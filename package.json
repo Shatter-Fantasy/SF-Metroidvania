@@ -1,0 +1,20 @@
+{
+    "name": "com.sf.statemachine",
+    "version": "0.0.1",
+    "displayName": "State Machine ",
+    "description": "This is the State Machine System developed by Jonathan Westfall of Shatter Fantasy studio.",
+    "keywords": [
+      "AI",
+      "State Machine",
+      "Shatter Fantasy",
+      "Jonathan Westfall"
+    ],
+    "category": "AI",
+    "author": {
+      "name": "Jonathan Westfall",
+      "url": "https://github.com/Shatter-Fantasy/com.sf.statemachine",
+      "email": "jonathan.westfall1@gmail.com"
+    },
+    "type": "tool",
+    "unity": "2022.2"
+  }
