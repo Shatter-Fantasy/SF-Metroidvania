@@ -2,7 +2,7 @@
   "name": "com.sf.metroidvania",
   "version": "0.0.1",
   "displayName": "Metroidvania Toolkit",
-  "description": "io.s is the Metroidvania Toolkit developed by Jonathan Westfall of Shatter Fantasy studio.",
+  "description": "io.s is the Metroidvania Toolkit developed by \nJonathan Westfall of Shatter Fantasy studio.",
   "documentationUrl": "https://shatter-fantasy.gitbook.io/metroidvania-system/",
   "keywords": [
     "AI",
@@ -19,6 +19,6 @@
   "type": "tool",
   "unity": "2022.1",
   "dependencies": {
-    "com.unity.cinemachine": ""
+    "com.unity.cinemachine": "3.0.0-pre.4"
   }
 }
