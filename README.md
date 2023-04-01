@@ -6,3 +6,7 @@ https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 
 Unity Custom Package Documentation 
 https://docs.unity3d.com/2023.2/Documentation/Manual/CustomPackages.html
+
+Unity Third Party Notice Documentation
+https://docs.unity3d.com/2023.2/Documentation/Manual/cus-legal.html
+

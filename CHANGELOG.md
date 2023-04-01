@@ -1,7 +1,7 @@
 # Changelog
 
 Link to full documentation.
-[Crowd Control Unity SDK](https://developer.crowdcontrol.live/unity/).
+[Shatter Fantasy Documentation](https://app.gitbook.com/o/SfDkagNWRll9OwbDmZcY/s/gJKmYJcfYS9ahIhpxefS/).
 
 ## [0.0.1] - 2023-03-31
 
