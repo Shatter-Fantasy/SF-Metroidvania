@@ -6,6 +6,7 @@ namespace SF.Physics
         [UnityEngine.Header("Gound Physics")]
         public float GroundSpeed;
         public float GroundAcceleration;
+        public float GroundMaxSpeed;
 
         [UnityEngine.Header("Air Physics")]
         public float Gravity;
@@ -17,6 +18,7 @@ namespace SF.Physics
         public MovementProperties(
             float _groundSpeed = 5f,
             float _groundAcceleration = 1f,
+            float _groundMaxSpeed = 10f,
             float _gravity = -9.81f,
             float _gravityAcceleration = 1f,
             float _terminalVelocity = 20f,
@@ -24,6 +26,7 @@ namespace SF.Physics
         {
             GroundSpeed = _groundSpeed;
             GroundAcceleration = _groundAcceleration;
+            GroundMaxSpeed = _groundMaxSpeed;
 
             Gravity = _gravity;
             GravityAcceleration = _gravityAcceleration;
