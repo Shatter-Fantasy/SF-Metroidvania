@@ -1,6 +1,6 @@
 {
   "name": "com.shatter-fantasy.metroidvania-toolkit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "displayName": "Metroidvania Toolkit",
   "description": "This is the Metroidvania Toolkit developed by \nJonathan Westfall of Shatter Fantasy studio.",
   "documentationUrl": "https://shatter-fantasy.gitbook.io/metroidvania-system/",
@@ -14,14 +14,16 @@
   "category": "Template",
   "author": {
     "name": "Jonathan Westfall",
-    "url": "https://github.com/Shatter-Fantasy/com.sf.statemachine",
+    "url": "https://github.com/Shatter-Fantasy/com.shatter-fantasy.metroidvania-toolkit",
     "email": "jonathan.westfall1@gmail.com"
   },
   "repository": {
     "url": "https://github.com/Unity-Technologies/com.unity.test-framework.git",
     "type": "git"
   },
-  "publishConfig": { "registry": "https://npm.pkg.github.com/Shatter-Fantasy" },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/Shatter-Fantasy"
+  },
   "_upm": {
     "changelog": "### Changed\n- Started the 2D Character Controller"
   },
