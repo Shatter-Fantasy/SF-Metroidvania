@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -69,12 +69,12 @@ namespace SF.CameraSystems
 		}
 		private void FindAllActiveCMCamera()
 		{
-			if(CinemachineCore.Instance.VirtualCameraCount <= 0)
+			if(CinemachineCore.VirtualCameraCount <= 0)
 				Debug.LogError("There were no cinemachines found inside of the scene.");
 
-			for(int x = 0; x < CinemachineCore.Instance.VirtualCameraCount; x++ )
+			for(int x = 0; x < CinemachineCore.VirtualCameraCount; x++ )
 			{
-				CMCameras.Add(CinemachineCore.Instance.GetVirtualCamera(x) as CinemachineCamera);
+				CMCameras.Add(CinemachineCore.GetVirtualCamera(x) as CinemachineCamera);
 			}
 
 			CMCameras.ForEach( vCam =>
@@ -108,11 +108,11 @@ namespace SF.CameraSystems
 			UnactiveCMCameras.ForEach(vCam =>
 			{
 				if(vCam.isActiveAndEnabled)
-					vCam.Priority = 1; 
+					vCam.Priority.Value = 1; 
 			});
 
 			CurrentCamera = activeVCamera;
-			CurrentCamera.Priority = 5;
+			CurrentCamera.Priority.Value = 5;
 		}
 		public static List<Camera> GetCameraStack()
 		{
