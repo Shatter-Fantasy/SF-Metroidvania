@@ -4,18 +4,24 @@ using UnityEngine;
 
 namespace SF.Characters
 {
-	[RequireComponent(typeof(Controller2D), typeof(Animator), typeof(SpriteRenderer))]
+	[RequireComponent(typeof(Animator), typeof(SpriteRenderer))]
     public class Character2D : MonoBehaviour
     {
-        [Header("Components")]
-		protected Controller2D _controller2D;
+
+		public bool IsPlayer = false;
+
+		#region Components
+		[Header("Components")]
+		protected SpriteRenderer _spriteRend;
 		protected Animator _animator;
+		#endregion
+
 
 		#region Lifecycle Functions  
 		private void Awake()
 		{
-			_controller2D = GetComponent<Controller2D>();
 			_animator = GetComponent<Animator>();
+			_spriteRend = GetComponent<SpriteRenderer>();
 			Init();
 		}
 
@@ -23,12 +29,17 @@ namespace SF.Characters
 		{
 
 		}
-		#endregion // end of Lifecycle Functions
-		
-		protected virtual void Init()
+		#endregion
+		private void Init()
+		{
+			OnInit();
+		}
+
+		protected virtual void OnInit()
 		{
 
 		}
+
 
 		protected virtual void UpdateAnimator()
 		{
