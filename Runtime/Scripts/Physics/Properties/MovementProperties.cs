@@ -12,6 +12,7 @@ namespace SF.Physics
         public float Gravity;
         public float GravityAcceleration;
         public float TerminalVelocity;
+        public float MaxUpForce;
 
         [UnityEngine.Header("Jump Physics")]
         public float JumpHeight;
@@ -22,6 +23,7 @@ namespace SF.Physics
             float _gravity = -9.81f,
             float _gravityAcceleration = 1f,
             float _terminalVelocity = 20f,
+            float _maxUpForce = 20f,
             float _jumpheight = 8f)
         {
             GroundSpeed = _groundSpeed;
@@ -31,6 +33,7 @@ namespace SF.Physics
             Gravity = _gravity;
             GravityAcceleration = _gravityAcceleration;
             TerminalVelocity = _terminalVelocity;
+            MaxUpForce = _maxUpForce;
 
             JumpHeight = _jumpheight;
 		}
