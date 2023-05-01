@@ -1,27 +1,32 @@
 using UnityEngine;
-
-using SF.Physics;
+using UnityEngine.InputSystem;
 
 namespace SF.Characters.Controllers
 {
     public class PlayerController : GroundedController2D
     {
-
-		public bool IsGrounded = false;
-		public bool IsFalling = false;
-		public bool IsSwimming = false;
-
-		#region Collision Calculations
-		protected virtual void GroundChecks()
+		#region Input Actions
+		private void OnInputMove(InputAction.CallbackContext context)
 		{
-
+			Vector2 input = context.ReadValue<Vector2>();
+			AddHorizontalForce(input.x);
+		}
+		
+		private void OnInputJump(InputAction.CallbackContext context)
+		{
+			AddVerticalForce(CurrentPhysics.JumpHeight);
 		}
 		#endregion
-
-
-		public void UpdatePhysics(MovementProperties movementProperties)
+		private void OnEnable()
 		{
-			CurrentPhysics = movementProperties;
+			InputManager.Controls.Player.Enable();
+			InputManager.Controls.Player.Move.performed += OnInputMove;
+			InputManager.Controls.Player.Jump.performed += OnInputJump;
+		}
+		private void OnDisable()
+		{
+			InputManager.Controls.Player.Move.performed -= OnInputMove;
+			InputManager.Controls.Player.Jump.performed -= OnInputJump;
 		}
 	}
 }
