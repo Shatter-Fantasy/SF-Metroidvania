@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 62ecfc17b4a632148a8eaaa98989d2e4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - _itemDatabase: {fileID: 11400000, guid: a30c886eb96ebec4190927fc582cad73, type: 2}
+  - _characterDatabase: {fileID: 11400000, guid: a18646cee8c9795469803c9218135015, type: 2}
+  - _dataEditorStyleSheet: {fileID: 7433441132597879392, guid: 5bdd69ae92a891a46a21794c8861dda7, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

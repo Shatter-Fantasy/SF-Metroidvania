@@ -1,0 +1,14 @@
+.data-section-view {
+    padding: 15px;
+    margin: 10px;
+    border-width: 3px;
+    border-top-color: rgb(64,64,64);
+    border-bottom-color: rgb(64,64,64);
+    border-right-color: rgb(64,64,64);
+    border-left-color: rgb(64,64,64);
+}
+
+.data-section__header-label{
+    font-size:25px;
+    margin:10px;
+}
