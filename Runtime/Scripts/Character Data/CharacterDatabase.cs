@@ -2,10 +2,9 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using SF.Characters.Data;
-using SF;
+using SF.StatModule;
 
-namespace SFEditor.Characters.Data
+namespace SF.Characters.Data
 {
     /// <summary>
     /// A generic database class for storing data about DTOBase classes or sub classes.
@@ -15,7 +14,7 @@ namespace SFEditor.Characters.Data
     {
         [SerializeReference] public List<T> DataEntries = new List<T>();
 
-        public void AddData(T dataEntry)
+        public virtual void AddData(T dataEntry)
         {
             if(dataEntry == null)
                 return;
@@ -31,6 +30,11 @@ namespace SFEditor.Characters.Data
             DataEntries.Remove(dataEntry);
         }
 
+        public T GetDataByID(int characterId)
+        {
+            return DataEntries.Find((T data) => data.ID == characterId);
+        }
+
         public T this[int index]
         {
             get { return DataEntries[index]; }
@@ -41,5 +45,18 @@ namespace SFEditor.Characters.Data
     [CreateAssetMenu(fileName = "Character Database", menuName = "SF/Data/Character Editor Database")]
     public class CharacterDatabase : SFDatabase<CharacterDTO>
     {
+        /// <summary>
+        /// The database with the default stat types and declarations in it.
+        /// </summary>
+        public StatSetDatabase StatDatabase;
+
+        public override void AddData(CharacterDTO dataEntry)
+        {
+            if(StatDatabase != null)
+            {
+                dataEntry.Stats = StatDatabase.DefaultStatTypes;
+            }          
+            base.AddData(dataEntry);
+        }
     }
 }

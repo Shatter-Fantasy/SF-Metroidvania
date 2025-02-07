@@ -33,7 +33,7 @@ namespace SF
 
         public DTOAssetBase() 
         {
-            GUID = this.GetInstanceID();
+           
         }
     }
 

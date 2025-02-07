@@ -14,7 +14,7 @@ namespace SF.StatModule
     }
 
     /// <summary>
-    /// The source of true for a stat on any object, character, and ect.
+    /// The source of truth for a stat on any object, character, and ect.
     /// This contains the modifiers values, modifier types (add, subtract, multiply, ect.), and the base value
     /// for a StatData.
     /// </summary>

@@ -1,3 +1,4 @@
+using SF.LootModule;
 using SF.StatModule;
 
 using UnityEngine;
@@ -14,5 +15,8 @@ namespace SF.Characters.Data
         public NPCQuestTypes NPCQuestType = NPCQuestTypes.None;
 
         public StatList Stats;
+
+        public LootTableData EnemyLootTable;
+        public RegionalLootTableData RegionalLootTable;
     }
 }
