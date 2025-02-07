@@ -1,7 +1,7 @@
 namespace SF.StatModule
 {
     /// <summary>
-    /// This is the enum class for all modifier types. This is not just for RPG Stats.
+    /// This is the enum class for all modifier types. This is not just for RPG StatMediators.
     /// Think modifiers that can be used for stats, relationship bonuses, shop prices, and reputation.
     /// </summary>
     public enum StatModifierType
@@ -15,6 +15,7 @@ namespace SF.StatModule
         Percent // A percentage to multiply or subtract the base amount by before calculating the flat modifiers.
     }
 
+    [System.Serializable]
     public class StatModifier
     {
         public float ModifierAmount;
