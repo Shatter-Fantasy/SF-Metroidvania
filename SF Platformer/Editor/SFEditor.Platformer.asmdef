@@ -1,0 +1,22 @@
+{
+    "name": "SFEditor.Platformer",
+    "rootNamespace": "SFEditor",
+    "references": [
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21",
+        "GUID:70643826bc633b246af1ece2db1e8338",
+        "GUID:54f550f7ac017ec4dbd8b30e83fc0057",
+        "GUID:a36038c41c31fd4468a7b4729e0e6ae4",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
