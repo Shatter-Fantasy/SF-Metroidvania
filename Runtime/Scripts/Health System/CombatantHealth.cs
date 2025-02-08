@@ -18,7 +18,7 @@ namespace SF.SpawnModule
         protected override void Kill()
         {
             if (_combatantData != null 
-                && _combatantData.EnemyLootTable.LootTable != null 
+                && _combatantData.EnemyLootTable != null 
                 && _combatantData.EnemyLootTable.LootTable.Count > 0)
             {
                 GameObject spawnedItem = Instantiate(
