@@ -1,24 +1,44 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 
 using SF.SpawnModule;
-
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SF.DataManagement
 {
-    public static class SaveSystem
+    public class SaveSystem
     {
-        private static List<SaveFileData> SaveFiles = new() { new SaveFileData() };
-        private static SaveFileData _currentSaveFileData;
+        protected static SaveSystem _instance;
+        public static SaveSystem Instance
+        {
+            get => _instance;
+            set
+            {
+                if(_instance != null)
+                    return;
+
+                _instance = value;
+            }
+        }
+        static SaveSystem()
+        {
+            Instance = new SaveSystem();
+        }
+        
+        protected static List<SaveFileData> SaveFile = new() { new SaveFileData() };
+        
+        protected static SaveFileData _currentSaveFileData;
         public static SaveFileData CurrentSaveFileData 
         { 
             get
             {
                 if(_currentSaveFileData == null)
-                    _currentSaveFileData = SaveFiles[0];
+                    _currentSaveFileData = SaveFile[0];
 
                 return _currentSaveFileData;
             }
@@ -31,26 +51,32 @@ namespace SF.DataManagement
             }
         }
 
-
-
+        public static Action OnUpdateSaveFile;
         // This is the path when called from Unity editor.
         // C:\Users\jonat\AppData\LocalLow\Shatter Fantasy\Immortal Chronicles - The Realm of Imprisoned Sorrows\ICSaveData.txt
         
-        private readonly static string SaveFileNameBase =
+        protected static readonly string SaveFileNameBase =
 #if UNITY_EDITOR
             Application.persistentDataPath + "/Development ICSaveData.txt";
 #else
             Application.persistentDataPath + "/ICSaveData.txt";
 #endif
         // The data stream of the contents being written and read from the save file.
-        private static FileStream DataStream;
+        protected static FileStream DataStream;
 
         // Key for reading and writing encrypted data.
         // (This is a "hardcoded" secret key. )
-        private readonly static byte[] SavedKey = { 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15 };
+        protected static readonly  byte[] SavedKey = { 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15, 0x16, 0x15 };
 
         public static void UpdateSaveFile()
         {
+            CurrentSaveFileData.SceneDataBlock = new SceneSaveData
+            {
+                CurrentScene = SceneManager.GetActiveScene(),
+                CurrentSaveStation = CurrentSaveFileData.CurrentSaveStation
+            };
+            
+            OnUpdateSaveFile?.Invoke();
             // Save the scene with the last used save station so we know which one to load.
             CurrentSaveFileData.CurrentScene = SceneManager.GetActiveScene();
         }
@@ -87,10 +113,9 @@ namespace SF.DataManagement
             // Create StreamWriter, wrapping CryptoStream.
             StreamWriter streamWriter = new StreamWriter(cryptoStream);
 
-
             // Serialize the SaveFileData object into JSON and save string.
-            string jsonString = JsonUtility.ToJson(SaveFiles[0]);
-
+            string jsonString = JsonUtility.ToJson(CurrentSaveFileData);
+            
             //Write to the innermost stream which is the encryption one.
             streamWriter.WriteLine(jsonString);
 
@@ -134,10 +159,9 @@ namespace SF.DataManagement
             // Close the stream after done using it
             streamReader.Close();
 
+            SaveFile[0] = JsonUtility.FromJson<SaveFileData>(text);
             //Deserialize the data from here and load it into Unity Object.
-            SaveFiles[0] = JsonUtility.FromJson<SaveFileData>(text);
-            CurrentSaveFileData = SaveFiles[0];
-
+            CurrentSaveFileData = SaveFile[0];
             // Finally initialize the Unity game data and load the scene and player.
             SetGameData();
         }
@@ -145,9 +169,8 @@ namespace SF.DataManagement
         /// <summary>
         /// Sets the data from the current save file into the game and starts the initialization process for loading the game scene.
         /// </summary>
-        private static void SetGameData()
+        protected static void SetGameData()
         {
-
             if(!string.IsNullOrEmpty(CurrentSaveFileData.CurrentScene.name))
             {
                 // For testing purposes only. Will remove in actual game play.
@@ -157,14 +180,82 @@ namespace SF.DataManagement
             // Set the spawning checkpoint which the SaveStation C# class ia a subclass of.
             // Checkpoint manager will have a execution order after the script that calls load game.
             CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint, CurrentSaveFileData.CurrentSaveStation);
+            SaveLoadEvent.Trigger(SaveLoadEventTypes.Loading);
+        }
+
+        public static List<SaveDataBlock> CurrentSaveDataBlocks()
+        {
+            return CurrentSaveFileData.SaveDatas;
+        }
+    }
+    
+    [System.Serializable]
+    public class SaveFileData
+    {
+        public SceneSaveData SceneDataBlock;
+        
+        [SerializeReference]
+        public List<SaveDataBlock> SaveDatas = new List<SaveDataBlock>();
+        
+        public SaveStation CurrentSaveStation;
+        public Scene CurrentScene;
+        
+        public int HoursPlayed = 0;
+
+        public TSaveData GetSaveDataBlock<TSaveData>() where TSaveData : SaveDataBlock
+        {
+            var dataQuery = SaveDatas.Where(saveData => saveData is TSaveData).ToArray();
+            
+            if (!dataQuery.Any())
+            {
+                return null;
+            }
+            
+            return dataQuery.First() as TSaveData;
+        }
+        
+        public bool TryAddOrSetDataBlock<TSaveData>(TSaveData newData) where TSaveData : SaveDataBlock
+        {
+            TSaveData indexedData = GetSaveDataBlock<TSaveData>();
+            
+            if (indexedData != null)
+            {
+                // There is already a data block of the attempted added type.
+                // Don't add a new one instead just override the already existing one.
+                indexedData = newData;
+                return false;
+            }
+            
+            // No data block of that type exists than it is safe to add a new one.
+            SaveDatas.Add(newData);
+            return true;
+        }
+        
+        // WE MIGHT NOT NEED THIS.
+        // SaveDataBlock is a class so it is passed by reference. We could just edit that data. 
+        public void SetSaveDataBlock<TSaveData>(TSaveData newData) where TSaveData : SaveDataBlock
+        { 
+            // Find the SaveDataBlock of the type we are trying to set.  
+           var data = SaveDatas.First(saveData => saveData is TSaveData);
+           // Find the index for that datablock type.
+           int dataIndex = SaveDatas.IndexOf(data);
+
+           // Now set the new data 
+           SaveDatas[dataIndex] = newData;
         }
     }
 
     [System.Serializable]
-    public class SaveFileData
+    public class SceneSaveData : SaveDataBlock
     {
         public SaveStation CurrentSaveStation;
         public Scene CurrentScene;
+        
         public int HoursPlayed = 0;
+    }
+    
+    [System.Serializable]
+    public class SaveDataBlock
+    {
     }
 }

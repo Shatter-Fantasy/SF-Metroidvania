@@ -1,10 +1,7 @@
 using Unity.Cinemachine;
 
-using UnityEngine;
-
 using SF.CameraModule;
-using System.Collections.Generic;
-
+using SF.Utilities;
 namespace SF.Characters.Controllers
 {
 	public class PlayerController : GroundedController2D
@@ -18,21 +15,5 @@ namespace SF.Characters.Controllers
                 CameraController.SetPlayerCMCamera(cinemachineCamera);
         }
     }
-
-    public static class GameObjectExtension
-    {
-        public static bool TryGetComponentInChildren<T>(this GameObject gameObject, out T component) where T : Component
-        {
-            component = gameObject.GetComponentInChildren<T>();
-
-            return component != null;
-        }
-
-        public static bool TryGetComponentInChildren<T>(this Component gameObject, out T component) where T : Component
-        {
-            component = gameObject.GetComponentInChildren<T>();
-
-            return component != null;
-        }
-    }
+    
 }

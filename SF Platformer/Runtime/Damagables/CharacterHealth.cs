@@ -1,10 +1,12 @@
 using SF.Characters.Controllers;
 using SF.Characters;
+using SF.DataManagement;
+using SF.Events;
 using UnityEngine;
 
 namespace SF.SpawnModule
 {
-    public class CharacterHealth : Health, IDamagable
+    public class CharacterHealth : Health
     {
         [Header("Animation Setting")]
 
@@ -57,5 +59,6 @@ namespace SF.SpawnModule
             _controller.SetExternalVelocity(knockback);
             base.TakeDamage(damage);
         }
+
     }
 }

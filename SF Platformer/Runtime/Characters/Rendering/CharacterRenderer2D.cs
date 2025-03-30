@@ -47,7 +47,8 @@ namespace SF.Characters
 		
 		protected virtual void OnInit()
 		{
-            _controller.OnDirectionChanged += OnDirectionChanged;
+			if(_controller) // Can happen when attached to an NPC not moving and just idle.
+				_controller.OnDirectionChanged += OnDirectionChanged;
 		}
 
 		private void LateUpdate()

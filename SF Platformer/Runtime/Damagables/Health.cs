@@ -12,10 +12,10 @@ namespace SF.SpawnModule
     public class Health : MonoBehaviour, IDamagable, EventListener<RespawnEvent>
     {
         /// <summary>
-        /// Is the ccharacter health being controlled by an external script to 
+        /// Is the character health being controlled by an external script to 
         /// add specific event handling logic.
         ///
-        /// Example SF.Metrdoivania package CharacterStats relays event data after 
+        /// Example SF.Metroidvania package CharacterStats relays event data after 
         /// damage calculations to the character health script.
         /// </summary>
         public IDamageController DamageController;
@@ -23,10 +23,10 @@ namespace SF.SpawnModule
         [SerializeField] private int _currentHealth;
         public int CurrentHealth
         {
-            get { return _currentHealth; }
+            get => _currentHealth;
             set
             {
-                float previousValue = _currentHealth;
+                int previousValue = _currentHealth;
                 _currentHealth = value;
 
                 if(previousValue != _currentHealth)
@@ -59,6 +59,7 @@ namespace SF.SpawnModule
 
         public virtual void FullHeal()
         {
+           
             CurrentHealth = MaxHealth;
         }
 
@@ -96,7 +97,7 @@ namespace SF.SpawnModule
 		{
             this.EventStartListening<RespawnEvent>();
 		}
-		protected void OnDestroy()
+		protected virtual void OnDestroy()
         {
 			this.EventStopListening<RespawnEvent>();
 		}

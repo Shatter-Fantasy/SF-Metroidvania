@@ -6,24 +6,22 @@ using UnityEngine;
 
 namespace SF.DataManagement
 {
-    public class SaveStation : CheckPoint, IInteractable, ICheckPoint
+    public class SaveStation : CheckPoint, IInteractable
     {
         [field:SerializeField] public InteractableMode InteractableMode { get; set; }
 
-        public void Interact()
+        public virtual void Interact()
         {
             SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;
-            SaveSystem.SaveDataFile();
         }
 
-        public void Interact(PlayerController controller)
+        public virtual void Interact(PlayerController controller)
         {
-            SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;
-            SaveSystem.SaveDataFile();
             if(controller.TryGetComponent<PlayerHealth>(out PlayerHealth health))
             {
                 health.FullHeal();
             }
+            SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;
         }
     }
 }

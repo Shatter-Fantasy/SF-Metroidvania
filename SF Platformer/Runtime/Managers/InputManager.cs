@@ -1,5 +1,5 @@
+using SF.AbilityModule;
 using SF.Events;
-using SF.Managers;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +8,13 @@ namespace SF.InputModule
 {
     public class InputManager : MonoBehaviour
     {
+	    
+	    /// <summary>
+	    /// Used to keep track of all abilities that implement <see cref="IInputAbility"/> on the player.
+	    /// Allows the ability to set new input events to the player abilities when needed.
+	    /// </summary>
+	    private AbilityController _playerAbilityController;
+	    
 		private static InputManager _instance;
 		public static InputManager Instance
 		{
@@ -30,12 +37,13 @@ namespace SF.InputModule
 				return _controls;
 			}
 		}
+		
 		private void Awake()
 		{
 			if(Instance != null && Instance != this)
 				Destroy(this);
 		}
-
+		
 		private void OnGameMenuToggled(InputAction.CallbackContext ctx)
 		{
 			GameEvent.Trigger(GameEventTypes.PauseToggle);

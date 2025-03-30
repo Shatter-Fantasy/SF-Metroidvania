@@ -39,10 +39,10 @@ namespace SF.Interactables
         {
             if(_boxCollider2D == null) return;
 
-            var collider = Physics2D.OverlapBox(transform.position, _boxCollider2D.bounds.size, 0, _interactableLayers);
+            var col2D = Physics2D.OverlapBox(transform.position, _boxCollider2D.bounds.size, 0, _interactableLayers);
 
 
-            if(collider != null && collider.TryGetComponent(out IInteractable interactable))
+            if(col2D != null && col2D.TryGetComponent(out IInteractable interactable))
             {
                 if(interactable.InteractableMode == InteractableMode.Input)
                 {

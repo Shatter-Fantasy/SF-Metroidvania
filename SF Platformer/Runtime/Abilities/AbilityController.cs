@@ -20,7 +20,16 @@ namespace SF.AbilityModule
         {
             Abilities = GetComponents<AbilityCore>().ToList();
 
+            
             _controller2D = AbilityOwner != null ? AbilityOwner.GetComponent<Controller2D>() : GetComponent<Controller2D>();
+            
+            // Set the correct type of controller so the abilities can do different things based on if it is player, a enemy affected by gravity, or another type.
+            _controller2D = _controller2D switch
+            {
+                PlayerController playerController => playerController,
+                GroundedController2D groundedController2D => groundedController2D,
+                _ => _controller2D
+            };
         }
         private void Start()
         {

@@ -1,13 +1,8 @@
-using System;
-
 using SF.Characters.Controllers;
 using SF.DataManagement;
 using SF.Events;
-using SF.InputModule;
-using SF.Utilities.Shapes;
 
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace SF.Managers
 {
@@ -37,28 +32,28 @@ namespace SF.Managers
     [RequireComponent(typeof(LivesManager))]
     public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>
     {
-        [SerializeField] private int _targetFrameRate = 60;
+        [SerializeField] protected int _targetFrameRate = 60;
 		public GameControlState ControlState;
 		public GamePlayState PlayState;
 
-        private static GameObject PlayerSceneObject;
+        protected static GameObject PlayerSceneObject;
 
         private void Awake()
         {
             Application.targetFrameRate = _targetFrameRate;
         }
-        private void Start()
+        protected virtual void Start()
         {
             PlayerSceneObject = FindAnyObjectByType<PlayerController>().gameObject;
             SaveSystem.LoadDataFile();
         }
-        private void OnExitGame()
+        protected void OnExitGame()
         {
             // Will need to do checks later for preventing shutdowns during saving and loading.
             Application.Quit();
         }
 
-        private void OnPausedToggle()
+        protected void OnPausedToggle()
         {
             if(PlayState == GamePlayState.Playing)
                 Pause();
@@ -66,13 +61,13 @@ namespace SF.Managers
                 Unpause();
         }
 
-        private void Pause()
+        protected void Pause()
         {
             PlayState = GamePlayState.MainMenu;
             GameMenuEvent.Trigger(GameMenuEventTypes.OpenGameMenu);
         }
 
-        private void Unpause()
+        protected void Unpause()
         {
             PlayState = GamePlayState.Playing;
             GameMenuEvent.Trigger(GameMenuEventTypes.CloseGameMenu);
@@ -102,13 +97,13 @@ namespace SF.Managers
             }
         }
 
-        private void OnEnable()
+        protected void OnEnable()
 		{
             this.EventStartListening<ApplicationEvent>();
             this.EventStartListening<GameEvent>();
 		}
 
-        private void OnDisable ()
+        protected void OnDisable ()
 		{
             this.EventStopListening<ApplicationEvent>();
             this.EventStopListening<GameEvent>();

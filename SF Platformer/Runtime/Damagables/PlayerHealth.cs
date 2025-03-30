@@ -1,3 +1,4 @@
+using SF.DataManagement;
 using UnityEngine;
 
 using SF.Events;
@@ -6,7 +7,7 @@ using SF.UI;
 
 namespace SF.SpawnModule
 {
-    public class PlayerHealth : CharacterHealth, IDamagable
+    public class PlayerHealth : CharacterHealth, IDamagable, EventListener<SaveLoadEvent>
     {
         [SerializeField] private FillBarUGUI _hpBar;
 
@@ -35,7 +36,7 @@ namespace SF.SpawnModule
         protected override void OnEnable()
         {
             base.OnEnable();
-
+            this.EventStartListening<SaveLoadEvent>();
             if(_hpBar != null)
                 HealthChangedCallback += () =>
                 {                  
@@ -45,11 +46,28 @@ namespace SF.SpawnModule
 
         private void OnDisable()
         {
+            this.EventStopListening<SaveLoadEvent>();
             if(_hpBar != null)
                 HealthChangedCallback -= () =>
                 {
                     _hpBar.SetValueWithoutNotify((float)CurrentHealth / (float)MaxHealth);
                 };
+        }
+        
+        public void OnEvent(SaveLoadEvent saveLoadEvent)
+        {
+            switch (saveLoadEvent.EventType)
+            {
+                case SaveLoadEventTypes.Loading:
+                {
+                    break;
+                }
+            }
+        }
+        
+        protected void OnDestroy()
+        {
+            this.EventStopListening<SaveLoadEvent>();
         }
     }
 }

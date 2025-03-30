@@ -23,8 +23,11 @@ namespace SF.AbilityModule
 		{
 			if (_isInitialized)
 				return;
-
-			_controller2d = controller2D as GroundedController2D;
+			
+			if(controller2D is GroundedController2D groundedController2D)
+				_controller2d = groundedController2D;
+			if(controller2D is PlayerController playerController)
+				_controller2d = playerController;
 
 			OnInitialize();
 
