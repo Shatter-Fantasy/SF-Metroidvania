@@ -4,20 +4,21 @@
     xmlns:ui="UnityEngine.UIElements"
     xmlns:editor="UnityEditor.UIElements"
     xmlns:sfeditor="SFEditor.Characters.Data"
-    xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+    noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
 >
+  <ui:Template src="../../Common/Data Section/GeneralDataEntrySection.uxml" name="GeneralDataEntrySection"/>
+  
   <ui:TwoPaneSplitView class="unity-two-pane-split-view">
     <sfeditor:CharacterListView/>
     <ui:VisualElement>
-      <ui:IntegerField binding-path="ID" name ="id-field" label="Database ID"/>
-      <ui:IntegerField binding-path="GUID" name="guid-field" label="Instance ID"/>
-      <ui:TextField binding-path="Name" name="name-field" label="Name"/>
-      <ui:TextField binding-path="Description" name="description-field" label="Description"/>
-      <editor:ObjectField type="UnityEngine.GameObject, UnityEngine.CoreModule" 
-                          binding-path="Prefab"
-                          label="Character Prefab" 
-                          allow-scene-objects="false"
-                          />      
+      <ui:Instance template="GeneralDataEntrySection">
+        <editor:ObjectField type="UnityEngine.GameObject, UnityEngine.CoreModule" 
+                            binding-path="Prefab"
+                            label="Character Prefab" 
+                            allow-scene-objects="false"
+        />
+      </ui:Instance>
+      
     </ui:VisualElement>
   </ui:TwoPaneSplitView>
 </ui:UXML>
