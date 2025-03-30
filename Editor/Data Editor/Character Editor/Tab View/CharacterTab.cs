@@ -6,9 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 using SF.Characters.Data;
-using SFEditor.Data;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 using UnityEditor.UIElements;
 
@@ -23,6 +21,7 @@ namespace SFEditor.Characters.Data
         private CharacterListView _characterListView;
         private CharacterDatabase _characterDatabase;
 
+        
         #region UI Fields
         private IntegerField _idField;
         private IntegerField _guidField;
@@ -125,9 +124,6 @@ namespace SFEditor.Characters.Data
                 return;
 
             var characterDTO = selectedObjects.First() as CharacterDTO;
-            //_itemView = CreateItemView(characterDTO);
-            //_itemView.style.flexGrow = 1;
-            //_dataViewContainer.Add(_itemView);
             this.Bind(new SerializedObject(characterDTO));
             SetValueWithoutNotify(characterDTO);
             Selection.SetActiveObjectWithContext(characterDTO, null);
@@ -139,13 +135,12 @@ namespace SFEditor.Characters.Data
                 return;
 
             _value = newValue;
-
-            _idField.SetValueWithoutNotify(_value.ID);
-            _guidField.SetValueWithoutNotify(_value.GUID);
-            _nameField.SetValueWithoutNotify(_value.Name);
-            _descriptionField.SetValueWithoutNotify(_value.Description);
+            _idField?.SetValueWithoutNotify(_value.ID);
+            _guidField?.SetValueWithoutNotify(_value.GUID);
+            _nameField?.SetValueWithoutNotify(_value.Name);
+            _descriptionField?.SetValueWithoutNotify(_value.Description);
            
-            _prefabField.SetValueWithoutNotify(_value.Prefab);
+            _prefabField?.SetValueWithoutNotify(_value.Prefab);
         }
     }
 }
