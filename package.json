@@ -28,7 +28,7 @@
   },
   "unity": "2023.2",
   "dependencies": {
-    "com.unity.cinemachine": "3.1.0",
     "com.unity.inputsystem": "1.8.1"
-  }
+  },
+  "hideInEditor": false
 }
