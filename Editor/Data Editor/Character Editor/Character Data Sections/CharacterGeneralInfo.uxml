@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:ue="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+>
+  <ui:Foldout name="stat-list__container" text="Character General" class="data__section--container">
+    <ui:EnumField label="CombatantType" name="combatant-type__field" binding-path="CombatantType"
+                  type="SF.Characters.CharacterCombatantTypes, SF.MetroidvaniaToolkit" />
+    <ui:EnumField label="NPCQuestType" name="npcquest-type__field" binding-path="NPCQuestType"
+                  type="SF.Characters.NPCQuestTypes, SF.MetroidvaniaToolkit"/>
+  </ui:Foldout>
+</ui:UXML>
