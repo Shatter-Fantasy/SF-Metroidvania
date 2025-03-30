@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd">
+    <ui:Template src="../DataTabViews/DataDefinitionTabView.uxml" name="DataDefinitionTabView"/>
+    
+    <ui:TabView name="data-editor__tab--view" view-data-key="TabbedMenu">
+        <ui:Tab label="Data Definitions"  view-data-key="DataDefinitionsTab">
+            <ui:Instance template="DataDefinitionTabView" name="data-definitions__tab--view"/>
+        </ui:Tab>
+        <ui:Tab label="Test Tab 1">
+            <ui:Button text="Test"/>
+        </ui:Tab>
+    </ui:TabView>
+</ui:UXML>
