@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+            <ui:VisualElement name="data-editor__main-container">
+                  <ui:VisualElement name="data-editor__left-panel">
+                        <ui:Button text="Left Panel Holder"/>
+                  </ui:VisualElement>
+                  <ui:VisualElement name="data-editor__right-panel">
+
+                  </ui:VisualElement>
+            </ui:VisualElement>
+</ui:UXML>
