@@ -57,7 +57,6 @@ namespace SFEditor.Inventory
             _itemBuyPriceField = new IntegerField() { label = "Buy Price", bindingPath = "PriceData.BuyPrice" };
             _itemBuyPriceField.RegisterValueChangedCallback(evt => 
             {
-                Debug.Log("");
                 _value.BuyPrice = evt.newValue;
             });
 

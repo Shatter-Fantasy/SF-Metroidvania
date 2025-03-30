@@ -111,8 +111,7 @@ namespace SFEditor
             });
 
             _generalDataSection
-                .AddChild(_dataSectionHeader
-                    )
+                .AddChild(_dataSectionHeader)
                 .AddChild(_itemGUIDField)
                 .AddChild(
                 new SFRow("two-column")
