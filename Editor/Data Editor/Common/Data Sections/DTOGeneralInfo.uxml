@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:ue="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+>
+  <ui:Foldout name="general-data__container" text="General Data" class="data__section--container">
+    <ui:VisualElement style="flex-direction: row;">
+      <ui:IntegerField label="ID" binding-path="ID" readonly="true" style="flex-grow: 1;" />
+      <ui:IntegerField label="GUID" binding-path="GUID" readonly="true" style="flex-grow: 1;" />
+    </ui:VisualElement>
+    
+    <ue:ObjectField label="Prefab" name="prefab-field" binding-path="Prefab"
+                    type="UnityEngine.GameObject, UnityEngine.CoreModule"/>
+    
+    <ui:TextField label="Name" name="name__field" binding-path="Name"/>
+    <ui:TextField label="Description" name="description__field" property="value" binding-path="Description"/>
+  </ui:Foldout>
+</ui:UXML>

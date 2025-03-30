@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns="UnityEngine.UIElements"
+    xmlns:sf="SF.UIElements"
+    noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+>
+    <VisualElement class="data__section--view" content-container="anyValue">
+        <Label text="General Data" name="general-data__section--header" class="data-section__header-label"/>
+        <sf:SFRow class="two-column">
+            <IntegerField  binding-path="ID" name ="id-field" label="Database ID" readonly="true"/>
+            <IntegerField  binding-path="GUID" name="guid-field" label="GUID" readonly="true"/>
+        </sf:SFRow>
+        <TextField binding-path="Name" name="name-field" label="Name"/>
+        <TextField binding-path="Description" name="description-field" label="Description" multiline="true"/>
+    </VisualElement>
+</UXML>
