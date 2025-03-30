@@ -47,14 +47,14 @@ namespace SF.SpawnModule
             {
                 characterData = spawnedObject.AddComponent<CharacterData>();
             }
-
-            characterData.CharacterID = SpawnedCharacterData.ID;
-
+            
             if(characterData is CombatantData cData)
             {
-                cData.EnemyLootTable = SpawnedCharacterData.EnemyLootTable;
-                cData.RegionalLootTable = SpawnedCharacterData.RegionalLootTable;
+                cData.SetData(SpawnedCharacterData);
+                return;
             }
+
+            characterData.SetData(SpawnedCharacterData);
         }
     }
 }
