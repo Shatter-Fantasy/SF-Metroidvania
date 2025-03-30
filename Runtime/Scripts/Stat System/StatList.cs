@@ -8,7 +8,6 @@ namespace SF.StatModule
     [System.Serializable]
     public class StatList
     {
-
         public AttributesStats AttributesStats;
 
         /// <summary>

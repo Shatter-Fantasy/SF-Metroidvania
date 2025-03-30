@@ -1,7 +1,10 @@
 using SF.DamageModule;
+using SF.Events;
 using SF.SpawnModule;
 
 using UnityEngine;
+
+using SF.Experience;
 
 namespace SF.StatModule
 {
@@ -13,7 +16,6 @@ namespace SF.StatModule
     public class CharacterStats : MonoBehaviour, IDamageController
     {
         public StatList CharacterStatList;
-
         /// <summary>
         /// The external character health component to link to.
         /// </summary>
@@ -24,7 +26,7 @@ namespace SF.StatModule
             return preDamage;
         }
 
-        private void Awake()
+        protected void Awake()
         {
             _characterHealth  =  _characterHealth != null 
                 ? _characterHealth 
