@@ -56,7 +56,7 @@ namespace SF.SpawnModule
 			switch (checkPointEvent.EventType) 
 			{
 				case CheckPointEventTypes.ChangeCheckPoint:
-					ChangeCheckPoint(checkPointEvent.CheckPoint);
+					ChangeCheckPoint(checkPointEvent.CheckPoint as CheckPoint);
 					break;
 			}
 		}

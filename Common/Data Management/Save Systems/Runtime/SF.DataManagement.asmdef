@@ -1,14 +1,8 @@
 {
-    "name": "SF.Platformer",
-    "rootNamespace": "SF",
+    "name": "SF.DataManagement",
+    "rootNamespace": "SF.DataManagement",
     "references": [
-        "Unity.Cinemachine",
-        "Unity.InputSystem",
-        "Unity.TextMeshPro",
-        "UnityEngine.UI",
-        "SF.Utilities",
-        "SF.Events",
-        "SF.DataManagement"
+        "GUID:ee2006c8bcda6994dabc1c6930d9306e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

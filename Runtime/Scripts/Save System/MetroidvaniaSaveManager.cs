@@ -1,5 +1,6 @@
 using SF.Characters.Controllers;
 using SF.Managers;
+using SF.SpawnModule;
 using UnityEngine;
 
 namespace SF.DataManagement
@@ -23,6 +24,8 @@ namespace SF.DataManagement
             
             // Out Metroidvania code here.
             var data = CurrentSaveFileData.GetSaveDataBlock<MetroidvaniaSaveData>();
+            
+            CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint, CurrentSaveFileData.CurrentSaveStation as CheckPoint);
         }
     }
 }

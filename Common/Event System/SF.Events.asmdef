@@ -1,15 +1,7 @@
 {
-    "name": "SF.Platformer",
-    "rootNamespace": "SF",
-    "references": [
-        "Unity.Cinemachine",
-        "Unity.InputSystem",
-        "Unity.TextMeshPro",
-        "UnityEngine.UI",
-        "SF.Utilities",
-        "SF.Events",
-        "SF.DataManagement"
-    ],
+    "name": "SF.Events",
+    "rootNamespace": "SF.Events",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

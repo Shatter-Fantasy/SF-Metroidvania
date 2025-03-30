@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
-using SF.SpawnModule;
-using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -52,6 +50,9 @@ namespace SF.DataManagement
         }
 
         public static Action OnUpdateSaveFile;
+        public static Action OnSaveDataFile;
+        public static Action OnBeforeLoadDataFile;
+        
         // This is the path when called from Unity editor.
         // C:\Users\jonat\AppData\LocalLow\Shatter Fantasy\Immortal Chronicles - The Realm of Imprisoned Sorrows\ICSaveData.txt
         
@@ -179,7 +180,11 @@ namespace SF.DataManagement
             }
             // Set the spawning checkpoint which the SaveStation C# class ia a subclass of.
             // Checkpoint manager will have a execution order after the script that calls load game.
-            CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint, CurrentSaveFileData.CurrentSaveStation);
+
+            
+            // When you need to do stuff before event listeners do loading events use OnBeforeLoadDataFile.
+            // Think like scene loading data clean up or setting and so forth.
+            OnBeforeLoadDataFile?.Invoke();
             SaveLoadEvent.Trigger(SaveLoadEventTypes.Loading);
         }
 
@@ -197,7 +202,7 @@ namespace SF.DataManagement
         [SerializeReference]
         public List<SaveDataBlock> SaveDatas = new List<SaveDataBlock>();
         
-        public SaveStation CurrentSaveStation;
+        public SavePoint CurrentSaveStation;
         public Scene CurrentScene;
         
         public int HoursPlayed = 0;
@@ -248,7 +253,7 @@ namespace SF.DataManagement
     [System.Serializable]
     public class SceneSaveData : SaveDataBlock
     {
-        public SaveStation CurrentSaveStation;
+        public SavePoint CurrentSaveStation;
         public Scene CurrentScene;
         
         public int HoursPlayed = 0;

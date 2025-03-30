@@ -1,3 +1,4 @@
+using SF.DataManagement;
 using SF.Events;
 
 namespace SF.SpawnModule
@@ -11,12 +12,24 @@ namespace SF.SpawnModule
     public struct CheckPointEvent
     {
         public CheckPointEventTypes EventType;
-        public CheckPoint CheckPoint;
-
+        // SavePoint is the base class that CheckPoint inherits from.
+        public SavePoint CheckPoint;
+        
 		public CheckPointEvent(CheckPointEventTypes eventType, CheckPoint checkPoint)
 		{
 			EventType = eventType;
 			CheckPoint = checkPoint;
+		}
+		
+		/// <summary>
+		/// Use this when needing to pass in the base class SavePoint that CheckPoint inherit froms.
+		/// </summary>
+		/// <param name="eventType"></param>
+		/// <param name="savePoint"></param>
+		public CheckPointEvent(CheckPointEventTypes eventType, SavePoint savePoint)
+		{
+			EventType = eventType;
+			CheckPoint = savePoint;
 		}
 
         static CheckPointEvent checkPointEvent;
