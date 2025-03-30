@@ -1,3 +1,4 @@
+using SF.Experience;
 using SF.LootModule;
 using SF.StatModule;
 
@@ -16,6 +17,7 @@ namespace SF.Characters.Data
 
         public StatList Stats;
 
+        public ExperienceValue Experience;
         public LootTableData EnemyLootTable;
         public RegionalLootTableData RegionalLootTable;
     }
