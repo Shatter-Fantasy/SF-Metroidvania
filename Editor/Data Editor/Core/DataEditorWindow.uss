@@ -1,0 +1,22 @@
+.section__header{
+    font-size:20px;
+    margin-top:15px;
+}
+
+.data__section--container{
+    margin: 5px;
+    margin-top: 15px;
+    padding: 5px;
+
+    border-color:rgb(64,64,64);
+    border-width:2px;
+}
+
+.data__section--container .unity-foldout__text {
+    font-size:20px;
+}
+
+.data-section__header-label{
+    font-size:25px;
+    margin:10px;
+}
