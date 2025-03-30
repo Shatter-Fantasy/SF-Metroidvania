@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
+>
+    <ui:Foldout name="experience-list__container" text="Experience Values" class="data__section--container"
+                data-source-type="SF.Experience.ExperienceValue, SF.MetroidvaniaToolkit" binding-path="Experience">
+        <ui:IntegerField label="Base Experience" name="Base-experience-__field"
+                       binding-path="BaseExperience"/>
+    </ui:Foldout>
+</UXML>

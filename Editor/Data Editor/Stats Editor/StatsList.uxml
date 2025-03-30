@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+>
+  <ui:Foldout name="stat-list__container" text="Character Stats" class="data__section--container"
+                  data-source-type="SF.StatModule.StatList, SF.MetroidvaniaToolkit" binding-path="Stats">
+    <ui:FloatField label="HP" name="hp-stat__field"
+                     binding-path="CombatStats.StatMediators.Array.data[0].Stat.BaseValue"/>
+    <ui:FloatField label="Soule" name="soule-stat__field" 
+                   binding-path="CombatStats.StatMediators.Array.data[1].Stat.BaseValue"/>
+    <ui:FloatField label="PhysicalAttack" name="physical-attack-stat__field" 
+                   binding-path="CombatStats.StatMediators.Array.data[2].Stat.BaseValue"/>
+    <ui:FloatField label="PhysicalDefence" name="physical-defence-stat__field" 
+                   binding-path="CombatStats.StatMediators.Array.data[3].Stat.BaseValue"/>
+    <ui:FloatField label="MagicalAttack" name="magical-attack-stat__field" 
+                   binding-path="CombatStats.StatMediators.Array.data[4].Stat.BaseValue" />
+    <ui:FloatField label="MagicalDefence" name="magical-attack-stat__field" 
+                   binding-path="CombatStats.StatMediators.Array.data[5].Stat.BaseValue" />
+  </ui:Foldout>
+</ui:UXML>
