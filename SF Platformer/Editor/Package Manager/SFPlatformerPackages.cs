@@ -18,7 +18,7 @@ namespace SFEditor.Packages
         static List<string> ScriptingDefineSymbols = new();
 
         /// <summary>
-        /// Required SF package Package Git url for the AddRequest
+        /// Required SF Package Git url for the AddRequest
         /// </summary>
         static string PackageBaseURl = "https://github.com/Shatter-Fantasy/SF-Utilities.git";
         /// <summary>

@@ -1,26 +1,34 @@
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-using SF.Characters;
+using SF.Characters.Data;
+using SF.Experience;
 using SF.ItemModule;
+
 
 namespace SF.SpawnModule
 {
     public class CombatantHealth : CharacterHealth
     {
         private CombatantData _combatantData;
-
+        
         protected override void Awake()
         {
             base.Awake();
             _combatantData = GetComponent<CombatantData>();
         }
-
+        
         protected override void Kill()
         {
-            if (_combatantData != null 
-                && _combatantData.EnemyLootTable != null 
+            if (_combatantData is not null 
+                && _combatantData.EnemyLootTable is not null 
                 && _combatantData.EnemyLootTable.LootTable.Count > 0)
             {
+                // TODO: Will need checks later for allies and summonings to not grant experience.
+                //  Grant the player his expierence from the enemy kill.
+                
+                ExperienceEvent.Trigger(ExperienceEventTypes.Gain,_combatantData.Experience.BaseExperience);
+                
                 GameObject spawnedItem = Instantiate(
                     _combatantData.EnemyLootTable.LootTable[0].Prefab,
                     transform.position,
