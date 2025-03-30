@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd">
+    <ui:TabView view-data-key="TabbedMenu">
+        <ui:Tab label="Editor Setting" view-data-key="SettingTab">
+            
+        </ui:Tab>
+        <ui:Tab label="Data Definitions" view-data-key="DefinitionsTab">
+            
+        </ui:Tab>
+        <ui:Tab label="Character Data" view-data-key="CharacterTab">
+            
+        </ui:Tab>
+        <ui:Tab label="Item Data" view-data-key="ItemTab">
+            
+        </ui:Tab>
+    </ui:TabView>
+</ui:UXML>
