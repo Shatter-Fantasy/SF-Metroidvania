@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:ue="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+>
+  <ui:Foldout name="loot-drop__container" text="Loot Drops" class="data__section--container"
+                  data-source-type="SF.LootModule.LootTableData, SF.MetroidvaniaToolkit" binding-path="LootTableDrop">
+    <ue:ObjectField label="Enemy Loot Table" name="enemy-loot-table__field" binding-path="EnemyLootTable"
+                type="SF.LootModule.LootTableData, SF.MetroidvaniaToolkit"/>
+    <ue:ObjectField label="Regional Loot Table" name="regional-loot-table__field" binding-path="RegionalLootTable"
+                type="SF.LootModule.RegionalLootTableData, SF.MetroidvaniaToolkit"/>
+  </ui:Foldout>
+</ui:UXML>
