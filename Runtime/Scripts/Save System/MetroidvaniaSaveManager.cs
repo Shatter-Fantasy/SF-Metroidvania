@@ -1,4 +1,5 @@
 using SF.Characters.Controllers;
+using SF.InventoryModule;
 using SF.Managers;
 using SF.SpawnModule;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace SF.DataManagement
 {
     public class MetroidvaniaSaveManager : SaveSystem
     {
+        public static PlayerInventory PlayerInventory;
         public static MetroidvaniaSaveData CurrentMetroidvaniaSaveData = new();
         
         public static void SaveGame()
@@ -24,6 +26,11 @@ namespace SF.DataManagement
             
             // Out Metroidvania code here.
             var data = CurrentSaveFileData.GetSaveDataBlock<MetroidvaniaSaveData>();
+
+            Debug.Log(data.PlayerInventory);
+            
+            if(PlayerInventory != null)
+                PlayerInventory = data.PlayerInventory;
             
             CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint, CurrentSaveFileData.CurrentSaveStation as CheckPoint);
         }

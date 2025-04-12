@@ -31,6 +31,7 @@ namespace SF.ItemModule
         private void PickUpItem(PlayerInventory playerInventory)
         {          
             playerInventory.Items.Add(Item);
+            ItemEvent.Trigger(ItemEventTypes.PickUp, itemID: Item.ID);
             Destroy(gameObject);
         }
     }
