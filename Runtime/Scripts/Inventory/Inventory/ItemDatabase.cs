@@ -45,10 +45,10 @@ namespace SF.Inventory
                     break;
             }
         }
-
+        
         public ItemDTO this[int index]
         {
-            get { return Items[index]; }
+            get { return Items.Find(dto => dto.ID == index); }
         }
     }
 }
