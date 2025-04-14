@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SF.InputModule;
+using SF.Managers;
 
 namespace SF.AbilityModule.Characters
 {
@@ -19,9 +20,11 @@ namespace SF.AbilityModule.Characters
         }
         #region Input Actions
         private void OnInputMove(InputAction.CallbackContext context)
-		{
+        {
+	        if (!CanStartAbility())
+		        return;
+	        
 			Vector2 input = context.ReadValue<Vector2>();
-
 			float xDirection = input.x != 0 ? input.x : 0;
 			_controller2d.Direction = new Vector2(xDirection, _controller2d.Direction.y);
 		}

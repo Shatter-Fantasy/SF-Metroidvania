@@ -19,6 +19,9 @@ namespace SF.AbilityModule.Characters
 
         private void OnInputCrouch(InputAction.CallbackContext context)
         {
+            if (!CanStartAbility())
+                return;
+            
             //TODO: Need to do some collider check to make sure the character is not being pushed into a ceiling or something else when uncrouching.
 
             if(!CheckAbilityRequirements()) return;
@@ -33,6 +36,9 @@ namespace SF.AbilityModule.Characters
 
         private void OnInputStopCrouching(InputAction.CallbackContext context)
         {
+            if (!CanStartAbility())
+                return;
+            
             _controller2d.IsCrouching = false;
             _controller2d.ResetColliderSize();
         }
