@@ -8,6 +8,13 @@ namespace SF.DialogueModule
     public class DialogueDatabase : ScriptableObject
     {
         public List<DialogueConversation> Conversations = new();
+        
+        public bool GetConversation(int guid, out DialogueConversation conversation)
+        {
+            conversation = Conversations.Find(x => x.GUID == guid);
+
+            return conversation != null;
+        }
     }
 
     /// <summary>

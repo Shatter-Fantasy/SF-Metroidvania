@@ -5,7 +5,8 @@ namespace SF.DialogueModule
 {
     public enum DialogueEventTypes
     {
-        DialoguePopup
+        DialogueOpen,
+        DialogueClose
     }
     public struct DialogueEvent
     {
