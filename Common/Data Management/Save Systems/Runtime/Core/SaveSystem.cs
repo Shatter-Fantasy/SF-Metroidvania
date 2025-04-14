@@ -88,7 +88,11 @@ namespace SF.DataManagement
             // First update the current information in the save file.
             UpdateSaveFile();
 
-
+            // Create a FileStream for writing data to.
+            DataStream = new FileStream(SaveFileNameBase, FileMode.Create);
+#if UNITY_EDITOR
+            StreamWriter streamWriter = new StreamWriter(DataStream);
+#else
             // Create an AES instance
             // The i stands for input
             Aes iAes = Aes.Create();
@@ -96,10 +100,7 @@ namespace SF.DataManagement
             // Save the generated IV aka the initialization Vector = IV
             // This tells the AES where to start as it encrypts data.
             byte[] inputIV = iAes.IV;
-
-            // Create a FileStream for writing data to.
-            DataStream = new FileStream(SaveFileNameBase, FileMode.Create);
-
+            
             // Just save the inputIV at the start of the fil before encrypting it.
             // It doesn't need to be private.
             DataStream.Write(inputIV,0,inputIV.Length);
@@ -113,7 +114,9 @@ namespace SF.DataManagement
 
             // Create StreamWriter, wrapping CryptoStream.
             StreamWriter streamWriter = new StreamWriter(cryptoStream);
-
+#endif
+            
+            
             // Serialize the SaveFileData object into JSON and save string.
             string jsonString = JsonUtility.ToJson(CurrentSaveFileData);
             
@@ -122,7 +125,11 @@ namespace SF.DataManagement
 
             //Close the streams in reverse order as they were made.
             streamWriter.Close();
+            
+#if UNITY_EDITOR
+#else
             cryptoStream.Close();
+#endif
             DataStream.Close();
         }
 
@@ -131,6 +138,10 @@ namespace SF.DataManagement
             if(!File.Exists(SaveFileNameBase))
                 return;
 
+#if UNITY_EDITOR
+            DataStream = new FileStream(SaveFileNameBase, FileMode.Open);
+            StreamReader streamReader = new StreamReader(DataStream);
+#else
             // Create new AES instance.
             // The o stands for output
             Aes oAes = Aes.Create();
@@ -154,6 +165,7 @@ namespace SF.DataManagement
 
             // Create a StreamReader to wrap the cryptoStream
             StreamReader streamReader = new StreamReader(cryptoStream);
+#endif
 
             // Read the entire file
             string text = streamReader.ReadToEnd();
