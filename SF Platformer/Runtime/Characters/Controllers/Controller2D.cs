@@ -1,5 +1,5 @@
 using System;
-
+using SF.Managers;
 using UnityEngine;
 
 using SF.Physics;
@@ -34,10 +34,9 @@ namespace SF.Characters.Controllers
         /// The type of PhysicsVolumeType the controller is in. Sets as none if not in one.
         /// </summary>
         public PhysicsVolumeType PhysicsVolumeType;
-
+        
         public CharacterState CharacterState;
         public ContactFilter2D PlatformFilter;
-
 
         public Vector2 Direction
         {
@@ -136,6 +135,10 @@ namespace SF.Characters.Controllers
         {
             Bounds = _boxCollider.bounds;
 
+            // If the player is not in control of the Input or Actions for this frame in game logic return.
+            if (GameManager.Instance.ControlState != GameControlState.Player)
+                return;
+            
             OnPreFixedUpdate();
 
             // Set the bools for what sides there was a collision on last frame.
@@ -151,6 +154,9 @@ namespace SF.Characters.Controllers
         }
         private void LateUpdate()
         {
+            if (GameManager.Instance.ControlState != GameControlState.Player)
+                return;
+            
             CalculateMovementState();
             OnLateUpdate();
         }
