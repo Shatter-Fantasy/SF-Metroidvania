@@ -2,6 +2,7 @@ using UnityEngine;
 
 using SF.Characters;
 using SF.Characters.Controllers;
+using SF.Managers;
 
 namespace SF.AbilityModule
 {
@@ -75,11 +76,14 @@ namespace SF.AbilityModule
 		{
             if(!_isInitialized || !enabled || _controller2d == null)
                 return false;
-
+            
+            if (GameManager.Instance.ControlState != GameControlState.Player)
+	            return false;
+            
             // If we are in a blocking movement state or blocking movement status don't start ability.
-            if((_controller2d.CharacterState.MovementState & BlockingMovementStates) > 0
-                || (_controller2d.CharacterState.CharacterStatus & BlockingCharacterStatus) > 0)
-                return false;
+            if((_controller2d.CharacterState.CurrentMovementState & BlockingMovementStates) > 0
+                || (_controller2d.CharacterState.CharacterStatus == CharacterStatus.Dead))
+					return false;
 
 			return CheckAbilityRequirements();
         }
