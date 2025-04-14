@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace SF.Characters
 {
@@ -9,23 +10,24 @@ namespace SF.Characters
 		AI
 	}
 	[Flags]
-	public enum MovementState
+	public enum MovementState : int
 	{
-		None,
-		Idle,
-		Crouching,
-		Walking,
-		Running,
-		Jumping,
-		Falling, 
-		Gliding,
-		Climbing,
-		ClimbingIdle,
+		None = 0,
+		Idle = 1,
+		Crouching = 2,
+		Walking = 4,
+		Running = 8,
+		Jumping = 16,
+		Falling = 32, 
+		Gliding = 64,
+		Climbing = 128,
+		ClimbingIdle = 256,
+		Paused = 512
 	}
 	public enum CharacterStatus
 	{
 		Alive,
-		Dead
+		Dead,
 	}
 
     public enum StatusEffect
@@ -40,7 +42,22 @@ namespace SF.Characters
     [Serializable]
 	public class CharacterState
 	{
-		public MovementState MovementState;
+		private MovementState _previousMovementState;
+		[SerializeField] private MovementState _currentMovementState;
+		public MovementState CurrentMovementState
+		{
+			get => _currentMovementState;
+			set
+			{
+
+				if (_currentMovementState == value)
+					return;
+
+				_previousMovementState = _currentMovementState;
+				_currentMovementState = value;
+			}
+		}
+		
 		public CharacterStatus CharacterStatus;
 
 		[UnityEngine.SerializeField] private StatusEffect _statusEffect;
@@ -56,5 +73,11 @@ namespace SF.Characters
 		}
 
 		public Action<StatusEffect> StatusEffectChanged;
+
+
+		public void RestoreMovementState()
+		{
+			_currentMovementState = _previousMovementState;
+		}
 	}
 }
