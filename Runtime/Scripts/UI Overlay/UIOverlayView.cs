@@ -1,4 +1,3 @@
-using SF.DialogueModule;
 using SF.Events;
 using SF.Inventory;
 using SF.InventoryModule;
@@ -7,16 +6,12 @@ using UnityEngine.UIElements;
 
 namespace SF.UIModule
 {
-    public class UIOverlayView : MonoBehaviour, EventListener<ItemEvent>, EventListener<DialogueEvent>
+    public class UIOverlayView : MonoBehaviour, EventListener<ItemEvent>
     {
         [SerializeField] private UIDocument _overlayUXML;
         [SerializeField] private ItemDatabase _itemDatabase;
-
-
-        [Header("Debugging")] public ItemDTO PickedUpTime;
         
-        private VisualElement _dialogueContainer;
-        private Label _dialogueLabel;
+        [Header("Debugging")] public ItemDTO PickedUpTime;
         
         private VisualElement _itemContainer;
         private Label _itemPickUpLabel;
@@ -36,9 +31,6 @@ namespace SF.UIModule
             if (_overlayUXML == null)
                 return;
             
-            _dialogueContainer = _overlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-dialogue__container");
-            _dialogueLabel = _overlayUXML.rootVisualElement.Q<Label>(name: "overlay-dialogue__label");
-            
             _itemContainer = _overlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-item__container");
             _itemPickUpLabel = _overlayUXML.rootVisualElement.Q<Label>(name: "overlay-item__label");
         }
@@ -53,22 +45,9 @@ namespace SF.UIModule
             _popTimer.StartTimerAsync();
         }
         
-        private void OnDialogueAppear(string dialogue)
-        {
-            
-            // Close misc pop up boxes for things like item pick-ups or smaller quest notifications when entering the dialogue conversation.
-            _itemContainer.style.visibility = Visibility.Hidden;
-            
-            _dialogueContainer.style.visibility = Visibility.Visible;
-            _dialogueLabel.text = dialogue;
-            _popTimer.StartTimerAsync();
-        }
-        
-        
         private void OnPopUpTimerCompleted()
         {
             _itemContainer.style.visibility = Visibility.Hidden;
-            _dialogueContainer.style.visibility = Visibility.Hidden;
         }
         
         public void OnEvent(ItemEvent itemEvent)
@@ -86,27 +65,13 @@ namespace SF.UIModule
             }
         }
 
-        public void OnEvent(DialogueEvent dialogueEvent)
-        {
-            switch (dialogueEvent.EventType)
-            {
-                case DialogueEventTypes.DialoguePopup:
-                { 
-                    OnDialogueAppear(dialogueEvent.Dialogue);
-                    break;
-                }
-            }
-        }
-
         private void OnEnable()
         {
             this.EventStartListening<ItemEvent>();
-            this.EventStartListening<DialogueEvent>();
         }
         private void OnDisable()
         {
             this.EventStopListening<ItemEvent>();
-            this.EventStopListening<DialogueEvent>();
         }
     }
 }
