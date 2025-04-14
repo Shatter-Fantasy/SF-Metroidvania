@@ -1,5 +1,6 @@
 using SF.Characters.Controllers;
 using SF.DataManagement;
+using SF.DialogueModule;
 using SF.Events;
 
 using UnityEngine;
@@ -15,7 +16,8 @@ namespace SF.Managers
 		SceneChanging,
 		Cutscenes,
 		CameraTransition,
-		TransformTransition // Player being moved within a scene, but has no control over the player. Think teleporting.
+		TransformTransition, // Player being moved within a scene, but has no control over the player. Think teleporting.
+        Dialogue
 	}
 
 	/// <summary>
@@ -25,22 +27,27 @@ namespace SF.Managers
 	{
 		Playing = 0,
 		Paused = 1,
-		MainMenu = 2
+		MainMenu = 2,
 	}
 
     [DefaultExecutionOrder(-5)]
-    [RequireComponent(typeof(LivesManager))]
-    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>
+    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>, EventListener<DialogueEvent>
     {
         [SerializeField] protected int _targetFrameRate = 60;
 		public GameControlState ControlState;
 		public GamePlayState PlayState;
 
         protected static GameObject PlayerSceneObject;
-
+        public static GameManager Instance;
+        
         private void Awake()
         {
             Application.targetFrameRate = _targetFrameRate;
+
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this);
         }
         protected virtual void Start()
         {
@@ -96,18 +103,36 @@ namespace SF.Managers
                     }
             }
         }
+        
+        public void OnEvent(DialogueEvent eventType)
+        {
+            switch (eventType.EventType)
+            {
+                case DialogueEventTypes.DialogueOpen:
+                {
+                    ControlState = GameControlState.Dialogue;
+                    break;
+                }
+                case DialogueEventTypes.DialogueClose:
+                {
+                    ControlState = GameControlState.Player;
+                    break;
+                }
+            }
+        }
 
         protected void OnEnable()
 		{
             this.EventStartListening<ApplicationEvent>();
             this.EventStartListening<GameEvent>();
+            this.EventStartListening<DialogueEvent>();
 		}
 
         protected void OnDisable ()
 		{
             this.EventStopListening<ApplicationEvent>();
             this.EventStopListening<GameEvent>();
+            this.EventStopListening<DialogueEvent>();
         }
-
     }
 }
