@@ -8,7 +8,8 @@
         "UnityEngine.UI",
         "SF.Utilities",
         "SF.Events",
-        "SF.DataManagement"
+        "SF.DataManagement",
+        "SF.Dialogue"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
