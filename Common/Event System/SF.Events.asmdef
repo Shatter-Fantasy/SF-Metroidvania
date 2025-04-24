@@ -1,7 +1,9 @@
 {
     "name": "SF.Events",
     "rootNamespace": "SF.Events",
-    "references": [],
+    "references": [
+        "GUID:5769175a692bee24cbd874f396613351"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
