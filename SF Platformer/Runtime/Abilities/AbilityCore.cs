@@ -18,7 +18,7 @@ namespace SF.AbilityModule
 		protected bool _isInitialized = false;		
 
 		protected GroundedController2D _controller2d;
-
+		protected bool _isPerformingAbility;
 
 		public virtual void Initialize(Controller2D controller2D = null)
 		{
@@ -63,9 +63,9 @@ namespace SF.AbilityModule
 
 		}
 
-		protected virtual void OnAbilityInteruption()
+		protected virtual void OnAbilityInterruption()
 		{
-
+			
 		}
 
 		/// <summary>
@@ -74,19 +74,29 @@ namespace SF.AbilityModule
 		/// <returns></returns>
 		protected bool CanStartAbility()
 		{
-            if(!_isInitialized || !enabled || _controller2d == null)
-                return false;
-            
-            if (GameManager.Instance.ControlState != GameControlState.Player)
-	            return false;
-            
-            // If we are in a blocking movement state or blocking movement status don't start ability.
+			if (!_isInitialized
+			    || !enabled
+			    || _controller2d == null
+			    || GameManager.Instance.ControlState != GameControlState.Player)
+			{
+				return false;
+			}
+
+			// If we are in a blocking movement state or blocking movement status don't start ability.
             if((_controller2d.CharacterState.CurrentMovementState & BlockingMovementStates) > 0
                 || (_controller2d.CharacterState.CharacterStatus == CharacterStatus.Dead))
 					return false;
 
-			return CheckAbilityRequirements();
-        }
+            bool doAbility = CheckAbilityRequirements();
+            // Ability is being interrupted for some reason.
+            if (_isPerformingAbility && !doAbility)
+            {
+	            OnAbilityInterruption();
+	            _isPerformingAbility = false;
+            }
+
+            return doAbility;
+		}
 
 		/// <summary>
 		///		Override this to create custom ability checking to make sure the ability can actually be used.
