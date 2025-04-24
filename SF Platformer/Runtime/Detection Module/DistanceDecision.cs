@@ -1,3 +1,4 @@
+using SF.Managers;
 using SF.StateMachine.Core;
 
 using UnityEngine;
@@ -9,7 +10,17 @@ namespace SF.StateMachine.Decisions
         [SerializeField] private float _distance = 3.5f;
         [SerializeField] private float calculatedDistance = 3.5f;
         [SerializeField] private Transform _target;
-
+        
+        [SerializeField] private bool _chasePlayer;
+        
+        protected override void Init()
+        {
+            if (_chasePlayer)
+            {
+                _target = GameManager.Instance.PlayerController.transform;
+            }
+        }
+        
         public override void CheckDecision(ref DecisionTransition decision, StateCore currentState)
         {
             if(_target == null || 
