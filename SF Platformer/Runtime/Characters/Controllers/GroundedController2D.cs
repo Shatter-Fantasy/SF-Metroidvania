@@ -283,7 +283,7 @@ namespace SF.Characters.Controllers
 		/// Calculates the current movement state that the player is currently in.
 		/// </summary>
 		/// <remarks>
-		/// This needs to be moved into the Controller2d parent class.
+		/// This needs to be moved into the Controller2D parent class.
 		/// </remarks>
 		protected override void CalculateMovementState()
 		{
@@ -297,28 +297,28 @@ namespace SF.Characters.Controllers
 			if(IsClimbing)
 			{
 				if(_calculatedVelocity.y != 0)
-					CharacterState.MovementState = MovementState.Climbing;
+					CharacterState.CurrentMovementState = MovementState.Climbing;
 				else
-					CharacterState.MovementState = MovementState.ClimbingIdle;
+					CharacterState.CurrentMovementState = MovementState.ClimbingIdle;
 			}
 
 			// If our velocity is negative we are either falling/gliding.
 			if(_calculatedVelocity.y < 0 && !IsClimbing)
 			{
 				if(IsGliding)
-					CharacterState.MovementState = MovementState.Gliding;
+					CharacterState.CurrentMovementState = MovementState.Gliding;
 				else
 				{
 					// Need to remove the crouch check when I get the collider calculation more accurate on resizing.
 					if(!IsCrouching)
-						CharacterState.MovementState = MovementState.Falling;
+						CharacterState.CurrentMovementState = MovementState.Falling;
 				}
                 IsFalling = true;
                 IsJumping = false;
             }
 
 			if(IsJumping)
-				CharacterState.MovementState = MovementState.Jumping;
+				CharacterState.CurrentMovementState = MovementState.Jumping;
 
 			if(IsGrounded)
 			{
@@ -326,11 +326,11 @@ namespace SF.Characters.Controllers
 
                 if(IsCrouching)
 				{
-					CharacterState.MovementState = MovementState.Crouching;
+					CharacterState.CurrentMovementState = MovementState.Crouching;
 					return;
 				}
 				
-				CharacterState.MovementState = (Direction.x == 0) ? MovementState.Idle : MovementState.Walking;
+				CharacterState.CurrentMovementState = (Direction.x == 0) ? MovementState.Idle : MovementState.Walking;
 			}
 		}
 
@@ -351,6 +351,9 @@ namespace SF.Characters.Controllers
 
 			//TODO: Do checks if colliding on the sides or ceiling to make sure the default collider size doesn't click through them.
 
+			// TODO: When the game is paused or in dialogue sometimes the crouching input can sttill come through when calling this and it causes the player to jump.
+			//	 This is because the is IsGrounded is not being checked while paused, but why is it even going through for some reason. 
+			
 			// Put character above ground.
 			if(IsGrounded)
 			{
