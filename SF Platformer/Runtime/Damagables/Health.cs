@@ -2,6 +2,7 @@ using UnityEngine;
 using SF.Events;
 using System;
 using SF.DamageModule;
+using Unity.Properties;
 
 namespace SF.SpawnModule
 {
@@ -21,7 +22,7 @@ namespace SF.SpawnModule
         public IDamageController DamageController;
 
         [SerializeField] private int _currentHealth;
-        public int CurrentHealth
+        [CreateProperty] public int CurrentHealth
         {
             get => _currentHealth;
             set
