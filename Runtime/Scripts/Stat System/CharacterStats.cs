@@ -5,6 +5,7 @@ using SF.SpawnModule;
 using UnityEngine;
 
 using SF.Experience;
+using Unity.Properties;
 
 namespace SF.StatModule
 {
@@ -19,7 +20,7 @@ namespace SF.StatModule
         /// <summary>
         /// The external character health component to link to.
         /// </summary>
-        [SerializeField] CharacterHealth _characterHealth;
+        [CreateProperty] public CharacterHealth CharacterHealth;
 
         public int CalculateDamage(int preDamage)
         {
@@ -28,14 +29,14 @@ namespace SF.StatModule
 
         protected void Awake()
         {
-            _characterHealth  =  _characterHealth != null 
-                ? _characterHealth 
+            CharacterHealth  =  CharacterHealth != null 
+                ? CharacterHealth 
                 : GetComponent<CharacterHealth>();
 
             // Make sure a component was find just in case the above was null.
             // IUf it is not null tell it is being externally controlled.
-            if(_characterHealth != null)
-                _characterHealth.DamageController = this;
+            if(CharacterHealth != null)
+                CharacterHealth.DamageController = this;
         }
     }
 }
