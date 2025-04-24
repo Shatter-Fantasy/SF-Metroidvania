@@ -1,3 +1,4 @@
+using Unity.Properties;
 using UnityEngine;
 
 namespace SF.Experience
@@ -13,11 +14,11 @@ namespace SF.Experience
     public class LevelStats
     {
         [Header("Level Data")]
-        public int CurrentLevel = 1;
+        [CreateProperty] public int CurrentLevel = 1;
         public int MaxLevel = 100;
 
         [Header("Experience Data")]
-        public int CurrentExperience
+        [CreateProperty] public int CurrentExperience
         {
             get => _currentExperience;
             set
@@ -30,7 +31,7 @@ namespace SF.Experience
         }
         [SerializeField] private int _currentExperience;
         
-        public int ExperienceToNextLevel = 40;
+        [CreateProperty] public int ExperienceToNextLevel = 40;
 
         // TODO: Add the experience curve system.
         /// <summary>
@@ -40,10 +41,7 @@ namespace SF.Experience
 
         private void LevelUp()
         {
-            int leftOverExperience = _currentExperience - ExperienceToNextLevel;
-            _currentExperience = leftOverExperience;
-
-            ExperienceToNextLevel = Mathf.RoundToInt(ExperienceToNextLevel * LevelUpModifier);
+            ExperienceToNextLevel += Mathf.RoundToInt(ExperienceToNextLevel * LevelUpModifier);
             CurrentLevel++;
         }
     }
