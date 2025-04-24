@@ -9,14 +9,6 @@ namespace SF.AbilityModule.Characters
     {
         [SerializeField] private Vector2 _colliderResized = new Vector2(.5f,1.5f);
 
-        protected override bool CheckAbilityRequirements()
-        {
-            if(!_isInitialized || !enabled || _controller2d == null)
-                return false;
-
-            return _controller2d.IsGrounded;
-        }
-
         private void OnInputCrouch(InputAction.CallbackContext context)
         {
             if (!CanStartAbility())
@@ -25,13 +17,19 @@ namespace SF.AbilityModule.Characters
             //TODO: Need to do some collider check to make sure the character is not being pushed into a ceiling or something else when uncrouching.
 
             if(!CheckAbilityRequirements()) return;
-
+            
             _controller2d.IsCrouching = !_controller2d.IsCrouching;
 
-            if(_controller2d.IsCrouching)
+            if (_controller2d.IsCrouching)
+            {
                 _controller2d.ResizeCollider(_colliderResized);
+                _isPerformingAbility = true;
+            }
             else
+            {
                 _controller2d.ResetColliderSize();
+                _isPerformingAbility = false;
+            }
         }
 
         private void OnInputStopCrouching(InputAction.CallbackContext context)
@@ -41,6 +39,29 @@ namespace SF.AbilityModule.Characters
             
             _controller2d.IsCrouching = false;
             _controller2d.ResetColliderSize();
+        }
+
+        protected override void OnAbilityInterruption()
+        {
+            _controller2d.IsCrouching = false;
+            _controller2d.ResetColliderSize();
+        }
+        
+        protected override bool CheckAbilityRequirements()
+        {
+            if (_controller2d.IsClimbing
+                    || _controller2d.IsJumping
+                    || _controller2d.IsFalling
+                    || _controller2d.IsSwimming
+                    || _controller2d.IsGliding
+                    || !_controller2d.IsGrounded
+                    || _controller2d.Direction.x != 0
+                )
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void OnEnable()
