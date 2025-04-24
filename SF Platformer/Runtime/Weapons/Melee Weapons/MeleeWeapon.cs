@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -7,18 +8,29 @@ namespace SF.Weapons
 {
     public class MeleeWeapon : WeaponBase, IWeapon
     {
-        [SerializeField] private Collider2D _hitBox;
+        [SerializeField] private BoxCollider2D _hitBox;
         private List<Collider2D> _hitResults = new();
 
         private int _comboIndex = 0;
         private bool _onCooldown = false;
-        [SerializeField] private float _attackDelayTimer = 0;
+
+        private void Awake()
+        {
+            _attackTimer = new Timer(ComboAttacks[0].AttackTimer, OnUseComplete);
+            _controller2D.OnDirectionChanged += OnDirectionChange;
+        }
+
+        private void OnDirectionChange(object sender, Vector2 newDirection)
+        {
+            if (_hitBox != null && newDirection != Vector2.zero)
+                transform.localScale = new Vector3(newDirection.x,1,1);
+        }
 
         public override void Use()
         {
             if(_onCooldown)
                 return;
-
+            
             if(_character2D != null)
                 _character2D.SetAnimationState(
                     ComboAttacks[0].Name, 
@@ -35,18 +47,17 @@ namespace SF.Weapons
                 }
             }
 
-            _attackDelayTimer = ComboAttacks[_comboIndex].AttackTimer;
+            // TODO: We need to do a check for combo timers.
+            //_attackDelayTimer = ComboAttacks[_comboIndex].AttackTimer;
+            _attackTimer.StartTimerAsync();
             _onCooldown = true;
         }
 
-        private void Update()
+
+        private void OnUseComplete()
         {
-            if(_attackDelayTimer < 0.05)
-                _onCooldown = false;
-            else
-            {
-                _attackDelayTimer -= Time.deltaTime;
-            }
+            UseCompleted?.Invoke();
+            _onCooldown = false;
         }
     }
 }
