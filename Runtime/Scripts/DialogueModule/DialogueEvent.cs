@@ -8,7 +8,7 @@ namespace SF.DialogueModule
         DialogueOpen,
         DialogueClose
     }
-    public struct DialogueEvent
+    public struct DialogueEvent : IEvent
     {
         public DialogueEventTypes EventType;
         public string Dialogue;
