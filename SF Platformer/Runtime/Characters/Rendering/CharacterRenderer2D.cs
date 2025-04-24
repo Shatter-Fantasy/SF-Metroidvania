@@ -5,6 +5,7 @@ using Unity.Profiling;
 using UnityEngine;
 
 using SF.Characters.Controllers;
+using SF.Managers;
 
 
 namespace SF.Characters
@@ -27,7 +28,7 @@ namespace SF.Characters
 		private Controller2D _controller;
 		#endregion
 
-		private int AnimationHash => Animator.StringToHash(CharacterState.MovementState.ToString());
+		private int AnimationHash => Animator.StringToHash(CharacterState.CurrentMovementState.ToString());
 		private int _forcedStateHash = 0;
 		private float _animationFadeTime = 0;
 		private bool _isForcedCrossFading = false;
@@ -113,7 +114,7 @@ namespace SF.Characters
 
 		private void OnDirectionChanged(object sender, Vector2 direction)
 		{
-			if(direction.x == 0)
+			if(direction.x == 0 || GameManager.Instance.ControlState != GameControlState.Player)
 				return;
 
 			SpriteFlip(direction);
