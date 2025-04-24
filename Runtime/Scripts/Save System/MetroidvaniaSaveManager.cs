@@ -26,8 +26,6 @@ namespace SF.DataManagement
             
             // Out Metroidvania code here.
             var data = CurrentSaveFileData.GetSaveDataBlock<MetroidvaniaSaveData>();
-
-            Debug.Log(data.PlayerInventory);
             
             if(PlayerInventory != null)
                 PlayerInventory = data.PlayerInventory;

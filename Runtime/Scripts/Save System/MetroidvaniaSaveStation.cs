@@ -1,8 +1,6 @@
 using SF.Characters.Controllers;
-using SF.Interactables;
 using SF.SpawnModule;
 using SF.StatModule;
-using UnityEngine;
 
 namespace SF.DataManagement
 {
@@ -25,7 +23,6 @@ namespace SF.DataManagement
             if(controller.TryGetComponent<PlayerStats>(out PlayerStats stats))
             {
                 MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.PlayerStats = stats;
-                Debug.Log(stats);
             }
             
             SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;
