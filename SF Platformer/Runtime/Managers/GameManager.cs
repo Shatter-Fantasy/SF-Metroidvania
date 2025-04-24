@@ -39,7 +39,8 @@ namespace SF.Managers
 
         protected static GameObject PlayerSceneObject;
         public static GameManager Instance;
-        
+
+        public PlayerController PlayerController;
         private void Awake()
         {
             Application.targetFrameRate = _targetFrameRate;
