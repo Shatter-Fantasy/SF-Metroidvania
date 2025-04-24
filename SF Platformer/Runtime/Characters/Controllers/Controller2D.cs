@@ -38,6 +38,7 @@ namespace SF.Characters.Controllers
         public CharacterState CharacterState;
         public ContactFilter2D PlatformFilter;
 
+        
         public Vector2 Direction
         {
             get { return _direction; }
@@ -48,6 +49,10 @@ namespace SF.Characters.Controllers
             }
         }
         [SerializeField] private Vector2 _direction;
+        /// <summary>
+        /// Used to keep track of the direction to restore after unfreezing the Controller2D.
+        /// </summary>
+        protected Vector2 _previousDirection;
         public EventHandler<Vector2> OnDirectionChanged;
 
         #region Components 
@@ -284,6 +289,19 @@ namespace SF.Characters.Controllers
         protected virtual void CalculateVertical()
         {
         }
+
+        public void FreezeController()
+        {
+            _calculatedVelocity.x = 0;
+            _externalVelocity.x = 0;
+            _previousDirection = _direction;
+            SetDirection(0);
+        }
+        
+        public void UnfreezeController()
+        {
+            SetDirection(_previousDirection.x);
+        }
         public void SetExternalVelocity(Vector2 force)
         {
             _externalVelocity = force;
@@ -299,6 +317,11 @@ namespace SF.Characters.Controllers
         public virtual void AddVerticalVelocity(float verticalVelocity)
         {
             _calculatedVelocity.y += verticalVelocity;
+        }
+
+        public virtual void SetVelocity(Vector2 velocity)
+        {
+            _calculatedVelocity = velocity;
         }
         public virtual void SetHorizontalVelocity(float horizontalVelocity)
         {
