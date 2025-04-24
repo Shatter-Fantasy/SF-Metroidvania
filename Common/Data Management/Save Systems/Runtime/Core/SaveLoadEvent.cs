@@ -11,7 +11,7 @@ namespace SF.DataManagement
         CopyingFile,
         DeletingSaveFile
     }
-    public struct SaveLoadEvent
+    public struct SaveLoadEvent : IEvent
     {
         public SaveLoadEventTypes EventType;
         
