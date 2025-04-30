@@ -13,7 +13,7 @@ namespace SF.UIModule
         
         [Header("Debugging")] public ItemDTO PickedUpTime;
         
-        private VisualElement _itemContainer;
+        private VisualElement _overlayContainer;
         private Label _itemPickUpLabel;
         
         [SerializeField] private Timer _popTimer;
@@ -30,8 +30,10 @@ namespace SF.UIModule
         {
             if (_overlayUXML == null)
                 return;
+            _overlayUXML.rootVisualElement.pickingMode = PickingMode.Ignore;
             
-            _itemContainer = _overlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-item__container");
+            
+            _overlayContainer = _overlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay__view");
             _itemPickUpLabel = _overlayUXML.rootVisualElement.Q<Label>(name: "overlay-item__label");
         }
         
@@ -40,14 +42,14 @@ namespace SF.UIModule
             var itemDTO = _itemDatabase[itemID];
             PickedUpTime = itemDTO;
             _itemPickUpLabel.text = itemDTO.Name;
-            _itemContainer.style.visibility = Visibility.Visible;
+            _overlayContainer.style.visibility = Visibility.Visible;
 
             _popTimer.StartTimerAsync();
         }
         
         private void OnPopUpTimerCompleted()
         {
-            _itemContainer.style.visibility = Visibility.Hidden;
+            _overlayContainer.style.visibility = Visibility.Hidden;
         }
         
         public void OnEvent(ItemEvent itemEvent)
