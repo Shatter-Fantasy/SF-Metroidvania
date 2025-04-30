@@ -10,6 +10,9 @@ namespace SF.DataManagement
         public PlayerHealth PlayerHealth;
         public PlayerStats PlayerStats;
         public PlayerInventory PlayerInventory;
-        public float TestFloat;
+        /// <summary>
+        /// The id of the room the save station that was used is in.
+        /// </summary>
+        public int SavedRoomID;
     }
 }

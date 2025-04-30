@@ -1,6 +1,7 @@
 using SF.Characters.Controllers;
 using SF.InventoryModule;
 using SF.Managers;
+using SF.RoomModule;
 using SF.SpawnModule;
 using UnityEngine;
 
@@ -29,6 +30,10 @@ namespace SF.DataManagement
             
             if(PlayerInventory != null)
                 PlayerInventory = data.PlayerInventory;
+            
+            // We set the spawned instance of the save room first before spawning the player.
+            // This makes the player spawning trigger the RoomSystem.OnRoomEnter properly. 
+            RoomSystem.SetInitialRoom(data.SavedRoomID);
             
             CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint, CurrentSaveFileData.CurrentSaveStation as CheckPoint);
         }
