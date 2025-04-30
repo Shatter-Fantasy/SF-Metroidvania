@@ -22,7 +22,9 @@ namespace SF.CameraModule
         }
         private static CameraController _instance;
 
+        public Transform CameraTarget;
         public CinemachineCamera PlayerCamera;
+        public CinemachineConfiner2D CameraConfiner;
 
         private void Awake()
         {
@@ -38,6 +40,8 @@ namespace SF.CameraModule
                 return;
                 
             Instance.PlayerCamera = cmCamera;
+            Instance.PlayerCamera.Follow = Instance.CameraTarget;
+            Instance.CameraConfiner = Instance.PlayerCamera.GetComponent<CinemachineConfiner2D>();
         }
 
         public static void ChangeCameraConfiner(CinemachineCamera cmCamera)
@@ -49,14 +53,23 @@ namespace SF.CameraModule
             }
         }
 
+        // There is a bug in here on Unity's side confirmed by devs in Cinemachine 3.1.3 and other Cinemachine 3.x.x versions.
+        // See link for devs talking about it being fixed in 3.1.4
+        // Bounding shapes are not being updated properly.
+        // https://discussions.unity.com/t/cinemachine-confiner2d-not-respected-in-v3-1-3/1607171/3
+        // https://discussions.unity.com/t/latest-cinemachine-3-1-3-not-handling-confiners-as-well-as-previous-versions-2-10-3/1631522/4
         public static void ChangeCameraConfiner(Collider2D collider2D)
         {
-
+            if (Instance.CameraConfiner?.BoundingShape2D == collider2D)
+                return;
             if(Instance.PlayerCamera != null)
             {
-                Debug.Log(Instance.PlayerCamera, Instance.PlayerCamera.gameObject);
-                Instance.PlayerCamera.GetComponent<CinemachineConfiner2D>().BoundingShape2D = collider2D;
-                Instance.PlayerCamera.GetComponent<CinemachineConfiner2D>().InvalidateBoundingShapeCache();
+                if (Instance.CameraConfiner == null)
+                    Instance.CameraConfiner = Instance.PlayerCamera.GetComponent<CinemachineConfiner2D>();
+                
+                Instance.CameraConfiner.InvalidateBoundingShapeCache();
+                Instance.CameraConfiner.BoundingShape2D = collider2D;
+                Instance.CameraConfiner.BakeBoundingShape(Instance.PlayerCamera, 1);
             }
         }
     }

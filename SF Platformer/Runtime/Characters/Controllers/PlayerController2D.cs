@@ -12,8 +12,7 @@ namespace SF.Characters.Controllers
         {
             base.OnAwake();
 
-            if(gameObject.TryGetComponentInChildren(out CinemachineCamera cinemachineCamera))
-                CameraController.SetPlayerCMCamera(cinemachineCamera);
+            CameraController.Instance.CameraTarget = transform;
 
             if (GameManager.Instance != null && GameManager.Instance.PlayerController == null)
                 GameManager.Instance.PlayerController = this;
