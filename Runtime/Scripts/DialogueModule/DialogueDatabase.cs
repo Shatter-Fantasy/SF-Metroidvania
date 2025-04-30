@@ -25,6 +25,10 @@ namespace SF.DialogueModule
     public class DialogueConversation
     {
         /// <summary>
+        /// The name of this conversation.
+        /// </summary>
+        public string Name;
+        /// <summary>
         /// The unique identifier for a <see cref="DialogueConversation"/>.
         /// </summary>
         // Shh you don't see this stupid way to generate a unique int value.

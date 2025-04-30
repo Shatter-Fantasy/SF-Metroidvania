@@ -23,9 +23,17 @@ namespace SF.DialogueModule
             }
         }
         
+        /// <summary>
+        /// The current conversation going on.
+        /// </summary>
         [SerializeField] private DialogueConversation _dialogueConversation;
         [SerializeField] private DialogueDatabase _dialogueDB;
-        private static DialogueConversation _recentConversation => _instance._dialogueConversation;
+
+        private static DialogueConversation RecentConversation
+        {
+            get => _instance._dialogueConversation;
+            set => _instance._dialogueConversation = value;
+        }
         
         [SerializeField] private UIDocument _dialogueOverlayUXML;
         private VisualElement _dialogueContainer;
@@ -44,17 +52,26 @@ namespace SF.DialogueModule
             _dialogueContainer = _dialogueOverlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-dialogue__container");
             _dialogueLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "overlay-dialogue__label");
         }
-
-
+        
         public static void TriggerConversation(int guid)
         {
             if(_instance._dialogueDB.GetConversation(guid, out DialogueConversation conversation))
             {
                 _instance._dialogueConversation = conversation;
-                DialogueEvent.Trigger(DialogueEventTypes.DialogueOpen, _recentConversation.NextDialogueEntry());
+                DialogueEvent.Trigger(DialogueEventTypes.DialogueOpen, RecentConversation.NextDialogueEntry());
             }
             else
                 DialogueEvent.Trigger(DialogueEventTypes.DialogueOpen,"No conversation for the Guid was found.");
+        }
+
+        public static void StopConversation()
+        {
+            // If there is no conversation going on, no need to try and stop any.
+            if (RecentConversation == null)
+                return;
+
+            RecentConversation = null;
+            _instance.OnDialogueClose();
         }
         
         private void OnDialogueOpen(string dialogue)
