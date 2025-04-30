@@ -19,7 +19,7 @@ namespace SF.AbilityModule.Characters
             // TODO: Reset jumps on starting climb.
         }
 
-        protected override void OnAbilityInteruption()
+        protected override void OnAbilityInterruption()
         {
             OnClimbEnd();
         }
@@ -38,7 +38,7 @@ namespace SF.AbilityModule.Characters
 
             Debug.Log("Doing the OnUpdate state checks.");
             if(!CollisionInfo.ClimbableSurface || _controller2d.IsJumping)
-                OnAbilityInteruption();
+                OnAbilityInterruption();
         }
 
         private void OnClimbMove(InputAction.CallbackContext ctx)
