@@ -9,7 +9,10 @@ namespace SF.DataManagement
     
     public class SaveStation : CheckPoint, IInteractable
     {
-        
+        /// <summary>
+        /// The room id that the save room is in.
+        /// </summary>
+        public int RoomID;
         [field:SerializeField] public InteractableMode InteractableMode { get; set; }
         
         public virtual void Interact()
