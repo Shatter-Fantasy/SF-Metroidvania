@@ -31,10 +31,10 @@ namespace SF.SpawnModule
                 _currentHealth = value;
 
                 if(previousValue != _currentHealth)
-                    HealthChangedCallback?.Invoke();
+                    HealthChangedCallback?.Invoke(_currentHealth);
             }
         }
-        public Action HealthChangedCallback;
+        public Action<int> HealthChangedCallback;
         
         public int MaxHealth = 10;
 
