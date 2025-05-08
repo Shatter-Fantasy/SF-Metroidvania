@@ -16,9 +16,9 @@ namespace SF.DialogueModule
             DialogueManager.TriggerConversation(ConversationGUID);
         }
 
-        private void OnTriggerExit2D(Collider2D other)
+        private void OnCollisionExit2D(Collision2D other)
         {
-            if (other.CompareTag("Player"))
+            if (other.collider.CompareTag("Player"))
             {
                 DialogueManager.StopConversation();
             }
