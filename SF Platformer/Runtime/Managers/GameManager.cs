@@ -33,11 +33,18 @@ namespace SF.Managers
     [DefaultExecutionOrder(-5)]
     public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>, EventListener<DialogueEvent>
     {
+        #if UNITY_EDITOR
+        /// <summary>
+        /// Set false to not load a save file allowing the player to spawn in place for debugging in the editor.
+        /// </summary>
+        [SerializeField] protected bool _shouldLoadData;
+        #endif
+        
         [SerializeField] protected int _targetFrameRate = 60;
 		public GameControlState ControlState;
 		public GamePlayState PlayState;
 
-        protected static GameObject PlayerSceneObject;
+        public static GameObject PlayerSceneObject { get; protected set; }
         public static GameManager Instance;
 
         public PlayerController PlayerController;
