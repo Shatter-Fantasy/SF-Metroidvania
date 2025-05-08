@@ -55,6 +55,11 @@ namespace SF.DialogueModule
         
         public static void TriggerConversation(int guid)
         {
+            if (_instance == null)
+            {
+                Debug.Log("There was no instance of the DialogueManager being set.");
+                return;
+            }
             if(_instance._dialogueDB.GetConversation(guid, out DialogueConversation conversation))
             {
                 _instance._dialogueConversation = conversation;
@@ -66,6 +71,9 @@ namespace SF.DialogueModule
 
         public static void StopConversation()
         {
+            if (_instance == null)
+                return;
+            
             // If there is no conversation going on, no need to try and stop any.
             if (RecentConversation == null)
                 return;
@@ -113,5 +121,6 @@ namespace SF.DialogueModule
         {
             this.EventStopListening<DialogueEvent>();
         }
+        
     }
 }
