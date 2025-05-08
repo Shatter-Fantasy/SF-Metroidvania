@@ -13,6 +13,14 @@ namespace SF.RoomModule
         
         public List<Room> Rooms = new();
         
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+            
+            Debug.Log(Instance);
+        }
+
         private void OnEnable()
         {
             if (Instance == null)
