@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using SF.CameraModule;
 using Unity.Cinemachine;
@@ -16,13 +15,25 @@ namespace SF.RoomModule
         public BoxCollider2D RoomConfiner;
         public CinemachineCamera RoomCamera;
         
+
+        /// <summary>
+        /// These are optional transition ids for when room controller needs to keep track of fast travel points or using <see cref="TransitionTypes.Local"/>.
+        /// </summary>
+        public List<RoomTransition> RoomTransitions = new List<RoomTransition>();
+        
         private void Awake()
         {
             if (RoomConfiner == null)
                 RoomConfiner = GetComponent<BoxCollider2D>();
+
+            // This is the ignore ray cast physics layer.
+            gameObject.layer = 2;
         }
         
-        public void LoadRoom()
+        /// <summary>
+        /// Changes the current room and invokes all the required CameraSystem, RoomSystem, and GameManagers calls. 
+        /// </summary>
+        public void MakeCurrentRoom()
         {
             // Can happen from CinemachineTriggerAction when exiting playmode.
             // If the collider is deloaded first it triggers an onexit callback while deloading the runtime.
@@ -33,13 +44,16 @@ namespace SF.RoomModule
 
             if (RoomCamera != null)
             {
-                CameraController.SetPlayerCMCamera(RoomCamera);
+                // This sets the priority of the virtual cameras for the old and new rooms while setting the new RoomConfiners.
+                CameraController.SwitchPlayerCMCamera(RoomCamera);
             }
 
             foreach (var roomID in RoomIdsToLoadOnEnter)
             {
                 RoomSystem.LoadConnectedRoom(roomID);
             }
+
+            RoomSystem.SetCurrentRoom(RoomID);
         }
         
         private void OnDestroy()
