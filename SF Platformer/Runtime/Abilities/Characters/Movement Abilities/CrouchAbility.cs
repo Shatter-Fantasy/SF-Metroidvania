@@ -34,9 +34,6 @@ namespace SF.AbilityModule.Characters
 
         private void OnInputStopCrouching(InputAction.CallbackContext context)
         {
-            if (!CanStartAbility())
-                return;
-            
             _controller2d.IsCrouching = false;
             _controller2d.ResetColliderSize();
         }
