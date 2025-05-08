@@ -6,6 +6,21 @@ namespace SF.CameraModule
 {
     public class CameraController : MonoBehaviour
     {
+        /// <summary>
+        /// This is the default priority that is set on the old virtual cameras that are being switched away from.
+        /// </summary>
+        public const int DefaultPriority = -1;
+
+        /// <summary>
+        /// This is the virtual camera priority value for the currently active player camera.
+        /// </summary>
+        public const int ActivePriority = 1;
+        
+        /// <summary>
+        /// This is the virtual camera priority value for the cutscene virtual cameras when a cutscene is playing requiring camera overriding.
+        /// </summary>
+        public const int CutsceneCameraPriority = 6;
+        
         public static CameraController Instance
         {
             get 
@@ -30,20 +45,34 @@ namespace SF.CameraModule
         {
             if(Instance != null && _instance  != this)
                 Destroy(this);
-
-            Instance = this;
+            else // done in an else statement for times when the component is not destroyed instantly and continues into the Awake call.
+            {
+                Instance = this;
+            }
         }
 
-        public static void SetPlayerCMCamera(CinemachineCamera cmCamera)
+        public static void SwitchPlayerCMCamera(CinemachineCamera cmCamera, int priority = DefaultPriority)
         {
             if(cmCamera == null)
                 return;
-                
-            Instance.PlayerCamera = cmCamera;
-            Instance.PlayerCamera.Follow = Instance.CameraTarget;
-            Instance.CameraConfiner = Instance.PlayerCamera.GetComponent<CinemachineConfiner2D>();
-        }
 
+            /* Not an error if this check is null: This is an expected result in some cases.
+                This can happen when loading the first room in an area,
+                 loading a game file into a save room, or when doing certain types of RoomTransitions from scene to scene. 
+            */ 
+            if (Instance.PlayerCamera != null)
+            {
+                // Reset the previous/old virtual camera priority.
+                // At this point Instance.PlayerCamera is still the old camera.
+                Instance.PlayerCamera.Priority = DefaultPriority;
+            }
+
+            Instance.PlayerCamera = cmCamera;
+            // From here Instance.PlayerCamera is the new camera.
+            Instance.PlayerCamera.Priority = ActivePriority;
+            Instance.PlayerCamera.Follow = Instance.CameraTarget;
+        }
+        
         public static void ChangeCameraConfiner(CinemachineCamera cmCamera)
         {
             if(Instance.PlayerCamera != null)
