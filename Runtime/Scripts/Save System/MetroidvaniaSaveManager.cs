@@ -9,6 +9,10 @@ namespace SF.DataManagement
 {
     public class MetroidvaniaSaveManager : SaveSystem
     {
+        /// <summary>
+        /// The starting room for new games or when no save files were find.
+        /// </summary>
+        private static readonly int StartingRoom = 0;
         public static PlayerInventory PlayerInventory;
         public static MetroidvaniaSaveData CurrentMetroidvaniaSaveData = new();
         
@@ -23,17 +27,25 @@ namespace SF.DataManagement
 
         public static void LoadGame()
         {
-            LoadDataFile();
+            if (HasSaveFiles())
+            {
+                LoadDataFile();
+                
+                // Out Metroidvania code here.
+                var data = CurrentSaveFileData.GetSaveDataBlock<MetroidvaniaSaveData>();
             
-            // Out Metroidvania code here.
-            var data = CurrentSaveFileData.GetSaveDataBlock<MetroidvaniaSaveData>();
+                if(PlayerInventory != null)
+                    PlayerInventory = data.PlayerInventory;
             
-            if(PlayerInventory != null)
-                PlayerInventory = data.PlayerInventory;
-            
-            // We set the spawned instance of the save room first before spawning the player.
-            // This makes the player spawning trigger the RoomSystem.OnRoomEnter properly. 
-            RoomSystem.SetInitialRoom(data.SavedRoomID);
+                // We set the spawned instance of the save room first before spawning the player.
+                // This makes the player spawning trigger the RoomSystem.OnRoomEnter properly. 
+                RoomSystem.SetInitialRoom(data.SavedRoomID);
+            }
+            else // if there is no save file already made.
+            {
+                // Set the starting room to the default new game room.
+                RoomSystem.SetInitialRoom(StartingRoom);
+            }
             
             CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint, CurrentSaveFileData.CurrentSaveStation as CheckPoint);
         }

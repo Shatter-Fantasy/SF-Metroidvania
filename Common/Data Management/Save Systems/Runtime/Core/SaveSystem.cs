@@ -135,8 +135,12 @@ namespace SF.DataManagement
 
         public static void LoadDataFile()
         {
-            if(!File.Exists(SaveFileNameBase))
+            // If there is no save file, and we are loading in the game this means a new game save needs made possibly. 
+            if (!File.Exists(SaveFileNameBase))
+            {
                 return;
+            }
+
 
 #if UNITY_EDITOR
             DataStream = new FileStream(SaveFileNameBase, FileMode.Open);
@@ -203,6 +207,12 @@ namespace SF.DataManagement
         public static List<SaveDataBlock> CurrentSaveDataBlocks()
         {
             return CurrentSaveFileData.SaveDatas;
+        }
+
+        public static bool HasSaveFiles()
+        {
+            // If there is no save file, and we are loading in the game this means a new game save needs made possibly. 
+            return File.Exists(SaveFileNameBase);
         }
     }
     
