@@ -10,7 +10,8 @@ namespace SF.Interactables
 	{
 		Collision,
 		Input,
-		RayCast // Used to do interaction during ray cast checks only.
+		RayCast, // Used to do interaction during ray cast checks only.
+		ItemUse
 	}
 	/// <summary>
 	/// Allows any object to interact with the component implementing this interface.

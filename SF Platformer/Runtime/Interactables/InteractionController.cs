@@ -8,9 +8,11 @@ namespace SF.Interactables
 {
     public class InteractionController : MonoBehaviour
     {
-        [SerializeField] private LayerMask _interactableLayers;
+        [SerializeField] private ContactFilter2D _interactableFilter;
         private BoxCollider2D _boxCollider2D;
 
+        [SerializeField] private Collider2D[] _hitColliders = new Collider2D[5];
+        
         private void Awake()
         {
             _boxCollider2D = GetComponent<BoxCollider2D>();
@@ -38,21 +40,24 @@ namespace SF.Interactables
         private void OnInteractPerformed(InputAction.CallbackContext ctx)
         {
             if(_boxCollider2D == null) return;
+            
+                
+            Physics2D.OverlapBox((Vector2)transform.position, _boxCollider2D.bounds.size, 0f, _interactableFilter, _hitColliders);
 
-            var col2D = Physics2D.OverlapBox(transform.position, _boxCollider2D.bounds.size, 0, _interactableLayers);
-
-
-            if(col2D != null && col2D.TryGetComponent(out IInteractable interactable))
+            for (int i = 0; i < _hitColliders.Length; i++)
             {
-                if(interactable.InteractableMode == InteractableMode.Input)
+                if(_hitColliders[i] != null && _hitColliders[i] .TryGetComponent(out IInteractable interactable))
                 {
-                    if(gameObject.TryGetComponent(out PlayerController controller))
+                    if(interactable.InteractableMode == InteractableMode.Input)
                     {
-                        interactable.Interact(controller);
-                    }
-                    else
-                    {
-                        interactable.Interact();
+                        if(gameObject.TryGetComponent(out PlayerController controller))
+                        {
+                            interactable.Interact(controller);
+                        }
+                        else
+                        {
+                            interactable.Interact();
+                        }
                     }
                 }
             }
