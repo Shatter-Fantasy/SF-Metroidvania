@@ -53,7 +53,10 @@ namespace SF.Managers
             
             if (WasGameInitialized)
                 return;
-            
+
+            if (_roomDB != null)
+                RoomDB.Instance = _roomDB;
+                    
             InitializeGame();
         }
 
@@ -68,6 +71,7 @@ namespace SF.Managers
                 LevelPlayData.Instance = _levelPlayData;
             
             InitializeInSceneManagers();
+            
             
             WasGameInitialized = true;
         }
