@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SF.CameraModule;
 using Unity.Cinemachine;
@@ -11,10 +12,8 @@ namespace SF.RoomModule
         /// The id for the room's spawned instance the RoomController is controlling.
         /// </summary>
         public int RoomID;
-        public List<int> RoomIdsToLoadOnEnter = new();
-        public BoxCollider2D RoomConfiner;
+        [NonSerialized] public List<int> RoomIdsToLoadOnEnter = new();
         public CinemachineCamera RoomCamera;
-        
 
         /// <summary>
         /// These are optional transition ids for when room controller needs to keep track of fast travel points or using <see cref="TransitionTypes.Local"/>.
@@ -23,11 +22,9 @@ namespace SF.RoomModule
         
         private void Awake()
         {
-            if (RoomConfiner == null)
-                RoomConfiner = GetComponent<BoxCollider2D>();
-
             // This is the ignore ray cast physics layer.
             gameObject.layer = 2;
+            RoomIdsToLoadOnEnter = RoomDB.Instance[RoomID].ConnectedRoomsIDs;
         }
         
         /// <summary>
@@ -55,7 +52,12 @@ namespace SF.RoomModule
 
             RoomSystem.SetCurrentRoom(RoomID);
         }
-        
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            MakeCurrentRoom();
+        }
+
         private void OnDestroy()
         {
             RoomSystem.CleanUpRoom(RoomID);
