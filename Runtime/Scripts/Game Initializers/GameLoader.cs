@@ -1,3 +1,4 @@
+using SF.DataManagement;
 using SF.RoomModule;
 using SF.DialogueModule;
 using SF.LevelModule;
@@ -12,8 +13,9 @@ namespace SF.Managers
     [DefaultExecutionOrder(-5)]
     public class GameLoader : MonoBehaviour
     {
+        public int StartingRoomID = 0;
+        
         public static GameLoader Instance;
-
         public static bool WasGameInitialized = false;
         /* Since Scriptable Objects don't have their lifecycle events done until they are referenced in scene,
          we set them up via the GameLoader Scriptable Object with a RuntimeInitializeOnLoadMethod
@@ -56,7 +58,9 @@ namespace SF.Managers
 
             if (_roomDB != null)
                 RoomDB.Instance = _roomDB;
-                    
+
+            MetroidvaniaSaveManager.StartingRoom = StartingRoomID;
+            
             InitializeGame();
         }
 

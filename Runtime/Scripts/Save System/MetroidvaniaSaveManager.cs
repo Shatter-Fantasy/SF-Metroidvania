@@ -12,7 +12,7 @@ namespace SF.DataManagement
         /// <summary>
         /// The starting room for new games or when no save files were find.
         /// </summary>
-        private static readonly int StartingRoom = 0;
+        public static int StartingRoom = 0;
         public static PlayerInventory PlayerInventory;
         public static MetroidvaniaSaveData CurrentMetroidvaniaSaveData = new();
         
