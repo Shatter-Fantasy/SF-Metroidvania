@@ -159,9 +159,6 @@ namespace SF.Characters.Controllers
         }
         private void LateUpdate()
         {
-            if (GameManager.Instance.ControlState != GameControlState.Player)
-                return;
-            
             CalculateMovementState();
             OnLateUpdate();
         }

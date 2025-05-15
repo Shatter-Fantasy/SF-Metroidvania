@@ -15,10 +15,13 @@ namespace SF.Abilities.CombatModule
         {
             if(_weaponBase == null)
                 return;
+            
+            if(!CanStartAbility()) 
+                return;
 
             _weaponBase.Use();
         }
-
+        
         private void OnEnable()
         {
             InputManager.Controls.Player.Enable();
@@ -31,7 +34,5 @@ namespace SF.Abilities.CombatModule
 
             InputManager.Controls.Player.Attack.performed -= OnAttackPerformed;
         }
-
-
     }
 }
