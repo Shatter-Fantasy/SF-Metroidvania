@@ -53,8 +53,9 @@ namespace SF.SpawnModule
             }
         }
         
-        protected void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             this.EventStopListening<SaveLoadEvent>();
         }
     }
