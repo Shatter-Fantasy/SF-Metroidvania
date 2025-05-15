@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using SF.Events;
 using UnityEngine;
@@ -29,11 +30,13 @@ namespace SF.DialogueModule
         [SerializeField] private DialogueConversation _dialogueConversation;
         [SerializeField] private DialogueDatabase _dialogueDB;
 
-        private static DialogueConversation RecentConversation
+        public static DialogueConversation RecentConversation
         {
             get => _instance._dialogueConversation;
-            set => _instance._dialogueConversation = value;
+            private set => _instance._dialogueConversation = value;
         }
+
+        public static bool InConversation => RecentConversation != null;
         
         [SerializeField] private UIDocument _dialogueOverlayUXML;
         private VisualElement _dialogueContainer;
@@ -60,6 +63,20 @@ namespace SF.DialogueModule
                 Debug.Log("There was no instance of the DialogueManager being set.");
                 return;
             }
+
+            if ( _instance._dialogueConversation?.GUID == guid)
+            {
+                
+                // Bad little man need to improve this so we don't have a shit ton of string garbage collection.
+                _instance._dialogueLabel.text = RecentConversation.NextDialogueEntry();
+                if (string.IsNullOrEmpty(_instance._dialogueLabel.text))
+                {
+                   StopConversation();
+                }
+
+                return;
+            }
+            
             if(_instance._dialogueDB.GetConversation(guid, out DialogueConversation conversation))
             {
                 _instance._dialogueConversation = conversation;
@@ -119,8 +136,9 @@ namespace SF.DialogueModule
         }
         private void OnDisable()
         {
+            // Reset the static dialogue conversation value between play sessions.
+            _instance._dialogueConversation = null;
             this.EventStopListening<DialogueEvent>();
         }
-        
     }
 }
