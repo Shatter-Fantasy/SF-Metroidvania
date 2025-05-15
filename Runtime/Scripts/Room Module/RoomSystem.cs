@@ -34,6 +34,14 @@ namespace SF.RoomModule
 
                 return _roomDB;
             }
+
+            set
+            {
+                if (value == null)
+                    return;
+
+                _roomDB = value;
+            }
         }
 
         /// <summary>
@@ -172,6 +180,10 @@ namespace SF.RoomModule
 
         public static void CleanUpRoom(int roomId)
         {
+            // Can happen without error when deloading a scene and objects are destroyed on scene exit and also on exiting playmode.
+            if (!IsRoomLoaded(roomId))
+                return;
+            
             _roomDB[roomId].SpawnedInstance = null;
             _loadedRoomsIDs.Remove(roomId);
         }
