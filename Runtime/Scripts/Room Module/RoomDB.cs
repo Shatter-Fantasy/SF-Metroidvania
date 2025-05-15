@@ -8,8 +8,22 @@ namespace SF.RoomModule
     [CreateAssetMenu(fileName = "Room DB", menuName = "SF/Data/Rooms/Room Database")]
     public class RoomDB : ScriptableObject , IList<Room>
     {
+        private static RoomDB _instance;
 
-        public static RoomDB Instance;
+        public static RoomDB Instance
+        {
+            get
+            {
+                return _instance;
+            }
+            set
+            {
+                if (value == null)
+                    return;
+
+                _instance = value;
+            }
+        }
         
         public List<Room> Rooms = new();
         
@@ -17,14 +31,15 @@ namespace SF.RoomModule
         {
             if (Instance == null)
                 Instance = this;
-            
-            Debug.Log(Instance);
         }
 
         private void OnEnable()
         {
             if (Instance == null)
+            {
+
                 Instance = this;
+            }
         }
 
         public IEnumerator<Room> GetEnumerator()
