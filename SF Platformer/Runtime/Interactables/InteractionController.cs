@@ -40,14 +40,16 @@ namespace SF.Interactables
         private void OnInteractPerformed(InputAction.CallbackContext ctx)
         {
             if(_boxCollider2D == null) return;
+
+            _hitColliders = new Collider2D[_hitColliders.Length];
             
-                
             Physics2D.OverlapBox((Vector2)transform.position, _boxCollider2D.bounds.size, 0f, _interactableFilter, _hitColliders);
 
             for (int i = 0; i < _hitColliders.Length; i++)
             {
-                if(_hitColliders[i] != null && _hitColliders[i] .TryGetComponent(out IInteractable interactable))
+                if(_hitColliders[i] != null && _hitColliders[i].TryGetComponent(out IInteractable interactable))
                 {
+                    
                     if(interactable.InteractableMode == InteractableMode.Input)
                     {
                         if(gameObject.TryGetComponent(out PlayerController controller))
