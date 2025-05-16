@@ -189,7 +189,6 @@ namespace SF.Characters.Controllers
             * than we should make sure we didn't clip through the collider.
             * If we did correct our character's position.
             */
-
        
             if(CollisionInfo.BelowHit)
             {

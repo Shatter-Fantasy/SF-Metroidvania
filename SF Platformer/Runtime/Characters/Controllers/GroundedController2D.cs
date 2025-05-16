@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using SF.Physics;
 using System;
+using SF.Managers;
 
 #if SF_Utilities
 using SF.Utilities;
@@ -24,9 +25,9 @@ namespace SF.Characters.Controllers
 		public ContactFilter2D OneWayPlatformFilter;
 		[SerializeField] protected LayerMask MovingPlatformLayer;
 		[field: SerializeField] public GameObject StandingOnObject { get; protected set; }
-		
 
-        [Header("Booleans")]
+		#region Booleans
+		[Header("Booleans")]
 		public bool IsGrounded = false;
 		protected bool _wasGroundedLastFrame = false;
 		public bool IsRunning = false;
@@ -35,8 +36,7 @@ namespace SF.Characters.Controllers
 		public bool IsFalling = false;
 		public bool IsGliding = false;
 		public bool IsCrouching = false;
-
-
+		
 		public bool IsClimbing
 		{
 			get { return _isClimbing; }
@@ -47,8 +47,8 @@ namespace SF.Characters.Controllers
 				if(!_isClimbing)
 				{
 					CurrentPhysics.GravityScale = DefaultPhysics.GravityScale;
-                    _character.CanTurnAround = true;
-                }
+					_character.CanTurnAround = true;
+				}
 				else
 				{
 					CurrentPhysics.GravityScale = 0;
@@ -57,16 +57,20 @@ namespace SF.Characters.Controllers
 			}
 		}
 		[SerializeField] private bool _isClimbing = false;
+		#endregion
 		
-		// [Header("Slope Settings")]
-		private bool _useSlopes = false;
-        private float SlopeLimit = 55;
-        private float SlopeSlipLimit = 35;
-		protected Vector2 _slopeNormal;
-        private float StandingOnSlopeAngle;
-        private bool OnSlope = false;
+		#region Slope Settings
+		[Header("Slope Settings")]
+		[SerializeField] private bool _useSlopes = false;
+		[SerializeField] private float SlopeLimit = 55;
+		[SerializeField] private float SlopeSlipLimit = 35;
+		[SerializeField] protected Vector2 _slopeNormal;
+		[SerializeField] private float StandingOnSlopeAngle;
+		[SerializeField] private float _lastFrameSlopeAngle;
+        [SerializeField] private bool OnSlope = false;
         private Vector2 _slopeSideDirection;
-
+        #endregion
+        
 		protected int OneWayFilterBitMask => PlatformFilter.layerMask & OneWayPlatformFilter.layerMask;
 		public Action OnGrounded;
 
@@ -89,7 +93,9 @@ namespace SF.Characters.Controllers
 		{
 			CollisionInfo.CollisionHits.Clear();
             _wasGroundedLastFrame = IsGrounded;
+            _lastFrameSlopeAngle = StandingOnSlopeAngle;
 			GroundChecks();
+			SlopeChecks();
 			CeilingChecks();
 			SideCollisionChecks();
 			ClimbableSurfaceChecks();
@@ -193,6 +199,20 @@ namespace SF.Characters.Controllers
             }
         }
 
+		public virtual void SlopeChecks()
+		{
+			if(!_useSlopes)
+				return;
+
+			if(Direction.x > 0)
+				_slopeNormal = Physics2D.Raycast(Bounds.BottomRight(), Vector2.down, CollisionController.VerticalRayDistance,layerMask: PlatformFilter.layerMask).normal;
+			else if(Direction.x < 0)
+				_slopeNormal = Physics2D.Raycast(Bounds.BottomLeft(), Vector2.down, CollisionController.VerticalRayDistance,layerMask: PlatformFilter.layerMask).normal;
+
+			StandingOnSlopeAngle = Vector2.Angle(_slopeNormal, Vector2.up);
+			OnSlope = StandingOnSlopeAngle > 5;
+		}
+
         #endregion
 
         protected override void CalculateHorizontal()
@@ -211,22 +231,23 @@ namespace SF.Characters.Controllers
 				// TODO: When turning around erase previously directional velocity.
 				// If it is kept the player could slide in the previous direction for a second before running the new direction on smaller ground acceleration values.
 				_calculatedVelocity.x = Mathf.MoveTowards(_calculatedVelocity.x, ReferenceSpeed * Direction.x, CurrentPhysics.GroundAcceleration);
-
-				// Moving right
-				if(Direction.x > 0 && CollisionInfo.IsCollidingRight)
-					_calculatedVelocity.x = 0;
-				// Moving left
-				else if(Direction.x < 0 && CollisionInfo.IsCollidingLeft)
-				{
-
-					_calculatedVelocity.x = 0;
-				}
 			}
 			else
 			{
 				_calculatedVelocity.x = Mathf.MoveTowards(_calculatedVelocity.x, 0, CurrentPhysics.GroundDeacceleration);
-
             }
+			
+			// If we are moving left and not hitting a slope, but an obstacle, stop moving left.
+			if (CollisionInfo.IsCollidingLeft && Direction.x < 0 && CollisionInfo.LeftHit.normal.x > .95)
+			{
+				_calculatedVelocity.x = 0;
+			}
+			
+			// If we are moving Right and not hitting a slope, but an obstacle, stop moving Right.
+			if (CollisionInfo.IsCollidingRight && Direction.x > 0 && CollisionInfo.RightHit.normal.x < -.95)
+			{
+				_calculatedVelocity.x = 0;
+			}
 		}
 		protected override void CalculateVertical()
 		{
@@ -248,31 +269,16 @@ namespace SF.Characters.Controllers
 
 		}
 
-		public virtual void CalculateSlope()
-		{
-			if(!_useSlopes)
-				return;
-
-			if(Direction.x > 0)
-				_slopeNormal = Physics2D.Raycast(Bounds.BottomRight(), Vector2.down, .25f).normal;
-			else
-				_slopeNormal = Physics2D.Raycast(Bounds.BottomLeft(), Vector2.down, .25f).normal;
-
-			StandingOnSlopeAngle = Vector2.Angle(_slopeNormal, Vector2.up);
-
-			OnSlope = StandingOnSlopeAngle > 5;
-
-			if(OnSlope)
-			{
-				IsGrounded = true;
-				// TODO: Make the ability to walk up slopes.
-				_calculatedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity, _slopeNormal);
-			}
-		}
-
 		protected override void Move()
 		{
-			//CalculateSlope();
+			
+			if(OnSlope)
+			{
+				_calculatedVelocity *= 0.75f;
+				// TODO: Make the ability to walk up slopes.
+				//_calculatedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity, _slopeNormal);
+			}
+			
 			// Note to self: If we are standing on a platform and we move with the platform we gain the velocity of the platform ontop of our own. 
 			// FIX THIS or the character becomes a mach 10 rocket sometimes.
 
@@ -287,10 +293,9 @@ namespace SF.Characters.Controllers
 		/// </remarks>
 		protected override void CalculateMovementState()
 		{
-
+			
 			if(CharacterState.CharacterStatus == CharacterStatus.Dead)
 				return;
-
 
 			// TODO: There are some places that set the values outside of this function. Find a way to make it where this function is the only needed one. Example IsJump in the Jumping Ability.
 
@@ -358,7 +363,6 @@ namespace SF.Characters.Controllers
 			if(IsGrounded)
 			{
 				transform.position += new Vector3(0, CollisionController.VerticalRayDistance, 0);
-
 			}
 		}
 
