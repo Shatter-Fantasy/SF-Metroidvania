@@ -50,10 +50,11 @@ namespace SF.SpawnModule
             
             if(characterData is CombatantData cData)
             {
+                stats.CharacterHealth.Respawn();
                 cData.SetData(SpawnedCharacterData);
                 return;
             }
-
+            
             characterData.SetData(SpawnedCharacterData);
         }
     }
