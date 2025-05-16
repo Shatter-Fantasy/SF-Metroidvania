@@ -88,7 +88,7 @@ namespace SF.SpawnModule
             }
 		}
 
-        protected virtual void Respawn()
+        public virtual void Respawn()
         {
             CurrentHealth = MaxHealth;
             gameObject.SetActive(true);

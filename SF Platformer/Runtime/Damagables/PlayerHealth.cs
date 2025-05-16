@@ -18,7 +18,7 @@ namespace SF.SpawnModule
             RespawnEvent.Trigger(RespawnEventTypes.GameObjectRespawn);
         }
 
-        protected override void Respawn()
+        public override void Respawn()
         {
             // TODO: Make the PlayerRespawn event pass in the check points position to
             // use it to move the player.

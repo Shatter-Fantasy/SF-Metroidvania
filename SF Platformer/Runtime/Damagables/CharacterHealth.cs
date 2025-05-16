@@ -40,7 +40,7 @@ namespace SF.SpawnModule
             base.Kill();
         }
 
-        protected override void Respawn()
+        public override void Respawn()
         {
             if(_controller != null)
             {
@@ -59,6 +59,5 @@ namespace SF.SpawnModule
             _controller.SetExternalVelocity(knockback);
             base.TakeDamage(damage);
         }
-
     }
 }
