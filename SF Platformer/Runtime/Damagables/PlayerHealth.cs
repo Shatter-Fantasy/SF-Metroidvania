@@ -1,14 +1,14 @@
+using SF.CommandModule;
 using SF.DataManagement;
-using UnityEngine;
 
 using SF.Events;
-using SF.UI;
 
 
 namespace SF.SpawnModule
 {
     public class PlayerHealth : CharacterHealth, IDamagable, EventListener<SaveLoadEvent>
     {
+
         protected override void Kill()
         {
             base.Kill();
@@ -31,6 +31,11 @@ namespace SF.SpawnModule
             base.Respawn();
         }
 
+        public override void Despawn()
+        {
+            // This empty ovveride prevents the base health script from deactivating the player.
+            // Only needed for a bit before the next update to the player spawn system is done.
+        }
         protected override void OnEnable()
         {
             base.OnEnable();

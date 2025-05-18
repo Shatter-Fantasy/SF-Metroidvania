@@ -40,12 +40,21 @@ namespace SF.SpawnModule
 
         [Header("SFX")]
         [SerializeField] protected AudioClip _deathSFX;
-
+        [SerializeField] protected AudioClip _damageSFX;
+        
+        /// <summary>
+        /// Timer that allows a delay before deactivating a game object when <see cref="Kill"/> is called.
+        /// This allows for having events or animations play first, then despawning the object. 
+        /// </summary>
+        [SerializeField] protected Timer _deathTimer;
         public virtual void TakeDamage(int damage, Vector2 knockback = new Vector2())
         {
             if(DamageController != null)
                 damage = DamageController.CalculateDamage(damage);
-
+            
+            if(_damageSFX != null)
+                AudioManager.Instance.PlayOneShot(_damageSFX);
+            
             if(!gameObject.activeSelf)
                 return;
 
@@ -75,7 +84,7 @@ namespace SF.SpawnModule
             if(_deathSFX != null)
                 AudioManager.Instance.PlayOneShot(_deathSFX);
 
-            gameObject.SetActive(false);
+            _deathTimer.StartTimerAsync();
         }
 
 		public void OnEvent(RespawnEvent respawnEvent)
@@ -94,11 +103,23 @@ namespace SF.SpawnModule
             gameObject.SetActive(true);
         }
 
+        public virtual void Despawn()
+        {
+            gameObject.SetActive(false);
+        }
+
 		protected virtual void OnEnable()
 		{
             this.EventStartListening<RespawnEvent>();
-		}
-		protected virtual void OnDestroy()
+            _deathTimer = new Timer(Despawn);
+        }
+
+        protected void OnDisable()
+        {
+            _deathTimer.StopTimer();
+        }
+
+        protected virtual void OnDestroy()
         {
 			this.EventStopListening<RespawnEvent>();
 		}

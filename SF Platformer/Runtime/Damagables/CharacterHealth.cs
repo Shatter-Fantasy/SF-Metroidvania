@@ -1,5 +1,6 @@
 using SF.Characters.Controllers;
 using SF.Characters;
+using SF.CommandModule;
 using SF.DataManagement;
 using SF.Events;
 using UnityEngine;
@@ -18,7 +19,9 @@ namespace SF.SpawnModule
         public readonly int DeathAnimationHash = Animator.StringToHash(DeathAnimationName);
 
         public float HitAnimationDuration = 0.3f;
-
+        
+        public SpriteBlinkCommand DamageBlink;
+        
         protected Controller2D _controller;
         protected CharacterRenderer2D _character2D;
 
@@ -35,7 +38,7 @@ namespace SF.SpawnModule
                 _controller.CharacterState.CharacterStatus = CharacterStatus.Dead;
 
             if(_character2D != null && !string.IsNullOrEmpty(DeathAnimationName))
-                _character2D.SetAnimationState(DeathAnimationName);
+                _character2D.SetAnimationState(DeathAnimationName,0.01f);
 
             base.Kill();
         }
@@ -53,9 +56,15 @@ namespace SF.SpawnModule
 
         public override void TakeDamage(int damage, Vector2 knockback = new Vector2())
         {
+
+            if (_controller.CharacterState.CharacterStatus == CharacterStatus.Dead)
+                return;
+            
             if(_character2D != null && !string.IsNullOrEmpty(HitAnimationName))
                 _character2D.SetAnimationState(HitAnimationName, HitAnimationDuration);
 
+            DamageBlink.Use();
+            
             _controller.SetExternalVelocity(knockback);
             base.TakeDamage(damage);
         }
