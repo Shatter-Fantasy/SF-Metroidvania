@@ -11,7 +11,7 @@ namespace SF.StateMachine
         [SerializeField] private bool _chasePlayer;
         /* Note when using something like the distance decision we won't need to have the enemy change direction. when getting to close to the target, because a different state will be switched to most of the time. */
         [SerializeField] private Transform _target;
-
+        private float _targetDirection; 
         protected override void OnInit(Controller2D controller2D)
         {
             base.OnInit(controller2D);
@@ -26,10 +26,10 @@ namespace SF.StateMachine
             if(_target == null)
                 return;
 
-            var targetDirection = Vector3.Cross(_target.position,transform.position).normalized.z;
-
-            if(targetDirection == 1 ||  targetDirection == -1)
-                _controller.SetDirection(targetDirection);
+            _targetDirection = Vector3.Cross(transform.position,_target.position).normalized.z;
+            
+            if(_targetDirection == 1 ||  _targetDirection == -1)
+                _controller.SetDirection(_targetDirection);
         }
     }
 }
