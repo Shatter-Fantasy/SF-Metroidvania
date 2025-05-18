@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SF.CommandModule
 {
+    [System.Serializable]
     public class SpriteBlinkCommand : CommandNode, ICommand
     {
         public SpriteRenderer SpriteRenderer;
@@ -12,7 +13,7 @@ namespace SF.CommandModule
         public float TotalBlinkTime = 1;
         private int _blinkAmount;
 
-        public async override Awaitable Use()
+        public override async  Awaitable Use()
         {
             if (SpriteRenderer == null)
                 return;
