@@ -19,7 +19,9 @@ namespace SF.RoomModule
         /// These are optional transition ids for when room controller needs to keep track of fast travel points or using <see cref="TransitionTypes.Local"/>.
         /// </summary>
         public List<RoomTransition> RoomTransitions = new List<RoomTransition>();
-        
+
+        public Action OnRoomEnteredHandler;
+        public Action OnRoomExitHandler;
         private void Awake()
         {
             // This is the ignore ray cast physics layer.
@@ -38,7 +40,8 @@ namespace SF.RoomModule
                 return;
             
             RoomSystem.OnRoomEntered(RoomID);
-
+            OnRoomEnteredHandler?.Invoke();
+            
             if (RoomCamera != null)
             {
                 // This sets the priority of the virtual cameras for the old and new rooms while setting the new RoomConfiners.
@@ -56,6 +59,11 @@ namespace SF.RoomModule
         private void OnTriggerEnter2D(Collider2D other)
         {
             MakeCurrentRoom();
+        }
+        
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            OnRoomExitHandler?.Invoke();
         }
 
         private void OnDestroy()
