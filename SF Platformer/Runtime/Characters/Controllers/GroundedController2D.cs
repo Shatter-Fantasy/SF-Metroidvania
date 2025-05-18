@@ -293,7 +293,6 @@ namespace SF.Characters.Controllers
 		/// </remarks>
 		protected override void CalculateMovementState()
 		{
-			
 			if(CharacterState.CharacterStatus == CharacterStatus.Dead)
 				return;
 

@@ -143,7 +143,6 @@ namespace SF.RoomModule
                 return;
 
             CurrentRoom = _roomDB[roomID];
-            SpawnRoomObjects(roomID);
         }
 
         /// <summary>
@@ -163,16 +162,6 @@ namespace SF.RoomModule
             roomController.MakeCurrentRoom();
         }
         
-        /// <summary>
-        /// Tells a room to spawn its game objects and allow them to call OnEnable.
-        /// </summary>
-        public static void SpawnRoomObjects(int roomID)
-        {
-            // Don't try to SpawnObjects in a room that hasn't loaded a spawned instance yet.
-            if (!IsRoomLoaded(roomID))
-                return;
-        }
-
         public static void OnRoomExit(int roomID)
         {
            
