@@ -1,17 +1,16 @@
-using System.Collections.Generic;
-
+using System;
 using UnityEngine;
 
 namespace SF.Pathfinding
 {
-    [System.Serializable]
+    [Serializable]
     public class PathNodeBase : IHeapItem<PathNodeBase>
     {
         public float GCost; // Distance to the starting node.
         public float HCost; // Distance to the ending node.
         public float FCost => GCost + HCost; // G + H. Good way to memorize what this is: F stands for final cost.
 
-        public PathNodeBase ParentNodeOnPath;
+        [NonSerialized] public PathNodeBase ParentNodeOnPath;
 
         /// <summary>
         /// The node position on the current grid this node is on.

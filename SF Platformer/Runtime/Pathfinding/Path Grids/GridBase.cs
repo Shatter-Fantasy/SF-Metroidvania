@@ -83,7 +83,7 @@ namespace SF
         /// <returns></returns>
         public PathNodeBase NodeFromWorldPoint(Vector2 worldPosition)
         {
-
+            
             if(_grid == null)
             {
                 _nodeDiameter = NodeRadius * 2;
@@ -93,16 +93,19 @@ namespace SF
                 GenerateGrid();
             }
 
-            float percentX = (worldPosition.x + GridWorldSize.x/2) / GridWorldSize.x;
-            float percentY = (worldPosition.y + GridWorldSize.y/2) / GridWorldSize.y;
-
+            
+            float percentX = (worldPosition.x - transform.position.x + GridWorldSize.x/2) / GridWorldSize.x;
+            float percentY = (worldPosition.y - transform.position.y + GridWorldSize.y/2) / GridWorldSize.y;
+            
             int x = Mathf.RoundToInt((_gridSizeX - 1) * percentX);
             int y = Mathf.RoundToInt((_gridSizeY - 1) * percentY);
 
             // Make sure we don't leave the grid if the target moves out of it.
             x = Math.Min(Mathf.RoundToInt(GridWorldSize.x), x);
             y = Math.Min(Mathf.RoundToInt(GridWorldSize.y), y);
-
+            
+            //Debug.Log($"Node World Position: {worldPosition}.  X Calculated Position: {x}. Y Calculated Position: {y}");
+            
             return _grid[x, y];
         }
 
