@@ -75,7 +75,7 @@ namespace SF.Characters
 	           || _animator.runtimeAnimatorController == null)
 		        return;
 
-	        if (_controller.CharacterState.CharacterStatus == CharacterStatus.Dead)
+	        if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 	        {
 		        _animator.Play(_deathAnimationHash,0);
 		        return;
