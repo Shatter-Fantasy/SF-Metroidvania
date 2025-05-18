@@ -14,10 +14,10 @@ namespace SF.StateMachine.Core
 	/// </summary>
 	public class StateMachineBrain : MonoBehaviour
     {
-
+	    [field: SerializeField] public StateCore DefaultState { get; protected set; }
         [field: SerializeField] public StateCore CurrentState { get; protected set; }
         [field: SerializeField] public StateCore PreviousState { get;protected set; }
-		[Tooltip("This is the gameobject that the newState machine brain is controlling.")]
+		[Tooltip("This is the game object that the newState machine brain is controlling.")]
 		
         public GameObject ControlledGameObject;
         protected List<StateCore> _states = new();
@@ -25,7 +25,6 @@ namespace SF.StateMachine.Core
         protected Controller2D _controller2D;
 		private void Awake()
 		{
-
             _states.Clear();
             _states = GetComponentsInChildren<StateCore>().ToList();
 
@@ -35,7 +34,7 @@ namespace SF.StateMachine.Core
                 _controller2D = GetComponent<Controller2D>();
 
             if(!_states.Any()) return;
-
+            
             foreach(StateCore state in _states)
             {
                 state.StateBrain = this;
@@ -44,13 +43,8 @@ namespace SF.StateMachine.Core
 		}
 
 		private void Start()
-        {
-            if(CurrentState == null)
-                CurrentState = _states.First();
-
-            // Don't do first Enter State in awake or you might call it before the _states init.
-            if(CurrentState != null)
-				CurrentState.EnterState();
+		{
+			InitStateBrain();
 		}
 		private void Update()
 		{
@@ -66,6 +60,20 @@ namespace SF.StateMachine.Core
 
             CurrentState.UpdateState();
 		}
+
+		public void InitStateBrain()
+		{
+			if (DefaultState != null)
+				CurrentState = DefaultState;
+			        
+			if(CurrentState == null)
+				CurrentState = _states.First();
+
+			// Don't do first Enter State in awake or you might call it before the _states init.
+			if(CurrentState != null)
+				CurrentState.EnterState();
+		}
+		
         /// <summary>
         /// Changes the current newState and runs the enter and
         /// exit functions for the appropriate states without doing transition 

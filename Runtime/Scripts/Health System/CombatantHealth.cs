@@ -3,6 +3,7 @@ using UnityEngine;
 using SF.Characters.Data;
 using SF.Experience;
 using SF.ItemModule;
+using SF.StateMachine.Core;
 
 
 namespace SF.SpawnModule
@@ -10,11 +11,13 @@ namespace SF.SpawnModule
     public class CombatantHealth : CharacterHealth
     {
         private CombatantData _combatantData;
+        private StateMachineBrain _combatantStateBrain;
         
         protected override void Awake()
         {
             base.Awake();
             _combatantData = GetComponent<CombatantData>();
+            _combatantStateBrain = GetComponentInChildren<StateMachineBrain>();
         }
         
         protected override void Kill()
@@ -41,6 +44,14 @@ namespace SF.SpawnModule
             }
 
             base.Kill();
+        }
+
+        public override void Respawn()
+        {
+            base.Respawn();
+            
+            if(_combatantStateBrain != null)
+                _combatantStateBrain.InitStateBrain();
         }
     }
 }
