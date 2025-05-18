@@ -29,9 +29,12 @@ namespace SF.Characters
 		#endregion
 
 		private int AnimationHash => Animator.StringToHash(CharacterState.CurrentMovementState.ToString());
-		private int _forcedStateHash = 0;
+		[SerializeField] private int _forcedStateHash = 0;
 		private float _animationFadeTime = 0;
-		private bool _isForcedCrossFading = false;
+		[SerializeField] private bool _isForcedCrossFading = false;
+		[SerializeField] private int _lastAnimationHash;
+		[SerializeField] private string _lastAnimationName;
+		[SerializeField] private int _deathAnimationHash;
 		#region Lifecycle Functions  
 		private void Awake()
 		{
@@ -43,6 +46,7 @@ namespace SF.Characters
 		#endregion
 		private void Init()
 		{
+			_deathAnimationHash = Animator.StringToHash(CharacterStatus.Dead.ToString());
 			OnInit();
 		}
 		
@@ -65,39 +69,56 @@ namespace SF.Characters
         /// <see cref="GroundedController2D.CalculateMovementState"/>
         /// </summary>
         private void SetAnimations()
-		{
-			if(_animator == null 
-				|| _animator.runtimeAnimatorController == null)
-					return;
-#if DEBUG
-            s_AnimationUpdateMarker.Begin();
-#endif
+        {
+	        
+	        if(_animator == null 
+	           || _animator.runtimeAnimatorController == null)
+		        return;
+
+	        if (_controller.CharacterState.CharacterStatus == CharacterStatus.Dead)
+	        {
+		        _animator.Play(_deathAnimationHash,0);
+		        return;
+	        }
+
+			
 			if(_isForcedCrossFading)
 			{
 				_animationFadeTime -= Time.deltaTime;
 				if(_animationFadeTime < 0)
 					_isForcedCrossFading = false;
-                return;
+				return;
 			}
 
-			if(_forcedStateHash != 0 && _animator.HasState(0, _forcedStateHash))
+			if(_forcedStateHash != 0)
 			{
-				_isForcedCrossFading = true;
-                _animator.CrossFade(_forcedStateHash, _animationFadeTime,0);
-				_forcedStateHash = 0;
+				if (_animator.HasState(0, _forcedStateHash))
+				{
+					if(_animationFadeTime > 0)
+						_isForcedCrossFading = true;
+					
+					_animator.CrossFadeInFixedTime(_forcedStateHash, _animationFadeTime,0);
+					_lastAnimationHash = _forcedStateHash;
+					_forcedStateHash = 0;
+				}
+				else
+				{
+					// If no state was found or set up in the animator just ignore the forced state.
+					_isForcedCrossFading = false;
+					_forcedStateHash = 0;
+				}
 			}
-			else if(_animator.HasState(0, AnimationHash) 
-					&& _controller.CharacterState.CharacterStatus != CharacterStatus.Dead)
+			else if(_animator.HasState(0, AnimationHash)
+					&& _lastAnimationHash != AnimationHash
+					)
 			{
-				_animator.CrossFade(AnimationHash, 0,0);
+				_animator.CrossFadeInFixedTime(AnimationHash, 0,0);
+				_lastAnimationHash = AnimationHash;
 			}
-#if DEBUG
-            s_AnimationUpdateMarker.End();
-#endif
         }
 
         // The 0.3f is the default fade time for Unity's crossfade api.
-        public void SetAnimationState(string stateName, float animationFadeTime = 0.3f)
+        public void SetAnimationState(string stateName, float animationFadeTime = 0.01f)
 		{
 			_forcedStateHash = Animator.StringToHash(stateName);
             _animationFadeTime = animationFadeTime;
