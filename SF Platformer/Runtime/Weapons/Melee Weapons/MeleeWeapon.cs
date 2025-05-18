@@ -9,11 +9,15 @@ namespace SF.Weapons
         /// The delay before the hit box is enabled. This allows for matching damage with the animation visuals.
         /// </summary>
         [SerializeField] protected Timer _hitBoxTimer;
+        /// <summary>
+        /// The timer to keep track of time between combo attacks to see if a combo should continue if not a lot of time has passed.
+        /// </summary>
+        [SerializeField] protected Timer _comboTimer;
         
         [SerializeField] private BoxCollider2D _hitBox;
         private List<Collider2D> _hitResults = new();
 
-        //private int _comboIndex = 0;
+        [SerializeField] private int _comboIndex = 0;
         private bool _onCooldown = false;
         private Vector2 _originalColliderOffset;
         
@@ -22,6 +26,8 @@ namespace SF.Weapons
         {
             _attackTimer = new Timer(ComboAttacks[0].AttackTimer, OnUseComplete);
             _hitBoxTimer = new Timer(ComboAttacks[0].HitBoxDelay, OnHitBoxDelay);
+            _comboTimer = new Timer(ComboAttacks[0].ComboInputDelay, OnComboReset);
+            
             _controller2D.OnDirectionChanged += OnDirectionChange;
 
             if (_hitBox != null)
@@ -41,9 +47,22 @@ namespace SF.Weapons
 
         public override void Use()
         {
-            if(_onCooldown)
+            if (_onCooldown)
                 return;
             
+            // If we have a combo enabled for the current weapon do it.
+            if (ComboAttacks.Count > 1)
+            {
+                ComboAttack();
+            }
+            else
+            {
+                SingleAttack();
+            }
+        }
+
+        private void SingleAttack()
+        {
             if(_character2D != null)
                 _character2D.SetAnimationState(
                     ComboAttacks[0].Name, 
@@ -52,12 +71,29 @@ namespace SF.Weapons
             
             _ = _hitBoxTimer.StartTimerAsync();
             _ = _attackTimer.StartTimerAsync();
-            
-            
-            // TODO: We need to do a check for combo timers.
-            //_attackDelayTimer = ComboAttacks[_comboIndex].AttackTimer;
-            
 
+            _onCooldown = true;
+        }
+        private void ComboAttack()
+        {
+            if(_character2D != null)
+                _character2D.SetAnimationState(
+                    ComboAttacks[_comboIndex].Name, 
+                    ComboAttacks[_comboIndex].AttackAnimationClip.averageDuration
+                );
+            
+            _attackTimer = new Timer(ComboAttacks[_comboIndex].AttackTimer, OnUseComplete);
+            _hitBoxTimer = new Timer(ComboAttacks[_comboIndex].HitBoxDelay, OnHitBoxDelay);
+            
+            // Stop the previous combo timer.
+            _comboTimer.StopTimer();
+            _comboTimer = new Timer(ComboAttacks[_comboIndex].ComboInputDelay, OnComboReset);
+            
+            _ = _hitBoxTimer.StartTimerAsync();
+            _ = _attackTimer.StartTimerAsync();
+            _ = _comboTimer.StartTimerAsync();
+
+            _comboIndex++;
             _onCooldown = true;
         }
 
@@ -82,6 +118,11 @@ namespace SF.Weapons
         {
             UseCompleted?.Invoke();
             _onCooldown = false;
+        }
+
+        private void OnComboReset()
+        {
+            _comboIndex = 0;
         }
     }
 }
