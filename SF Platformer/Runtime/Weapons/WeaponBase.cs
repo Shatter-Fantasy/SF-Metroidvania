@@ -20,6 +20,7 @@ namespace SF.Weapons
         [SerializeField] protected ContactFilter2D _hitBoxFilter;
 
         [SerializeField] protected Timer _attackTimer;
+        
         public System.Action UseCompleted;
         
         public virtual void Use()
