@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using SF.Characters;
 using SF.Characters.Controllers;
 using SF.StateMachine.Decisions;
 
@@ -92,6 +92,11 @@ namespace SF.StateMachine.Core
         public void UpdateState()
 		{
 			CheckTransitions();
+
+			if (_controller.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			{
+				return;
+			}
 			OnUpdateState();
 		}
 
@@ -131,9 +136,15 @@ namespace SF.StateMachine.Core
 		}
 		public virtual bool CheckEnterableState(StateCore currentState)
 		{
+			if (_controller == null
+			    || _controller.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			{
+				return false;
+			}
+			
 			if(!NonEnterableStates.Any())
 				return true;
-			// If there is blokcing states check if the state we are in
+			// If there is a blocking state check if the state we are in
 			// blocks the new state trying to be entered.
 			return NonEnterableStates.Any(stateToCheck =>
 			{
