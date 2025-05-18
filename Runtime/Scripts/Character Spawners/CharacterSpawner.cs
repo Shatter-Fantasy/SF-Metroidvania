@@ -1,6 +1,3 @@
-using System;
-
-using SF.Characters;
 using SF.Characters.Data;
 using SF.StatModule;
 
@@ -31,7 +28,6 @@ namespace SF.SpawnModule
 
         private void SpawnedCharacter()
         {
-            // TODO: Make a check if the current platform supports async instanatiate and do it instead.
             GameObject spawnedObject = Instantiate(SpawnedCharacterData.Prefab,
                 transform.position,
                 Quaternion.identity);
