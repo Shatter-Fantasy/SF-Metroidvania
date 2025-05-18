@@ -18,23 +18,25 @@ namespace SF.StateMachine
 		{
 			_controller = controller2D;
 		}
-
-
+        
         protected override void OnStart()
 		{
 			if(_controller == null)
 				return;
-
+			
 			_controller.CollisionInfo.OnCollidedLeft += OnCollidingLeft;
 			_controller.CollisionInfo.OnCollidedRight += OnCollidingRight;
-
-			_controller.Direction = StartingRight
-				? Vector2.right : Vector2.left;
 		}
 
         protected override void OnUpdateState()
         {
 			HoleDetection();
+        }
+
+        protected override void OnStateEnter()
+        {
+	        _controller.Direction = StartingRight
+		        ? Vector2.right : Vector2.left;
         }
 
 		private void HoleDetection()
