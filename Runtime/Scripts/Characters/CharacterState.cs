@@ -52,14 +52,35 @@ namespace SF.Characters
 
 				if (_currentMovementState == value)
 					return;
-
+				
 				_previousMovementState = _currentMovementState;
 				_currentMovementState = value;
+				
+				OnMovementStateChanged?.Invoke();
 			}
 		}
-		
-		public CharacterStatus CharacterStatus;
 
+		public Action OnMovementStateChanged;
+		
+		private CharacterStatus _characterStatus;
+
+		public CharacterStatus CharacterStatus
+		{
+			get => _characterStatus;
+			set
+			{
+				// If we were alive and now dead, invoke on death event.
+				if (value == CharacterStatus.Dead && _characterStatus == CharacterStatus.Alive)
+				{
+					OnDeathHandler?.Invoke();
+				}
+
+				_characterStatus = value;
+			}
+		}
+
+		public Action OnDeathHandler;
+		
 		[UnityEngine.SerializeField] private StatusEffect _statusEffect;
 		public StatusEffect StatusEffect
 		{
