@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using SF.Characters;
 using UnityEngine;
 namespace SF.Weapons
 {
@@ -29,7 +29,7 @@ namespace SF.Weapons
             _comboTimer = new Timer(ComboAttacks[0].ComboInputDelay, OnComboReset);
             
             _controller2D.OnDirectionChanged += OnDirectionChange;
-
+            
             if (_hitBox != null)
             {
                 _originalColliderOffset = _hitBox.offset;
@@ -48,6 +48,10 @@ namespace SF.Weapons
         public override void Use()
         {
             if (_onCooldown)
+                return;
+
+            // Stop attack while dead attack while dead.
+            if (_controller2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
             
             // If we have a combo enabled for the current weapon do it.
