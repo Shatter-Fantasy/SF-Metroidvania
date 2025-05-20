@@ -19,6 +19,7 @@ namespace SF
         private Vector2 _collisionNormal;
         public Direction DamageDirection;
         public int DamageAmount = 1;
+        [SerializeField] private Vector2 _knockBackForce;
 
         private void Awake()
         {
@@ -31,7 +32,7 @@ namespace SF
             {
                 _collisionNormal = collision2D.GetContact(0).normal;
                 if(CheckCollisionDirection())
-                    damagable.TakeDamage(DamageAmount);
+                    damagable.TakeDamage(DamageAmount,_knockBackForce);
             }
         }
 
@@ -42,7 +43,7 @@ namespace SF
                 _collisionNormal = collider2D.Distance(_collider2D).normal;
                 
                 if(CheckCollisionDirection())
-                    damagable.TakeDamage(DamageAmount);
+                    damagable.TakeDamage(DamageAmount,_knockBackForce);
             }
         }
 
