@@ -46,7 +46,7 @@ namespace SF.Pathfinding
     public class PathAStar : MonoBehaviour
     {
         private PathRequetManager _pathRequestManager;
-        [SerializeField] private GridBase _grid;
+        [field: SerializeField] public GridBase GridPath { get; private set; }
 
         private PathNodeBase _startNode;
         private PathNodeBase _goalNode;
@@ -54,8 +54,8 @@ namespace SF.Pathfinding
         private void Awake()
         {
             _pathRequestManager = GetComponent<PathRequetManager>();
-            if(_grid == null)
-                _grid = GetComponent<GridBase>();
+            if(GridPath == null)
+                GridPath = GetComponent<GridBase>();
         }
 
         public void StartFindPath(Vector2 startPos, Vector2 targetPos)
@@ -65,20 +65,20 @@ namespace SF.Pathfinding
 
         private async void FindPath(Vector2 startPotion, Vector2 goalPosition)
         {
-            if(_grid == null)
+            if(GridPath == null)
                 return;
 
             Vector2[] wayPoints = new Vector2[0];
             bool pathSuccess = false;
 
-            _startNode = _grid.NodeFromWorldPoint(startPotion);
-            _goalNode = _grid.NodeFromWorldPoint(goalPosition);
+            _startNode = GridPath.NodeFromWorldPoint(startPotion);
+            _goalNode = GridPath.NodeFromWorldPoint(goalPosition);
 
             // If either nodes are not traveserable don't bother finding a path.
             if(!_startNode.IsTraversable || !_goalNode.IsTraversable)
                 return;
 
-            Heap<PathNodeBase> _openNodes = new Heap<PathNodeBase>(_grid.MaxSize);
+            Heap<PathNodeBase> _openNodes = new Heap<PathNodeBase>(GridPath.MaxSize);
             HashSet<PathNodeBase> _closedNodes = new();
 
             _openNodes.Add(_startNode);
@@ -97,7 +97,7 @@ namespace SF.Pathfinding
                 }
 
 
-                foreach(PathNodeBase neighbourNode in _grid.GetNeighbours(currentNode))
+                foreach(PathNodeBase neighbourNode in GridPath.GetNeighbours(currentNode))
                 {
                     if(!neighbourNode.IsTraversable || _closedNodes.Contains(neighbourNode))
                         continue;
@@ -118,6 +118,7 @@ namespace SF.Pathfinding
                 }
             }
             await Awaitable.EndOfFrameAsync();
+            
             if(pathSuccess)
                 wayPoints = RetracePath(_startNode, _goalNode);
 
@@ -126,20 +127,20 @@ namespace SF.Pathfinding
 
         public async Awaitable<Vector2[]> FindPathAwaitable(Vector2 startPotion, Vector2 goalPosition)
         {
-            if(_grid == null)
+            if(GridPath == null)
                 return null;
 
             Vector2[] wayPoints = new Vector2[0];
             bool pathSuccess = false;
 
-            _startNode = _grid.NodeFromWorldPoint(startPotion);
-            _goalNode = _grid.NodeFromWorldPoint(goalPosition);
+            _startNode = GridPath.NodeFromWorldPoint(startPotion);
+            _goalNode = GridPath.NodeFromWorldPoint(goalPosition);
 
             // If either nodes are not traveserable don't bother finding a path.
             if(!_startNode.IsTraversable || !_goalNode.IsTraversable)
                 return null;
 
-            Heap<PathNodeBase> _openNodes = new Heap<PathNodeBase>(_grid.MaxSize);
+            Heap<PathNodeBase> _openNodes = new Heap<PathNodeBase>(GridPath.MaxSize);
             HashSet<PathNodeBase> _closedNodes = new();
 
             _openNodes.Add(_startNode);
@@ -158,7 +159,7 @@ namespace SF.Pathfinding
                 }
 
 
-                foreach(PathNodeBase neighbourNode in _grid.GetNeighbours(currentNode))
+                foreach(PathNodeBase neighbourNode in GridPath.GetNeighbours(currentNode))
                 {
                     if(!neighbourNode.IsTraversable || _closedNodes.Contains(neighbourNode))
                         continue;
@@ -199,7 +200,6 @@ namespace SF.Pathfinding
             Vector2[] waypoints = SimplifyPath(pathNodes);
             System.Array.Reverse(waypoints);
             return waypoints;
-
         }
 
         private Vector2[] SimplifyPath(List<PathNodeBase> path)
