@@ -53,5 +53,10 @@ namespace SF.SpawnModule
             if(_combatantStateBrain != null)
                 _combatantStateBrain.InitStateBrain();
         }
+        
+        protected virtual void OnEnable()
+        {
+            _deathTimer = new Timer(Despawn);
+        }
     }
 }

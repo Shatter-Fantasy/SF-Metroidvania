@@ -9,7 +9,7 @@ namespace SF.DialogueModule
     {
         public int ConversationGUID;
         [field:SerializeField] public InteractableMode InteractableMode { get; set; }
-       
+        
         public void Interact() {  }
         public void Interact(PlayerController controller)
         {

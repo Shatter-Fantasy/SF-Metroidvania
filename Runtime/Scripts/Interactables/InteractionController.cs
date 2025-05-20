@@ -18,7 +18,7 @@ namespace SF.Interactables
             _boxCollider2D = GetComponent<BoxCollider2D>();
         }
 
-        private void OnTriggerStay2D(Collider2D collision)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
             if(collision.TryGetComponent(out IInteractable interactable))
             {
@@ -34,7 +34,6 @@ namespace SF.Interactables
                     }
                 }
             }
-
         }
 
         private void OnInteractPerformed(InputAction.CallbackContext ctx)
