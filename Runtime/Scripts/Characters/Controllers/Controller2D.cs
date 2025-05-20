@@ -205,9 +205,6 @@ namespace SF.Characters.Controllers
                 {
                     CollisionInfo.BelowHit = new RaycastHit2D();
                 }
-
-                if(CollisionInfo.BelowHit.distance > 0)
-                    LowerToGround();
             }
 
 
@@ -230,22 +227,19 @@ namespace SF.Characters.Controllers
             if(CollisionInfo.CeilingHit && CollisionInfo.BelowHit
                 && CollisionInfo.LeftHit && CollisionInfo.RightHit)
                 return;
-
+            
             // Adjust the position of the Character if we do have a clip inside a wall.
             // Do this for each hit we have in our CollisionInfo struct.
             foreach(RaycastHit2D hit in CollisionInfo.CollisionHits)
             {
                 ColliderDistance2D colliderDistance = _boxCollider.Distance(hit.collider);
 
-                if(colliderDistance.isOverlapped)
-                {
+                if(colliderDistance is { isOverlapped: true, distance: < 0 })
                     // This means we are inside something.
-                    if(colliderDistance.distance < 0)
-                    {
-                        Vector2 adjustedPosition = 
-                            colliderDistance.distance * colliderDistance.normal;
-                        transform.position = transform.position + (Vector3)adjustedPosition;
-                    }
+                {
+                    Vector2 adjustedPosition = 
+                        colliderDistance.distance * colliderDistance.normal;
+                    transform.position += (Vector3)adjustedPosition;
                 }
             }
         }

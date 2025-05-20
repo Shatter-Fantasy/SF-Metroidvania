@@ -16,8 +16,6 @@ namespace SF.Characters.Controllers
                 GameManager.Instance.PlayerController = this;
         }
         
-        
-
         protected override void CalculateMovementState()
         {
             // For when in menu, in a conversation, and so forth.
