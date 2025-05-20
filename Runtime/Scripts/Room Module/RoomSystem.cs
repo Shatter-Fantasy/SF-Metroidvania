@@ -58,7 +58,8 @@ namespace SF.RoomModule
         /// Allowing farther rooms to be loaded in the background to prevent pop up and lag.
         /// </summary>
         /// <param name="roomID"></param>
-        public static Room LoadConnectedRoom(int roomID)
+        /// <param name="loadPrefab"></param>
+        public static Room LoadConnectedRoom(int roomID, bool loadPrefab = true)
         {
             if (RoomDB[roomID]?.RoomPrefab == null)
                 return null;
@@ -69,16 +70,31 @@ namespace SF.RoomModule
                 RefreshRoom(roomID);
                 return _roomDB[roomID];
             }
-            
-            // If no room instance with the passed in roomID is currently loaded spawn and load an instance. 
-            // Also set it as the current SpawnedInstance in the RoomDB. This allows us to check if a room is already loaded later by checking 
-            // if the SpawnedInstance is null or not. We should check the _loadedRoomsIDs first for performance reasons. 
-            _roomDB[roomID].SpawnedInstance = GameObject.Instantiate(RoomDB[roomID].RoomPrefab);
-            
+
+            // We can choose to skip the spawning of the instance. This is done for debugging reasons and to catch errors.
+            if (loadPrefab)
+            {
+                // If no room instance with the passed in roomID is currently loaded spawn and load an instance. 
+                // Also set it as the current SpawnedInstance in the RoomDB. This allows us to check if a room is already loaded later by checking 
+                // if the SpawnedInstance is null or not. We should check the _loadedRoomsIDs first for performance reasons. 
+                _roomDB[roomID].SpawnedInstance = GameObject.Instantiate(RoomDB[roomID].RoomPrefab);
+            }
+
             _loadedRoomsIDs.Add(roomID);
             return _roomDB[roomID];
         }
 
+        /// <summary>
+        /// Only use this to manually add a RoomID into the loaded room ids list when the room will already exist in the scene at the start. 
+        /// </summary>
+        public static void AddLoadedRoomManually(int roomID)
+        {
+            // Don't duplicate the loaded room id.
+            if (IsRoomLoaded(roomID))
+                return;
+            
+            _loadedRoomsIDs.Add(roomID);
+        }
         /// <summary>
         /// Checks to see if the passed in room id belongs to one of the already loaded rooms.
         /// </summary>

@@ -28,6 +28,16 @@ namespace SF.RoomModule
             gameObject.layer = 2;
             RoomIdsToLoadOnEnter = RoomDB.Instance[RoomID].ConnectedRoomsIDs;
         }
+
+        private void Start()
+        {
+            if (!RoomSystem.IsRoomLoaded(RoomID))
+            {
+                RoomSystem.AddLoadedRoomManually(RoomID);
+                RoomSystem.RoomDB[RoomID].SpawnedInstance = this.gameObject;
+            }
+        }
+        
         
         /// <summary>
         /// Changes the current room and invokes all the required CameraSystem, RoomSystem, and GameManagers calls. 
@@ -37,7 +47,10 @@ namespace SF.RoomModule
             // Can happen from CinemachineTriggerAction when exiting playmode.
             // If the collider is deloaded first it triggers an onexit callback while deloading the runtime.
             if (!RoomSystem.IsRoomLoaded(RoomID))
+            {
                 return;
+            }
+               
             
             RoomSystem.OnRoomEntered(RoomID);
             OnRoomEnteredHandler?.Invoke();
