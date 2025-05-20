@@ -2,14 +2,16 @@ using SF.Managers;
 using SF.StateMachine.Core;
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SF.StateMachine.Decisions
 {
     public class DistanceDecision : StateDecisionCore
     {
-        [SerializeField] private float _distance = 3.5f;
+        [FormerlySerializedAs("_distance")]
+        public float Distance = 3.5f;
         [SerializeField] private float calculatedDistance = 3.5f;
-        [SerializeField] private Transform _target;
+        [FormerlySerializedAs("_target")] public Transform Target;
         
         [SerializeField] private bool _chasePlayer;
         
@@ -17,32 +19,31 @@ namespace SF.StateMachine.Decisions
         {
             if (_chasePlayer)
             {
-                _target = GameManager.Instance.PlayerController.transform;
+                Target = GameManager.Instance.PlayerController.transform;
             }
         }
         
         public override void CheckDecision(ref DecisionTransition decision, StateCore currentState)
         {
-            if(_target == null || 
+            if(Target == null || 
                 (_trueState == null && _falseState == null))
             {
                 decision.CanTransist = false;
                 return;
             }
 
-            calculatedDistance = Vector3.Distance(transform.position, _target.position);
+            calculatedDistance = Vector3.Distance(transform.position, Target.position);
 
             // If the target is within the distance
-            if(_trueState != null && calculatedDistance < _distance)
+            if(_trueState != null && calculatedDistance < Distance)
             {
-
                 decision.CanTransist = true;
                 decision.StateGoingTo = _trueState;
                 return;
             }
-            else if(_falseState != null && calculatedDistance > _distance)
+            else if(_falseState != null && calculatedDistance > Distance)
             {
-
+                Debug.Log($"Going the state of: {_falseState}");
                 decision.CanTransist = true;
                 decision.StateGoingTo = _falseState;
                 return;
