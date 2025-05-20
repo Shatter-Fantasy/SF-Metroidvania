@@ -91,9 +91,11 @@ namespace SF.StateMachine.Core
         /// </summary>
         public void UpdateState()
 		{
+			
 			CheckTransitions();
 
-			if (_controller.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			
+			if (_controller == null && _controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
 				return;
 			}
