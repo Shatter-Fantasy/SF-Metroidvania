@@ -87,15 +87,7 @@ namespace SF.SpawnModule
             _deathTimer.StartTimerAsync();
         }
 
-		public void OnEvent(RespawnEvent respawnEvent)
-		{
-			switch (respawnEvent.EventType) 
-            {
-                case RespawnEventTypes.PlayerRespawn:
-                    Respawn();
-                    break;
-            }
-		}
+		public virtual void OnEvent(RespawnEvent respawnEvent) { }
 
         public virtual void Respawn()
         {

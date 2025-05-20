@@ -56,8 +56,8 @@ namespace SF.SpawnModule
 
         public override void TakeDamage(int damage, Vector2 knockback = new Vector2())
         {
-
-            if (_controller.CharacterState.CharacterStatus == CharacterStatus.Dead)
+           
+            if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
             
             if(_character2D != null && !string.IsNullOrEmpty(HitAnimationName))
@@ -65,7 +65,7 @@ namespace SF.SpawnModule
 
             DamageBlink.Use();
             
-            _controller.SetExternalVelocity(knockback);
+            _controller?.SetDirectionalForce(knockback);
             base.TakeDamage(damage);
         }
     }

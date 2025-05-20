@@ -37,7 +37,6 @@ namespace SF.Characters.Controllers
         
         public CharacterState CharacterState;
         public ContactFilter2D PlatformFilter;
-
         
         public Vector2 Direction
         {
@@ -49,6 +48,7 @@ namespace SF.Characters.Controllers
             }
         }
         [SerializeField] private Vector2 _direction;
+        [SerializeField] protected Vector2 _directionLastFrame;
         /// <summary>
         /// Used to keep track of the direction to restore after unfreezing the Controller2D.
         /// </summary>
@@ -139,7 +139,10 @@ namespace SF.Characters.Controllers
         private void Update()
         {
             Bounds = _boxCollider.bounds;
-
+            
+            if (_direction.x != 0)
+                _directionLastFrame.x = _direction.x;
+ 
             // If the player is not in control of the Input or Actions for this frame in game logic return.
             if (GameManager.Instance.ControlState != GameControlState.Player)
                 return;
@@ -302,6 +305,14 @@ namespace SF.Characters.Controllers
         {
             _externalVelocity = force;
         }
+        /// <summary>
+        /// This function applies velocity compared to the direction the user is facing.
+        /// </summary>
+        public virtual void SetDirectionalForce(Vector2 force)
+        {
+            _externalVelocity = force * -_directionLastFrame.x;
+        }
+        
         public virtual void AddVelocity(Vector2 velocity)
         {
             _externalVelocity += velocity;
@@ -328,6 +339,7 @@ namespace SF.Characters.Controllers
             // Need to compare this to _rigidbody2D.velocityY to see which one feels better. 
             _calculatedVelocity.y = verticalVelocity;
         }
+
         protected virtual void CalculateMovementState()
         {
 

@@ -58,6 +58,16 @@ namespace SF.SpawnModule
             }
         }
         
+        public override void OnEvent(RespawnEvent respawnEvent)
+        {
+            switch (respawnEvent.EventType) 
+            {
+                case RespawnEventTypes.PlayerRespawn:
+                    Respawn();
+                    break;
+            }
+        }
+        
         protected override void OnDestroy()
         {
             base.OnDestroy();
