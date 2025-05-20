@@ -18,7 +18,7 @@ namespace SF.Characters
 #endif
 		public enum CharacterTypes { Player, Ally, Enemy, NPC}
 		public CharacterTypes CharacterType = CharacterTypes.Player;
-		public CharacterState CharacterState => _controller.CharacterState;
+		public CharacterState CharacterState => _controller?.CharacterState;
 
 		public bool CanTurnAround = true;
 		public bool StartedFacingRight = true;
@@ -28,7 +28,7 @@ namespace SF.Characters
 		private Controller2D _controller;
 		#endregion
 
-		private int AnimationHash => Animator.StringToHash(CharacterState.CurrentMovementState.ToString());
+		private int AnimationHash => Animator.StringToHash(CharacterState?.CurrentMovementState.ToString());
 		[SerializeField] private int _forcedStateHash = 0;
 		private float _animationFadeTime = 0;
 		[SerializeField] private bool _isForcedCrossFading = false;
