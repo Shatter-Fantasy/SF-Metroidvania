@@ -31,7 +31,6 @@ namespace SF.DialogueModule
         /// <summary>
         /// The unique identifier for a <see cref="DialogueConversation"/>.
         /// </summary>
-        // Shh you don't see this stupid way to generate a unique int value.
         public int GUID;
         public List<DialogueEntry> DialogueEntries = new();
 
@@ -76,10 +75,6 @@ namespace SF.DialogueModule
     [Serializable]
     public class DialogueEntry
     {
-        /// <summary>
-        /// The unique identifier for this one piece of Dialogue Entry.
-        /// </summary>
-        public int GUID = Guid.NewGuid().GetHashCode();
         public string Text;
         /// <summary>
         /// An action that can be invoked when the Dialogue Entry starts.
