@@ -1,4 +1,3 @@
-using SF.CommandModule;
 using SF.DataManagement;
 
 using SF.Events;
@@ -42,7 +41,7 @@ namespace SF.SpawnModule
             this.EventStartListening<SaveLoadEvent>();
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             this.EventStopListening<SaveLoadEvent>();
         }
