@@ -103,9 +103,14 @@ namespace SF
             // Make sure we don't leave the grid if the target moves out of it.
             x = Math.Min(Mathf.RoundToInt(GridWorldSize.x), x);
             y = Math.Min(Mathf.RoundToInt(GridWorldSize.y), y);
-            
-            //Debug.Log($"Node World Position: {worldPosition}.  X Calculated Position: {x}. Y Calculated Position: {y}");
-            
+
+            if (x < 0 || y < 0
+                      || x > GridWorldSize.x -1 
+                      || y > GridWorldSize.y - 1)
+            {
+                return _grid[0, 0];
+            }
+
             return _grid[x, y];
         }
 
