@@ -43,11 +43,12 @@ namespace SF.Characters.Controllers
             get { return _direction; }
             set
             {
+                value.x = Mathf.RoundToInt(value.x);
                 _direction = value;
                 OnDirectionChanged?.Invoke(this, _direction);
             }
         }
-        [SerializeField] private Vector2 _direction;
+        [SerializeField] protected Vector2 _direction;
         [SerializeField] protected Vector2 _directionLastFrame;
         /// <summary>
         /// Used to keep track of the direction to restore after unfreezing the Controller2D.
@@ -136,8 +137,8 @@ namespace SF.Characters.Controllers
         {
         }
 
-        private void Update()
-        {
+        protected virtual void FixedUpdate()
+        { 
             Bounds = _boxCollider.bounds;
             
             if (_direction.x != 0)
@@ -186,7 +187,8 @@ namespace SF.Characters.Controllers
                 _externalVelocity = Vector2.zero;
             }
             
-            transform.Translate(_calculatedVelocity * Time.deltaTime);
+            _rigidbody2D.linearVelocity = _calculatedVelocity;
+            //transform.Translate(_calculatedVelocity * Time.deltaTime); Old way before starting to use linear velocity.
 
             /* If we are detecting a collision before the transform.Translate moved our character,
             * than we should make sure we didn't clip through the collider.
@@ -288,6 +290,7 @@ namespace SF.Characters.Controllers
             _calculatedVelocity.x = 0;
             _externalVelocity.x = 0;
             _previousDirection = _direction;
+            _rigidbody2D.linearVelocity = Vector2.zero;
             SetDirection(0);
         }
         
