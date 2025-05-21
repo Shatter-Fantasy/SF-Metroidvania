@@ -1,7 +1,6 @@
 using SF.Characters.Controllers;
 using SF.Platformer.Utilities;
 using SF.StateMachine.Core;
-using SF.Weapons;
 
 using UnityEngine;
 
@@ -41,9 +40,9 @@ namespace SF.StateMachine
 
 		private void HoleDetection()
 		{
-			if(_controller == null || !DoesTurnOnHoles)
+			if(_controller == null || _controller is GroundedController2D { IsFalling:true } || !DoesTurnOnHoles )
 				return;
-
+			
 			RaycastHit2D hit2D = new RaycastHit2D();
 			if(_controller.Direction == Vector2.left)
 			{
