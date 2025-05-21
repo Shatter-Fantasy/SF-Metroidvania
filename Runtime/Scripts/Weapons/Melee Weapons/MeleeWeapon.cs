@@ -28,15 +28,18 @@ namespace SF.Weapons
             _hitBoxTimer = new Timer(ComboAttacks[0].HitBoxDelay, OnHitBoxDelay);
             _comboTimer = new Timer(ComboAttacks[0].ComboInputDelay, OnComboReset);
             
-            _controller2D.OnDirectionChanged += OnDirectionChange;
             
+            if(_controller2D != null)
+                _controller2D.OnDirectionChanged += OnDirectionChange;
+
+                
             if (_hitBox != null)
             {
                 _originalColliderOffset = _hitBox.offset;
             }
         }
 
-        private void OnDirectionChange(object sender, Vector2 newDirection)
+        protected override void OnDirectionChange(object sender, Vector2 newDirection)
         {
             // Flip the weapons hitbox when switching direction.
             if (_hitBox != null && newDirection != Vector2.zero)
