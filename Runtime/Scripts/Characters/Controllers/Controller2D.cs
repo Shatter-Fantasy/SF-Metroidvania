@@ -43,6 +43,9 @@ namespace SF.Characters.Controllers
             get { return _direction; }
             set
             {
+                if (_previousDirection != value)
+                    _previousDirection = _direction;
+                
                 value.x = Mathf.RoundToInt(value.x);
                 _direction = value;
                 OnDirectionChanged?.Invoke(this, _direction);
@@ -55,7 +58,7 @@ namespace SF.Characters.Controllers
         /// </summary>
         protected Vector2 _previousDirection;
         public EventHandler<Vector2> OnDirectionChanged;
-
+        public bool IsFrozen;
         #region Components 
         protected BoxCollider2D _boxCollider;
         protected Rigidbody2D _rigidbody2D;
@@ -289,14 +292,13 @@ namespace SF.Characters.Controllers
         {
             _calculatedVelocity.x = 0;
             _externalVelocity.x = 0;
-            _previousDirection = _direction;
             _rigidbody2D.linearVelocity = Vector2.zero;
-            SetDirection(0);
+            IsFrozen = true;
         }
         
         public void UnfreezeController()
         {
-            SetDirection(_previousDirection.x);
+            IsFrozen = false;
         }
         public void SetExternalVelocity(Vector2 force)
         {
@@ -534,7 +536,7 @@ namespace SF.Characters.Controllers
             /* This un childs characters from attached platforms like
              * moving, climables, and so forth on death to prevent being linked to them if dying while on one. */
             transform.parent = null;
-
+            IsFrozen = false;
             _calculatedVelocity = Vector3.zero;
             _rigidbody2D.linearVelocity = Vector3.zero;
             _externalVelocity = Vector3.zero;
