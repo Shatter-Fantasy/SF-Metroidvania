@@ -36,11 +36,11 @@ namespace SF
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D collider2D)
+        private void OnTriggerEnter2D(Collider2D col2D)
         {
-            if(collider2D.TryGetComponent(out IDamagable damagable))
+            if(col2D.TryGetComponent(out IDamagable damagable))
             {
-                _collisionNormal = collider2D.Distance(_collider2D).normal;
+                _collisionNormal = col2D.Distance(_collider2D).normal;
                 
                 if(CheckCollisionDirection())
                     damagable.TakeDamage(DamageAmount,_knockBackForce);

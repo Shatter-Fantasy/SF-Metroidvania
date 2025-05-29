@@ -33,7 +33,6 @@ namespace SF.AbilityModule.Characters
         }
         private void OnInputGlide(InputAction.CallbackContext context)
         {
-            Debug.Log(context.ReadValue<Single>());
             if(!CheckAbilityRequirements()) return;
 
             _controller2d.SetVerticalVelocity(0);
