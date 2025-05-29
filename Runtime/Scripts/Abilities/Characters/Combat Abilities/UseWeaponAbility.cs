@@ -1,7 +1,6 @@
 using UnityEngine.InputSystem;
 
 using SF.AbilityModule;
-using SF.Characters.Controllers;
 using SF.InputModule;
 using SF.Weapons;
 
@@ -16,8 +15,17 @@ namespace SF.Abilities.CombatModule
         {
             if (_controller2d == null || _weaponBase == null)
                 return;
-            
+
+            _weaponBase.UseCompleted += OnUseCompleted;
             _weaponBase.Initialize(_controller2d);
+        }
+
+        /// <summary>
+        /// This plays after the attack finishes. Use this to wait for the attack animation to finish.
+        /// </summary>
+        private void OnUseCompleted()
+        {
+            _controller2d.UnfreezeController();
         }
 
         private void OnAttackPerformed(InputAction.CallbackContext context)
@@ -27,7 +35,10 @@ namespace SF.Abilities.CombatModule
             
             if(!CanStartAbility()) 
                 return;
-
+            
+            if(!_controller2d.IsFrozen)
+                _controller2d.FreezeController();
+            
             _weaponBase.Use();
         }
         
