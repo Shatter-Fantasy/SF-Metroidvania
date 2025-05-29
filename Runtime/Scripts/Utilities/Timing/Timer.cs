@@ -66,7 +66,9 @@ namespace SF
                 RemainingTime -= Time.deltaTime;
             }
             RemainingTime = 0;
-            _onTimerComplete?.Invoke();
+            
+            if(!_timerStopped)
+                _onTimerComplete?.Invoke();
         }
     }
 }
