@@ -21,8 +21,8 @@ namespace SF.Weapons
 
         [SerializeField] protected Timer _attackTimer;
         
+        public bool OnCooldown { get; protected set;}
         public System.Action UseCompleted;
-
         
         public virtual void Initialize(Controller2D controller2D = null)
         {

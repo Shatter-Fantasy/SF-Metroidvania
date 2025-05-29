@@ -18,7 +18,6 @@ namespace SF.Weapons
         private List<Collider2D> _hitResults = new();
 
         [SerializeField] private int _comboIndex = 0;
-        private bool _onCooldown = false;
         private Vector2 _originalColliderOffset;
         
         
@@ -50,7 +49,7 @@ namespace SF.Weapons
 
         public override void Use()
         {
-            if (_onCooldown)
+            if (OnCooldown)
                 return;
 
             // Stop attack while dead attack while dead.
@@ -79,14 +78,14 @@ namespace SF.Weapons
             _ = _hitBoxTimer.StartTimerAsync();
             _ = _attackTimer.StartTimerAsync();
 
-            _onCooldown = true;
+            OnCooldown = true;
         }
         private void ComboAttack()
         {
             if(_character2D != null)
                 _character2D.SetAnimationState(
                     ComboAttacks[_comboIndex].Name, 
-                    ComboAttacks[_comboIndex].AttackAnimationClip.averageDuration
+                    ComboAttacks[_comboIndex].AttackAnimationClip.length
                 );
             
             _attackTimer = new Timer(ComboAttacks[_comboIndex].AttackTimer, OnUseComplete);
@@ -101,7 +100,10 @@ namespace SF.Weapons
             _ = _comboTimer.StartTimerAsync();
 
             _comboIndex++;
-            _onCooldown = true;
+            
+            if (_comboIndex >= ComboAttacks.Count)
+                _comboIndex = 0;
+            OnCooldown = true;
         }
 
         /// <summary>
@@ -124,12 +126,27 @@ namespace SF.Weapons
         private void OnUseComplete()
         {
             UseCompleted?.Invoke();
-            _onCooldown = false;
+            OnCooldown = false;
         }
 
         private void OnComboReset()
         {
             _comboIndex = 0;
         }
+        
+        
+        #if UNITY_EDITOR
+        /// <summary>
+        /// Syncs all the attack timers to match the length of the animation clip length for that attack animation.
+        /// </summary>
+        [ContextMenu("Sync attack and animation timers.")]
+        void SetAllAttacksTimerViaAnimation()
+        {
+            for (int i = 0; i < ComboAttacks.Count; i++)
+            {
+                ComboAttacks[i].AttackTimer = ComboAttacks[i].AttackAnimationClip.length;
+            }
+        }
+        #endif
     }
 }
