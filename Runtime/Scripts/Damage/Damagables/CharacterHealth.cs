@@ -46,7 +46,9 @@ namespace SF.SpawnModule
 
             if(_character2D != null && !string.IsNullOrEmpty(DeathAnimationName))
                 _character2D.SetAnimationState(DeathAnimationName,0.01f);
-
+            
+            DamageBlink.StopInteruptBlinking();
+            
             base.Kill();
         }
 
