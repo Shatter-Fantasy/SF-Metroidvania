@@ -203,14 +203,6 @@ namespace SF.Characters.Controllers
 			if(!_useSlopes)
 				return;
 			
-
-			// We might be able ot get away with checking the already calculated CollisionInfo.BelowHit.normal
-			/*if(Direction.x > 0)
-				_slopeNormal = Physics2D.Raycast(Bounds.BottomRight(), Vector2.down, CollisionController.VerticalRayDistance,layerMask: PlatformFilter.layerMask).normal;
-			else if(Direction.x < 0)
-				_slopeNormal = Physics2D.Raycast(Bounds.BottomLeft(), Vector2.down, CollisionController.VerticalRayDistance,layerMask: PlatformFilter.layerMask).normal;
-			*/
-			
 			_slopeNormal = CollisionInfo.BelowHit.normal;
 			_standingOnSlopeAngle = Vector2.Angle(_slopeNormal, Vector2.up);
 			_onSlope = _slopeUpperLimit > _standingOnSlopeAngle 
@@ -281,9 +273,10 @@ namespace SF.Characters.Controllers
 				// TODO: Make the ability to walk up slopes.
 				//_calculatedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity, _slopeNormal);
 			}
-			// Note to self: If we are standing on a platform, and we move with the platform we gain the velocity of the platform on top of our own. 
-			// FIX THIS or the character becomes a mach 10 rocket sometimes.
 
+			if (IsFrozen && IsGrounded)
+				_calculatedVelocity.x = 0;
+			
 			base.Move();
         }
 		
