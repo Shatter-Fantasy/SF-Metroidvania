@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SF.InputModule;
-using SF.Managers;
 
 namespace SF.AbilityModule.Characters
 {
@@ -21,10 +20,19 @@ namespace SF.AbilityModule.Characters
         #region Input Actions
         private void OnInputMove(InputAction.CallbackContext context)
         {
-	        if (!CanStartAbility())
-		        return;
+
+	        /* When freezing the player controller CanStartAbility will return false in most cases.
+				This means Direction will never be set back to zero unless we tell it to here.
+				So after a player is unfrozen he will auto move without any input after. So we set Direction to 0 here.
+				Note the previous direction value will be set to the value before freezing if we need to restore it. */
 	        
-			Vector2 input = context.ReadValue<Vector2>();
+	        if (!CanStartAbility())
+	        {
+		        _controller2d.Direction = Vector2.zero;
+		        return;
+	        }
+
+	        Vector2 input = context.ReadValue<Vector2>();
 			
 			// Feel like the below xDirection is redundant and can be removed after testing it out now
 			float xDirection = input.x != 0 ? input.x : 0;
