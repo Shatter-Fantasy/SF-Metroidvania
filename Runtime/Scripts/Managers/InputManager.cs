@@ -1,3 +1,4 @@
+using System;
 using SF.AbilityModule;
 using SF.Events;
 
@@ -72,6 +73,14 @@ namespace SF.InputModule
 			{
 				Controls.Player.PauseToggle.performed -= OnGameMenuToggled;
 			}
+        }
+
+        private void OnDestroy()
+        {
+	        if (Controls != null)
+	        {
+		        Controls.Player.Disable();
+	        }
         }
     }
 }
