@@ -1,5 +1,6 @@
 using SF.CameraModule;
 using SF.Managers;
+using UnityEngine;
 
 
 namespace SF.Characters.Controllers
@@ -29,7 +30,6 @@ namespace SF.Characters.Controllers
                 {
                     CharacterState.CurrentMovementState = MovementState.Idle;
                     // Freeze the controller only after grounded so if we are stopped in mid-air we still hit the ground.
-                    FreezeController();
                 }
 
                 return;
@@ -43,6 +43,10 @@ namespace SF.Characters.Controllers
             // If we are exiting dialogue or a menu unfreeze the player.
             if(controlState == GameControlState.Player)
                 UnfreezeController();
+            else
+            {
+                FreezeController();
+            }
         }
     }
 }
