@@ -7,7 +7,7 @@ namespace SF.CommandModule
     {
         public SpriteRenderer SpriteRenderer;
         public Color TintColor;
-        private Color _originalColor;
+        private Color _originalColor = Color.white;
         public float TotalBlinkTime = 0.5f;
         private bool _isBlinking;
         public override async  Awaitable Use()
