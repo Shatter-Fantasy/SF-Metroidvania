@@ -13,6 +13,7 @@ namespace SF.Interactables
 		RayCast, // Used to do interaction during ray cast checks only.
 		ItemUse
 	}
+
 	/// <summary>
 	/// Allows any object to interact with the component implementing this interface.
 	/// </summary>
@@ -24,13 +25,17 @@ namespace SF.Interactables
         // Need to look into a cleaner code design.
 
 		void Interact();
-
-
-        /// <summary>
-        /// Allows for player only interactions.
-        /// </summary>
-        /// <param name="controller"></param>
-        void Interact(PlayerController controller);
+	}
+	
+	/// <summary>
+	/// Allows any object to interact with the component implementing this interface,
+	/// while also passing in any type of data that might need to be read during the interaction.
+	/// See <see cref="SF.DataManagement.SaveStation.Interact(PlayerController)"/> for an example.
+	/// </summary>
+	/// <typeparam name="T">The data that needs to be passed in during an interaction.</typeparam>
+	public interface IInteractable<in T> : IInteractable
+	{
+		void Interact(T interactingComponent);
 	}
 
     /// <summary>

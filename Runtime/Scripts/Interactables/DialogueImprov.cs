@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SF.DialogueModule
 {
-    public class DialogueImprov : MonoBehaviour, IInteractable
+    public class DialogueImprov : MonoBehaviour, IInteractable<PlayerController>
     {
         public int ConversationGUID;
         [field:SerializeField] public InteractableMode InteractableMode { get; set; }
