@@ -1,4 +1,3 @@
-using System;
 using SF.Characters.Controllers;
 using SF.Interactables;
 using UnityEngine;

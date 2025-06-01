@@ -8,6 +8,13 @@ namespace SF.RoomModule
 {
     public class RoomController : MonoBehaviour
     {
+        /* TODO List:
+            Room Auto Align: Make a method that allows taking in two transforms.
+            each transform is the floor of two connected rooms. 
+            We can round the x/y values of the transform to make sure they align perfect.
+            We might have to make one room round using ceiling and one round using floor depending on the values.         */
+        
+        
         /// <summary>
         /// The id for the room's spawned instance the RoomController is controlling.
         /// </summary>
