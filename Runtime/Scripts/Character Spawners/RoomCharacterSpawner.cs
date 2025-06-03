@@ -1,17 +1,31 @@
+using System;
 using SF.Characters.Data;
 using SF.RoomModule;
 using SF.StatModule;
 using UnityEngine;
 
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
+
 namespace SF.SpawnModule
 {
+    [System.Serializable]
+    public struct SpawnSet
+    {
+        public int SpawnCharacterID;
+        public Vector2 SpawnPosition;
+        public GameObject SpawnedCharacter;
+        public CharacterHealth SpawnedHealth;
+    }
+    
     /// <summary>
     /// Controls the spawn characters to keep spawned or despawn based on the current room that the player is in. 
     /// </summary>
     public class RoomCharacterSpawner : MonoBehaviour
     {
-        [SerializeField] private CharacterDatabase _characterDB;
-        [SerializeField] private SpawnSet[] _spawnSets;
+        public CharacterDatabase CharacterDB;
+        public SpawnSet[] SpawnSets;
 
         private bool _alreadySpawned;
         private void Awake()
@@ -32,33 +46,33 @@ namespace SF.SpawnModule
                 return;
             }
 
-            if (_spawnSets.Length < 1)
+            if (SpawnSets.Length < 1)
                 return;
             
             
-            for (int i = 0; i < _spawnSets.Length; i++)
+            for (int i = 0; i < SpawnSets.Length; i++)
             {
-                var spawnedCharacterData = _characterDB.GetDataByID(_spawnSets[i].SpawnCharacterID);
-                _spawnSets[i].SpawnedCharacter = Instantiate(spawnedCharacterData.Prefab,
-                _spawnSets[i].SpawnPosition,
+                var spawnedCharacterData = CharacterDB.GetDataByID(SpawnSets[i].SpawnCharacterID);
+                SpawnSets[i].SpawnedCharacter = Instantiate(spawnedCharacterData.Prefab,
+                SpawnSets[i].SpawnPosition,
                 Quaternion.identity);
 
-                if(!_spawnSets[i].SpawnedCharacter.TryGetComponent(out CharacterStats stats))
+                if(!SpawnSets[i].SpawnedCharacter.TryGetComponent(out CharacterStats stats))
                 {
-                    stats = _spawnSets[i].SpawnedCharacter.AddComponent<CharacterStats>();
+                    stats = SpawnSets[i].SpawnedCharacter.AddComponent<CharacterStats>();
                 }
 
                 stats.CharacterStatList = spawnedCharacterData.Stats;
 
-                if(!_spawnSets[i].SpawnedCharacter.TryGetComponent(out CharacterData characterData))
+                if(!SpawnSets[i].SpawnedCharacter.TryGetComponent(out CharacterData characterData))
                 {
-                    characterData = _spawnSets[i].SpawnedCharacter.AddComponent<CharacterData>();
+                    characterData = SpawnSets[i].SpawnedCharacter.AddComponent<CharacterData>();
                 }
                     
                 if(characterData is CombatantData cData)
                 {
-                    _spawnSets[i].SpawnedHealth = stats.CharacterHealth;
-                    _spawnSets[i].SpawnedHealth.Respawn();
+                    SpawnSets[i].SpawnedHealth = stats.CharacterHealth;
+                    SpawnSets[i].SpawnedHealth.Respawn();
                     
                     cData.SetData(spawnedCharacterData);
                 }
@@ -74,12 +88,12 @@ namespace SF.SpawnModule
 
         private void DespawnCharacters()
         {
-            for (int i = 0; i < _spawnSets.Length; i++)
+            for (int i = 0; i < SpawnSets.Length; i++)
             {
-                if(_spawnSets[i].SpawnedCharacter == null)
+                if(SpawnSets[i].SpawnedCharacter == null)
                     continue;
                 
-                _spawnSets[i].SpawnedHealth.Despawn();
+                SpawnSets[i].SpawnedHealth.Despawn();
             }
         }
 
@@ -89,22 +103,67 @@ namespace SF.SpawnModule
         /// </summary>
         private void RespawnCharacters()
         {
-            for (int i = 0; i < _spawnSets.Length; i++)
+            for (int i = 0; i < SpawnSets.Length; i++)
             {
-                if(_spawnSets[i].SpawnedCharacter == null)
+                if(SpawnSets[i].SpawnedCharacter == null)
                     continue;
                 
-                _spawnSets[i].SpawnedHealth.Respawn();
-                _spawnSets[i].SpawnedCharacter.transform.position = _spawnSets[i].SpawnPosition;
+                SpawnSets[i].SpawnedHealth.Respawn();
+                SpawnSets[i].SpawnedCharacter.transform.position = SpawnSets[i].SpawnPosition;
             }
         }
     }
-    [System.Serializable]
-    public struct SpawnSet
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(RoomCharacterSpawner))]
+    public class RoomCharacterSpawnerEditor : Editor
     {
-        public int SpawnCharacterID;
-        public Vector2 SpawnPosition;
-        public GameObject SpawnedCharacter;
-        public CharacterHealth SpawnedHealth;
+        private Vector3 _lastFramePosition;
+        private RoomCharacterSpawner _target;
+        private void Awake()
+        {
+            _target = target as RoomCharacterSpawner;
+            
+            if(_target != null)
+                _lastFramePosition = _target.transform.position;
+        }
+
+        public void OnSceneGUI()
+        {
+            RoomCharacterSpawner t = target as RoomCharacterSpawner;
+            
+            if (t == null || t.SpawnSets?.Length < 1)
+                return;
+
+            if (_lastFramePosition != _target.transform.position)
+            {
+                Vector2 deltaPosition = _target.transform.position - _lastFramePosition;
+                for (int i = 0; i < t.SpawnSets?.Length; i++)
+                {
+                    t.SpawnSets[i].SpawnPosition += deltaPosition;
+                }
+
+                _lastFramePosition = _target.transform.position;
+            }
+            
+            var color = new Color(1, 0.8f, 0.4f, 1);
+            Handles.color = color;
+
+            for (int i = 0; i < t.SpawnSets?.Length; i++)
+            {
+                EditorGUI.BeginChangeCheck();
+                Vector3 newTargetPosition = Handles.PositionHandle(t.SpawnSets[i].SpawnPosition, Quaternion.identity);
+                
+                if(t.CharacterDB != null && t.CharacterDB.GetDataByID(t.SpawnSets[i].SpawnCharacterID, out CharacterDTO characterDTO))
+                    Handles.Label(newTargetPosition,$"{characterDTO.name }");
+                
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(t, "Change Look At Target Position");
+                    t.SpawnSets[i].SpawnPosition = newTargetPosition;
+                }
+            }
+        }
     }
+#endif
 }

@@ -34,6 +34,13 @@ namespace SF.Characters.Data
         {
             return DataEntries.Find((T data) => data.ID == characterId);
         }
+        
+        public bool GetDataByID(int characterId, out T data)
+        {
+            data = DataEntries.Find((T data) => data.ID == characterId);
+
+            return data != null;
+        }
 
         public T this[int index]
         {
