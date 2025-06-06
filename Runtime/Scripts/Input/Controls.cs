@@ -182,15 +182,6 @@ namespace SF.InputModule
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""PauseToggle"",
-                    ""type"": ""Button"",
-                    ""id"": ""4b0faaac-98d0-49d5-ac3b-e77d56a694bc"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -688,28 +679,6 @@ namespace SF.InputModule
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""59dc1261-4618-4877-a54a-41ac86a103dd"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PauseToggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5d760f1a-b0fa-4bb1-95ba-6825f1683325"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PauseToggle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -803,6 +772,15 @@ namespace SF.InputModule
                     ""type"": ""PassThrough"",
                     ""id"": ""700f095a-f92b-4abb-9ce0-3685099ddede"",
                     ""expectedControlType"": ""Quaternion"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Talk"",
+                    ""type"": ""Button"",
+                    ""id"": ""b28984dd-a51c-44c6-a14b-36fcf223b0fb"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1226,6 +1204,89 @@ namespace SF.InputModule
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7648970c-2364-4fb6-b4a0-904d2ad08c15"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Talk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7db21898-17dd-42f0-b3f2-01639e2e98a1"",
+                    ""path"": ""<HID::Bensussen Deutsch & Associates,Inc.(BDA) Core (Plus) Wired Controller>/button3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Talk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8cf3a92-ac2b-4859-a136-8a35786540e0"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Talk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34711270-041d-46a2-9f3d-9c494d40255a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Talk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""GameControl"",
+            ""id"": ""635dfd36-6882-4146-a78a-d348303a8089"",
+            ""actions"": [
+                {
+                    ""name"": ""PauseToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""3455504f-c505-48ff-8b5c-ecbd9e24a92f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""12a03eab-165b-4e8b-9fa6-65b44d0b6d60"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88b035b5-85aa-485e-b511-7e1563f1258a"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1277,7 +1338,6 @@ namespace SF.InputModule
             m_Player_Glide = m_Player.FindAction("Glide", throwIfNotFound: true);
             m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-            m_Player_PauseToggle = m_Player.FindAction("PauseToggle", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1290,12 +1350,17 @@ namespace SF.InputModule
             m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+            m_UI_Talk = m_UI.FindAction("Talk", throwIfNotFound: true);
+            // GameControl
+            m_GameControl = asset.FindActionMap("GameControl", throwIfNotFound: true);
+            m_GameControl_PauseToggle = m_GameControl.FindAction("PauseToggle", throwIfNotFound: true);
         }
 
         ~@Controls()
         {
             UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, Controls.Player.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, Controls.UI.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_GameControl.enabled, "This will cause a leak and performance issues, Controls.GameControl.Disable() has not been called.");
         }
 
         /// <summary>
@@ -1381,7 +1446,6 @@ namespace SF.InputModule
         private readonly InputAction m_Player_Glide;
         private readonly InputAction m_Player_Crouch;
         private readonly InputAction m_Player_Interact;
-        private readonly InputAction m_Player_PauseToggle;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1433,10 +1497,6 @@ namespace SF.InputModule
             /// Provides access to the underlying input action "Player/Interact".
             /// </summary>
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/PauseToggle".
-            /// </summary>
-            public InputAction @PauseToggle => m_Wrapper.m_Player_PauseToggle;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1493,9 +1553,6 @@ namespace SF.InputModule
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
-                @PauseToggle.started += instance.OnPauseToggle;
-                @PauseToggle.performed += instance.OnPauseToggle;
-                @PauseToggle.canceled += instance.OnPauseToggle;
             }
 
             /// <summary>
@@ -1537,9 +1594,6 @@ namespace SF.InputModule
                 @Interact.started -= instance.OnInteract;
                 @Interact.performed -= instance.OnInteract;
                 @Interact.canceled -= instance.OnInteract;
-                @PauseToggle.started -= instance.OnPauseToggle;
-                @PauseToggle.performed -= instance.OnPauseToggle;
-                @PauseToggle.canceled -= instance.OnPauseToggle;
             }
 
             /// <summary>
@@ -1587,6 +1641,7 @@ namespace SF.InputModule
         private readonly InputAction m_UI_RightClick;
         private readonly InputAction m_UI_TrackedDevicePosition;
         private readonly InputAction m_UI_TrackedDeviceOrientation;
+        private readonly InputAction m_UI_Talk;
         /// <summary>
         /// Provides access to input actions defined in input action map "UI".
         /// </summary>
@@ -1638,6 +1693,10 @@ namespace SF.InputModule
             /// Provides access to the underlying input action "UI/TrackedDeviceOrientation".
             /// </summary>
             public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Talk".
+            /// </summary>
+            public InputAction @Talk => m_Wrapper.m_UI_Talk;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1694,6 +1753,9 @@ namespace SF.InputModule
                 @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+                @Talk.started += instance.OnTalk;
+                @Talk.performed += instance.OnTalk;
+                @Talk.canceled += instance.OnTalk;
             }
 
             /// <summary>
@@ -1735,6 +1797,9 @@ namespace SF.InputModule
                 @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
+                @Talk.started -= instance.OnTalk;
+                @Talk.performed -= instance.OnTalk;
+                @Talk.canceled -= instance.OnTalk;
             }
 
             /// <summary>
@@ -1768,6 +1833,102 @@ namespace SF.InputModule
         /// Provides a new <see cref="UIActions" /> instance referencing this action map.
         /// </summary>
         public UIActions @UI => new UIActions(this);
+
+        // GameControl
+        private readonly InputActionMap m_GameControl;
+        private List<IGameControlActions> m_GameControlActionsCallbackInterfaces = new List<IGameControlActions>();
+        private readonly InputAction m_GameControl_PauseToggle;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "GameControl".
+        /// </summary>
+        public struct GameControlActions
+        {
+            private @Controls m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public GameControlActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "GameControl/PauseToggle".
+            /// </summary>
+            public InputAction @PauseToggle => m_Wrapper.m_GameControl_PauseToggle;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_GameControl; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="GameControlActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(GameControlActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="GameControlActions" />
+            public void AddCallbacks(IGameControlActions instance)
+            {
+                if (instance == null || m_Wrapper.m_GameControlActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_GameControlActionsCallbackInterfaces.Add(instance);
+                @PauseToggle.started += instance.OnPauseToggle;
+                @PauseToggle.performed += instance.OnPauseToggle;
+                @PauseToggle.canceled += instance.OnPauseToggle;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="GameControlActions" />
+            private void UnregisterCallbacks(IGameControlActions instance)
+            {
+                @PauseToggle.started -= instance.OnPauseToggle;
+                @PauseToggle.performed -= instance.OnPauseToggle;
+                @PauseToggle.canceled -= instance.OnPauseToggle;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="GameControlActions.UnregisterCallbacks(IGameControlActions)" />.
+            /// </summary>
+            /// <seealso cref="GameControlActions.UnregisterCallbacks(IGameControlActions)" />
+            public void RemoveCallbacks(IGameControlActions instance)
+            {
+                if (m_Wrapper.m_GameControlActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="GameControlActions.AddCallbacks(IGameControlActions)" />
+            /// <seealso cref="GameControlActions.RemoveCallbacks(IGameControlActions)" />
+            /// <seealso cref="GameControlActions.UnregisterCallbacks(IGameControlActions)" />
+            public void SetCallbacks(IGameControlActions instance)
+            {
+                foreach (var item in m_Wrapper.m_GameControlActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_GameControlActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="GameControlActions" /> instance referencing this action map.
+        /// </summary>
+        public GameControlActions @GameControl => new GameControlActions(this);
         private int m_MobiledeviceSchemeIndex = -1;
         /// <summary>
         /// Provides access to the input control scheme.
@@ -1884,13 +2045,6 @@ namespace SF.InputModule
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteract(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "PauseToggle" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnPauseToggle(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
@@ -1969,6 +2123,28 @@ namespace SF.InputModule
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Talk" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTalk(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "GameControl" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="GameControlActions.AddCallbacks(IGameControlActions)" />
+        /// <seealso cref="GameControlActions.RemoveCallbacks(IGameControlActions)" />
+        public interface IGameControlActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "PauseToggle" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPauseToggle(InputAction.CallbackContext context);
         }
     }
 }

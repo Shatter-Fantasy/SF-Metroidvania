@@ -1,5 +1,7 @@
 using SF.Events;
+using SF.InputModule;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace SF.DialogueModule
@@ -131,12 +133,29 @@ namespace SF.DialogueModule
         private void OnEnable()
         {
             this.EventStartListening<DialogueEvent>();
+            
+            if(InputManager.Controls != null)
+            {
+                InputManager.Controls.UI.Talk.performed += OnTalk;
+            }
         }
+
         private void OnDisable()
         {
             // Reset the static dialogue conversation value between play sessions.
             _instance._dialogueConversation = null;
             this.EventStopListening<DialogueEvent>();
+            
+            if(InputManager.Controls != null)
+            {
+                InputManager.Controls.UI.Talk.performed -= OnTalk;
+            }
+        }
+        
+        
+        private void OnTalk(InputAction.CallbackContext ctx)
+        {
+            TriggerConversation(RecentConversation.GUID);
         }
     }
 }
