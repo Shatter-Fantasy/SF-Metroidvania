@@ -1,8 +1,10 @@
+using System;
 using SF.DataManagement;
 using SF.RoomModule;
 using SF.DialogueModule;
 using SF.LevelModule;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SF.Managers
 {
@@ -13,7 +15,7 @@ namespace SF.Managers
     [DefaultExecutionOrder(-5)]
     public class GameLoader : MonoBehaviour
     {
-        public int StartingRoomID = 0;
+        [SerializeField] private GameLoaderSO _gameLoaderData; 
         
         public static GameLoader Instance;
         public static bool WasGameInitialized = false;
@@ -45,8 +47,15 @@ namespace SF.Managers
             // The GameLoader will take care of all child gameobjects initialization.
             // If one was already set and initialized do not reinit and load duplicate game managers.
             // Destroy this entire GameObject to prevent duplicate managers.
-            if(Instance != null && Instance != this)
+            if (Instance != null && Instance != this)
                 Destroy(gameObject);
+            else
+                Instance = this;
+
+            if (_gameLoaderData != null)
+                SceneManager.sceneLoaded += OnSceneLoaded;
+            
+            DontDestroyOnLoad(this);
 
             /* Even after checking to make sure no other GameLoaders exists there could be one case the game was already initialized.
                 The first GameLoader that initialized the GameManagers could have been destroyed/deloaded making Instance == null.
@@ -58,8 +67,6 @@ namespace SF.Managers
 
             if (_roomDB != null)
                 RoomDB.Instance = _roomDB;
-
-            MetroidvaniaSaveManager.StartingRoom = StartingRoomID;
             
             InitializeGame();
         }
@@ -76,7 +83,6 @@ namespace SF.Managers
             
             InitializeInSceneManagers();
             
-            
             WasGameInitialized = true;
         }
         
@@ -90,6 +96,71 @@ namespace SF.Managers
                 Debug.Log("There was no prefab for GameWideManagers assigned in the GameLoader component", gameObject);
                 return;
             }
+        }
+
+        /// <summary>
+        /// Sets up the base state of a new game.
+        /// </summary>
+        public void NewGame()
+        {
+            // Set the starting room first.
+            if (_gameLoaderData == null)
+                return;
+
+            _gameLoaderData.SettingUpNewGame = true;
+            MetroidvaniaSaveManager.StartingRoom = _gameLoaderData.StartingRoomID;
+
+            SceneManager.LoadScene(_gameLoaderData.NewGameSceneIndex);
+        }
+
+        /// <summary>
+        /// Called when the new game data has been set up and the first scene of the new game is completely loaded and initialized.
+        /// </summary>
+        private void OnNewGameReady()
+        {
+            if (_gameLoaderData == null)
+                return;
+            
+            _gameLoaderData.SettingUpNewGame = false;
+        }
+        public void LoadGame()
+        {
+            // Set the starting room first.
+            if(_gameLoaderData != null)
+                MetroidvaniaSaveManager.StartingRoom = _gameLoaderData.StartingRoomID;
+        }
+        
+        /// <summary>
+        /// /Called by the SceneManager when any scene is loaded.
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="loadSceneMode"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            if (_gameLoaderData == null)
+                return;
+            
+            Debug.Log("Scene is loading.");
+            // When we are loading the same scene as a new game also check if we are in the middle of setting a new game file.
+            if (scene.buildIndex == _gameLoaderData.NewGameSceneIndex && _gameLoaderData.SettingUpNewGame)
+                NewGameSceneInitialization();
+        }
+        
+        /// <summary>
+        /// This is called when the new game scene is finished loaded.
+        /// <remarks>
+        /// This should be called after all the starting data has been assigned in the <see cref="GameLoader"/> such as the databases and starting room.
+        /// </remarks> 
+        /// </summary>
+        private void NewGameSceneInitialization()
+        {
+            Debug.Log("A new game is being set up.");
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
     }
 }
