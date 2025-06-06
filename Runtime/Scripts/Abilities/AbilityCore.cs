@@ -79,6 +79,7 @@ namespace SF.AbilityModule
 		/// <returns></returns>
 		protected bool CanStartAbility()
 		{
+			
 			if (!_isInitialized
 			    || !enabled
 			    || _controller2d == null

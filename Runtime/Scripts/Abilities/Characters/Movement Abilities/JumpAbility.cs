@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 using SF.InputModule;
+using SF.Managers;
 
 namespace SF.AbilityModule.Characters
 {
@@ -24,13 +25,19 @@ namespace SF.AbilityModule.Characters
             _controller2d.OnGrounded += ResetJumps;
         }
 
+        /// <summary>
+        /// Check if the character controller is in a movement state or if the ability has special logic checks to make sure it can be performed.
+        /// <remarks>
+        /// If you want to make sure the ability can start while checking the ControlState call <see cref="AbilityCore.CanStartAbility"/>.
+        /// AbilityCore.CanStart calls the CheckAbilityRequirements in it as well so it will do both checks.
+        /// </remarks>
+        /// </summary>
+        /// <returns></returns>
         protected override bool CheckAbilityRequirements()
         {
-            if(!_isInitialized || !enabled || _controller2d == null)
-                return false;
-
+            Debug.Log(GameManager.Instance.ControlState);
             // If we are currently gliding don't jump. 
-            // Due note we could add the ability to jump in mid glide for more movement customization. Maybe a boolean in the Glide called CanGlideJump.
+            // Do note we could add the ability to jump in mid-glide for more movement customization. Maybe a boolean in the Glide called CanGlideJump.
             if(_controller2d.IsGliding)
                 return false;
 
@@ -43,7 +50,7 @@ namespace SF.AbilityModule.Characters
 
         private void OnInputJump(InputAction.CallbackContext context)
 		{
-            if(!CheckAbilityRequirements()) return;
+            if(!CanStartAbility()) return;
 
             CalculatedJumpHeight = _controller2d.IsRunning
                 ? JumpHeight * RunningJumpMultiplier
