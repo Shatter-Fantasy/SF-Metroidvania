@@ -67,6 +67,26 @@ namespace SF.DialogueModule
             
             return DialogueEntries[_index].Text;
         }
+
+        public void NextDialogueEntry(out DialogueEntry entry)
+        {
+            _index++;
+
+            if (!InConversation)
+            {
+                _index = -1;
+                entry = DialogueEntry.EmptyEntry;
+                return;
+            }
+
+            // If this is past the first entry call the previous entries on end action before starting the next dialogue entry.
+            if (_index > 0)
+                DialogueEntries[_index - 1].EndAction?.Invoke();
+            
+            DialogueEntries[_index].StartAction?.Invoke();
+            
+            entry = DialogueEntries[_index];
+        }
     }
 
     /// <summary>
@@ -77,6 +97,10 @@ namespace SF.DialogueModule
     {
         public string Text;
         /// <summary>
+        /// The name of the current speaker.
+        /// </summary>
+        public string SpeakerName;
+        /// <summary>
         /// An action that can be invoked when the Dialogue Entry starts.
         /// </summary>
         public Action StartAction;
@@ -85,6 +109,13 @@ namespace SF.DialogueModule
         /// This finishes running before the next DialogueEntries StartAction is invoked.
         /// </summary>
         public Action EndAction;
+        
+        // Used for comparisons to see if a DialogueEntry is null.
+        public static readonly DialogueEntry EmptyEntry = new()
+        {
+            Text = "",
+            SpeakerName = ""
+        };
     }
 
     /// <summary>
