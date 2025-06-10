@@ -129,6 +129,7 @@ namespace SF.RoomModule
             for (int i = 0; i < Rooms.Count; i++)
             {
                 Rooms[i].RoomID = i;
+                Rooms[i].RoomPrefab.GetComponent<RoomController>().RoomID = i;
             }
         }
 
