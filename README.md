@@ -1,9 +1,13 @@
 # SF-Metroidvania-Package
+
+## Install Instructions are located at the bottom of the read me in detail.
+
+## Summary 
 This is the Shatter Fantasy Metroidvania Unity package that can be used to create any game needing Metroidvania like controls. 
-This at the moment is for 2D only physics, but we will be adding 3D hysics support when Unity 6.3 comes out. 
+At the moment it is for 2D only physics, but we will be adding 3D hysics support when Unity 6.3 comes out. 
 This is because there is a major rework from the ground up of Unity's 2D physics coming that allow making custom 3D world like interactions with 2D physics colliders.
 
-Install Instructions are located at the bottom of the read me in detail.
+
 
 ## Current Alpha: Alpha One
 Currently the first alpha is being worked on a seperate branch from the main branch. 
