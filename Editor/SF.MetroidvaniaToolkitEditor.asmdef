@@ -1,0 +1,30 @@
+{
+    "name": "SF.MetroidvaniaToolkitEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3a9781db4804a9945b9883f3a7c46d45",
+        "GUID:70643826bc633b246af1ece2db1e8338",
+        "GUID:e35e215503ab6b34eb8cadb39b7719da",
+        "GUID:5769175a692bee24cbd874f396613351",
+        "GUID:e8ca73d31c2608e498b77118a366f5dd"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "SF_UIELEMENTS"
+    ],
+    "versionDefines": [
+        {
+            "name": "shatter-fantasy.sf-ui-elements",
+            "expression": "0.0.1",
+            "define": "SF_UIELEMENTS"
+        }
+    ],
+    "noEngineReferences": false
+}
