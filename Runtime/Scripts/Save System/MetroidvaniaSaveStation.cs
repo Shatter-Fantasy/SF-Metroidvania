@@ -1,11 +1,15 @@
 using SF.Characters.Controllers;
+using SF.RoomModule;
 using SF.SpawnModule;
 using SF.StatModule;
+using UnityEngine;
 
 namespace SF.DataManagement
 {
     public class MetroidvaniaSaveStation : SaveStation
     {
+        
+        
         public override void Interact()
         {
             SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;
@@ -25,6 +29,7 @@ namespace SF.DataManagement
                 MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.PlayerStats = stats;
             }
             
+            MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.SavedRoomID = RoomSystem.CurrentRoom.RoomID;
             SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;
             MetroidvaniaSaveManager.SaveGame();
         }

@@ -1,6 +1,7 @@
+using System;
 using SF.AbilityModule;
 using SF.Events;
-
+using SF.Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -43,13 +44,20 @@ namespace SF.InputModule
 			if(Instance != null && Instance != this)
 				Destroy(this);
 		}
+
+		private void Start()
+		{
+			if (GameManager.Instance != null)
+				GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
+		}
 		
 		private void OnGameMenuToggled(InputAction.CallbackContext ctx)
 		{
+			
 			GameEvent.Trigger(GameEventTypes.PauseToggle);
 		}
 
-		public void EnbaleActionMap()
+		public void EnableActionMap()
         {
 
         }
@@ -58,20 +66,45 @@ namespace SF.InputModule
         {
 
         }
-
+        
+        private void OnGameControlStateChanged(GameControlState controlState)
+        {
+	        // If we are exiting dialogue or a menu unfreeze the player.
+	        if (controlState == GameControlState.Player)
+	        {
+		        Controls.Player.Enable();
+		        Controls.UI.Disable();
+	        }
+	        else
+	        {
+		        Controls.UI.Enable();
+		        Controls.Player.Disable();
+	        }
+        }
+        
         private void OnEnable()
         {
 			if(Controls != null)
 			{
-				Controls.Player.PauseToggle.performed += OnGameMenuToggled;
+				Controls.GameControl.PauseToggle.performed += OnGameMenuToggled;
 			}
         }
         private void OnDisable()
         {
 			if(Controls != null)
 			{
-				Controls.Player.PauseToggle.performed -= OnGameMenuToggled;
+				Controls.GameControl.PauseToggle.performed -= OnGameMenuToggled;
 			}
+        }
+
+        private void OnDestroy()
+        {
+	        if (Controls != null)
+	        {
+		        Controls.Player.Disable();
+		        Controls.UI.Disable();
+		        Controls.GameControl.Disable();
+	        }
         }
     }
 }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using SF.Characters;
 using UnityEngine;
 namespace SF.Weapons
 {
@@ -18,7 +18,6 @@ namespace SF.Weapons
         private List<Collider2D> _hitResults = new();
 
         [SerializeField] private int _comboIndex = 0;
-        private bool _onCooldown = false;
         private Vector2 _originalColliderOffset;
         
         
@@ -28,15 +27,18 @@ namespace SF.Weapons
             _hitBoxTimer = new Timer(ComboAttacks[0].HitBoxDelay, OnHitBoxDelay);
             _comboTimer = new Timer(ComboAttacks[0].ComboInputDelay, OnComboReset);
             
-            _controller2D.OnDirectionChanged += OnDirectionChange;
+            
+            if(_controller2D != null)
+                _controller2D.OnDirectionChanged += OnDirectionChange;
 
+                
             if (_hitBox != null)
             {
                 _originalColliderOffset = _hitBox.offset;
             }
         }
 
-        private void OnDirectionChange(object sender, Vector2 newDirection)
+        protected override void OnDirectionChange(object sender, Vector2 newDirection)
         {
             // Flip the weapons hitbox when switching direction.
             if (_hitBox != null && newDirection != Vector2.zero)
@@ -47,7 +49,11 @@ namespace SF.Weapons
 
         public override void Use()
         {
-            if (_onCooldown)
+            if (OnCooldown)
+                return;
+
+            // Stop attack while dead attack while dead.
+            if (_controller2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
             
             // If we have a combo enabled for the current weapon do it.
@@ -72,14 +78,14 @@ namespace SF.Weapons
             _ = _hitBoxTimer.StartTimerAsync();
             _ = _attackTimer.StartTimerAsync();
 
-            _onCooldown = true;
+            OnCooldown = true;
         }
         private void ComboAttack()
         {
             if(_character2D != null)
                 _character2D.SetAnimationState(
                     ComboAttacks[_comboIndex].Name, 
-                    ComboAttacks[_comboIndex].AttackAnimationClip.averageDuration
+                    ComboAttacks[_comboIndex].AttackAnimationClip.length
                 );
             
             _attackTimer = new Timer(ComboAttacks[_comboIndex].AttackTimer, OnUseComplete);
@@ -94,7 +100,10 @@ namespace SF.Weapons
             _ = _comboTimer.StartTimerAsync();
 
             _comboIndex++;
-            _onCooldown = true;
+            
+            if (_comboIndex >= ComboAttacks.Count)
+                _comboIndex = 0;
+            OnCooldown = true;
         }
 
         /// <summary>
@@ -117,12 +126,27 @@ namespace SF.Weapons
         private void OnUseComplete()
         {
             UseCompleted?.Invoke();
-            _onCooldown = false;
+            OnCooldown = false;
         }
 
         private void OnComboReset()
         {
             _comboIndex = 0;
         }
+        
+        
+        #if UNITY_EDITOR
+        /// <summary>
+        /// Syncs all the attack timers to match the length of the animation clip length for that attack animation.
+        /// </summary>
+        [ContextMenu("Sync attack and animation timers.")]
+        void SetAllAttacksTimerViaAnimation()
+        {
+            for (int i = 0; i < ComboAttacks.Count; i++)
+            {
+                ComboAttacks[i].AttackTimer = ComboAttacks[i].AttackAnimationClip.length;
+            }
+        }
+        #endif
     }
 }

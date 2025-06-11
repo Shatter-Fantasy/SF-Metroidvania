@@ -1,5 +1,7 @@
 using SF.Events;
+using SF.InputModule;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace SF.DialogueModule
@@ -7,7 +9,7 @@ namespace SF.DialogueModule
     /// <summary>
     /// The in scene manager that controls the way DialogueConversations are run and set up.
     /// </summary>
-    public class DialogueManager : MonoBehaviour, EventListener<DialogueEvent>
+    public class DialogueManager : MonoBehaviour
     {
         private static DialogueManager _instance;
         public static DialogueManager Instance
@@ -27,7 +29,7 @@ namespace SF.DialogueModule
         /// </summary>
         [SerializeField] private DialogueConversation _dialogueConversation;
         [SerializeField] private DialogueDatabase _dialogueDB;
-
+        private DialogueEntry _currentEntry;
         public static DialogueConversation RecentConversation
         {
             get => _instance._dialogueConversation;
@@ -39,6 +41,7 @@ namespace SF.DialogueModule
         [SerializeField] private UIDocument _dialogueOverlayUXML;
         private VisualElement _dialogueContainer;
         private Label _dialogueLabel;
+        private Label _speakerLabel;
 
         private void Awake()
         {
@@ -52,6 +55,7 @@ namespace SF.DialogueModule
         {
             _dialogueContainer = _dialogueOverlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-dialogue__container");
             _dialogueLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "overlay-dialogue__label");
+            _speakerLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "dialogue-speaker__label");
         }
         
         public static void TriggerConversation(int guid)
@@ -62,11 +66,15 @@ namespace SF.DialogueModule
                 return;
             }
 
+            // We were already in a conversation and are continuing it.
             if ( _instance._dialogueConversation?.GUID == guid)
             {
+
+                RecentConversation.NextDialogueEntry(out _instance._currentEntry);
                 
-                // Bad little man need to improve this so we don't have a shit ton of string garbage collection.
-                _instance._dialogueLabel.text = RecentConversation.NextDialogueEntry();
+                _instance._dialogueLabel.text = _instance._currentEntry.Text;
+                _instance._speakerLabel.text = _instance._currentEntry.SpeakerName;
+                
                 if (string.IsNullOrEmpty(_instance._dialogueLabel.text))
                 {
                    StopConversation();
@@ -75,13 +83,19 @@ namespace SF.DialogueModule
                 return;
             }
             
+            // Just starting a new conversation.
             if(_instance._dialogueDB.GetConversation(guid, out DialogueConversation conversation))
             {
                 _instance._dialogueConversation = conversation;
-                DialogueEvent.Trigger(DialogueEventTypes.DialogueOpen, RecentConversation.NextDialogueEntry());
+                RecentConversation.NextDialogueEntry(out _instance._currentEntry);
+                OnDialogueOpen();
+                DialogueEvent.Trigger(DialogueEventTypes.DialogueOpen, _instance._currentEntry.Text);
             }
             else
-                DialogueEvent.Trigger(DialogueEventTypes.DialogueOpen,"No conversation for the Guid was found.");
+            {
+                OnDialogueOpen();
+                DialogueEvent.Trigger(DialogueEventTypes.DialogueOpen, $"No conversation for the Guid: {guid} was found. If you see this in game please report the guid value to the devs.");
+            }
         }
 
         public static void StopConversation()
@@ -97,46 +111,45 @@ namespace SF.DialogueModule
             _instance.OnDialogueClose();
         }
         
-        private void OnDialogueOpen(string dialogue)
+        private static void OnDialogueOpen()
         {
-            _dialogueContainer.style.visibility = Visibility.Visible;
-            _dialogueLabel.text = dialogue;
+            _instance._dialogueContainer.style.visibility = Visibility.Visible;
+            _instance._dialogueLabel.text = _instance._currentEntry.Text;
+            _instance._speakerLabel.text = _instance._currentEntry.SpeakerName;
         }
         
         private void OnDialogueClose()
         {
             _dialogueContainer.style.visibility = Visibility.Hidden;
             _dialogueLabel.text = "";
+            _speakerLabel.text = "";
             DialogueEvent.Trigger(DialogueEventTypes.DialogueClose,"");
-        }
-        
-        public void OnEvent(DialogueEvent dialogueEvent)
-        {
-            switch (dialogueEvent.EventType)
-            {
-                case DialogueEventTypes.DialogueOpen:
-                {
-                    if (string.IsNullOrEmpty(dialogueEvent.Dialogue))
-                    {
-                        OnDialogueClose();
-                        break;
-                    }
-
-                    OnDialogueOpen(dialogueEvent.Dialogue);
-                    break;
-                }
-            }
         }
         
         private void OnEnable()
         {
-            this.EventStartListening<DialogueEvent>();
+            if(InputManager.Controls != null)
+            {
+                InputManager.Controls.UI.Talk.performed += OnTalk;
+            }
         }
+
         private void OnDisable()
         {
             // Reset the static dialogue conversation value between play sessions.
             _instance._dialogueConversation = null;
-            this.EventStopListening<DialogueEvent>();
+            _instance._currentEntry = null;
+            
+            if(InputManager.Controls != null)
+            {
+                InputManager.Controls.UI.Talk.performed -= OnTalk;
+            }
+        }
+        
+        
+        private void OnTalk(InputAction.CallbackContext ctx)
+        {
+            TriggerConversation(RecentConversation.GUID);
         }
     }
 }

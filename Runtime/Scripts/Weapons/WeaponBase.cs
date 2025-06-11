@@ -21,11 +21,30 @@ namespace SF.Weapons
 
         [SerializeField] protected Timer _attackTimer;
         
+        public bool OnCooldown { get; protected set;}
         public System.Action UseCompleted;
+        
+        public virtual void Initialize(Controller2D controller2D = null)
+        {
+            _controller2D = controller2D;
+            
+            
+            if(_controller2D != null)
+                _controller2D.OnDirectionChanged += OnDirectionChange;
+        }
         
         public virtual void Use()
         {
 
         }
+
+        /// <summary>
+        /// Mainly used in subclasses for things needing updated when character changes directions.
+        /// Flipping melee hit boxes when characters change direction
+        /// Changing projectile firing directions for range weapons or mixed style weapons. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="newDirection"></param>
+        protected virtual void OnDirectionChange(object sender, Vector2 newDirection) { }
     }
 }

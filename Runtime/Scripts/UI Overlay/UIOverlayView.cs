@@ -44,7 +44,7 @@ namespace SF.UIModule
             _itemPickUpLabel.text = itemDTO.Name;
             _overlayContainer.style.visibility = Visibility.Visible;
 
-            _popTimer.StartTimerAsync();
+            _ = _popTimer.StartTimerAsync();
         }
         
         private void OnPopUpTimerCompleted()

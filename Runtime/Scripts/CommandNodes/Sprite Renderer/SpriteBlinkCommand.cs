@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace SF.CommandModule
@@ -8,17 +7,18 @@ namespace SF.CommandModule
     {
         public SpriteRenderer SpriteRenderer;
         public Color TintColor;
-        private Color _originalColor;
-        public float BlinkIntervalTimer = 0.5f;
-        public float TotalBlinkTime = 1;
-        private int _blinkAmount;
-
+        private Color _originalColor = Color.white;
+        public float TotalBlinkTime = 0.5f;
+        private bool _isBlinking;
         public override async  Awaitable Use()
         {
             if (SpriteRenderer == null)
                 return;
 
-            _blinkAmount = Mathf.RoundToInt(TotalBlinkTime/BlinkIntervalTimer);
+            // Don't start a new blink if we are already doing one.
+            if (_isBlinking)
+                return;
+            
             _originalColor = SpriteRenderer.color;
 
             await TintSprite();
@@ -26,14 +26,16 @@ namespace SF.CommandModule
 
         private async Awaitable TintSprite()
         {
-            while(_blinkAmount > 0)
-            {
-                SpriteRenderer.color = TintColor;
-                await Awaitable.WaitForSecondsAsync(BlinkIntervalTimer);
-                SpriteRenderer.color = _originalColor;
-                await Awaitable.WaitForSecondsAsync(BlinkIntervalTimer);
-                _blinkAmount--;
-            }      
+            _isBlinking = true;
+            SpriteRenderer.color = TintColor;
+            await Awaitable.WaitForSecondsAsync(TotalBlinkTime);
+            SpriteRenderer.color = _originalColor;
+            _isBlinking = false;
+        }
+
+        public void StopInteruptBlinking()
+        {
+            SpriteRenderer.color = _originalColor;
         }
     }
 }

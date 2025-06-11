@@ -64,6 +64,8 @@ namespace SF.CameraModule
             {
                 // Reset the previous/old virtual camera priority.
                 // At this point Instance.PlayerCamera is still the old camera.
+                // We also clear the old camera follow to prevent it from following the player while not the active camera.
+                Instance.PlayerCamera.Follow = null;
                 Instance.PlayerCamera.Priority = DefaultPriority;
             }
 
@@ -81,8 +83,8 @@ namespace SF.CameraModule
                 Instance.PlayerCamera = cmCamera;
             }
         }
-
-        // There is a bug in here on Unity's side confirmed by devs in Cinemachine 3.1.3 and other Cinemachine 3.x.x versions.
+        
+        /* There is a bug in here on Unity's side confirmed by devs in Cinemachine 3.1.3 and other Cinemachine 3.x.x versions.
         // See link for devs talking about it being fixed in 3.1.4
         // Bounding shapes are not being updated properly.
         // https://discussions.unity.com/t/cinemachine-confiner2d-not-respected-in-v3-1-3/1607171/3
@@ -101,5 +103,6 @@ namespace SF.CameraModule
                 Instance.CameraConfiner.BakeBoundingShape(Instance.PlayerCamera, 1);
             }
         }
+        */
     }
 }

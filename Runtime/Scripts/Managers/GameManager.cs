@@ -1,3 +1,4 @@
+using System;
 using SF.Characters.Controllers;
 using SF.DataManagement;
 using SF.DialogueModule;
@@ -41,13 +42,30 @@ namespace SF.Managers
         #endif
         
         [SerializeField] protected int _targetFrameRate = 60;
-		public GameControlState ControlState;
+        [SerializeField] private GameControlState _controlState;
+
+        public GameControlState ControlState
+        {
+            get { return _controlState;}
+            set
+            {
+                if (_controlState != value)
+                {
+                    _controlState = value;
+                    OnGameControlStateChanged?.Invoke(_controlState);
+                }
+            }
+        }
+        
 		public GamePlayState PlayState;
 
         public static GameObject PlayerSceneObject { get; protected set; }
         public static GameManager Instance;
 
         public PlayerController PlayerController;
+
+        public Action<GameControlState> OnGameControlStateChanged;
+        
         private void Awake()
         {
             Application.targetFrameRate = _targetFrameRate;

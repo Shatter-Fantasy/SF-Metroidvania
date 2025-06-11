@@ -1,7 +1,7 @@
-using SF.Utilities;
 using SF.RoomModule;
 
 using UnityEditor;
+using UnityEditor.Tilemaps;
 using UnityEditor.UIElements;
 
 using UnityEngine;
@@ -9,91 +9,47 @@ using UnityEngine.UIElements;
 
 namespace SFEditor.Rooms
 {
-
-    public class RectHandleLogic
-    {
-        private static Vector2 StartMousePosition;
-        private static Vector2 CurrentMousePosition;
-        /// <summary>
-        /// The current screen coordinates of the mouse positon.
-        /// </summary>
-        private static Vector2 CurrentScreenMousePosition;
-        private static Vector2 StartPosition;
-
-        public static void DoDraw(int id,
-         Vector3 position,
-         Quaternion rotation,
-         float size)
-        {
-            Vector3 position2 = Handles.matrix.MultiplyPoint(position);
-
-            Matrix4x4 matrix = Handles.matrix;
-            Event current = Event.current;
-
-
-            switch(current.GetTypeForControl(id))
-            {
-                case EventType.Layout:
-                    {
-                        Handles.matrix = Matrix4x4.identity;
-                        Handles.matrix = matrix;
-                        break;
-                    }
-                case EventType.Repaint:
-                    {
-                        Handles.matrix = Matrix4x4.identity;
-                        Handles.matrix = matrix;
-                        break;
-                    }
-                case EventType.MouseDown:
-                    {
-                        if(HandleUtility.nearestControl == id && current.button == 0)
-                        {
-                            GUIUtility.hotControl = id;
-                            CurrentMousePosition = (CurrentScreenMousePosition 
-                                = (StartMousePosition = current.mousePosition));
-
-                            StartPosition = position;
-                            current.Use();
-                            EditorGUIUtility.SetWantsMouseJumping(1);
-                        }
-                        break;
-                    }
-                case EventType.MouseUp:
-                    if(GUIUtility.hotControl == id && (current.button == 0 || current.button == 2))
-                    {
-                        Debug.Log(current.mousePosition);
-                        GUIUtility.hotControl = 0;
-                        current.Use();
-                        EditorGUIUtility.SetWantsMouseJumping(0);
-                    }
-                    break;
-            }
-        }
-
-    }
-
     [CustomEditor(typeof(RoomController), true)]
     public class RoomControllerEditor : Editor
     {
-        Rect boundaryRect = new Rect(0,0,10,10);
-        Color handleFill = new Color(.5f, .5f, .5f, .5f);
-        Vector3 rectPosition => (Vector3)boundaryRect.position;
-        Vector3 snap = Vector3.one * 0.5f;
+        /// <summary>
+        /// Is the RoomController component on the same gameobject as a grid component for things like Tilemaps or custom grid layouts.
+        /// </summary>
+        /// <remarks>
+        /// This is used to allow custom tools for Rooms to easily set up the connection points of rooms when they spawn.
+        /// </remarks>
+        private bool _isGrid;
+        private RoomController _roomController;
+        private Grid _grid;
 
-        int roomBoundaryID = "Room Controller Boundary".GetHashCode();
-
+        private BoundsIntField _selectionPositionField;
         public override VisualElement CreateInspectorGUI()
         {
+            _roomController = target as RoomController;
+            _roomController?.TryGetComponent(out _grid);
+            _isGrid = _grid != null;
+            
             VisualElement newInspector = new();
             InspectorElement.FillDefaultInspector(newInspector, serializedObject, this);
-            newInspector.Add(
+            
+            if (_isGrid)
+            {
+                Foldout gridTools = new Foldout(){text = "Room Grid Tools"};
+                _selectionPositionField = new BoundsIntField("Grid Position");
+                
+                gridTools.Add(
                     new Button(SetUpRoomObjects)
                     {
                         text = "Setup Room Objects",
-                        tooltip = "Sets up the needed objects like cameras, boundaries for a new room using the game object the room controller is on as the root object."
+                        tooltip =
+                            "Sets up the needed objects like cameras, boundaries for a new room using the game object the room controller is on as the root object."
                     }
                 );
+                gridTools.Add(_selectionPositionField);
+                
+                newInspector.Add(gridTools);
+            }
+            
             return newInspector;
         }
 
@@ -103,15 +59,24 @@ namespace SFEditor.Rooms
         private void SetUpRoomObjects()
         {
             RoomController room = target as RoomController;
-            GameObject levelBoundary = new GameObject("Level Boundary",
-                    (typeof(BoxCollider2D))
-            ) {
-                name = "Level Boundary",
-            };
-            levelBoundary.transform.SetParent(room.transform);
+            Debug.Log("Set up room objects function needs reworked to match the updated room controller.");
+        }
 
-            BoxCollider2D boundaryCollider = levelBoundary.GetComponent<BoxCollider2D>();
-            boundaryCollider.isTrigger = true;
+        private void OnEnable()
+        {
+            GridSelection.gridSelectionChanged += OnGridSelectionChanged;
+        }
+        private void OnDisable()
+        {
+            GridSelection.gridSelectionChanged -= OnGridSelectionChanged;
+        }
+        
+        private void OnGridSelectionChanged()
+        {
+            if (_selectionPositionField != null)
+            {
+                _selectionPositionField.value = GridSelection.position;
+            }
         }
     }
 }

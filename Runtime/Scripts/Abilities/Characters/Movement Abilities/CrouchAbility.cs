@@ -18,8 +18,11 @@ namespace SF.AbilityModule.Characters
 
             if(!CheckAbilityRequirements()) return;
             
+
+            
             _controller2d.IsCrouching = !_controller2d.IsCrouching;
 
+            // If statement acts like a toggle for crouching.
             if (_controller2d.IsCrouching)
             {
                 _controller2d.ResizeCollider(_colliderResized);
@@ -34,6 +37,16 @@ namespace SF.AbilityModule.Characters
 
         private void OnInputStopCrouching(InputAction.CallbackContext context)
         {
+            // Have to make sure we are already crouching because we might cause issues
+            // calling ResetColliderSize when are character doesn't need the collider size reset.
+            if(!_controller2d.IsCrouching)
+                return;
+
+            // On Controllers sometimes the dead zone still registers a move axis when just ushing down on the controller.
+            // If the value == (0,-1) the controllers are just slightly bumped sideways and this event doesn't actually need invoked.
+            if (context.ReadValue<Vector2>() == Vector2.down)
+                return;
+            
             _controller2d.IsCrouching = false;
             _controller2d.ResetColliderSize();
         }

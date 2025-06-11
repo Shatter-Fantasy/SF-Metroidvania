@@ -43,18 +43,22 @@ namespace SF.Characters.Controllers
             get { return _direction; }
             set
             {
+                if (_previousDirection != value)
+                    _previousDirection = _direction;
+                
+                value.x = Mathf.RoundToInt(value.x);
                 _direction = value;
                 OnDirectionChanged?.Invoke(this, _direction);
             }
         }
-        [SerializeField] private Vector2 _direction;
+        [SerializeField] protected Vector2 _direction;
         [SerializeField] protected Vector2 _directionLastFrame;
         /// <summary>
         /// Used to keep track of the direction to restore after unfreezing the Controller2D.
         /// </summary>
         protected Vector2 _previousDirection;
         public EventHandler<Vector2> OnDirectionChanged;
-
+        public bool IsFrozen;
         #region Components 
         protected BoxCollider2D _boxCollider;
         protected Rigidbody2D _rigidbody2D;
@@ -136,8 +140,8 @@ namespace SF.Characters.Controllers
         {
         }
 
-        private void Update()
-        {
+        protected virtual void FixedUpdate()
+        { 
             Bounds = _boxCollider.bounds;
             
             if (_direction.x != 0)
@@ -186,7 +190,7 @@ namespace SF.Characters.Controllers
                 _externalVelocity = Vector2.zero;
             }
             
-            transform.Translate(_calculatedVelocity * Time.deltaTime);
+            _rigidbody2D.linearVelocity = _calculatedVelocity;
 
             /* If we are detecting a collision before the transform.Translate moved our character,
             * than we should make sure we didn't clip through the collider.
@@ -205,15 +209,14 @@ namespace SF.Characters.Controllers
                 {
                     CollisionInfo.BelowHit = new RaycastHit2D();
                 }
-
-                if(CollisionInfo.BelowHit.distance > 0)
-                    LowerToGround();
             }
 
 
+            /*
             if(CollisionInfo.CollisionHits != null 
                 && CollisionInfo.CollisionHits.Count > 0)
                 CorrectCollisionClipping();
+                */
         }
 
         /// <summary>
@@ -230,22 +233,19 @@ namespace SF.Characters.Controllers
             if(CollisionInfo.CeilingHit && CollisionInfo.BelowHit
                 && CollisionInfo.LeftHit && CollisionInfo.RightHit)
                 return;
-
+            
             // Adjust the position of the Character if we do have a clip inside a wall.
             // Do this for each hit we have in our CollisionInfo struct.
             foreach(RaycastHit2D hit in CollisionInfo.CollisionHits)
             {
                 ColliderDistance2D colliderDistance = _boxCollider.Distance(hit.collider);
 
-                if(colliderDistance.isOverlapped)
-                {
+                if(colliderDistance is { isOverlapped: true, distance: < 0 })
                     // This means we are inside something.
-                    if(colliderDistance.distance < 0)
-                    {
-                        Vector2 adjustedPosition = 
-                            colliderDistance.distance * colliderDistance.normal;
-                        transform.position = transform.position + (Vector3)adjustedPosition;
-                    }
+                {
+                    Vector2 adjustedPosition = 
+                        colliderDistance.distance * colliderDistance.normal;
+                    transform.position += (Vector3)adjustedPosition;
                 }
             }
         }
@@ -293,13 +293,13 @@ namespace SF.Characters.Controllers
         {
             _calculatedVelocity.x = 0;
             _externalVelocity.x = 0;
-            _previousDirection = _direction;
-            SetDirection(0);
+            _rigidbody2D.linearVelocity = Vector2.zero;
+            IsFrozen = true;
         }
         
         public void UnfreezeController()
         {
-            SetDirection(_previousDirection.x);
+            IsFrozen = false;
         }
         public void SetExternalVelocity(Vector2 force)
         {
@@ -537,7 +537,7 @@ namespace SF.Characters.Controllers
             /* This un childs characters from attached platforms like
              * moving, climables, and so forth on death to prevent being linked to them if dying while on one. */
             transform.parent = null;
-
+            IsFrozen = false;
             _calculatedVelocity = Vector3.zero;
             _rigidbody2D.linearVelocity = Vector3.zero;
             _externalVelocity = Vector3.zero;

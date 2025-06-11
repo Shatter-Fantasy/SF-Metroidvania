@@ -54,6 +54,9 @@ namespace SF.Characters
 		{
 			if(_controller) // Can happen when attached to an NPC not moving and just idle.
 				_controller.OnDirectionChanged += OnDirectionChanged;
+
+			// TODO: Make the attacking change the state the animation state to attacking. 
+			//_controller.CharacterState.OnMovementStateChanged += UpdateAnimator;
 		}
 
 		private void LateUpdate()

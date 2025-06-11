@@ -68,7 +68,7 @@ namespace SF.AbilityModule.Characters
             // Can we climb in the current character/game state.
             if(!CanStartAbility())
                 return;
-
+            
             if(!_controller2d.IsClimbing)
                 OnClimbStart();
             else
@@ -112,6 +112,7 @@ namespace SF.AbilityModule.Characters
 
             InputManager.Controls.Player.Interact.performed -= OnClimb;
             InputManager.Controls.Player.Move.performed -= OnClimbMove;
+            InputManager.Controls.Player.Move.canceled -= OnClimbMoveCancelled;
         }
     }
 }

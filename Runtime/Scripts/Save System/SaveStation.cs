@@ -8,14 +8,14 @@ using UnityEngine;
 namespace SF.DataManagement
 {
     
-    public class SaveStation : CheckPoint, IInteractable
+    public class SaveStation : CheckPoint, IInteractable<PlayerController>
     {
         /// <summary>
         /// The room id that the save room is in.
         /// </summary>
         public int RoomID;
+
         [field:SerializeField] public InteractableMode InteractableMode { get; set; }
-        
         public virtual void Interact()
         {
             SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;

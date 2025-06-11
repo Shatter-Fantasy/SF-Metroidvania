@@ -54,9 +54,9 @@ namespace SF.SpawnModule
                 _combatantStateBrain.InitStateBrain();
         }
         
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
-            _deathTimer = new Timer(Despawn);
+            _deathTimer = new Timer(_deathTimer.StartingTime,Despawn);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace SF.CombatModule
         public ComboAttack(AnimationClip attackAnimationClip)
         {
             AttackAnimationClip = attackAnimationClip;
-            AttackTimer = attackAnimationClip.averageDuration;
+            AttackTimer = attackAnimationClip.length;
         }
     }
 }

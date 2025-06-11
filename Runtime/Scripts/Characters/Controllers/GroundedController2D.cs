@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using SF.Physics;
 using System;
-using SF.Managers;
 
 #if SF_Utilities
 using SF.Utilities;
@@ -60,14 +59,15 @@ namespace SF.Characters.Controllers
 		#endregion
 		
 		#region Slope Settings
+
 		[Header("Slope Settings")]
 		[SerializeField] private bool _useSlopes = false;
-		[SerializeField] private float SlopeLimit = 55;
-		[SerializeField] private float SlopeSlipLimit = 35;
+		[SerializeField] private float _slopeUpperLimit = 65;
+		[SerializeField] private float _slopeLowerLimit = 15;
 		[SerializeField] protected Vector2 _slopeNormal;
-		[SerializeField] private float StandingOnSlopeAngle;
-		[SerializeField] private float _lastFrameSlopeAngle;
-        [SerializeField] private bool OnSlope = false;
+		[SerializeField] private float _standingOnSlopeAngle;
+		[SerializeField] private float _slopeMultiplier = 0.9f;
+        [SerializeField] private bool _onSlope = false;
         private Vector2 _slopeSideDirection;
         #endregion
         
@@ -93,7 +93,6 @@ namespace SF.Characters.Controllers
 		{
 			CollisionInfo.CollisionHits.Clear();
             _wasGroundedLastFrame = IsGrounded;
-            _lastFrameSlopeAngle = StandingOnSlopeAngle;
 			GroundChecks();
 			SlopeChecks();
 			CeilingChecks();
@@ -128,20 +127,20 @@ namespace SF.Characters.Controllers
                 // If we are standing on something keep track of it. This can be useful for things like moving platforms.
                 StandingOnObject = CollisionInfo.BelowHit.collider.gameObject;
 
-				// Only set the transform if we already are not a child of another gameobject.
-				// If we don't do this than we will cnstantly be restuck to the moving platforms transform.
+				// Only set the transform if we already are not a child of another game object.
+				// If we don't do this than we will constantly be restuck to the moving platforms transform.
 				if(transform.parent == null && LayerMask.LayerToName(CollisionInfo.BelowHit.collider.gameObject.layer) == "MovingPlatforms")
                     transform.SetParent(CollisionInfo.BelowHit.collider.gameObject.transform);
 
                 CollisionInfo.IsCollidingBelow = true;
                 IsGrounded = true;
-				LowerToGround();
+				//LowerToGround();
             }
 			else // If we are not colliding with anything below.
 			{
 				StandingOnObject = null;
 
-                // If we are attacthed to another object and was standing on something last frame
+                // If we are attached to another object and was standing on something last frame
                 // unattach the character from the object.
                 if(transform.parent != null)
 					transform.SetParent(null);
@@ -203,14 +202,11 @@ namespace SF.Characters.Controllers
 		{
 			if(!_useSlopes)
 				return;
-
-			if(Direction.x > 0)
-				_slopeNormal = Physics2D.Raycast(Bounds.BottomRight(), Vector2.down, CollisionController.VerticalRayDistance,layerMask: PlatformFilter.layerMask).normal;
-			else if(Direction.x < 0)
-				_slopeNormal = Physics2D.Raycast(Bounds.BottomLeft(), Vector2.down, CollisionController.VerticalRayDistance,layerMask: PlatformFilter.layerMask).normal;
-
-			StandingOnSlopeAngle = Vector2.Angle(_slopeNormal, Vector2.up);
-			OnSlope = StandingOnSlopeAngle > 5;
+			
+			_slopeNormal = CollisionInfo.BelowHit.normal;
+			_standingOnSlopeAngle = Vector2.Angle(_slopeNormal, Vector2.up);
+			_onSlope = _slopeUpperLimit > _standingOnSlopeAngle 
+			               && _standingOnSlopeAngle > _slopeLowerLimit;
 		}
 
         #endregion
@@ -256,7 +252,7 @@ namespace SF.Characters.Controllers
 				_calculatedVelocity.y = Direction.y * CurrentPhysics.ClimbSpeed.y;
 			}
 
-			if(!IsGrounded && !IsClimbing)
+			if(!IsGrounded && !IsClimbing && !_onSlope)
 			{
                 // This is related to the formula of: square root of ( -2 (gravity * height) )
                 // https://en.wikipedia.org/wiki/Equations_for_a_falling_body#Example
@@ -266,24 +262,59 @@ namespace SF.Characters.Controllers
 					-CurrentPhysics.TerminalVelocity,
 					CurrentPhysics.MaxUpForce);
 			}
-
 		}
 
 		protected override void Move()
 		{
 			
-			if(OnSlope)
+			if(_onSlope)
 			{
-				_calculatedVelocity *= 0.75f;
+				_calculatedVelocity *= _slopeMultiplier;
 				// TODO: Make the ability to walk up slopes.
 				//_calculatedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity, _slopeNormal);
 			}
-			
-			// Note to self: If we are standing on a platform and we move with the platform we gain the velocity of the platform ontop of our own. 
-			// FIX THIS or the character becomes a mach 10 rocket sometimes.
 
+			if (IsFrozen && IsGrounded)
+				_calculatedVelocity.x = 0;
+			
 			base.Move();
         }
+		
+		/// <summary>
+		/// If the transform translate puts us through a collider do to an off update frame for movement than correct the transform to prevent overlapping.
+		/// </summary>
+		protected override void CorrectCollisionClipping()
+		{
+			/* If for some reason this frame we are colliding on all four side we shouldn't try to correct our position.
+			 * If we try to correct our position in this state we could just be corrected from one direction making us clip into another direction.
+			 * Example case this happens. Imagine you have a crushing enemy like Mario's Thwomp meant to hurt, but not kill the player.
+			 * The thwomp would be pushing you into the floor and the correction formula would place you back upward.
+			 * Same thing for side collisions.
+			 */
+			if(CollisionInfo.CeilingHit && CollisionInfo.BelowHit
+			                            && CollisionInfo.LeftHit && CollisionInfo.RightHit)
+				return;
+            
+			// Adjust the position of the Character if we do have a clip inside a wall.
+			// Do this for each hit we have in our CollisionInfo struct.
+			foreach(RaycastHit2D hit in CollisionInfo.CollisionHits)
+			{
+				ColliderDistance2D colliderDistance = _boxCollider.Distance(hit.collider);
+
+				if(colliderDistance is { isOverlapped: true, distance: < 0 })
+					// This means we are inside something.
+				{
+					Vector2 adjustedPosition = 
+						colliderDistance.distance * colliderDistance.normal;
+					
+					
+					if (IsGrounded && _onSlope && Vector2.Angle(colliderDistance.normal, Vector2.down) > _slopeLowerLimit)
+						adjustedPosition.x = 0;
+					
+					transform.position += (Vector3)adjustedPosition;
+				}
+			}
+		}
 		
 		/// <summary>
 		/// Calculates the current movement state that the player is currently in.
@@ -307,7 +338,7 @@ namespace SF.Characters.Controllers
 			}
 
 			// If our velocity is negative we are either falling/gliding.
-			if(_calculatedVelocity.y < 0 && !IsClimbing)
+			if(_calculatedVelocity.y < 0 && !IsClimbing && !_onSlope)
 			{
 				if(IsGliding)
 					CharacterState.CurrentMovementState = MovementState.Gliding;
@@ -337,8 +368,7 @@ namespace SF.Characters.Controllers
 				CharacterState.CurrentMovementState = (Direction.x == 0) ? MovementState.Idle : MovementState.Walking;
 			}
 		}
-
-
+		
 		public virtual void ResizeCollider(Vector2 newSize)
 		{
 			// Need to keep track of the previous size if the collider was already resized once before, but wasn't reset to the default collider size.
@@ -355,7 +385,7 @@ namespace SF.Characters.Controllers
 
 			//TODO: Do checks if colliding on the sides or ceiling to make sure the default collider size doesn't click through them.
 
-			// TODO: When the game is paused or in dialogue sometimes the crouching input can sttill come through when calling this and it causes the player to jump.
+			// TODO: When the game is paused or in dialogue sometimes the crouching input can still come through when calling this and it causes the player to jump.
 			//	 This is because the is IsGrounded is not being checked while paused, but why is it even going through for some reason. 
 			
 			// Put character above ground.

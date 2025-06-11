@@ -27,6 +27,11 @@ namespace SF.RoomModule
         
         public List<Room> Rooms = new();
         
+        /// <summary>
+        /// Will be called when the Rooms list value gets changed such as add/remove.
+        /// This is also called when a new list is assigned into the Rooms value.
+        /// </summary>
+        public Action OnRoomsValueChanged;
         private void Awake()
         {
             if (Instance == null)
@@ -52,19 +57,28 @@ namespace SF.RoomModule
             return GetEnumerator();
         }
 
-        public void Add(Room item)
+        public void Add(Room newRoom)
         {
-            throw new NotImplementedException();
+            Rooms.Add(newRoom);
+            OnRoomsValueChanged();
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            Rooms.Clear();
+            OnRoomsValueChanged();
         }
         
         public bool Contains(Room item)
         {
-            return true;
+            Room room = Rooms.Find(roomInDB => roomInDB.RoomID == item?.RoomID);
+            return room != null;
+        }
+        
+        public bool Contains(int roomID)
+        {
+            Room room = Rooms.Find(roomInDB => roomInDB.RoomID == roomID);
+            return room != null;
         }
 
         public void CopyTo(Room[] array, int arrayIndex)
@@ -72,9 +86,22 @@ namespace SF.RoomModule
             throw new NotImplementedException();
         }
 
-        public bool Remove(Room item)
+        /// <summary>
+        /// Tries to remove a room from the <see cref="Rooms"/> list.
+        /// Return true if there was a room to remove or false if none matching the value to remove existed.
+        /// </summary>
+        /// <param name="room"></param>
+        /// <returns></returns>
+        public bool Remove(Room room)
         {
-            throw new NotImplementedException();
+            if (Rooms.Contains(room))
+            {
+                Rooms.Remove(room);
+                OnRoomsValueChanged();
+                return true;
+            }
+
+            return false;
         }
 
         public int Count { get; }
@@ -94,9 +121,26 @@ namespace SF.RoomModule
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Used to reset the room ids of the rooms in the database in cases the rooms values have been switch or reorganized in the list.
+        /// </summary>
+        public void ResetRoomIds()
+        {
+            for (int i = 0; i < Rooms.Count; i++)
+            {
+                Rooms[i].RoomID = i;
+                Rooms[i].RoomPrefab.GetComponent<RoomController>().RoomID = i;
+            }
+        }
+
+        /// <summary>
+        /// We search via the RoomID first. If the RoomID doesn;t exist than
+        /// </summary>
+        /// <param name="index"></param>
+        /// <exception cref="NotImplementedException"></exception>
         public Room this[int index]
         {
-            get => Rooms.Find(x => x.RoomID == index);
+            get => Rooms[index];
             set => throw new NotImplementedException();
         }
     }

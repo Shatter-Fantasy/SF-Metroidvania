@@ -84,7 +84,7 @@ namespace SF.SpawnModule
             if(_deathSFX != null)
                 AudioManager.Instance.PlayOneShot(_deathSFX);
 
-            _deathTimer.StartTimerAsync();
+            _ = _deathTimer.StartTimerAsync();
         }
 
 		public virtual void OnEvent(RespawnEvent respawnEvent) { }
@@ -106,7 +106,7 @@ namespace SF.SpawnModule
             _deathTimer = new Timer(Despawn);
         }
 
-        protected void OnDisable()
+        protected virtual void OnDisable()
         {
             _deathTimer.StopTimer();
         }

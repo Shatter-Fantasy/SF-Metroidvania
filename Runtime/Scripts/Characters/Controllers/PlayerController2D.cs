@@ -12,25 +12,40 @@ namespace SF.Characters.Controllers
 
             CameraController.Instance.CameraTarget = transform;
 
-            if (GameManager.Instance != null && GameManager.Instance.PlayerController == null)
-                GameManager.Instance.PlayerController = this;
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
+                if(GameManager.Instance.PlayerController == null)
+                    GameManager.Instance.PlayerController = this;
+            }
         }
         
-        
-
         protected override void CalculateMovementState()
         {
             // For when in menu, in a conversation, and so forth.
             if (GameManager.Instance.ControlState != GameControlState.Player)
             {
                 if (IsGrounded)
+                {
                     CharacterState.CurrentMovementState = MovementState.Idle;
-                
-                FreezeController();
+                    // Freeze the controller only after grounded so if we are stopped in mid-air we still hit the ground.
+                }
+
                 return;
             }
             
             base.CalculateMovementState();
+        }
+
+        private void OnGameControlStateChanged(GameControlState controlState)
+        {
+            // If we are exiting dialogue or a menu unfreeze the player.
+            if(controlState == GameControlState.Player)
+                UnfreezeController();
+            else
+            {
+                FreezeController();
+            }
         }
     }
 }
