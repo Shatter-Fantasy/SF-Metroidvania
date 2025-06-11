@@ -1,6 +1,5 @@
 using UnityEngine;
 
-using SF.DataModule;
 using SF.Characters.Data;
 
 
