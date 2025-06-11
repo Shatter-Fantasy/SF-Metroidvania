@@ -1,0 +1,24 @@
+{
+    "name": "SF.Core.Packages.Editor",
+    "rootNamespace": "SFEditor.Core.Packages",
+    "references": [
+        "GUID:5769175a692bee24cbd874f396613351"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "shatter-fantasy.sf-ui-elements",
+            "expression": "0.0.1",
+            "define": "SF_UIELEMENTS"
+        }
+    ],
+    "noEngineReferences": false
+}
