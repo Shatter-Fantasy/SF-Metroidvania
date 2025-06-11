@@ -1,0 +1,7 @@
+apiRules:
+- include: 
+    uidRegex: ^SF
+    type: Namespace
+- exclude:
+    uidRegex: .*
+    type: Namespace

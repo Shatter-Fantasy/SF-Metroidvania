@@ -211,6 +211,7 @@ namespace SF.DataManagement
 
         public static bool HasSaveFiles()
         {
+            Debug.Log(SaveFileNameBase);
             // If there is no save file, and we are loading in the game this means a new game save needs made possibly. 
             return File.Exists(SaveFileNameBase);
         }
