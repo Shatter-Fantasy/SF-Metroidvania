@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SF
 {
-    public class AnimationActivatable : ActivablteWrapper, IActivatable
+    public class AnimationActivatable : ActivatableWrapper, IActivatable
     {
         public Animator _animator;
         public int _parameterHash;
