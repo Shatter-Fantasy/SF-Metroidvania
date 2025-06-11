@@ -8,7 +8,6 @@ At the moment it is for 2D only physics, but we will be adding 3D hysics support
 This is because there is a major rework from the ground up of Unity's 2D physics coming that allow making custom 3D world like interactions with 2D physics colliders.
 
 
-
 ## Current Alpha: Alpha One
 Currently the first alpha is being worked on a seperate branch from the main branch. 
 Look into the alpha-one branch if you want to try out the package. 
@@ -66,8 +65,8 @@ Here is the official Unity documentation page if you want to do a full read thro
 
    
 2. Choose install package from git url and paste in the following.
-
-https://github.com/crowhound/SF-Platformer.git
+Note the current Metroidvania package is being worked on in the alpha-one branch. I would advise following the optional steps below to grab it.
+https://github.com/Shatter-Fantasy/SF-Metroidvania.git
 
 Optional for choosing a specific version of the SF Platformer package to install.
 Unity supports git revision syntax allowing you to add options at the end of the Git url to customize your package download.
@@ -79,9 +78,9 @@ The options are as followed:
 3. A specific commit if you want to try out a commit with a feature that hasn't been published in a release yet - #git-commit-hash
 Example for the specific commit hash #76c6efb35ac8d4226a22f974939f300231a3637f. This is the hash for the commit added right before pre-alpha 9 release.
 
-Full example for wanting to get the SF Package that is release version alpha 1
-https://github.com/crowhound/SF-Platformer.git#v0.0.1
+Full example for wanting to get the SF Package that is a release version
+https://github.com/Shatter-Fantasy/SF-Metroidvania.git.git#v0.0.1
 
-Full example for wanting to get the SF Package that is being worked on in the alpha-two branch
-https://github.com/crowhound/SF-Platformer.git#alpha-two
+Full example for wanting to get the SF Package that is being worked on in the alpha-one branch
+https://github.com/crowhound/SF-Platformer.git#alpha-one
 
