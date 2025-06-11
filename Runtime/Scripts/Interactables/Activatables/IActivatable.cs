@@ -7,7 +7,7 @@ namespace SF
         public bool Activated{ get; set; }
     }
 
-    public abstract class ActivablteWrapper : MonoBehaviour, IActivatable
+    public abstract class ActivatableWrapper : MonoBehaviour, IActivatable
     {
         [field: SerializeField]
         private bool _activated;
