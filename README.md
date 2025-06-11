@@ -51,7 +51,7 @@ There will be demo videos as soon as I finished the options menu events.
 Please note the documentation is very early wip. The manual link at the top left is not ready yet. So clicking it does nothing. We are working on videos currently for the manual. 
 Currently somethings are not in the final location for namespaces. In the root SF namespace you will see some classes, structs, or interfaces needing moved to their proper namespaces.
 
-[WIP SF Platformer Documentation](https://crowhound.github.io/SF-Platformer/api/SF.Physics.CollisionInfo.html)
+[WIP API Documentation](https://shatter-fantasy.github.io/SF-Metroidvania/api/SF.Characters.Controllers.Controller2D.html)
 
 ## Install Instructions
 This package was built with the idea of using Unity's built in package manager to help make installing and choosing which version of the package you want to use easier.
