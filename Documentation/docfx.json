@@ -45,7 +45,7 @@
     ],
     "template": [ "default", "templates/unity" ],
     "sitemap": {
-      "baseUrl": "https://Crowhound.github.io/SF-Platformer",
+      "baseUrl": "https://Crowhound.github.io/SF-Metroidvania",
       "changefreq": "weekly",
       "fileOptions": {
         "api/*": {
