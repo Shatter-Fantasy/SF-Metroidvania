@@ -1,8 +1,7 @@
-using System.Collections.Generic;
+using UnityEngine;
 
 using SF.Characters.Data;
 
-using UnityEngine;
 
 namespace SF.LootModule
 {
