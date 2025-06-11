@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Audio;
 
-namespace SF
+namespace SF.AudioModule
 {
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(AudioSource))]

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 using SF.InputModule;
-using SF.Managers;
+using SF.AudioModule;
 
 namespace SF.AbilityModule.Characters
 {

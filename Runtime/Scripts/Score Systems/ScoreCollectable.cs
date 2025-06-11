@@ -1,8 +1,8 @@
+using UnityEngine;
+
+using SF.AudioModule;
 using SF.Events;
 using SF.SpawnModule;
-
-using UnityEngine;
-using UnityEngine.Audio;
 
 namespace SF.CollectableModule
 {
