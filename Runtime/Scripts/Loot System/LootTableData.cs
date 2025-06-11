@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 using SF.Inventory;
-
-using UnityEngine;
+using SF.DataModule;
 
 namespace SF.LootModule
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-
 using UnityEngine;
 
+using SF.DataModule;
 using SF.StatModule;
 
 namespace SF.Characters.Data

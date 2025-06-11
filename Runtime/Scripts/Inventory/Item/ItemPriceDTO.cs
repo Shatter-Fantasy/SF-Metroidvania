@@ -1,3 +1,5 @@
+using SF.DataModule;
+
 namespace SF.Inventory
 {
     [System.Serializable]

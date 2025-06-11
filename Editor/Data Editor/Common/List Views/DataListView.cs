@@ -1,7 +1,6 @@
 using UnityEngine.UIElements;
 
-using SFEditor.Characters.Data;
-using SF;
+using SF.DataModule;
 using System;
 using System.Collections.Generic;
 using UnityEditor;

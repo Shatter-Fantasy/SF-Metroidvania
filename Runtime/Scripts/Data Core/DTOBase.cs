@@ -1,8 +1,6 @@
-using UnityEditor;
-
 using UnityEngine;
 
-namespace SF
+namespace SF.DataModule
 {
 
 
