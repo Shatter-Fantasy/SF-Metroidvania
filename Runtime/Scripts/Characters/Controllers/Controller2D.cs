@@ -191,7 +191,6 @@ namespace SF.Characters.Controllers
             }
             
             _rigidbody2D.linearVelocity = _calculatedVelocity;
-            //transform.Translate(_calculatedVelocity * Time.deltaTime); Old way before starting to use linear velocity.
 
             /* If we are detecting a collision before the transform.Translate moved our character,
             * than we should make sure we didn't clip through the collider.
@@ -213,9 +212,11 @@ namespace SF.Characters.Controllers
             }
 
 
+            /*
             if(CollisionInfo.CollisionHits != null 
                 && CollisionInfo.CollisionHits.Count > 0)
                 CorrectCollisionClipping();
+                */
         }
 
         /// <summary>
