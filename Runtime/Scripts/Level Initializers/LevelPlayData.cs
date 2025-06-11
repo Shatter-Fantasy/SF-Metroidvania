@@ -100,7 +100,8 @@ namespace SF.LevelModule
         
         private void OnValidate()
         {
-            _instance = _playDataObj;
+            if(_playDataObj != null)
+                _instance = _playDataObj;
         }
 #endif
     }
