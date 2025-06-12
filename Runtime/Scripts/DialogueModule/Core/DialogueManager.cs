@@ -39,7 +39,7 @@ namespace SF.DialogueModule
         public static bool InConversation => RecentConversation != null;
         
         [SerializeField] private UIDocument _dialogueOverlayUXML;
-        private VisualElement _dialogueContainer;
+        private VisualElement _dialogueView;
         private Label _dialogueLabel;
         private Label _speakerLabel;
 
@@ -53,7 +53,7 @@ namespace SF.DialogueModule
 
         private void Start()
         {
-            _dialogueContainer = _dialogueOverlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-dialogue__container");
+            _dialogueView = _dialogueOverlayUXML.rootVisualElement.Q<VisualElement>(name: "dialogue__view");
             _dialogueLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "overlay-dialogue__label");
             _speakerLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "dialogue-speaker__label");
         }
@@ -113,14 +113,14 @@ namespace SF.DialogueModule
         
         private static void OnDialogueOpen()
         {
-            _instance._dialogueContainer.style.visibility = Visibility.Visible;
+            _instance._dialogueView.style.visibility = Visibility.Visible;
             _instance._dialogueLabel.text = _instance._currentEntry.Text;
             _instance._speakerLabel.text = _instance._currentEntry.SpeakerName;
         }
         
         private void OnDialogueClose()
         {
-            _dialogueContainer.style.visibility = Visibility.Hidden;
+            _dialogueView.style.visibility = Visibility.Hidden;
             _dialogueLabel.text = "";
             _speakerLabel.text = "";
             DialogueEvent.Trigger(DialogueEventTypes.DialogueClose,"");
