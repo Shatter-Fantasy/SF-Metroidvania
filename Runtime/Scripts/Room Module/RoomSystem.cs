@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SF.CameraModule;
+using SF.Managers;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

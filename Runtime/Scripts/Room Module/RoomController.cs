@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using SF.CameraModule;
+using SF.Characters.Controllers;
+using SF.Managers;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -57,7 +59,6 @@ namespace SF.RoomModule
             {
                 return;
             }
-               
             
             RoomSystem.OnRoomEntered(RoomID);
             OnRoomEnteredHandler?.Invoke();
@@ -78,7 +79,11 @@ namespace SF.RoomModule
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            MakeCurrentRoom();
+            if (other.TryGetComponent(out PlayerController controller) 
+                && controller.CollisionController.IsActive)
+            {
+                MakeCurrentRoom();
+            }
         }
         
         private void OnTriggerExit2D(Collider2D other)

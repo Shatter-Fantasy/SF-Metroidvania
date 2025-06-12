@@ -145,8 +145,12 @@ namespace SF.Managers
         private void NewGameSceneInitialization()
         {
             RoomSystem.SetInitialRoom(_gameLoaderData.StartingRoomID);
-            Debug.Log(RoomSystem.IsRoomLoaded(_gameLoaderData.StartingRoomID));
-            
+            if (GameManager.Instance.PlayerController != null)
+            {
+                GameManager.Instance.PlayerController.transform.position =
+                    RoomSystem.CurrentRoom.SpawnedInstance.GetComponent<RoomController>().RoomCamera.transform.position;
+            }
+
             OnNewGameReady();
         }
 
