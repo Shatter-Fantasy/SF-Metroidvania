@@ -39,14 +39,6 @@ namespace SFEditor
         private Tab _characterTab;
         private CharacterEditorView _characterEditorView;
 
-
-        [MenuItem("SF/SFInventoryEditor Editor")]
-        public static void ShowExample()
-        {
-            SFInventoryEditor wnd = GetWindow<SFInventoryEditor>();
-            wnd.titleContent = new GUIContent("SF Inventory");
-        }
-
         public void CreateGUI()
         {
            
