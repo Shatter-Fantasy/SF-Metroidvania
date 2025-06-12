@@ -8,8 +8,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 using SF.Characters.Data;
+using SF.DataModule;
 using SF.Inventory;
 using SFEditor.Characters.Data;
+using SFEditor.Inventory.Data;
 using SFEditor.UIElements.Utilities;
 
 
@@ -26,7 +28,9 @@ namespace SFEditor.Data
         [SerializeField] private VisualTreeAsset m_VisualTreeAsset = default;
         
         private VisualElement _rootDataElement;
+        
         private CharacterListView _characterListView;
+        private SFItemListView _itemListView;
         
         [MenuItem("SF/Data Editor")]
         public static void OpenDataEditor()
@@ -43,38 +47,60 @@ namespace SFEditor.Data
             root.Add(veUXML);
             SFUIElementsFactory.InitializeSFStyles(root);
             
+            
             _rootDataElement = root.Q<VisualElement>("root-datasource");
             
-            if(_characterDatabase != null)
-            {
-                InitListView();
-            }
+            InitListView();
         }
         
         private void InitListView()
         {                // When first opening the editor guarantee at least a data entry is binded.
             _rootDataElement.Bind(new SerializedObject(_characterDatabase.DataEntries[0]));
-            _characterListView = _rootDataElement.Q<CharacterListView>();
-            _characterListView.InitDataListView(_characterDatabase);
-            _characterListView.selectionChanged += OnSelectionChanged;
+            
+            if(_characterDatabase != null)
+            {
+                _characterListView = _rootDataElement.Q<CharacterListView>();
+                _characterListView.InitDataListView(_characterDatabase);
+                _characterListView.selectionChanged += OnSelectionChanged;
+            }
+
+            if (_itemDatabase != null)
+            {
+                _itemListView = _rootDataElement.Q<SFItemListView>();
+                _itemListView.InitDataListView(_itemDatabase);
+                _itemListView.selectionChanged += OnSelectionChanged;
+            }
         }
         
         private void OnSelectionChanged()
         {
-            if(Selection.activeObject is not CharacterDTO || _rootDataElement == null)
+            if(Selection.activeObject is not DTOAssetBase || _rootDataElement == null)
                 return;
-
-            _rootDataElement.Bind(new SerializedObject( Selection.activeObject as CharacterDTO));
+            
+            if(Selection.activeObject is CharacterDTO)
+                _rootDataElement.Bind(new SerializedObject( Selection.activeObject as CharacterDTO));
+            else  if(Selection.activeObject is ItemDTO)
+                _rootDataElement.Bind(new SerializedObject( Selection.activeObject as ItemDTO));
         }
         
         private void OnSelectionChanged(IEnumerable<object> selectedObjects)
         {
-            if(!selectedObjects.Any())
+            var enumerable = selectedObjects as object[] ?? selectedObjects.ToArray();
+            if(enumerable.Length  < 1)
                 return;
 
-            var characterDTO = selectedObjects.First() as CharacterDTO;
-            _rootDataElement.Bind(new SerializedObject(characterDTO));
-            Selection.SetActiveObjectWithContext(characterDTO, null);
+            var dtoAsset = enumerable.First() as DTOAssetBase;
+
+            if (dtoAsset is CharacterDTO characterDTO)
+            {
+                _rootDataElement.Bind(new SerializedObject(characterDTO));
+                Selection.SetActiveObjectWithContext(characterDTO, null);
+            }
+            else if (dtoAsset is ItemDTO itemDTO)
+            {
+                _rootDataElement.Bind(new SerializedObject(itemDTO));
+                Selection.SetActiveObjectWithContext(itemDTO, null);
+            }
         }
 
         private void OnEnable()

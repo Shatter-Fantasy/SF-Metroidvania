@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:UXML
     xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
     xmlns:sfeditor="SFEditor.Characters.Data"
+    xmlns:sfitem="SFEditor.Inventory.Data"
+
     noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
 >
 	<ui:Template src="../Common/Data Sections/DTOGeneralInfo.uxml" name="DTOGeneral"/>
@@ -13,9 +14,9 @@
     
     <Style src="project://database/Packages/shatter-fantasy.sf-metroidvania/Editor/Data%20Editor/Core/DataEditorWindow.uss?fileID=7433441132597879392&amp;guid=7bf347311f8e91242abf04e790cfbf7e&amp;type=3#DataEditorWindow" />
 	
-	<ui:TabView>
+	<ui:TabView name="root-datasource">
 		<ui:Tab label="Characters">
-			<ui:VisualElement name="root-datasource" data-source="project://database/Assets/Data/Character/Bloom%20Bug.asset?fileID=11400000&amp;guid=c2828686cc3a0d44283a670a1b61ce0c&amp;type=2#Bloom Bug" data-source-type="SF.Characters.Data.CharacterDTO, SF.MetroidvaniaToolkit">
+			<ui:VisualElement  data-source="project://database/Assets/Data/Character/Bloom%20Bug.asset?fileID=11400000&amp;guid=c2828686cc3a0d44283a670a1b61ce0c&amp;type=2#Bloom Bug" data-source-type="SF.Characters.Data.CharacterDTO, SF.MetroidvaniaToolkit">
 				<ui:TwoPaneSplitView class="unity-two-pane-split-view">
 					<sfeditor:CharacterListView/>
 					<ui:VisualElement>
@@ -28,11 +29,15 @@
 				</ui:TwoPaneSplitView>
 			</ui:VisualElement>
 		</ui:Tab>
-		<ui:Tab label="Data Definitions">
-			<ui:Label text="Data Definitions tab"/>
-		</ui:Tab>
 		<ui:Tab label="Items">
-			<ui:Label text="Items Tab"/>
+			<ui:VisualElement name="root-datasource" data-source-type="SF.Inventory.ItemDTO, SF.MetroidvaniaToolkit">
+				<ui:TwoPaneSplitView class="unity-two-pane-split-view">
+					<sfitem:SFItemListView/>
+					<ui:VisualElement>
+						<ui:Instance template="DTOGeneral" name="dto-general__section"/>
+					</ui:VisualElement>
+				</ui:TwoPaneSplitView>
+			</ui:VisualElement>
 		</ui:Tab>
 	</ui:TabView>
 
