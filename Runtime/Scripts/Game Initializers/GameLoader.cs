@@ -81,7 +81,7 @@ namespace SF.Managers
             if (_levelPlayData != null)
                 LevelPlayData.Instance = _levelPlayData;
             
-            InitializeInSceneManagers();
+            //InitializeInSceneManagers();
             
             WasGameInitialized = true;
         }
@@ -141,7 +141,6 @@ namespace SF.Managers
             if (_gameLoaderData == null)
                 return;
             
-            Debug.Log("Scene is loading.");
             // When we are loading the same scene as a new game also check if we are in the middle of setting a new game file.
             if (scene.buildIndex == _gameLoaderData.NewGameSceneIndex && _gameLoaderData.SettingUpNewGame)
                 NewGameSceneInitialization();
@@ -156,6 +155,8 @@ namespace SF.Managers
         private void NewGameSceneInitialization()
         {
             Debug.Log("A new game is being set up.");
+
+            OnNewGameReady();
         }
 
         private void OnDisable()
