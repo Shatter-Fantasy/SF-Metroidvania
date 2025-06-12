@@ -10,13 +10,16 @@ using SF.Managers;
 
 namespace SF.Characters
 {
+	/// <summary>
+	/// Controls the character rendering for Sprites. This includes automatic animator set up and
+	/// also includes systems tinting the sprite for vfx.
+	/// </summary>
 	[RequireComponent(typeof(Animator), typeof(SpriteRenderer))]
     public class CharacterRenderer2D : MonoBehaviour
     {
 #if DEBUG
 		private static ProfilerMarker s_AnimationUpdateMarker = new(ProfilerCategory.Animation, "SF.Animation.Update" );
 #endif
-		public enum CharacterTypes { Player, Ally, Enemy, NPC}
 		public CharacterTypes CharacterType = CharacterTypes.Player;
 		public CharacterState CharacterState => _controller?.CharacterState;
 

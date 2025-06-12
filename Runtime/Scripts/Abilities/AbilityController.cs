@@ -6,7 +6,18 @@ using UnityEngine;
 namespace SF.AbilityModule
 {
     // Setting the default execution order past Controller2D.
-    // This gurantees the controller is already set up it's current physics struct.
+    // This guarantees the controller is already set up it's current physic struct in case any 
+    
+    /// <summary>
+    /// This is the <see cref="PlayerController"/> specific controller for abilities that only players use.
+    ///
+    /// For NPC, Enemies, or Ally combatants not controlled by the Players use <see cref="SF.StateMachine.Core.StateMachineBrain"/>
+    /// <remarks>
+    /// The AbilityController default execution order is set one past the Controller2D.
+    /// This guarantees the controller is already set up it's current physic struct in case any external force is starting to change it.
+    /// <see cref="SF.Physics.PhysicsVolume"/> 
+    /// </remarks>
+    /// </summary>
     [DefaultExecutionOrder(1)]
     public class AbilityController : MonoBehaviour
     {

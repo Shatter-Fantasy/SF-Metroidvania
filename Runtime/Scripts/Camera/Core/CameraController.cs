@@ -1,3 +1,5 @@
+using System;
+using SF.Managers;
 using Unity.Cinemachine;
 
 using UnityEngine;
@@ -48,6 +50,14 @@ namespace SF.CameraModule
             else // done in an else statement for times when the component is not destroyed instantly and continues into the Awake call.
             {
                 Instance = this;
+            }
+        }
+
+        public void Start()
+        {
+            if (GameManager.Instance != null && GameManager.Instance.PlayerController != null)
+            {
+                _instance.CameraTarget = GameManager.Instance.PlayerController.transform;
             }
         }
 

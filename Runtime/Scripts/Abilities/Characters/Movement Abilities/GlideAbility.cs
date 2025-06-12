@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +6,10 @@ using SF.Physics;
 
 namespace SF.AbilityModule.Characters
 {
+    /// <summary>
+    /// Grants the ability for a player to Glide with a set input command.
+    /// Controller by an <see cref="AbilityController"/>.
+    /// </summary>
     public class GlideAbility : AbilityCore, IInputAbility
     {
         [Header("Gravity Physics")]

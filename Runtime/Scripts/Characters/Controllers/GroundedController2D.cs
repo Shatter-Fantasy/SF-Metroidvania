@@ -17,6 +17,10 @@ using SF.Platformer.Utilities;
 
 namespace SF.Characters.Controllers
 {
+	/// <summary>
+	/// A physics controller for grounded characters that help implement gravity, slope mechanics, collision for platforms,
+	/// and updates the <see cref="MovementState"/> while using the <see cref="CollisionController"/> for custom collision callbacks. 
+	/// </summary>
 	[RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D), typeof(CharacterRenderer2D))]
 	public class GroundedController2D : Controller2D
 	{
