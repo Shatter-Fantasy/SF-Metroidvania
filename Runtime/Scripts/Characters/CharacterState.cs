@@ -3,12 +3,10 @@ using UnityEngine;
 
 namespace SF.Characters
 {
-	public enum CharacterType
-	{
-		Player,
-		Enemy,
-		AI
-	}
+	/// <summary>
+	/// The current movement state of the Character.
+	///  This is used to tell what animation to play, when physics need to apply gravity, and what movement speed value is used when a character is moved. 
+	/// </summary>
 	[Flags]
 	public enum MovementState : int
 	{
@@ -24,21 +22,41 @@ namespace SF.Characters
 		ClimbingIdle = 256,
 		Paused = 512
 	}
+	
+	/// <summary>
+	/// The current status of the character's lifespan.
+	/// </summary>
 	public enum CharacterStatus
 	{
 		Alive,
 		Dead,
+		Respawning,
+		KnockedOut
 	}
 
-    public enum StatusEffect
+	/// <summary>
+	/// The characters combat status. 
+	/// </summary>
+    public enum StatusEffect : int
     {
-        Normal,
-        Beserk,
-		Weakened,
-		Bleeding,
-		Confused
+        Normal = 0,
+        Berserk = 1,
+		Weakened = 2,
+		Bleeding = 4,
+		Confused = 8
     }
-
+    
+    /// <summary>
+    /// The type of character being rendered. Allows different character types will have different vfx logic.
+    /// </summary>
+    public enum CharacterTypes { Player, Ally, Enemy, NPC}
+    
+    /// <summary>
+    /// Keeps track of all the characters current states for <see cref="MovementState"/>, <see cref="CharacterStatus"/>,
+    /// and <see cref="StatusEffect"/>.
+    ///
+    /// It also has callbacks that can registered to when any form of state change for the character has happened.
+    /// </summary>
     [Serializable]
 	public class CharacterState
 	{
@@ -81,7 +99,7 @@ namespace SF.Characters
 
 		public Action OnDeathHandler;
 		
-		[UnityEngine.SerializeField] private StatusEffect _statusEffect;
+		[SerializeField] private StatusEffect _statusEffect;
 		public StatusEffect StatusEffect
 		{
 			get	{ return _statusEffect;	}

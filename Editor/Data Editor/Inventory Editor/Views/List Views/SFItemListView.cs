@@ -1,15 +1,20 @@
-using System.Collections.Generic;
-
-using UnityEditor;
 using UnityEngine.UIElements;
 
+using SFEditor.Data;
 using SF.Inventory;
-using System;
-using UnityEngine;
 
-namespace SFEditor.Inventory
+namespace SFEditor.Inventory.Data
 {
     [UxmlElement]
+    public partial class SFItemListView : DataListView<ItemDatabase, ItemDTO>
+    {
+        protected override string _dataFilePath => "Assets/Data/Item Data/";
+
+        public SFItemListView() { }
+        public SFItemListView(ItemDatabase itemDatabase) : base(itemDatabase) { }
+    }
+    
+    /*    [UxmlElement]
     public partial class SFItemListView : ListView, INotifyValueChanged<ItemDatabase>
     {
 
@@ -186,4 +191,6 @@ namespace SFEditor.Inventory
             return AssetDatabase.AssetPathExists($"{parentDirectory}/{newFolder}");
         }
     }
+    
+    */
 }

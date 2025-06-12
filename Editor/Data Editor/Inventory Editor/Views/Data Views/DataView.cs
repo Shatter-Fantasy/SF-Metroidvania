@@ -18,38 +18,26 @@ namespace SFEditor
     /// Data view for normal DTOBase classes
     /// </summary>
     /// <typeparam name="TDataType"></typeparam>
-    public abstract class DataView<TDataType> : BindableElement where TDataType : DTOBase
+    public abstract class DataView<TDataType> : VisualElement where TDataType : DTOAssetBase
     {
-
-        protected TDataType _value;
-        public TDataType value
+        protected TDataType _dataSource;
+        public TDataType DataSource
         {
-            get => _value;
+            get => _dataSource;
             set
             {
-                if(value == this.value)
+                if(value == this._dataSource)
                     return;
 
-                var previous = this.value;
-                SetValueWithoutNotify(value);
-
-                using(var evt = ChangeEvent<TDataType>.GetPooled(previous, value))
-                {
-                    evt.target = this;
-                    SendEvent(evt);
-                }
+                _dataSource = value;
             }
         }
 
-        protected Label _dataSectionHeader;
-        protected const string DataSectionHeaderUSSClass = "data-section__header-label";
-        protected DataView()
+        protected DataView(){}
+        protected DataView(TDataType dataSource)
         {
-            _dataSectionHeader = new Label();
-            _dataSectionHeader.AddToClassList(DataSectionHeaderUSSClass);
+            _dataSource = dataSource;
         }
-
-        public abstract void SetValueWithoutNotify(TDataType newValue);
     }
 
     /// <summary>

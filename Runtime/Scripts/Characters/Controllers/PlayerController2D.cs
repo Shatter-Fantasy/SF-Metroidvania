@@ -1,17 +1,24 @@
-using SF.CameraModule;
 using SF.Managers;
-
 
 namespace SF.Characters.Controllers
 {
+    /// <summary>
+    /// A physics controller for the playable character that help implement gravity, slope mechanics, collision for platforms,
+    /// and updates the <see cref="MovementState"/> while using the <see cref="SF.Physics.CollisionController"/> for custom collision callbacks.
+    ///
+    /// This player specific controller also implements logic for the game when  paused, character state is moved to a dialogue,
+    /// and helps set up the instance object for other classes to know what is the player.
+    /// <remarks>
+    /// This sets up the PlayerController instance in the game manager during the awake call.
+    /// In the start call for objects being loaded at the same time, other objects can now get a reference to
+    /// the <see cref="GameManager.PlayerController"/> after it is set in <see cref="PlayerController.OnAwake"/>.
+    /// </remarks> 
+    /// </summary>
 	public class PlayerController : GroundedController2D
     {
         protected override void OnAwake()
         {
             base.OnAwake();
-
-            CameraController.Instance.CameraTarget = transform;
-
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
@@ -28,7 +35,7 @@ namespace SF.Characters.Controllers
                 if (IsGrounded)
                 {
                     CharacterState.CurrentMovementState = MovementState.Idle;
-                    // Freeze the controller only after grounded so if we are stopped in mid-air we still hit the ground.
+                    // Freeze the controller only after grounded so if we are stopped in midair we still hit the ground.
                 }
 
                 return;

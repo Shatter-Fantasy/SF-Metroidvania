@@ -7,10 +7,12 @@ using UnityEngine;
 
 namespace SF.StateMachine.Core
 {
-
+	
 	/// <summary>
-	/// <see href="https://app.gitbook.com/o/SfDkagNWRll9OwbDmZcY/s/gJKmYJcfYS9ahIhpxefS/features/state-machine-system/states"/>
-	/// <seealso cref="StateCore"/>
+	/// This is for controlling non-player controlled characters states and actions.
+	/// 
+	/// <see cref="SF.StateMachine.Core.StateCore"/> are for non-player characters
+	/// and <see cref="SF.AbilityModule.AbilityCore"/> are for player controlled characters.
 	/// </summary>
 	public class StateMachineBrain : MonoBehaviour
     {

@@ -507,7 +507,7 @@ namespace SF.Characters.Controllers
 
         protected void OnStatusEffectChanged(StatusEffect statusEffect)
         {
-            if(statusEffect == StatusEffect.Beserk)
+            if(statusEffect == StatusEffect.Berserk)
                 GetComponent<SpriteRenderer>().color = Color.red;
         }
 
