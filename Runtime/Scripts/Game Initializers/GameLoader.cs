@@ -113,16 +113,6 @@ namespace SF.Managers
             SceneManager.LoadScene(_gameLoaderData.NewGameSceneIndex);
         }
 
-        /// <summary>
-        /// Called when the new game data has been set up and the first scene of the new game is completely loaded and initialized.
-        /// </summary>
-        private void OnNewGameReady()
-        {
-            if (_gameLoaderData == null)
-                return;
-            
-            _gameLoaderData.SettingUpNewGame = false;
-        }
         public void LoadGame()
         {
             // Set the starting room first.
@@ -154,11 +144,23 @@ namespace SF.Managers
         /// </summary>
         private void NewGameSceneInitialization()
         {
-            Debug.Log("A new game is being set up.");
-
+            RoomSystem.SetInitialRoom(_gameLoaderData.StartingRoomID);
+            Debug.Log(RoomSystem.IsRoomLoaded(_gameLoaderData.StartingRoomID));
+            
             OnNewGameReady();
         }
 
+        
+        /// <summary>
+        /// Called when the new game data has been set up and the first scene of the new game is completely loaded and initialized.
+        /// </summary>
+        private void OnNewGameReady()
+        {
+            if (_gameLoaderData == null)
+                return;
+            
+            _gameLoaderData.SettingUpNewGame = false;
+        }
         private void OnDisable()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
