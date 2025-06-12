@@ -1,6 +1,7 @@
 using UnityEngine.UIElements;
 
 using SF.Inventory;
+using SFEditor.Inventory.Data;
 using SF.UIElements.Utilities;
 using static SF.UIElements.Utilities.SFCommonStyleClasses;
 
@@ -35,7 +36,7 @@ namespace SFEditor.Inventory
 
         public EquipmentView() { }
 
-        public EquipmentView(EquipmentDTO equipmentDTO, SFItemListView itemListView = null) : base(equipmentDTO,itemListView)
+        public EquipmentView(EquipmentDTO equipmentDTO, SFItemListView itemListView = null) : base(equipmentDTO)
         {
             // This constructor calls the base ItemView constructor to set up the base fields for all item types.
             // The base ItemView constructor also sets up the fields value change callbacks and binding paths.

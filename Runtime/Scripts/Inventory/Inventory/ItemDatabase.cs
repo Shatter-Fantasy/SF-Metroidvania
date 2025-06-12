@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
-
+using SF.Characters.Data;
 using UnityEngine;
 
 namespace SF.Inventory
 {
-    [CreateAssetMenu(fileName = "Item Database", menuName = "SF/Inventory/Item Database")]
-    public class ItemDatabase : ScriptableObject
+    [CreateAssetMenu(fileName = "Item Database", menuName = "SF/Data/Item Database")]
+    public class ItemDatabase : SFDatabase<ItemDTO>
     {
-        [SerializeReference] public List<ItemDTO> Items = new();
-
         [SerializeReference] public List<EquipmentDTO> Equipment = new();
 
         public Action OnItemsFiltered;
-        public Action OnEquipmentFiltered;
 
 
         public void AddItem<TItemDTOType>(TItemDTOType itemDTO) where TItemDTOType : ItemDTO
@@ -21,7 +18,7 @@ namespace SF.Inventory
             if(itemDTO == null)
                 return;
 
-            Items.Add(itemDTO);
+            base.AddData(itemDTO);
 
             switch(itemDTO)
             {
@@ -36,7 +33,7 @@ namespace SF.Inventory
             if(itemDTO == null)
                 return;
 
-            Items.Remove(itemDTO);
+            base.RemoveData(itemDTO);
 
             switch(itemDTO)
             {
@@ -46,9 +43,9 @@ namespace SF.Inventory
             }
         }
         
-        public ItemDTO this[int index]
+        public new ItemDTO this[int index]
         {
-            get { return Items.Find(dto => dto.ID == index); }
+            get { return DataEntries.Find(dto => dto.ID == index); }
         }
     }
 }

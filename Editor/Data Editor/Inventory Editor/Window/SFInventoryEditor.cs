@@ -6,12 +6,16 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-using SF.Inventory;
-
+using SFEditor.Characters.Data;
 using SFEditor.Data;
 using SFEditor.Inventory;
+using SFEditor.Inventory.Data;
+
+using SF.Inventory;
+
+
 using SF.UIElements.Utilities;
-using SFEditor.Characters.Data;
+
 using SF.Characters.Data;
 
 namespace SFEditor
@@ -45,6 +49,7 @@ namespace SFEditor
 
         public void CreateGUI()
         {
+           
             _root = rootVisualElement;
             _dataViewContainer = new();
             DataEditorTabView rootTab = new DataEditorTabView("Data Editor");
@@ -61,6 +66,7 @@ namespace SFEditor
             _characterTab.Add(_characterEditorView);
            
 
+            /*
             if(_itemDatabase == null || _itemDatabase.Items.Count < 1)
                 return;
 
@@ -76,6 +82,7 @@ namespace SFEditor
                     .AddChild(new DataToolbar())
                     .AddChild(CreateItemView(_itemDatabase.Items[0]))
                 );
+                */
 
             _itemTab.Add(_itemPaneView);
             _root.Add(rootTab);
