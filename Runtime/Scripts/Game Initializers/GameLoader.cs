@@ -15,8 +15,8 @@ namespace SF.Managers
     [DefaultExecutionOrder(-5)]
     public class GameLoader : MonoBehaviour
     {
-        [SerializeField] private GameLoaderSO _gameLoaderData; 
-        
+        [field: SerializeField] public GameLoaderSO GameLoaderData { get; private set; }
+
         public static GameLoader Instance;
         public static bool WasGameInitialized = false;
         /* Since Scriptable Objects don't have their lifecycle events done until they are referenced in scene,
@@ -52,7 +52,7 @@ namespace SF.Managers
             else
                 Instance = this;
 
-            if (_gameLoaderData != null)
+            if (GameLoaderData != null)
                 SceneManager.sceneLoaded += OnSceneLoaded;
             
             DontDestroyOnLoad(this);
@@ -104,20 +104,20 @@ namespace SF.Managers
         public void NewGame()
         {
             // Set the starting room first.
-            if (_gameLoaderData == null)
+            if (GameLoaderData == null)
                 return;
 
-            _gameLoaderData.SettingUpNewGame = true;
-            MetroidvaniaSaveManager.StartingRoom = _gameLoaderData.StartingRoomID;
+            GameLoaderData.SettingUpNewGame = true;
+            MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
 
-            SceneManager.LoadScene(_gameLoaderData.NewGameSceneIndex);
+            SceneManager.LoadScene(GameLoaderData.NewGameSceneIndex);
         }
 
         public void LoadGame()
         {
             // Set the starting room first.
-            if(_gameLoaderData != null)
-                MetroidvaniaSaveManager.StartingRoom = _gameLoaderData.StartingRoomID;
+            if(GameLoaderData != null)
+                MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
         }
         
         /// <summary>
@@ -128,11 +128,11 @@ namespace SF.Managers
         /// <exception cref="NotImplementedException"></exception>
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
-            if (_gameLoaderData == null)
+            if (GameLoaderData == null)
                 return;
             
             // When we are loading the same scene as a new game also check if we are in the middle of setting a new game file.
-            if (scene.buildIndex == _gameLoaderData.NewGameSceneIndex && _gameLoaderData.SettingUpNewGame)
+            if (scene.buildIndex == GameLoaderData.NewGameSceneIndex && GameLoaderData.SettingUpNewGame)
                 NewGameSceneInitialization();
         }
         
@@ -144,7 +144,7 @@ namespace SF.Managers
         /// </summary>
         private void NewGameSceneInitialization()
         {
-            RoomSystem.SetInitialRoom(_gameLoaderData.StartingRoomID);
+            RoomSystem.SetInitialRoom(GameLoaderData.StartingRoomID);
             if (GameManager.Instance.PlayerController != null)
             {
                 GameManager.Instance.PlayerController.transform.position =
@@ -160,10 +160,10 @@ namespace SF.Managers
         /// </summary>
         private void OnNewGameReady()
         {
-            if (_gameLoaderData == null)
+            if (GameLoaderData == null)
                 return;
             
-            _gameLoaderData.SettingUpNewGame = false;
+            GameLoaderData.SettingUpNewGame = false;
         }
         private void OnDisable()
         {
