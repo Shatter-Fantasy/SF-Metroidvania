@@ -24,6 +24,9 @@ namespace SF.Characters.Controllers
                 GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
                 if(GameManager.Instance.PlayerController == null)
                     GameManager.Instance.PlayerController = this;
+
+                if (!GameLoader.Instance.GameLoaderData.SettingUpNewGame)
+                    CollisionController.IsActive = true;
             }
         }
         
