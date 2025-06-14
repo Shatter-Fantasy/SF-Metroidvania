@@ -22,7 +22,11 @@ namespace SF.CameraModule
         /// This is the virtual camera priority value for the cutscene virtual cameras when a cutscene is playing requiring camera overriding.
         /// </summary>
         public const int CutsceneCameraPriority = 6;
-        
+
+        /// <summary>
+        /// How far away the virtual cameras camera is set 
+        /// </summary>
+        public const int CameraDistance = 10;
         public static CameraController Instance
         {
             get 
@@ -69,7 +73,12 @@ namespace SF.CameraModule
             /* Not an error if this check is null: This is an expected result in some cases.
                 This can happen when loading the first room in an area,
                  loading a game file into a save room, or when doing certain types of RoomTransitions from scene to scene. 
-            */ 
+            */
+
+            // If the Virtual Camera has a CinemachinePositionComposer on it set it's distance to our set default.
+            if (cmCamera.TryGetComponent(out CinemachinePositionComposer positionComposer))
+                positionComposer.CameraDistance = CameraDistance;
+            
             if (Instance.PlayerCamera != null)
             {
                 // Reset the previous/old virtual camera priority.
