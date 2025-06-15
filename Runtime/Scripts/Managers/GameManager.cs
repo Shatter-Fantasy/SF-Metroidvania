@@ -47,9 +47,7 @@ namespace SF.Managers
         /// The <see cref="Room.RoomID"/> of a debug room to start in.
         /// </summary>
         [SerializeField] private int _debugRoomID;
-        #endif
-
-     #if UNITY_EDITOR
+        
         /// <summary>
         /// Set false to not load a save file allowing the player to spawn in place for debugging in the editor.
         /// </summary>
@@ -58,7 +56,7 @@ namespace SF.Managers
         
         [SerializeField] protected int _targetFrameRate = 60;
         [SerializeField] private GameControlState _controlState;
-
+        
         public GameControlState ControlState
         {
             get { return _controlState;}
@@ -71,10 +69,8 @@ namespace SF.Managers
                 }
             }
         }
-        
 		public GamePlayState PlayState;
-
-        public static GameManager PlayerSceneObject { get; protected set; }
+        
         public static GameManager Instance;
 
         public PlayerController PlayerController;
