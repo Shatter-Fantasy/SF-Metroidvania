@@ -4,7 +4,6 @@ using SF.Characters.Controllers;
 using SF.DataManagement;
 using SF.DialogueModule;
 using SF.Events;
-using SF.RoomModule;
 using UnityEngine;
 
 namespace SF.Managers
@@ -38,22 +37,6 @@ namespace SF.Managers
         [SerializeReference]
         public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
         
-        #if UNITY_EDITOR
-        /// <summary>
-        /// When playing from editor you can set a default room to load into to bypass the starting spawn room.
-        /// </summary>
-        [Header("Editor only debug settings.")][SerializeField] private bool _loadDebugRoom = false;
-        /// <summary>
-        /// The <see cref="Room.RoomID"/> of a debug room to start in.
-        /// </summary>
-        [SerializeField] private int _debugRoomID;
-        
-        /// <summary>
-        /// Set false to not load a save file allowing the player to spawn in place for debugging in the editor.
-        /// </summary>
-        [SerializeField] protected bool _shouldLoadData;
-        #endif
-        
         [SerializeField] protected int _targetFrameRate = 60;
         [SerializeField] private GameControlState _controlState;
         
@@ -86,26 +69,6 @@ namespace SF.Managers
             else
                 Destroy(this);
         }
-        
-        public void InitializeLoadedGame()
-        {
-            
-#if UNITY_EDITOR
-            if (_shouldLoadData)
-            {
-#endif
-                MetroidvaniaSaveManager.LoadGame();
-                SaveDataBlocks = SaveSystem.CurrentSaveDataBlocks();
-#if UNITY_EDITOR
-            }
-
-            if (_loadDebugRoom)
-            {
-                RoomSystem.SetInitialRoom(_debugRoomID);
-            }
-#endif
-        }
-
         
         protected void OnExitGame()
         {
