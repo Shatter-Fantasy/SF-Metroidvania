@@ -148,12 +148,14 @@ namespace SF.RoomModule
             // Make sure the room we are trying to set as the current room is already loaded
             if (!IsRoomLoaded(roomID))
             {
-                
                 #if UNITY_EDITOR
                 Debug.LogWarning($"No room matching RoomID: {roomID} is currently loaded in.");
                 #endif
                 return false;
             }
+            
+            // This sets the priority of the virtual cameras for the old and new rooms while setting the new RoomConfiners.
+            CameraController.SwitchPlayerCMCamera(_roomDB[roomID].SpawnedRoomController.RoomCamera);
 
             // Was able to set a valid room as the current one.
             CurrentRoom = _roomDB[roomID];
@@ -165,8 +167,8 @@ namespace SF.RoomModule
         /// </summary>
         public static void SetInitialRoom(int roomID)
         {
-            var room = LoadRoom(roomID); 
-            room?.SpawnedRoomController?.MakeCurrentRoom();
+            LoadRoom(roomID); 
+            _roomDB[roomID]?.SpawnedRoomController?.MakeCurrentRoom();
         }
         public static void CleanUpRoom(int roomId)
         {
