@@ -56,8 +56,6 @@ namespace SF.Managers
         
         public static GameManager Instance;
 
-        public PlayerController PlayerController;
-
         public Action<GameControlState> OnGameControlStateChanged;
         
         private void Awake()
@@ -65,9 +63,12 @@ namespace SF.Managers
             Application.targetFrameRate = _targetFrameRate;
 
             if (Instance == null)
+            {
                 Instance = this;
+                DontDestroyOnLoad(gameObject); 
+            }
             else
-                Destroy(this);
+                Destroy(gameObject); // We want to destroy the child object managers so they are not doubles as well.
         }
         
         protected void OnExitGame()

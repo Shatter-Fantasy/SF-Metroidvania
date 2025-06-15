@@ -1,4 +1,5 @@
 using System;
+using SF.LevelModule;
 using SF.Managers;
 using Unity.Cinemachine;
 
@@ -11,7 +12,7 @@ namespace SF.CameraModule
         /// <summary>
         /// This is the default priority that is set on the old virtual cameras that are being switched away from.
         /// </summary>
-        public const int DefaultPriority = -1;
+        public const int DeactivatedPriority = -1;
 
         /// <summary>
         /// This is the virtual camera priority value for the currently active player camera.
@@ -58,13 +59,13 @@ namespace SF.CameraModule
 
         public void Start()
         {
-            if (GameManager.Instance != null && GameManager.Instance.PlayerController != null)
+            if (GameManager.Instance != null && LevelPlayData.Instance.SpawnedPlayerController != null)
             {
-                _instance.CameraTarget = GameManager.Instance.PlayerController.transform;
+                _instance.CameraTarget = LevelPlayData.Instance.SpawnedPlayerController.transform;
             }
         }
 
-        public static void SwitchPlayerCMCamera(CinemachineCamera cmCamera, int priority = DefaultPriority)
+        public static void SwitchPlayerCMCamera(CinemachineCamera cmCamera, int priority = ActivePriority)
         {
             if(cmCamera == null)
                 return;
@@ -84,13 +85,18 @@ namespace SF.CameraModule
                 // At this point Instance.ActiveRoomCamera is still the old camera.
                 // We also clear the old camera follow to prevent it from following the player while not the active camera.
                 ActiveRoomCamera.Follow = null;
-                ActiveRoomCamera.Priority = DefaultPriority;
+                ActiveRoomCamera.Priority = DeactivatedPriority;
             }
             
-            ActiveRoomCamera = cmCamera;
+            ActiveRoomCamera = cmCamera;             
             // From here Instance.ActiveRoomCamera is the new camera.
+            if(Instance.CameraTarget != null)
+                ActiveRoomCamera.transform.position = Instance.CameraTarget.position;
+            
             ActiveRoomCamera.Priority = ActivePriority;
-            ActiveRoomCamera.Follow = Instance.CameraTarget;
+            
+            // We don't add setting the ActiveRoomCamera.Follow in the null check above for when we need to do cutscenes and not have a follow target
+            ActiveRoomCamera.Follow = Instance.CameraTarget;  
         }
         
         public static void ChangeCameraConfiner(CinemachineCamera cmCamera)

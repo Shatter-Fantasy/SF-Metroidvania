@@ -126,10 +126,10 @@ namespace SF.Managers
             
             // TODO: Create the proper spawn system for loading in game or any play spawn positioning.
             //  The if statement and stuff in it should be remove sooner or later
-            if (GameManager.Instance.PlayerController != null && CameraController.ActiveRoomCamera != null)
+            if (_levelPlayData.SpawnedPlayerController != null && CameraController.ActiveRoomCamera != null)
             {
                 Vector2 startingPosition = CameraController.ActiveRoomCamera.transform.position;
-                GameManager.Instance.PlayerController.transform.position.Set(startingPosition.x,startingPosition.y,0);
+                _levelPlayData.SpawnedPlayerController.transform.position = new Vector3(startingPosition.x,startingPosition.y,0);
             }
 
             OnNewGameReady();
@@ -145,6 +145,7 @@ namespace SF.Managers
                 return;
             
             GameLoaderData.SettingUpNewGame = false;
+            LevelPlayData.Instance.SpawnedPlayerController.CollisionActivated = true;
         }
         private void OnDisable()
         {

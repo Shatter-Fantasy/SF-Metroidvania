@@ -1,3 +1,4 @@
+using SF.LevelModule;
 using SF.Managers;
 
 namespace SF.Characters.Controllers
@@ -11,7 +12,7 @@ namespace SF.Characters.Controllers
     /// <remarks>
     /// This sets up the PlayerController instance in the game manager during the awake call.
     /// In the start call for objects being loaded at the same time, other objects can now get a reference to
-    /// the <see cref="GameManager.PlayerController"/> after it is set in <see cref="PlayerController.OnAwake"/>.
+    /// the <see cref="PlayerController"/> after it is set in <see cref="PlayerController.OnAwake"/>.
     /// </remarks> 
     /// </summary>
 	public class PlayerController : GroundedController2D
@@ -22,11 +23,11 @@ namespace SF.Characters.Controllers
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
-                if(GameManager.Instance.PlayerController == null)
-                    GameManager.Instance.PlayerController = this;
+                if(LevelPlayData.Instance.SpawnedPlayerController == null)
+                    LevelPlayData.Instance.SpawnedPlayerController = this;
 
                 if (!GameLoader.Instance.GameLoaderData.SettingUpNewGame)
-                    CollisionController.IsActive = true;
+                    CollisionController.CollisionActivated = true;
             }
         }
         

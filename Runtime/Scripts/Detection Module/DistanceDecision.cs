@@ -1,3 +1,4 @@
+using SF.LevelModule;
 using SF.Managers;
 using SF.StateMachine.Core;
 
@@ -19,7 +20,7 @@ namespace SF.StateMachine.Decisions
         {
             if (_chasePlayer)
             {
-                Target = GameManager.Instance.PlayerController.transform;
+                Target = LevelPlayData.Instance.SpawnedPlayerController.transform;
             }
         }
         
