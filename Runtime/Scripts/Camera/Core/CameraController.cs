@@ -44,8 +44,7 @@ namespace SF.CameraModule
         private static CameraController _instance;
 
         public Transform CameraTarget;
-        public CinemachineCamera PlayerCamera;
-        public CinemachineConfiner2D CameraConfiner;
+        public static CinemachineCamera ActiveRoomCamera;
 
         private void Awake()
         {
@@ -78,28 +77,28 @@ namespace SF.CameraModule
             // If the Virtual Camera has a CinemachinePositionComposer on it set it's distance to our set default.
             if (cmCamera.TryGetComponent(out CinemachinePositionComposer positionComposer))
                 positionComposer.CameraDistance = CameraDistance;
-            
-            if (Instance.PlayerCamera != null)
+
+            if (ActiveRoomCamera != null)
             {
                 // Reset the previous/old virtual camera priority.
-                // At this point Instance.PlayerCamera is still the old camera.
+                // At this point Instance.ActiveRoomCamera is still the old camera.
                 // We also clear the old camera follow to prevent it from following the player while not the active camera.
-                Instance.PlayerCamera.Follow = null;
-                Instance.PlayerCamera.Priority = DefaultPriority;
+                ActiveRoomCamera.Follow = null;
+                ActiveRoomCamera.Priority = DefaultPriority;
             }
-
-            Instance.PlayerCamera = cmCamera;
-            // From here Instance.PlayerCamera is the new camera.
-            Instance.PlayerCamera.Priority = ActivePriority;
-            Instance.PlayerCamera.Follow = Instance.CameraTarget;
+            
+            ActiveRoomCamera = cmCamera;
+            // From here Instance.ActiveRoomCamera is the new camera.
+            ActiveRoomCamera.Priority = ActivePriority;
+            ActiveRoomCamera.Follow = Instance.CameraTarget;
         }
         
         public static void ChangeCameraConfiner(CinemachineCamera cmCamera)
         {
-            if(Instance.PlayerCamera != null)
+            if(ActiveRoomCamera != null)
             {
                 cmCamera.Prioritize();
-                Instance.PlayerCamera = cmCamera;
+                ActiveRoomCamera = cmCamera;
             }
         }
         
@@ -112,14 +111,14 @@ namespace SF.CameraModule
         {
             if (Instance.CameraConfiner?.BoundingShape2D == collider2D)
                 return;
-            if(Instance.PlayerCamera != null)
+            if(Instance.ActiveRoomCamera != null)
             {
                 if (Instance.CameraConfiner == null)
-                    Instance.CameraConfiner = Instance.PlayerCamera.GetComponent<CinemachineConfiner2D>();
+                    Instance.CameraConfiner = Instance.ActiveRoomCamera.GetComponent<CinemachineConfiner2D>();
                 
                 Instance.CameraConfiner.InvalidateBoundingShapeCache();
                 Instance.CameraConfiner.BoundingShape2D = collider2D;
-                Instance.CameraConfiner.BakeBoundingShape(Instance.PlayerCamera, 1);
+                Instance.CameraConfiner.BakeBoundingShape(Instance.ActiveRoomCamera, 1);
             }
         }
         */
