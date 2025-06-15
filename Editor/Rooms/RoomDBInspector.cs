@@ -40,6 +40,10 @@ namespace SFEditor.Rooms
             }
         }
 
+        /// <summary>
+        /// Runs whenever the plus button the Rooms ListView is used to add a new room in the editor.
+        /// </summary>
+        /// <param name="roomsAdded"></param>
         private void OnRoomAdded(IEnumerable<int> roomsAdded)
         {
             foreach (int roomIndex in roomsAdded)
@@ -53,8 +57,7 @@ namespace SFEditor.Rooms
             RoomDB roomDB = target as RoomDB;
             if (roomDB == null)
                 return;
-                
-            RoomDB.Instance = roomDB;
+            
             RoomSystem.RoomDB = roomDB;
         }
         

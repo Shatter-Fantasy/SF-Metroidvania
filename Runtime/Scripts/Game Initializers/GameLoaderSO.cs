@@ -1,3 +1,4 @@
+using SF.RoomModule;
 using UnityEngine;
 
 namespace SF.Managers
@@ -26,5 +27,12 @@ namespace SF.Managers
 
         [Header("Room Data")]
         public int StartingRoomID = 0;
+
+        public bool DynamicRoomLoading = false;
+
+        public void OnEnable()
+        {
+            RoomSystem.DynamicRoomLoading = DynamicRoomLoading;
+        }
     }
 }

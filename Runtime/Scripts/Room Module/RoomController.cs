@@ -35,16 +35,9 @@ namespace SF.RoomModule
         {
             // This is the ignore ray cast physics layer.
             gameObject.layer = 2;
-            RoomIdsToLoadOnEnter = RoomDB.Instance[RoomID].ConnectedRoomsIDs;
-        }
-
-        private void Start()
-        {
-            if (!RoomSystem.IsRoomLoaded(RoomID))
-            {
-                RoomSystem.AddLoadedRoomManually(RoomID);
-                RoomSystem.RoomDB[RoomID].SpawnedInstance = this.gameObject;
-            }
+            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
+            
+            RoomSystem.LoadRoomManually(RoomID, gameObject);
         }
         
         
@@ -53,14 +46,11 @@ namespace SF.RoomModule
         /// </summary>
         public void MakeCurrentRoom()
         {
-            // Can happen from CinemachineTriggerAction when exiting playmode.
-            // If the collider is deloaded first it triggers an onexit callback while deloading the runtime.
             if (!RoomSystem.IsRoomLoaded(RoomID))
             {
                 return;
             }
             
-            RoomSystem.OnRoomEntered(RoomID);
             OnRoomEnteredHandler?.Invoke();
             
             if (RoomCamera != null)
@@ -71,7 +61,7 @@ namespace SF.RoomModule
 
             foreach (var roomID in RoomIdsToLoadOnEnter)
             {
-                RoomSystem.LoadConnectedRoom(roomID);
+                RoomSystem.LoadRoom(roomID);
             }
 
             RoomSystem.SetCurrentRoom(RoomID);
