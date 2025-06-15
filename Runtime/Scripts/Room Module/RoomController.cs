@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SF.CameraModule;
 using SF.Characters.Controllers;
-using SF.Managers;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -53,15 +51,13 @@ namespace SF.RoomModule
             
             OnRoomEnteredHandler?.Invoke();
             
-            if (RoomCamera != null)
+            // Probably should put this if and for loop in the RoomSystem itself.
+            if (RoomSystem.DynamicRoomLoading)
             {
-                // This sets the priority of the virtual cameras for the old and new rooms while setting the new RoomConfiners.
-                CameraController.SwitchPlayerCMCamera(RoomCamera);
-            }
-
-            foreach (var roomID in RoomIdsToLoadOnEnter)
-            {
-                RoomSystem.LoadRoom(roomID);
+                foreach (var roomID in RoomIdsToLoadOnEnter)
+                {
+                    RoomSystem.LoadRoom(roomID);
+                }
             }
 
             RoomSystem.SetCurrentRoom(RoomID);
@@ -70,7 +66,7 @@ namespace SF.RoomModule
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.TryGetComponent(out PlayerController controller) 
-                && controller.CollisionController.IsActive)
+                && controller.CollisionActivated)
             {
                 MakeCurrentRoom();
             }

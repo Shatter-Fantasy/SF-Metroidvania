@@ -80,6 +80,12 @@ namespace SF.Characters.Controllers
         /// </summary>
         protected Vector2 _externalVelocity;
 
+        public bool CollisionActivated
+        {
+            get => CollisionController.CollisionActivated;
+            set => CollisionController.CollisionActivated = value;
+        }
+        
         #region Lifecycle Methods
         private void Awake()
         {

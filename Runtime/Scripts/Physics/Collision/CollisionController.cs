@@ -8,7 +8,7 @@ namespace SF.Physics
 	[System.Serializable]
     public struct CollisionController
     {
-	    public bool IsActive;
+	    public bool CollisionActivated;
 	    
 		[Header("Collision Correction")]
 		public float SkinWidth;
@@ -41,7 +41,7 @@ namespace SF.Physics
 			SkinWidth = skinWidth;
 			RaycastHit2Ds = new RaycastHit2D[4];
 
-			IsActive = true;
+			CollisionActivated = true;
 		}
 
 
