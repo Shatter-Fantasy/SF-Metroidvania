@@ -41,7 +41,7 @@ namespace SF.InputModule
 		private void Awake()
 		{
 			if(Instance != null && Instance != this)
-				Destroy(this);
+				Destroy(gameObject);
 		}
 
 		private void Start()
