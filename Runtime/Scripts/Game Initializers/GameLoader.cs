@@ -1,4 +1,5 @@
 using System;
+using SF.CameraModule;
 using SF.DataManagement;
 using SF.RoomModule;
 using SF.DialogueModule;
@@ -15,8 +16,8 @@ namespace SF.Managers
     [DefaultExecutionOrder(-5)]
     public class GameLoader : MonoBehaviour
     {
-        [SerializeField] private GameLoaderSO _gameLoaderData; 
-        
+        [field: SerializeField] public GameLoaderSO GameLoaderData { get; private set; }
+
         public static GameLoader Instance;
         public static bool WasGameInitialized = false;
         /* Since Scriptable Objects don't have their lifecycle events done until they are referenced in scene,
@@ -30,17 +31,6 @@ namespace SF.Managers
         /// This data object that keeps track of references needed to be loaded in playable levels before anything else.
         /// </summary>
         [SerializeField] private LevelPlayData _levelPlayData;
-
-        /// <summary>
-        /// The prefab that acts as the root game object for all game wide managers.
-        /// </summary>
-        /// <remarks>
-        /// Think managers in all scenes not just the scenes for playing the game.
-        /// Example non-play scenes needing managers loaded - starting menu scene.
-        /// Think of managers like Audio/Input.
-        /// </remarks>
-        [Header("Required Managers")] 
-        [SerializeField] private GameObject _gameWideManagers;
         
         private void Awake()
         {
@@ -51,22 +41,6 @@ namespace SF.Managers
                 Destroy(gameObject);
             else
                 Instance = this;
-
-            if (_gameLoaderData != null)
-                SceneManager.sceneLoaded += OnSceneLoaded;
-            
-            DontDestroyOnLoad(this);
-
-            /* Even after checking to make sure no other GameLoaders exists there could be one case the game was already initialized.
-                The first GameLoader that initialized the GameManagers could have been destroyed/deloaded making Instance == null.
-                Thus, we should also check if WasGameInitialized was set to true already in a different GameLoader InitializeGame call.
-                */
-            
-            if (WasGameInitialized)
-                return;
-
-            if (_roomDB != null)
-                RoomDB.Instance = _roomDB;
             
             InitializeGame();
         }
@@ -78,24 +52,22 @@ namespace SF.Managers
         /// </summary>
         public void InitializeGame()
         {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            DontDestroyOnLoad(this);
+            
+            /* Even after checking to make sure no other GameLoaders exists there could be one case the game was already initialized.
+            The first GameLoader that initialized the GameManagers could have been destroyed/deloaded making Instance == null.
+            Thus, we should also check if WasGameInitialized was set to true already in a different GameLoader InitializeGame call.*/
+            if (WasGameInitialized)
+                return;
+            
+            if (_roomDB != null)
+                RoomSystem.RoomDB = _roomDB;
+            
             if (_levelPlayData != null)
                 LevelPlayData.Instance = _levelPlayData;
             
-            InitializeInSceneManagers();
-            
             WasGameInitialized = true;
-        }
-        
-        /// <summary>
-        /// Initializes the managers for the game that exist inside the scene view.
-        /// </summary>
-        public void InitializeInSceneManagers()
-        {
-            if (_gameWideManagers == null)
-            {
-                Debug.Log("There was no prefab for GameWideManagers assigned in the GameLoader component", gameObject);
-                return;
-            }
         }
 
         /// <summary>
@@ -103,31 +75,19 @@ namespace SF.Managers
         /// </summary>
         public void NewGame()
         {
-            // Set the starting room first.
-            if (_gameLoaderData == null)
+            if (GameLoaderData == null)
                 return;
 
-            _gameLoaderData.SettingUpNewGame = true;
-            MetroidvaniaSaveManager.StartingRoom = _gameLoaderData.StartingRoomID;
-
-            SceneManager.LoadScene(_gameLoaderData.NewGameSceneIndex);
+            GameLoaderData.SettingUpNewGame = true;
+            MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
+            SceneManager.LoadScene(GameLoaderData.NewGameSceneIndex);
         }
 
-        /// <summary>
-        /// Called when the new game data has been set up and the first scene of the new game is completely loaded and initialized.
-        /// </summary>
-        private void OnNewGameReady()
-        {
-            if (_gameLoaderData == null)
-                return;
-            
-            _gameLoaderData.SettingUpNewGame = false;
-        }
         public void LoadGame()
         {
             // Set the starting room first.
-            if(_gameLoaderData != null)
-                MetroidvaniaSaveManager.StartingRoom = _gameLoaderData.StartingRoomID;
+            if(GameLoaderData != null)
+                MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
         }
         
         /// <summary>
@@ -138,12 +98,13 @@ namespace SF.Managers
         /// <exception cref="NotImplementedException"></exception>
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
-            if (_gameLoaderData == null)
+            if (GameLoaderData == null)
                 return;
             
-            Debug.Log("Scene is loading.");
+            // We will be doing stuff here later so the NewGameSceneInitialization is staying in a separate function for now 
+            
             // When we are loading the same scene as a new game also check if we are in the middle of setting a new game file.
-            if (scene.buildIndex == _gameLoaderData.NewGameSceneIndex && _gameLoaderData.SettingUpNewGame)
+            if (scene.buildIndex == GameLoaderData.NewGameSceneIndex && GameLoaderData.SettingUpNewGame)
                 NewGameSceneInitialization();
         }
         
@@ -155,9 +116,37 @@ namespace SF.Managers
         /// </summary>
         private void NewGameSceneInitialization()
         {
-            Debug.Log("A new game is being set up.");
+            /* Keep in mind the OnSceneLoaded callback that will call this function will be called after
+                awake has run on the gameobject in the scene already as it is loaded.
+                
+                Example: The RoomControllers that exist in the scene already if the rooms were not dynamically loaded
+                will have already set their spawned instances and the linked room in the room database initialized.*/
+            
+            RoomSystem.SetInitialRoom(GameLoaderData.StartingRoomID);
+            
+            // TODO: Create the proper spawn system for loading in game or any play spawn positioning.
+            //  The if statement and stuff in it should be remove sooner or later
+            if (_levelPlayData.SpawnedPlayerController != null && CameraController.ActiveRoomCamera != null)
+            {
+                Vector2 startingPosition = CameraController.ActiveRoomCamera.transform.position;
+                _levelPlayData.SpawnedPlayerController.transform.position = new Vector3(startingPosition.x,startingPosition.y,0);
+            }
+
+            OnNewGameReady();
         }
 
+        
+        /// <summary>
+        /// Called when the new game data has been set up and the first scene of the new game is completely loaded and initialized.
+        /// </summary>
+        private void OnNewGameReady()
+        {
+            if (GameLoaderData == null)
+                return;
+            
+            GameLoaderData.SettingUpNewGame = false;
+            LevelPlayData.Instance.SpawnedPlayerController.CollisionActivated = true;
+        }
         private void OnDisable()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;

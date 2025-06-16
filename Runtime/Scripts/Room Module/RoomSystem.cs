@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SF.CameraModule;
+using SF.Managers;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -9,9 +10,19 @@ namespace SF.RoomModule
     /// <summary>
     /// Used to allow interactions between the in game systems and the RoomDatabase. <see cref="RoomDB"/>.
     /// Also includes helper functions for interacting with room management like room loading/unloading and keeping track of what rooms are already loaded.
+    ///
+    ///
+    /// <remarks>
+    ///     Room System Logic Flow
+    ///     There are two ways to have the game take care of room loading that run depending on if DynamicRoomLoading is set to true or false.   
+    ///  
+    /// 
+    /// </remarks>
     /// </summary>
     public static class RoomSystem
     {
+
+        public static bool DynamicRoomLoading = false;
         
         /// <summary>
         /// List of the loaded Rooms data.
@@ -25,15 +36,7 @@ namespace SF.RoomModule
         /// </summary>
         public static RoomDB RoomDB
         {
-            get
-            {
-                if (_roomDB == null)
-                    _roomDB = RoomModule.RoomDB.Instance;
-                
-                // TODO: Check to make sure the static instance of room db is never somehow null.
-
-                return _roomDB;
-            }
+            get { return _roomDB; }
 
             set
             {
@@ -52,14 +55,13 @@ namespace SF.RoomModule
         /// Calling SetCurrentRoom does checks to make sure the value being set to the CurrentRoom is valid.
         /// </remarks>
         public static Room CurrentRoom { get; private set; }
-
+        
         /// <summary>
         /// Loads a connected room by its id. This is called in the room before it aka the connected room leading to other rooms.
         /// Allowing farther rooms to be loaded in the background to prevent pop up and lag.
         /// </summary>
         /// <param name="roomID"></param>
-        /// <param name="loadPrefab"></param>
-        public static Room LoadConnectedRoom(int roomID, bool loadPrefab = true)
+        public static Room LoadRoom(int roomID)
         {
             if (RoomDB[roomID]?.RoomPrefab == null)
                 return null;
@@ -72,28 +74,36 @@ namespace SF.RoomModule
             }
 
             // We can choose to skip the spawning of the instance. This is done for debugging reasons and to catch errors.
-            if (loadPrefab)
+            if (DynamicRoomLoading)
             {
                 // If no room instance with the passed in roomID is currently loaded spawn and load an instance. 
                 // Also set it as the current SpawnedInstance in the RoomDB. This allows us to check if a room is already loaded later by checking 
                 // if the SpawnedInstance is null or not. We should check the _loadedRoomsIDs first for performance reasons. 
                 _roomDB[roomID].SpawnedInstance = GameObject.Instantiate(RoomDB[roomID].RoomPrefab);
+                _loadedRoomsIDs.Add(roomID);
             }
 
-            _loadedRoomsIDs.Add(roomID);
             return _roomDB[roomID];
         }
 
         /// <summary>
         /// Only use this to manually add a RoomID into the loaded room ids list when the room will already exist in the scene at the start. 
         /// </summary>
-        public static void AddLoadedRoomManually(int roomID)
+        public static Room LoadRoomManually(int roomID, GameObject spawnedInstance = null)
         {
-            // Don't duplicate the loaded room id.
+            // Don't duplicate the loaded room if it was already loaded.
             if (IsRoomLoaded(roomID))
-                return;
+                return _roomDB[roomID];
             
             _loadedRoomsIDs.Add(roomID);
+
+            if (spawnedInstance != null)
+            {
+                _roomDB[roomID].SpawnedInstance = spawnedInstance;
+                _roomDB[roomID].SpawnedRoomController = spawnedInstance.GetComponent<RoomController>();
+            }
+
+            return _roomDB[roomID];
         }
         /// <summary>
         /// Checks to see if the passed in room id belongs to one of the already loaded rooms.
@@ -125,10 +135,12 @@ namespace SF.RoomModule
             // Don't try to Refresh a room that hasn't loaded a spawned instance yet.
             if (!IsRoomLoaded(roomID))
                 return;
+            
+            //Debug.Log($"Room with ID: {roomID} was refreshed, but at the moment the RefreshRoom is not implemented yet.");
         }
 
         /// <summary>
-        /// Sets the curren room
+        /// Sets the current room
         /// Returns true if the <see cref="CurrentRoom"/> value was set properly and false if it failed to be set.
         /// </summary>
         public static bool SetCurrentRoom(int roomID)
@@ -136,29 +148,18 @@ namespace SF.RoomModule
             // Make sure the room we are trying to set as the current room is already loaded
             if (!IsRoomLoaded(roomID))
             {
-                
                 #if UNITY_EDITOR
                 Debug.LogWarning($"No room matching RoomID: {roomID} is currently loaded in.");
                 #endif
                 return false;
             }
+            
+            // This sets the priority of the virtual cameras for the old and new rooms while setting the new RoomConfiners.
+            CameraController.SwitchPlayerCMCamera(_roomDB[roomID].SpawnedRoomController.RoomCamera);
 
             // Was able to set a valid room as the current one.
             CurrentRoom = _roomDB[roomID];
             return true;
-        }
-        
-        /// <summary>
-        /// This is called on the room being entered. 
-        /// </summary>
-        /// <param name="roomID"></param>
-        public static void OnRoomEntered(int roomID)
-        {
-            // We make sure the room is fully loaded before we do anything with it.
-            if (!IsRoomLoaded(roomID))
-                return;
-
-            CurrentRoom = _roomDB[roomID];
         }
 
         /// <summary>
@@ -166,26 +167,12 @@ namespace SF.RoomModule
         /// </summary>
         public static void SetInitialRoom(int roomID)
         {
-            LoadConnectedRoom(roomID);
-            //RefreshRoom(roomID);
-            
-            //SpawnRoomObjects(roomID);
-            var roomController = _roomDB[roomID].SpawnedInstance.GetComponent<RoomController>();
-            
-            if (roomController == null)
-                return;
-            
-            roomController.MakeCurrentRoom();
+            LoadRoom(roomID); 
+            _roomDB[roomID]?.SpawnedRoomController?.MakeCurrentRoom();
         }
-        
-        public static void OnRoomExit(int roomID)
-        {
-           
-        }
-
         public static void CleanUpRoom(int roomId)
         {
-            // Can happen without error when deloading a scene and objects are destroyed on scene exit and also on exiting playmode.
+            // Can happen without error when unloading a scene and objects are destroyed on scene exit and also on exiting playmode.
             if (!IsRoomLoaded(roomId))
                 return;
             
@@ -206,7 +193,7 @@ namespace SF.RoomModule
         public List<int> ConnectedRoomsIDs = new List<int>();
 
         /// <summary>
-        /// The list of possible transition points into and out of a room. <see cref="RoomTransitionLink"/>
+        /// The list of possible transition points into and out of a room. <see cref="RoomTransition"/>
         /// </summary>
         public List<int> TransitionsIDs = new List<int>();
         /// <summary>
@@ -219,5 +206,6 @@ namespace SF.RoomModule
         /// This is only used during runtime. This allows for keeping track of the SpawnedInstances in the Room data itself.
         /// </summary>
         [NonSerialized] public GameObject SpawnedInstance;
+        [NonSerialized] public RoomController SpawnedRoomController;
     }
 }

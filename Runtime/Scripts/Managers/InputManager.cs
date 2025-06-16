@@ -1,4 +1,3 @@
-using System;
 using SF.AbilityModule;
 using SF.Events;
 using SF.Managers;
@@ -42,7 +41,7 @@ namespace SF.InputModule
 		private void Awake()
 		{
 			if(Instance != null && Instance != this)
-				Destroy(this);
+				Destroy(gameObject);
 		}
 
 		private void Start()
@@ -53,7 +52,6 @@ namespace SF.InputModule
 		
 		private void OnGameMenuToggled(InputAction.CallbackContext ctx)
 		{
-			
 			GameEvent.Trigger(GameEventTypes.PauseToggle);
 		}
 
@@ -86,6 +84,7 @@ namespace SF.InputModule
         {
 			if(Controls != null)
 			{
+				Controls.GameControl.Enable();
 				Controls.GameControl.PauseToggle.performed += OnGameMenuToggled;
 			}
         }

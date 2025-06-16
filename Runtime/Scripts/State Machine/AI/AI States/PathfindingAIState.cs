@@ -1,4 +1,5 @@
 using SF.Characters.Controllers;
+using SF.LevelModule;
 using SF.Managers;
 using SF.Pathfinding;
 using SF.StateMachine.Decisions;
@@ -34,7 +35,7 @@ namespace SF.StateMachine.Core
             base.OnInit();
             if (_chasePlayer)
             {
-                _target = GameManager.Instance.PlayerController.transform;
+                _target = LevelPlayData.Instance.SpawnedPlayerController.transform;
                 _currentTargetPos = _target.position;
             }
 

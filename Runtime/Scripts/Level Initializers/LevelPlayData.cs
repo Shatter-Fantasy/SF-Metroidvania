@@ -48,7 +48,7 @@ namespace SF.LevelModule
 
                 return _spawnedPlayerController;
             }
-            private set
+            set
             {
                 if (value != null)
                     _spawnedPlayerController = value;

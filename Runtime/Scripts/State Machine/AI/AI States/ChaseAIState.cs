@@ -1,4 +1,5 @@
 using SF.Characters.Controllers;
+using SF.LevelModule;
 using SF.Managers;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ namespace SF.StateMachine
             base.OnInit(controller2D);
             if (_chasePlayer)
             {
-                _target = GameManager.Instance.PlayerController.transform;
+                _target = LevelPlayData.Instance.SpawnedPlayerController.transform;
             }
         }
 

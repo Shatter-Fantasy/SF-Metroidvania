@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using SF.Characters.Controllers;
 using SF.DataManagement;
 using SF.DialogueModule;
 using SF.Events;
-
 using UnityEngine;
 
 namespace SF.Managers
@@ -34,16 +34,12 @@ namespace SF.Managers
     [DefaultExecutionOrder(-5)]
     public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>, EventListener<DialogueEvent>
     {
-        #if UNITY_EDITOR
-        /// <summary>
-        /// Set false to not load a save file allowing the player to spawn in place for debugging in the editor.
-        /// </summary>
-        [SerializeField] protected bool _shouldLoadData;
-        #endif
+        [SerializeReference]
+        public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
         
         [SerializeField] protected int _targetFrameRate = 60;
         [SerializeField] private GameControlState _controlState;
-
+        
         public GameControlState ControlState
         {
             get { return _controlState;}
@@ -56,13 +52,9 @@ namespace SF.Managers
                 }
             }
         }
-        
 		public GamePlayState PlayState;
-
-        public static GameObject PlayerSceneObject { get; protected set; }
+        
         public static GameManager Instance;
-
-        public PlayerController PlayerController;
 
         public Action<GameControlState> OnGameControlStateChanged;
         
@@ -71,15 +63,14 @@ namespace SF.Managers
             Application.targetFrameRate = _targetFrameRate;
 
             if (Instance == null)
+            {
                 Instance = this;
+                DontDestroyOnLoad(gameObject); 
+            }
             else
-                Destroy(this);
+                Destroy(gameObject); // We want to destroy the child object managers so they are not doubles as well.
         }
-        protected virtual void Start()
-        {
-            PlayerSceneObject = FindAnyObjectByType<PlayerController>().gameObject;
-            SaveSystem.LoadDataFile();
-        }
+        
         protected void OnExitGame()
         {
             // Will need to do checks later for preventing shutdowns during saving and loading.
@@ -146,7 +137,7 @@ namespace SF.Managers
                 }
             }
         }
-
+        
         protected void OnEnable()
 		{
             this.EventStartListening<ApplicationEvent>();

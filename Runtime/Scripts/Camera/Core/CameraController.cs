@@ -1,4 +1,5 @@
 using System;
+using SF.LevelModule;
 using SF.Managers;
 using Unity.Cinemachine;
 
@@ -11,7 +12,7 @@ namespace SF.CameraModule
         /// <summary>
         /// This is the default priority that is set on the old virtual cameras that are being switched away from.
         /// </summary>
-        public const int DefaultPriority = -1;
+        public const int DeactivatedPriority = -1;
 
         /// <summary>
         /// This is the virtual camera priority value for the currently active player camera.
@@ -22,7 +23,11 @@ namespace SF.CameraModule
         /// This is the virtual camera priority value for the cutscene virtual cameras when a cutscene is playing requiring camera overriding.
         /// </summary>
         public const int CutsceneCameraPriority = 6;
-        
+
+        /// <summary>
+        /// How far away the virtual cameras camera is set 
+        /// </summary>
+        public const int CameraDistance = 10;
         public static CameraController Instance
         {
             get 
@@ -40,8 +45,7 @@ namespace SF.CameraModule
         private static CameraController _instance;
 
         public Transform CameraTarget;
-        public CinemachineCamera PlayerCamera;
-        public CinemachineConfiner2D CameraConfiner;
+        public static CinemachineCamera ActiveRoomCamera;
 
         private void Awake()
         {
@@ -55,13 +59,13 @@ namespace SF.CameraModule
 
         public void Start()
         {
-            if (GameManager.Instance != null && GameManager.Instance.PlayerController != null)
+            if (GameManager.Instance != null && LevelPlayData.Instance.SpawnedPlayerController != null)
             {
-                _instance.CameraTarget = GameManager.Instance.PlayerController.transform;
+                _instance.CameraTarget = LevelPlayData.Instance.SpawnedPlayerController.transform;
             }
         }
 
-        public static void SwitchPlayerCMCamera(CinemachineCamera cmCamera, int priority = DefaultPriority)
+        public static void SwitchPlayerCMCamera(CinemachineCamera cmCamera, int priority = ActivePriority)
         {
             if(cmCamera == null)
                 return;
@@ -69,28 +73,38 @@ namespace SF.CameraModule
             /* Not an error if this check is null: This is an expected result in some cases.
                 This can happen when loading the first room in an area,
                  loading a game file into a save room, or when doing certain types of RoomTransitions from scene to scene. 
-            */ 
-            if (Instance.PlayerCamera != null)
+            */
+
+            // If the Virtual Camera has a CinemachinePositionComposer on it set it's distance to our set default.
+            if (cmCamera.TryGetComponent(out CinemachinePositionComposer positionComposer))
+                positionComposer.CameraDistance = CameraDistance;
+
+            if (ActiveRoomCamera != null)
             {
                 // Reset the previous/old virtual camera priority.
-                // At this point Instance.PlayerCamera is still the old camera.
+                // At this point Instance.ActiveRoomCamera is still the old camera.
                 // We also clear the old camera follow to prevent it from following the player while not the active camera.
-                Instance.PlayerCamera.Follow = null;
-                Instance.PlayerCamera.Priority = DefaultPriority;
+                ActiveRoomCamera.Follow = null;
+                ActiveRoomCamera.Priority = DeactivatedPriority;
             }
-
-            Instance.PlayerCamera = cmCamera;
-            // From here Instance.PlayerCamera is the new camera.
-            Instance.PlayerCamera.Priority = ActivePriority;
-            Instance.PlayerCamera.Follow = Instance.CameraTarget;
+            
+            ActiveRoomCamera = cmCamera;             
+            // From here Instance.ActiveRoomCamera is the new camera.
+            if(Instance.CameraTarget != null)
+                ActiveRoomCamera.transform.position = Instance.CameraTarget.position;
+            
+            ActiveRoomCamera.Priority = ActivePriority;
+            
+            // We don't add setting the ActiveRoomCamera.Follow in the null check above for when we need to do cutscenes and not have a follow target
+            ActiveRoomCamera.Follow = Instance.CameraTarget;  
         }
         
         public static void ChangeCameraConfiner(CinemachineCamera cmCamera)
         {
-            if(Instance.PlayerCamera != null)
+            if(ActiveRoomCamera != null)
             {
                 cmCamera.Prioritize();
-                Instance.PlayerCamera = cmCamera;
+                ActiveRoomCamera = cmCamera;
             }
         }
         
@@ -103,14 +117,14 @@ namespace SF.CameraModule
         {
             if (Instance.CameraConfiner?.BoundingShape2D == collider2D)
                 return;
-            if(Instance.PlayerCamera != null)
+            if(Instance.ActiveRoomCamera != null)
             {
                 if (Instance.CameraConfiner == null)
-                    Instance.CameraConfiner = Instance.PlayerCamera.GetComponent<CinemachineConfiner2D>();
+                    Instance.CameraConfiner = Instance.ActiveRoomCamera.GetComponent<CinemachineConfiner2D>();
                 
                 Instance.CameraConfiner.InvalidateBoundingShapeCache();
                 Instance.CameraConfiner.BoundingShape2D = collider2D;
-                Instance.CameraConfiner.BakeBoundingShape(Instance.PlayerCamera, 1);
+                Instance.CameraConfiner.BakeBoundingShape(Instance.ActiveRoomCamera, 1);
             }
         }
         */

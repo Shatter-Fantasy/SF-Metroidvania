@@ -8,7 +8,9 @@ namespace SF.Physics
 	[System.Serializable]
     public struct CollisionController
     {
-		[Header("Collision Corection")]
+	    public bool CollisionActivated;
+	    
+		[Header("Collision Correction")]
 		public float SkinWidth;
 
 		[Header("Ray distance")]
@@ -38,6 +40,8 @@ namespace SF.Physics
 			VerticalRayAmount = verticalRayAmount;
 			SkinWidth = skinWidth;
 			RaycastHit2Ds = new RaycastHit2D[4];
+
+			CollisionActivated = true;
 		}
 
 

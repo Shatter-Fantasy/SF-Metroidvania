@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SF.CameraModule;
+using SF.Characters.Controllers;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -33,16 +33,9 @@ namespace SF.RoomModule
         {
             // This is the ignore ray cast physics layer.
             gameObject.layer = 2;
-            RoomIdsToLoadOnEnter = RoomDB.Instance[RoomID].ConnectedRoomsIDs;
-        }
-
-        private void Start()
-        {
-            if (!RoomSystem.IsRoomLoaded(RoomID))
-            {
-                RoomSystem.AddLoadedRoomManually(RoomID);
-                RoomSystem.RoomDB[RoomID].SpawnedInstance = this.gameObject;
-            }
+            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
+            
+            RoomSystem.LoadRoomManually(RoomID, gameObject);
         }
         
         
@@ -51,26 +44,20 @@ namespace SF.RoomModule
         /// </summary>
         public void MakeCurrentRoom()
         {
-            // Can happen from CinemachineTriggerAction when exiting playmode.
-            // If the collider is deloaded first it triggers an onexit callback while deloading the runtime.
             if (!RoomSystem.IsRoomLoaded(RoomID))
             {
                 return;
             }
-               
             
-            RoomSystem.OnRoomEntered(RoomID);
             OnRoomEnteredHandler?.Invoke();
             
-            if (RoomCamera != null)
+            // Probably should put this if and for loop in the RoomSystem itself.
+            if (RoomSystem.DynamicRoomLoading)
             {
-                // This sets the priority of the virtual cameras for the old and new rooms while setting the new RoomConfiners.
-                CameraController.SwitchPlayerCMCamera(RoomCamera);
-            }
-
-            foreach (var roomID in RoomIdsToLoadOnEnter)
-            {
-                RoomSystem.LoadConnectedRoom(roomID);
+                foreach (var roomID in RoomIdsToLoadOnEnter)
+                {
+                    RoomSystem.LoadRoom(roomID);
+                }
             }
 
             RoomSystem.SetCurrentRoom(RoomID);
@@ -78,7 +65,11 @@ namespace SF.RoomModule
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            MakeCurrentRoom();
+            if (other.TryGetComponent(out PlayerController controller) 
+                && controller.CollisionActivated)
+            {
+                MakeCurrentRoom();
+            }
         }
         
         private void OnTriggerExit2D(Collider2D other)
