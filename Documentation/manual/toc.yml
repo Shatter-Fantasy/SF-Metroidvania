@@ -1,2 +1,4 @@
 - name: Manual Home
   href: manual.md
+- name: Install Instructions
+  href: install.md
