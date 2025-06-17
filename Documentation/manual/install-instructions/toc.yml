@@ -1,4 +1,4 @@
-﻿- name: Install Instructions
+﻿- name: Install
   href: install.md
 - name: Package Dependencies
   href: package-dependencies.md
