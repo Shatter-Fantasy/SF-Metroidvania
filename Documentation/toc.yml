@@ -1,6 +1,4 @@
 - name: Scripting API
   href: api/
 - name: Manual
-  href: manual/
-- name: Install Instructions
-  href: manual/install-instructions/
+  href: manual/toc.yml

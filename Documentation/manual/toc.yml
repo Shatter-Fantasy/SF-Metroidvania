@@ -1,4 +1,4 @@
-- name: Install Instructions
-  href: install-instructions/
 - name: Manual Home
   href: manual.md
+- name: Install Instructions
+  href: install-instructions/toc.yml
