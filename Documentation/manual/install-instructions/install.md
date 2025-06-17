@@ -10,7 +10,7 @@ This package was built with the idea of using Unity's built in package manager t
 
 ### Step-by-step instructions
 1. Open up Unity's package manager editor window and click the button with a plus sign at the top left of the package manager window. It should have a small dropdown arrow icon by the button with a plus sign on it.
-![Unity GitHub Package.jpg](../resources/images/Unity%20GitHub%20Package.jpg)
+![Unity GitHub Package.jpg](../../resources/images/Unity%20GitHub%20Package.jpg)
 
 2. Choose install package from git url and paste in the following. Note the current Metroidvania package is being worked on in the alpha-one branch. I would advise following the optional steps below to grab it. https://github.com/Shatter-Fantasy/SF-Metroidvania.git
 
