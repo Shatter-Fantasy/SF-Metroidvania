@@ -42,6 +42,14 @@
           "*.md"
         ],
         "dest": "manual"
+      },
+      {
+        "src": "install-instructions",
+        "files": [
+          "toc.yml",
+          "*.md"
+        ],
+        "dest": "install-instructions"
       }
     ],
     "resource": [
