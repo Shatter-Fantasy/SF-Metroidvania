@@ -70,3 +70,10 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Documentation meta files that are not needed.
+/[Dd]ocumentation.meta
+/[Dd]ocumentation/**/*.meta
+
+# Jet Brain Rider files
+**/.[Ii]dea/**/*
