@@ -1,5 +1,4 @@
-items:
-  - name: Manual Home
-    href: manual.md
-  - name: Install Process
-    href: install-instructions/toc.yml
+- name: Manual Home
+  href: manual.md
+- name: Install Process
+  href: install-instructions/
