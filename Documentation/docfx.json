@@ -44,12 +44,12 @@
         "dest": "manual"
       },
       {
-        "src": "install-instructions",
+        "src": "manual/install-instructions",
         "files": [
           "toc.yml",
           "*.md"
         ],
-        "dest": "install-instructions"
+        "dest": "manual/install-instructions"
       }
     ],
     "resource": [
