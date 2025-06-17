@@ -1,5 +1,11 @@
 # SF-Metroidvania-Package
 
+
+> There is a work in progress dedicated documentation website being made. If you check the documentation and it gives a 404 error, that means a new build of it is being uploaded and deployed at the moment. It will be back up in less than two minutes.
+> I am spending this week to update and test stuff for the manual and api documentation deployment, so it will be updating multiple times a day.
+> After I am finished with the bulk of it I will move the stuff in the read me below to the actual documentation site to have all information in one spot.
+> https://shatter-fantasy.github.io/SF-Metroidvania/manual/install-instructions/install.html
+
 ## Install Instructions are located at the bottom of the read me in detail.
 
 ## Summary 
