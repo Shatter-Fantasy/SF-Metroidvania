@@ -57,17 +57,18 @@
     "resource": [
       {
         "files": [
-          "resources/**/*"
+          "resources/**/*",
+          "resources/images/*"
         ]
       }
     ],
     "template": [ "default", "templates/unity" ],
     "sitemap": {
       "baseUrl": "https://shatter-fantasy.github.io/SF-Metroidvania",
-      "changefreq": "weekly",
+      "changefreq": "daily",
       "fileOptions": {
         "api/*": {
-          "changefreq": "weekly"
+          "changefreq": "daily"
         }
       }
     },
