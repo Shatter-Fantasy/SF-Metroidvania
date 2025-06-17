@@ -2,6 +2,9 @@
 
 ## Unity Packages
 
+Inside the SF Metroidvania package there is an automatic system that installs the required packages if you don't have them already instlled.
+There are two scripts called SFHubPackageSystem and SFPackageData. They help install other SF packages that they rely on.
+
 ### Cinemachine 
 
 Version 3.1.4
