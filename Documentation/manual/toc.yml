@@ -1,4 +1,7 @@
 - name: Manual Home
   href: manual.md
-- name: Install Process
-  href: install-instructions/
+  items:
+    - name: Package Dependencies
+      href: install-instructions/package-dependencies.md
+    - name: Install Instructions
+      href: install-instructions/install.md
