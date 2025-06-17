@@ -38,6 +38,8 @@
       {
         "src": "manual",
         "files": [
+          "manual/**.md",
+          "manual/**.toc.yml",
           "toc.yml",
           "*.md"
         ],
