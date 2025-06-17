@@ -50,8 +50,7 @@
           "*.md"
         ],
         "dest": "manual/install-instructions"
-      },
-      { "files": "**/*.{md,yml}", "exclude": "**/include/**" }
+      }
     ],
     "resource": [
       {
