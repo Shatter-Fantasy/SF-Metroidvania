@@ -119,18 +119,19 @@ namespace SF.Managers
             /* Keep in mind the OnSceneLoaded callback that will call this function will be called after
                 awake has run on the gameobject in the scene already as it is loaded.
                 
-                Example: The RoomControllers that exist in the scene already if the rooms were not dynamically loaded
+                Example: The RoomControllers that exist in the scene already, if the rooms were not dynamically loaded,
                 will have already set their spawned instances and the linked room in the room database initialized.*/
             
             RoomSystem.SetInitialRoom(GameLoaderData.StartingRoomID);
             
+            /*
             // TODO: Create the proper spawn system for loading in game or any play spawn positioning.
             //  The if statement and stuff in it should be remove sooner or later
             if (_levelPlayData.SpawnedPlayerController != null && CameraController.ActiveRoomCamera != null)
             {
                 Vector2 startingPosition = CameraController.ActiveRoomCamera.transform.position;
                 _levelPlayData.SpawnedPlayerController.transform.position = new Vector3(startingPosition.x,startingPosition.y,0);
-            }
+            }*/
 
             OnNewGameReady();
         }
