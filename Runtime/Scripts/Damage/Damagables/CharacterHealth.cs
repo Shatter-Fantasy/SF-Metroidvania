@@ -35,7 +35,7 @@ namespace SF.SpawnModule
         {
             _controller = GetComponent<Controller2D>();
             _character2D = GetComponent<CharacterRenderer2D>();
-            _invicibilityTimer = new Timer(_invicibilityTimer.StartingTime,OnInvicibilityTimerCompleted);
+            _invicibilityTimer = new Timer(_invicibilityTimer.Duration,OnInvicibilityTimerCompleted);
         }
 
         protected override void Kill()

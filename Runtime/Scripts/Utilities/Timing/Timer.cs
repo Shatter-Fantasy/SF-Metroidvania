@@ -6,15 +6,15 @@ namespace SF
     [Serializable]
     public class Timer
     {
-        public float StartingTime = 3;
+        public float Duration = 3;
         public float RemainingTime;
-
+        public float ElapsedTimer = 0;
         /// <summary>
         /// An Action that is called at the end when the Timer hits 0.
         /// </summary>
         private Action _onTimerComplete;
 
-        private bool _timerStopped;
+        [NonSerialized] public bool TimerStopped;
         public Timer(Action onTimerComplete = null)
         {
             if (onTimerComplete == null)
@@ -22,15 +22,15 @@ namespace SF
 
             _onTimerComplete += onTimerComplete;
         }
-        public Timer(float startingTime, Action onTimerComplete = null) : this(onTimerComplete)
+        public Timer(float duration, Action onTimerComplete = null) : this(onTimerComplete)
         {
-            StartingTime = startingTime;
-            RemainingTime = startingTime;
+            Duration = duration;
+            RemainingTime = duration;
         }
         public void ResetTimer()
         {
-            _timerStopped = false;
-            RemainingTime = StartingTime;
+            TimerStopped = false;
+            RemainingTime = Duration;
         }
         /// <summary>
         /// Starts an async timer that when completed raises the 
@@ -48,7 +48,7 @@ namespace SF
 
         public void StopTimer()
         {
-            _timerStopped = true;
+            TimerStopped = true;
         }
 
         /// <summary>
@@ -59,15 +59,16 @@ namespace SF
         {
             while (RemainingTime > 0)
             {
-                if(_timerStopped)
+                if(TimerStopped)
                     break;
                 
                 await Awaitable.EndOfFrameAsync();
                 RemainingTime -= Time.deltaTime;
+                ElapsedTimer += Time.deltaTime;
             }
             RemainingTime = 0;
             
-            if(!_timerStopped)
+            if(!TimerStopped)
                 _onTimerComplete?.Invoke();
         }
     }
