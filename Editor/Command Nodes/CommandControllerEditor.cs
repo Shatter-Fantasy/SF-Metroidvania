@@ -1,13 +1,16 @@
 using UnityEditor;
-using SF.CommandModule;
 using UnityEngine.UIElements;
 
 using System.Collections.Generic;
 using System;
 using System.Linq;
+
 using UnityEditor.UIElements;
 
-namespace SF
+using SF.CommandModule;
+using UnityEngine;
+
+namespace SFEditor.CommandModule
 {
     [CustomEditor(typeof(CommandController))]
     public class CommandControllerEditor : Editor
@@ -15,7 +18,7 @@ namespace SF
         [NonSerialized] private List<Type> CommandTypes;
         [NonSerialized] private List<CommandNode> _commandNodes = new List<CommandNode>();
         [NonSerialized] private PopupField<CommandNode> _commandDropdownMenu;
-
+        
         private CommandController _commandController;
 
         public override VisualElement CreateInspectorGUI()
@@ -48,11 +51,27 @@ namespace SF
             {
                 _commandDropdownMenu.choices.Add(_commandNodes[i]);
             }
+            
+            _commandDropdownMenu.formatListItemCallback = FormatListItemLabel;
 
             _commandDropdownMenu.RegisterValueChangedCallback(evt =>
             {
                 _commandController.Commands.Add(evt.newValue);
             });
+        }
+
+        private string FormatListItemLabel<T>(T command) where T : CommandNode
+        {
+            if (Attribute.GetCustomAttribute (
+                    command.GetType(),
+                    typeof(CommandMenuAttribute)
+                ) is CommandMenuAttribute commandMenuAttr)
+            {
+                if (!string.IsNullOrEmpty(commandMenuAttr.FullPath))
+                    return commandMenuAttr.FullPath;
+            }
+            
+            return command.GetType().Name;
         }
     }
 }
