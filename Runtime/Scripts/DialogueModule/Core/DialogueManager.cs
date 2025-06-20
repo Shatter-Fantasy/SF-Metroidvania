@@ -28,7 +28,8 @@ namespace SF.DialogueModule
         /// The current conversation going on.
         /// </summary>
         [SerializeField] private DialogueConversation _dialogueConversation;
-        [SerializeField] private DialogueDatabase _dialogueDB;
+
+        [field: SerializeField] public DialogueDatabase DialogueDB { get; private set; }
         private DialogueEntry _currentEntry;
         public static DialogueConversation RecentConversation
         {
@@ -84,7 +85,7 @@ namespace SF.DialogueModule
             }
             
             // Just starting a new conversation.
-            if(_instance._dialogueDB.GetConversation(guid, out DialogueConversation conversation))
+            if(_instance.DialogueDB.GetConversation(guid, out DialogueConversation conversation))
             {
                 _instance._dialogueConversation = conversation;
                 RecentConversation.NextDialogueEntry(out _instance._currentEntry);
