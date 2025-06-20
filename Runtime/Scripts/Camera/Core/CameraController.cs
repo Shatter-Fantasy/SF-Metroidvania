@@ -46,6 +46,7 @@ namespace SF.CameraModule
 
         public Transform CameraTarget;
         public static CinemachineCamera ActiveRoomCamera;
+        public static CinemachineCamera ActiveCutsceneCamera;
 
         private void Awake()
         {
@@ -98,6 +99,36 @@ namespace SF.CameraModule
             // We don't add setting the ActiveRoomCamera.Follow in the null check above for when we need to do cutscenes and not have a follow target
             ActiveRoomCamera.Follow = Instance.CameraTarget;  
         }
+        
+        
+        public static void ActivateCutsceneCMCamera(CinemachineCamera cmCamera)
+        {
+            if(cmCamera == null)
+                return;
+
+            /* Not an error if this check is null: This is an expected result in some cases.
+                This can happen when loading the first room in an area,
+                 loading a game file into a save room, or when doing certain types of RoomTransitions from scene to scene.
+            */
+
+            // If the Virtual Camera has a CinemachinePositionComposer on it set it's distance to our set default.
+            if (cmCamera.TryGetComponent(out CinemachinePositionComposer positionComposer))
+                positionComposer.CameraDistance = CameraDistance;
+
+            if (ActiveCutsceneCamera != null)
+            {
+                // Reset the previous/old virtual camera priority.
+                // At this point Instance.ActiveCutsceneCamera is still the old camera.
+                // We also clear the old camera follow to prevent it from following the player while not the active camera.
+                ActiveCutsceneCamera.Follow = null;
+                ActiveCutsceneCamera.Priority = DeactivatedPriority;
+            }
+            
+            ActiveCutsceneCamera = cmCamera;             
+            // From here Instance.ActiveCutsceneCamera is the new camera.
+            ActiveCutsceneCamera.Priority = CutsceneCameraPriority;
+        }
+
         
         public static void ChangeCameraConfiner(CinemachineCamera cmCamera)
         {
