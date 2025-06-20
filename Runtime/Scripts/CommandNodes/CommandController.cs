@@ -2,13 +2,19 @@ using System.Collections.Generic;
 
 using SF.Characters;
 using SF.Characters.Controllers;
-
+using SF.Managers;
 using UnityEngine;
 
 namespace SF.CommandModule
 {
+    public enum CommandType
+    {
+        Cutscene,
+        Character
+    }
     public class CommandController : MonoBehaviour
     {
+        [SerializeField] private CommandType _commandType;
         [SerializeField] private bool DoStart = false;
         [SerializeReference] public List<CommandNode> Commands = new List<CommandNode>();
 
@@ -34,10 +40,16 @@ namespace SF.CommandModule
 
         public async void StartCommands()
         {
+            if (_commandType == CommandType.Cutscene)
+                GameManager.Instance.ControlState = GameControlState.Cutscenes;
+                
             for (int i = 0; i < Commands.Count; i++)
             {
-                await Commands[i].Use();
+                _ = Commands[i].Use();
             }
+            
+            //if (_commandType == CommandType.Cutscene)
+               // GameManager.Instance.ControlState = GameControlState.Player;
         }
     }
 }

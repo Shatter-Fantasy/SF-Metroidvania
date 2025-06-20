@@ -1,34 +1,29 @@
 using UnityEngine;
-using SF.CommandModule;
 
-namespace SF
+
+namespace SF.CommandModule
 {
     [System.Serializable]
+    [CommandMenu("Audio/Play Sound")]
     public class SFXCommand : CommandNode, ICommand
     {
-        public AudioClip SFXClip;
-        public float Volume;
-        public AudioSource SFXSource;
+        [SerializeField] private AudioClip _sfxClip;
+        [SerializeField] private float _volume = .5f;
+        [SerializeField] private AudioSource _sfxSource;
 
-
-        public async override Awaitable Use() 
+        protected override bool CanDoCommand()
         {
-            if (SFXClip == null)
-                return;
-
-            if(IsAsyncCommand)
-                await PlayAudioAsync();
-            else PlayAudio();
+            return _sfxClip != null && _sfxSource != null;
         }
 
-        private void PlayAudio()
+        protected override void DoCommand()
         {
-            SFXSource.PlayOneShot(SFXClip, Volume);
+            _sfxSource.PlayOneShot(_sfxClip, _volume);
         }
 
-        private async Awaitable PlayAudioAsync()
+        protected override async Awaitable DoAsyncCommand()
         {
-            SFXSource.PlayOneShot(SFXClip,Volume);
+            _sfxSource.PlayOneShot(_sfxClip,_volume);
             await Awaitable.MainThreadAsync();
         }
     }

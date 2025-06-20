@@ -3,7 +3,8 @@ using UnityEngine;
 namespace SF.CommandModule
 {
     [System.Serializable]
-    public class TransformCommand : CommandNode, ICommand
+    [CommandMenu("Transform/Move")]
+    public class TransformCommand : CommandNode
     {
         public Vector3 MovementAmount = new Vector3(5,5,0);
         public float Duration = 3;
@@ -12,18 +13,24 @@ namespace SF.CommandModule
         public Transform _transform;
         private Vector3 _startPosition;
         private Vector3 _endPosition;
+        
         public TransformCommand() { }
         public TransformCommand(Transform transform )
         {
             _transform = transform;
         }
 
-        public async override Awaitable Use()
+        protected override bool CanDoCommand()
         {
-            await StartMove();
+            return _transform != null;
         }
 
-        public async Awaitable StartMove()
+        protected override void DoCommand()
+        {
+            
+        }
+
+        protected override async Awaitable DoAsyncCommand()
         {
             DurationRemaining = Duration;
 
@@ -32,7 +39,8 @@ namespace SF.CommandModule
 
             await MoveLinear();
         }
-        public async Awaitable MoveLinear()
+        
+        private async Awaitable MoveLinear()
         {
             float percentCompleted = 0;
             float timeElapsed = 0;
@@ -48,7 +56,6 @@ namespace SF.CommandModule
                 
                 await Awaitable.EndOfFrameAsync();
             }
-          
         }
     }
 }

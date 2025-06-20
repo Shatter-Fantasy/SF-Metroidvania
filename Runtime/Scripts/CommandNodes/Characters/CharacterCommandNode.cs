@@ -10,9 +10,16 @@ namespace SF.CommandModule
         [HideInInspector] public Controller2D Controller2D;
         [HideInInspector] public CharacterRenderer2D Character2D;
 
-        public override Awaitable Use()
+        protected override bool CanDoCommand()
         {
-            throw new System.NotImplementedException();
+            return Controller2D != null && Character2D != null;
+        }
+
+        protected override void DoCommand() { }
+
+        protected override Awaitable DoAsyncCommand()
+        {
+            return null; 
         }
     }
 }
