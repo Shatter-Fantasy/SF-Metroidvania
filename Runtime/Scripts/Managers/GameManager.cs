@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using SF.Characters.Controllers;
 using SF.DataManagement;
 using SF.DialogueModule;
 using SF.Events;
@@ -52,11 +51,25 @@ namespace SF.Managers
                 }
             }
         }
-		public GamePlayState PlayState;
+		
+        [SerializeField] private GamePlayState _playState;
+        public GamePlayState PlayState
+        {
+            get { return _playState;}
+            set
+            {
+                if (_playState != value)
+                {
+                    _playState = value;
+                    OnGamePlayStateChanged?.Invoke(_playState);
+                }
+            }
+        }
         
         public static GameManager Instance;
 
         public Action<GameControlState> OnGameControlStateChanged;
+        public Action<GamePlayState> OnGamePlayStateChanged;
         
         private void Awake()
         {
