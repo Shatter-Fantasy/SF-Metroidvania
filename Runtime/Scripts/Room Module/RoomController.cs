@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SF.Characters.Controllers;
+using SF.Managers;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -65,6 +66,9 @@ namespace SF.RoomModule
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
+                return;
+            
             if (other.TryGetComponent(out PlayerController controller) 
                 && controller.CollisionActivated)
             {
