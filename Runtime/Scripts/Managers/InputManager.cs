@@ -22,7 +22,7 @@ namespace SF.InputModule
 			{
 				if(_instance == null)
 					_instance = FindAnyObjectByType<InputManager>();
-
+				
 				return _instance;
 			}
 		}
@@ -47,7 +47,7 @@ namespace SF.InputModule
 		private void Start()
 		{
 			if (GameManager.Instance != null)
-				GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
+				GameManager.Instance.OnGamePlayStateChanged += OnGamePlayStateChanged;
 		}
 		
 		private void OnGameMenuToggled(InputAction.CallbackContext ctx)
@@ -65,10 +65,10 @@ namespace SF.InputModule
 
         }
         
-        private void OnGameControlStateChanged(GameControlState controlState)
+        private void OnGamePlayStateChanged(GamePlayState playState)
         {
 	        // If we are exiting dialogue or a menu unfreeze the player.
-	        if (controlState == GameControlState.Player)
+	        if (playState == GamePlayState.Playing)
 	        {
 		        Controls.Player.Enable();
 		        Controls.UI.Disable();
