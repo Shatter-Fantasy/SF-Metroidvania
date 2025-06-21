@@ -15,20 +15,13 @@ namespace SF.Managers
 		Player,
 		SceneChanging,
 		Cutscenes,
-		CameraTransition,
-		TransformTransition, // Player being moved within a scene, but has no control over the player. Think teleporting.
-        Dialogue
+		Transition, // Player being moved within a scene, but has no control over the player. Think teleporting.
+        Dialogue,
+        Menu,
 	}
-
 	/// <summary>
 	/// The current play state of the game loop that describes what type of logic loop is being updated.
 	/// </summary>
-	public enum GamePlayState
-	{
-		Playing = 0,
-		Paused = 1,
-		MainMenu = 2,
-	}
 
     [DefaultExecutionOrder(-5)]
     public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>, EventListener<DialogueEvent>
@@ -51,26 +44,10 @@ namespace SF.Managers
                 }
             }
         }
-		
-        [SerializeField] private GamePlayState _playState;
-        public GamePlayState PlayState
-        {
-            get { return _playState;}
-            set
-            {
-                if (_playState != value)
-                {
-                    _playState = value;
-                    OnGamePlayStateChanged?.Invoke(_playState);
-                }
-            }
-        }
         
         public static GameManager Instance;
 
         public Action<GameControlState> OnGameControlStateChanged;
-        public Action<GamePlayState> OnGamePlayStateChanged;
-        
         private void Awake()
         {
             Application.targetFrameRate = _targetFrameRate;
@@ -92,7 +69,7 @@ namespace SF.Managers
 
         protected void OnPausedToggle()
         {
-            if(PlayState == GamePlayState.Playing)
+            if(_controlState == GameControlState.Player)
                 Pause();
             else // So we are already paused or in another menu.
                 Unpause();
@@ -100,13 +77,13 @@ namespace SF.Managers
 
         protected void Pause()
         {
-            PlayState = GamePlayState.MainMenu;
+            _controlState = GameControlState.Menu;
             GameMenuEvent.Trigger(GameMenuEventTypes.OpenGameMenu);
         }
 
         protected void Unpause()
         {
-            PlayState = GamePlayState.Playing;
+            _controlState = GameControlState.Player;
             GameMenuEvent.Trigger(GameMenuEventTypes.CloseGameMenu);
         }
 
