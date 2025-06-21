@@ -426,30 +426,25 @@ namespace SF.Characters.Controllers
             _listOfPoints.Clear();
             _boxCollider = (_boxCollider == null) ? GetComponent<BoxCollider2D>() : _boxCollider;
 
+            Bounds = _boxCollider.bounds;
             Vector2 startPosition;
             float stepPercent;
-            int numberOfRays = CollisionController.VerticalRayAmount;
-            Vector2 origin = Bounds.BottomLeft();
-            Vector2 end = Bounds.BottomRight();
-
-            numberOfRays = CollisionController.HoriztonalRayAmount;
-            origin = Bounds.TopRight();
-            end = Bounds.BottomRight();
+            int numberOfRays = CollisionController.HoriztonalRayAmount;
 
             for(int x = 0; x < numberOfRays; x++) // Right
             {
                 stepPercent = (float)x / (float)(numberOfRays - 1);
-                startPosition = Vector2.Lerp(origin, end, stepPercent);
+                startPosition = Vector2.Lerp(Bounds.BottomRight(), Bounds.TopRight(), stepPercent);
                 _listOfPoints.Add(startPosition);
                 _listOfPoints.Add(startPosition + new Vector2(CollisionController.HoriztonalRayDistance, 0));
             }
 
             for(int x = 0; x < numberOfRays; x++) // Left
             {
-                stepPercent = (float)x / (float)(numberOfRays - 1);
-                startPosition = Vector2.Lerp(Bounds.BottomLeft(), Bounds.TopLeft(), stepPercent);
-                _listOfPoints.Add(startPosition);
-                _listOfPoints.Add(startPosition - new Vector2(CollisionController.HoriztonalRayDistance, 0));
+	            stepPercent = (float)x / (float)(numberOfRays - 1);
+	            startPosition = Vector2.Lerp(Bounds.BottomLeft(), Bounds.TopLeft(), stepPercent);
+	            _listOfPoints.Add(startPosition);
+	            _listOfPoints.Add(startPosition - new Vector2(CollisionController.HoriztonalRayDistance, 0));
             }
 
             ReadOnlySpan<Vector3> pointsAsSpan = CollectionsMarshal.AsSpan(_listOfPoints);
