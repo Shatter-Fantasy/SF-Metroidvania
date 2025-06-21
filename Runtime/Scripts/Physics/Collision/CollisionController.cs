@@ -20,9 +20,7 @@ namespace SF.Physics
 		[Header("Ray Amount")]
 		public int HoriztonalRayAmount;
 		public int VerticalRayAmount;
-
-		[field: Header("Ray Offsets")]
-        [field: SerializeField] public float RayOffset { get; private set; }
+		
 
         [HideInInspector] public RaycastHit2D[] RaycastHit2Ds;
 
@@ -33,7 +31,6 @@ namespace SF.Physics
 							 float horiztonalOffset = 0.01f,
 							 float skinWidth = 0.02f)
 		{
-			RayOffset = horiztonalOffset;
 			HoriztonalRayDistance = horiztonalRayDistance;
 			VerticalRayDistance = verticalRayDistance;
 			HoriztonalRayAmount = horiztonalRayAmount;
@@ -42,22 +39,6 @@ namespace SF.Physics
 			RaycastHit2Ds = new RaycastHit2D[4];
 
 			CollisionActivated = true;
-		}
-
-
-		/// <summary>
-		/// NOT IMPLEMENTED YET.
-		/// Check the <see cref="AIModule.AICrushAction"/> for the bitwise operator method I would like to implement here.
-		/// 
-		/// Checks if anything in the collision controllers RayCastHit2D array matches the layer mask. 
-		/// This allows reusing the already cached raycast hits for better performance.
-		/// </summary>
-		/// <param name="layerMask"></param>
-		/// <returns></returns>
-		public bool DidHitObjectInLayerMask(LayerMask layerMask)
-		{
-			Debug.Log("The DidHitObjectInLayerMask in CollisionController is not implemented yet and currently always returns true.");
-			return true;
 		}
 	}
 }

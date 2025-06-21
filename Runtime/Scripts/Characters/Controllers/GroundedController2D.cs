@@ -174,16 +174,21 @@ namespace SF.Characters.Controllers
 		protected override void SideCollisionChecks()
 		{
 			//TODO: Clean the below up and fuse the IsColliding value setting with the variable hit2D checks.
-
-            // Right Side
-            CollisionInfo.RightHit = Physics2D.BoxCast(Bounds.MiddleRight(), new Vector2(.02f,Bounds.size.y - CollisionController.RayOffset), 0, Vector2.right, CollisionController.HoriztonalRayDistance, PlatformFilter.layerMask);
+			
+			// Right Side
+			CollisionInfo.RightHit = Physics2D.BoxCast(Bounds.MiddleRight() + new Vector2(CollisionController.SkinWidth, 0),
+				new Vector2(CollisionController.SkinWidth, Bounds.size.y - CollisionController.SkinWidth), 0, Vector2.right,
+				CollisionController.HoriztonalRayDistance, PlatformFilter.layerMask);
 
 			CollisionInfo.IsCollidingRight = CollisionInfo.RightHit;
 
-            // Left Side
-            CollisionInfo.LeftHit = Physics2D.BoxCast(Bounds.MiddleLeft(), new Vector2(.02f, Bounds.size.y - CollisionController.RayOffset), 0, Vector2.left, CollisionController.HoriztonalRayDistance, PlatformFilter.layerMask);
+			
+			// Left Side
+			CollisionInfo.LeftHit = Physics2D.BoxCast(Bounds.MiddleLeft() - new Vector2(CollisionController.SkinWidth, 0),
+				new Vector2(CollisionController.SkinWidth, Bounds.size.y - CollisionController.SkinWidth), 0, Vector2.left,
+				CollisionController.HoriztonalRayDistance, PlatformFilter.layerMask);
 
-            CollisionInfo.IsCollidingLeft = CollisionInfo.LeftHit;
+			CollisionInfo.IsCollidingLeft = CollisionInfo.LeftHit;
 		}
 
 		protected virtual void ClimbableSurfaceChecks()
@@ -283,42 +288,6 @@ namespace SF.Characters.Controllers
 			
 			base.Move();
         }
-		
-		/// <summary>
-		/// If the transform translate puts us through a collider do to an off update frame for movement than correct the transform to prevent overlapping.
-		/// </summary>
-		protected override void CorrectCollisionClipping()
-		{
-			/* If for some reason this frame we are colliding on all four side we shouldn't try to correct our position.
-			 * If we try to correct our position in this state we could just be corrected from one direction making us clip into another direction.
-			 * Example case this happens. Imagine you have a crushing enemy like Mario's Thwomp meant to hurt, but not kill the player.
-			 * The thwomp would be pushing you into the floor and the correction formula would place you back upward.
-			 * Same thing for side collisions.
-			 */
-			if(CollisionInfo.CeilingHit && CollisionInfo.BelowHit
-			                            && CollisionInfo.LeftHit && CollisionInfo.RightHit)
-				return;
-            
-			// Adjust the position of the Character if we do have a clip inside a wall.
-			// Do this for each hit we have in our CollisionInfo struct.
-			foreach(RaycastHit2D hit in CollisionInfo.CollisionHits)
-			{
-				ColliderDistance2D colliderDistance = _boxCollider.Distance(hit.collider);
-
-				if(colliderDistance is { isOverlapped: true, distance: < 0 })
-					// This means we are inside something.
-				{
-					Vector2 adjustedPosition = 
-						colliderDistance.distance * colliderDistance.normal;
-					
-					
-					if (IsGrounded && _onSlope && Vector2.Angle(colliderDistance.normal, Vector2.down) > _slopeLowerLimit)
-						adjustedPosition.x = 0;
-					
-					transform.position += (Vector3)adjustedPosition;
-				}
-			}
-		}
 		
 		/// <summary>
 		/// Calculates the current movement state that the player is currently in.
@@ -431,14 +400,6 @@ namespace SF.Characters.Controllers
             float stepPercent;
             int numberOfRays = CollisionController.HoriztonalRayAmount;
 
-            for(int x = 0; x < numberOfRays; x++) // Right
-            {
-                stepPercent = (float)x / (float)(numberOfRays - 1);
-                startPosition = Vector2.Lerp(Bounds.BottomRight(), Bounds.TopRight(), stepPercent);
-                _listOfPoints.Add(startPosition);
-                _listOfPoints.Add(startPosition + new Vector2(CollisionController.HoriztonalRayDistance, 0));
-            }
-
             for(int x = 0; x < numberOfRays; x++) // Left
             {
 	            stepPercent = (float)x / (float)(numberOfRays - 1);
@@ -450,6 +411,8 @@ namespace SF.Characters.Controllers
             ReadOnlySpan<Vector3> pointsAsSpan = CollectionsMarshal.AsSpan(_listOfPoints);
             Gizmos.DrawLineList(pointsAsSpan);
 
+            Gizmos.color = Color.coral;
+            Gizmos.DrawWireCube(Bounds.MiddleRight(),new Vector2(CollisionController.SkinWidth,Bounds.size.y - CollisionController.SkinWidth));
             if(CollisionInfo.ClimbableSurfaceHit)
                 Gizmos.DrawWireSphere(CollisionInfo.ClimbableSurfaceHit.point, .25f);
 
