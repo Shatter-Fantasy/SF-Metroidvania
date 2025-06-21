@@ -40,8 +40,16 @@ namespace SF.UIModule
         private void OnPickUpItem(int itemID)
         {
             var itemDTO = _itemDatabase[itemID];
+            if (itemDTO == null)
+            {
+                #if UNITY_EDITOR
+                Debug.Log($"There was no Item with the id: {itemID} inside of the item database.");
+                #endif
+                return;
+            }
+
             PickedUpTime = itemDTO;
-            _itemPickUpLabel.text = itemDTO.Name;
+            _itemPickUpLabel.text = itemDTO?.Name;
             _overlayContainer.style.visibility = Visibility.Visible;
 
             _ = _popTimer.StartTimerAsync();
