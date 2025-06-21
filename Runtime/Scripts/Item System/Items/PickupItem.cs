@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SF.ItemModule
 {
-    public class PickupItem : MonoBehaviour, IInteractable
+    public class PickupItem : MonoBehaviour, IInteractable<PlayerController>
     {
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
         public ItemData Item;
