@@ -2,23 +2,23 @@
 <ui:UXML
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ui="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements"
     xmlns:sfeditor="SFEditor.Characters.Data"
     noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
 >
-  <ui:Template src="../../Common/Data Section/GeneralDataEntrySection.uxml" name="GeneralDataEntrySection"/>
+  <ui:Template src="../../Common/Data Sections/DTOGeneralInfo.uxml" name="DTOGeneral"/>
+  <ui:Template src="../../Character Editor/Character Data Sections/CharacterGeneralInfo.uxml" name="CharacterGeneral"/>
+  <ui:Template src="../../Stats Editor/StatsList.uxml" name="StatsList"/>
+  <ui:Template src="../../Loot Editor/LootTableDrops.uxml" name="LootTableDrops"/>
+  <ui:Template src="../../Stats Editor/ExperienceList.uxml" name="ExperienceList"/>
   
-  <ui:TwoPaneSplitView class="unity-two-pane-split-view">
+  <ui:TwoPaneSplitView class="unity-two-pane-split-view" data-source-type="SF.Characters.Data.CharacterDTO, SF.MetroidvaniaToolkit">
     <sfeditor:CharacterListView/>
     <ui:VisualElement>
-      <ui:Instance template="GeneralDataEntrySection">
-        <editor:ObjectField type="UnityEngine.GameObject, UnityEngine.CoreModule" 
-                            binding-path="Prefab"
-                            label="Character Prefab" 
-                            allow-scene-objects="false"
-        />
-      </ui:Instance>
-      
+      <ui:Instance template="DTOGeneral" name="dto-general__section"/>
+      <ui:Instance template="CharacterGeneral" name="character-general__section"/>
+      <ui:Instance template="StatsList" name="stats-list__section"/>
+      <ui:Instance template="ExperienceList" name="expierence__section"/>
+      <ui:Instance template="LootTableDrops" name="loot-table-drops__section"/>
     </ui:VisualElement>
   </ui:TwoPaneSplitView>
 </ui:UXML>
