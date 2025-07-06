@@ -37,7 +37,6 @@ namespace SFEditor
         private ItemView _itemView;
 
         private Tab _characterTab;
-        private CharacterEditorView _characterEditorView;
 
         public void CreateGUI()
         {
@@ -53,28 +52,6 @@ namespace SFEditor
             _characterTab = new Tab();
             _characterTab.label = "Character Tab";
             rootTab.Add(_characterTab);
-
-            _characterEditorView = new(_characterDatabase);
-            _characterTab.Add(_characterEditorView);
-           
-
-            /*
-            if(_itemDatabase == null || _itemDatabase.Items.Count < 1)
-                return;
-
-            _itemListView = new(_itemDatabase);
-            _itemListView.selectionChanged += OnSelectionChanged;
-
-            _itemPaneView = new TwoPaneSplitView();
-            _itemPaneView.Add(_itemListView);
-
-            _itemPaneView
-                .AddChild(_dataViewContainer
-                    .AddChild(new ItemDataToolbar(_itemDatabase))
-                    .AddChild(new DataToolbar())
-                    .AddChild(CreateItemView(_itemDatabase.Items[0]))
-                );
-                */
 
             _itemTab.Add(_itemPaneView);
             _root.Add(rootTab);
