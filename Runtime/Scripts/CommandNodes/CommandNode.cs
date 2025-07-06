@@ -17,7 +17,7 @@ namespace SF.CommandModule
         {
             if (!CanDoCommand())
                 return;
-
+            
             if (_delayTimer.Duration > 0)
             {
                 _delayTimer = new Timer(_delayTimer.Duration, DelayCommand);

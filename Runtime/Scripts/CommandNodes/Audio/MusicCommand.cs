@@ -17,7 +17,6 @@ namespace SF.CommandModule
         {
             return _musicTrack != null && _sfxSource != null;
         }
-
         protected override void DoCommand()
         {
             _sfxSource.clip = _musicTrack;

@@ -16,7 +16,6 @@ namespace SF.SpawnModule
         [SerializeField] protected bool _activeInvicibility;
         
         [Header("Animation Setting")]
-
         [Tooltip("If you want to force an animation state when this object is damaged than set this string to the name of the animation state.")]
         public const string HitAnimationName = "Damaged";
         public readonly int HitAnimationHash = Animator.StringToHash(HitAnimationName);
