@@ -32,6 +32,10 @@ namespace SFEditor.Data
         private CharacterListView _characterListView;
         private SFItemListView _itemListView;
         
+        
+        private CharacterTab _characterEditorView;
+
+        private DataView _selectedView;
         [MenuItem("SF/Data Editor")]
         public static void OpenDataEditor()
         {
@@ -62,6 +66,9 @@ namespace SFEditor.Data
                 _characterListView = _rootDataElement.Q<CharacterListView>();
                 _characterListView.InitDataListView(_characterDatabase);
                 _characterListView.selectionChanged += OnSelectionChanged;
+
+                _characterEditorView = _rootDataElement.Q<CharacterTab>();
+                _characterEditorView = new CharacterTab(_characterDatabase, _rootDataElement);
             }
 
             if (_itemDatabase != null)

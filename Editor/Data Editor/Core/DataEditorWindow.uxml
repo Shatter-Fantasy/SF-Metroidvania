@@ -39,6 +39,9 @@
 				</ui:TwoPaneSplitView>
 			</ui:VisualElement>
 		</ui:Tab>
+		<ui:Tab label="Characters DTO Test">
+			<sfeditor:CharacterTab/>
+		</ui:Tab>
 	</ui:TabView>
 
 </ui:UXML>

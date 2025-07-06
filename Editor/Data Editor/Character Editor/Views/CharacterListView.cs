@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace SFEditor.Characters.Data
 {
     [UxmlElement]
-    public partial class CharacterListView : DataListView<CharacterDatabase, CharacterDTO>, INotifyValueChanged<CharacterDatabase>
+    public partial class CharacterListView : DataListView<CharacterDatabase, CharacterDTO>
     {
         protected override string _dataFilePath => "Assets/Data/Character/";
 

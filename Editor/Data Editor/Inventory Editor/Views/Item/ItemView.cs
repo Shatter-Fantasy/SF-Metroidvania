@@ -15,9 +15,9 @@ namespace SFEditor.Inventory.Data
         /// </summary>
         protected SFItemListView _itemListView;
 
-        private VisualElement _generalDataSection = new();
+        protected VisualElement _generalDataSection = new();
 
-        private const string GeneralDataSectionUXMLPath =
+        protected const string GeneralDataSectionUXMLPath =
             "Packages/shatter-fantasy.sf-metroidvania/Editor/Data Editor/Common/Data Sections/GeneralDataEntrySection.uxml";
 
         // Blank constructor is for the UxmlElement attribute and is needed to appear inside of the UI Builders asset library.
