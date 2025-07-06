@@ -15,7 +15,7 @@ namespace SF
         private void OnEnable()
         {
             InputManager.Controls.Player.Enable();
-            InputManager.Controls.Player.PowerUp.performed += OnPowerUp;
+            //InputManager.Controls.Player.PowerUp.performed += OnPowerUp;
         }   
 
         private void OnPowerUp(InputAction.CallbackContext context)
