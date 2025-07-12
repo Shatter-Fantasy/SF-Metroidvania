@@ -1,8 +1,8 @@
 using System;
-using SF.CameraModule;
 using SF.DataManagement;
 using SF.RoomModule;
 using SF.DialogueModule;
+using SF.Inventory;
 using SF.LevelModule;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -31,7 +31,8 @@ namespace SF.Managers
         /// This data object that keeps track of references needed to be loaded in playable levels before anything else.
         /// </summary>
         [SerializeField] private LevelPlayData _levelPlayData;
-        
+
+        public ItemDatabase ItemDatabase;
         private void Awake()
         {
             // The GameLoader will take care of all child gameobjects initialization.

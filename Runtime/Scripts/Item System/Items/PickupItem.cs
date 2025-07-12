@@ -11,6 +11,7 @@ namespace SF.ItemModule
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
         public ItemData Item;
 
+        
         public void Interact()
         {
             
@@ -29,8 +30,8 @@ namespace SF.ItemModule
         }
 
         private void PickUpItem(PlayerInventory playerInventory)
-        {          
-            playerInventory.Items.Add(Item);
+        {         
+            playerInventory.AddItem(Item.ID);
             ItemEvent.Trigger(ItemEventTypes.PickUp, itemID: Item.ID);
             Destroy(gameObject);
         }
