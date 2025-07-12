@@ -24,6 +24,7 @@ namespace SF.DataModule
     /// </summary>
     public class DTOAssetBase : ScriptableObject
     {
+        // TODO: Replace the below with either ItemData or Item
         public int ID = 0;
         public int GUID;
         public string Name;

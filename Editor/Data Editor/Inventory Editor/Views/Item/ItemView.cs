@@ -39,15 +39,6 @@ namespace SFEditor.Inventory.Data
             SFUIElementsFactory.InitializeSFStyles(this);
 
             Add(_generalDataSection);
-
-            /*
-            if(_itemDTO != null)
-            {
-                _priceView = new ItemPriceView(_itemDTO.PriceData);
-                Add(_priceView);
-                SerializedObject priceObj = new SerializedObject(_itemDTO);
-                _priceView.Bind(priceObj);
-            }*/
         }
     }
 }

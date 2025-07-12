@@ -17,7 +17,6 @@ namespace SF.Inventory
     {
         public Sprite ItemIcon;
         public GameObject Prefab;
-        public ItemGeneralDTO GeneralInformation = new();
         public ItemSubType ItemSubType;
         public ItemPriceDTO PriceData;
     }
