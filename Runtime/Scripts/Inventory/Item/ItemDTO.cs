@@ -1,17 +1,12 @@
 using UnityEngine;
 using SF.DataModule;
+using SF.ItemModule;
 
 namespace SF.Inventory
 {
-    public enum ItemSubType
-    {
-        Consumable,
-        Key,
-        Equipment,
-        None // This is used for when filtering items in different places.
-    }
-
-
+    /// <summary>
+    /// The scriptable object data asset that makes keeps track of an item inside the item databases.
+    /// </summary>
     [CreateAssetMenu(fileName = "New Item", menuName = "SF/Inventory/ItemData")]
     public class ItemDTO : DTOAssetBase
     {

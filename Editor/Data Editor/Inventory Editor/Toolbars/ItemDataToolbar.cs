@@ -1,4 +1,5 @@
 using SF.Inventory;
+using SF.ItemModule;
 
 using UnityEditor.UIElements;
 

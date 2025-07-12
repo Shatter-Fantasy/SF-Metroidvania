@@ -16,12 +16,15 @@ namespace SF.ItemModule
         public string Name = "New Item";
         public string Description = "New Description";
 
+        public ItemSubType ItemSubType;
+        
         public static implicit operator ItemData(ItemDTO itemAsset) 
         {
             ItemData itemData = new ItemData();
             itemData.ID = itemAsset.ID;
             itemData.Name = itemAsset.Name;
             itemData.Description = itemAsset.Description;
+            itemData.ItemSubType = itemAsset.ItemSubType;
             return itemData;
         }
     }
