@@ -11,8 +11,7 @@ namespace SF.Inventory
         [SerializeReference] public List<EquipmentDTO> Equipment = new();
 
         public Action OnItemsFiltered;
-
-
+        
         public void AddItem<TItemDTOType>(TItemDTOType itemDTO) where TItemDTOType : ItemDTO
         {
             if(itemDTO == null)
