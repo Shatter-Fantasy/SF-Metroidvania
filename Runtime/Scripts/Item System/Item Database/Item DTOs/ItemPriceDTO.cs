@@ -3,7 +3,7 @@ using SF.DataModule;
 namespace SF.Inventory
 {
     [System.Serializable]
-    public class ItemPriceDTO : DTOBase
+    public class ItemPriceDTO
     {
         public bool CanBuy;
         public bool CanSell;
