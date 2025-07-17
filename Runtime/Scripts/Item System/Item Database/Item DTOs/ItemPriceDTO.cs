@@ -1,5 +1,3 @@
-using SF.DataModule;
-
 namespace SF.Inventory
 {
     [System.Serializable]
@@ -11,8 +9,7 @@ namespace SF.Inventory
         public int SellPrice = 5;
 
         public ItemPriceDTO() { }
-
-
+        
         public ItemPriceDTO(bool canBuy = false, bool canSell = false, int buyPrice = 0, int sellPrice = 0)
         {
             CanBuy = canBuy;

@@ -28,7 +28,7 @@ namespace SF.ItemModule
 
         public virtual void Use() { }
         
-        /* TODO: Implement ovverride for GetHashCode and Equal(Object)
+        /* TODO: Implement override for GetHashCode and Equal(Object)
         public static bool operator ==(ItemData item1, ItemData item2)
         {
             if (item1 is null || item2 is null)

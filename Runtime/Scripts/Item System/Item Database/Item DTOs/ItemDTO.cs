@@ -14,5 +14,10 @@ namespace SF.Inventory
         public GameObject Prefab;
         public ItemSubType ItemSubType;
         public ItemPriceDTO PriceData;
+
+        public ItemDTO(string name = "New Item", string description = "I am a new Item")
+        {
+            Name = name;
+        }
     }
 }

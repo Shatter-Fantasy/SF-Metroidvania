@@ -11,7 +11,7 @@ namespace SF.InventoryModule
     {
         public List<ItemData> Items = new List<ItemData>();
 
-        public void AddItem(int itemID)
+        public virtual void AddItem(int itemID)
         {
             var item = GameLoader.Instance?.ItemDatabase[itemID];
             

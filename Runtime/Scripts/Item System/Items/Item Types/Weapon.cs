@@ -1,3 +1,6 @@
+using SF.Inventory;
+using UnityEngine;
+
 namespace SF.ItemModule
 {
 	[System.Serializable]
@@ -17,6 +20,14 @@ namespace SF.ItemModule
 		public override void Use()
 		{
 			
+		}
+		        
+		public static implicit operator Weapon(EquipmentDTO equipmentAsset)
+		{
+			// Deep copy the weapon to prevent any reference types from being edited in the future.
+			Weapon weapon = (Weapon)equipmentAsset.WeaponData.MemberwiseClone();
+			// Might have to deep copy ItemPriceDTO as well.
+			return weapon;
 		}
 	}
 }

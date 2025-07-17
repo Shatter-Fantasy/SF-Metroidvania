@@ -8,7 +8,13 @@ namespace SF.Inventory
     [CreateAssetMenu(fileName = "Item Database", menuName = "SF/Data/Item Database")]
     public class ItemDatabase : SFDatabase<ItemDTO>
     {
+        public readonly Dictionary<EquipmentType, List<EquipmentDTO>> EquipmentDictionary = new();
+        
+        /* Filtered Item Lists */
+        
         [SerializeReference] public List<EquipmentDTO> Equipment = new();
+        [SerializeReference] public List<EquipmentDTO> Weapons = new();
+        [SerializeReference] public List<EquipmentDTO> Armor = new();
 
         public Action OnItemsFiltered;
         
@@ -41,10 +47,28 @@ namespace SF.Inventory
                     break;
             }
         }
+
+        public ItemDTO GetEquipment(int id, EquipmentType equipmentType)
+        {
+            switch (equipmentType)
+            {
+                case EquipmentType.Weapon:
+                    return DataEntries[id];
+                    //return EquipmentDictionary[equipmentType].First(equipmentDTO => equipmentDTO.ID == id);
+                default: return null;
+            }
+        }
         
         public new ItemDTO this[int index]
         {
-            get { return DataEntries.Find(dto => dto.ID == index); }
+            get
+            {
+                var item =  DataEntries.Find(dto => dto.ID == index);
+                if (item is EquipmentDTO equipment)
+                    return equipment;
+
+                return item;
+            }
         }
     }
 }
