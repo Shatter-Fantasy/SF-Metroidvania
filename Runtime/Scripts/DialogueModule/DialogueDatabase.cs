@@ -109,7 +109,13 @@ namespace SF.DialogueModule
         /// This finishes running before the next DialogueEntries StartAction is invoked.
         /// </summary>
         public Action EndAction;
-        
+
+        public DialogueEntry() { }
+
+        public DialogueEntry(string text)
+        {
+            Text = text;
+        }
         // Used for comparisons to see if a DialogueEntry is null.
         public static readonly DialogueEntry EmptyEntry = new()
         {
