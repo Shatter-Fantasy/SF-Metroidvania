@@ -17,10 +17,7 @@ namespace SF.UIModule
         private Label _itemPickUpLabel;
         
         [SerializeField] private Timer _popTimer;
-        /// <summary>
-        /// This is a dev set max timer that will make sure user set timer values are not too high.
-        /// </summary>
-        [SerializeField] private float _maxTimer = 5;
+        
         private void Awake()
         {
             _popTimer = new Timer(OnPopUpTimerCompleted);
@@ -32,8 +29,7 @@ namespace SF.UIModule
                 return;
             _overlayUXML.rootVisualElement.pickingMode = PickingMode.Ignore;
             
-            
-            _overlayContainer = _overlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay__view");
+            _overlayContainer = _overlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-item__container");
             _itemPickUpLabel = _overlayUXML.rootVisualElement.Q<Label>(name: "overlay-item__label");
         }
         
