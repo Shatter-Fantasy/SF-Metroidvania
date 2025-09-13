@@ -34,6 +34,11 @@ namespace SF.RoomModule
         {
             // This is the ignore ray cast physics layer.
             gameObject.layer = 2;
+            if (RoomSystem.RoomDB[RoomID] == null)
+            {
+                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
+                return;
+            }
             RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
             
             RoomSystem.LoadRoomManually(RoomID, gameObject);
