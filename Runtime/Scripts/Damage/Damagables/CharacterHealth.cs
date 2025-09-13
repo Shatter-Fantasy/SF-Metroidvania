@@ -71,13 +71,14 @@ namespace SF.SpawnModule
             if(_character2D != null && !string.IsNullOrEmpty(HitAnimationName))
                 _character2D.SetAnimationState(HitAnimationName, HitAnimationDuration);
 
+            base.TakeDamage(damage);
             _ = DamageBlink.Use();
             
             _controller?.SetDirectionalForce(knockback);
             
             _activeInvicibility = true;
             _ = _invicibilityTimer.StartTimerAsync();
-            base.TakeDamage(damage);
+
         }
 
         protected void OnInvicibilityTimerCompleted()
