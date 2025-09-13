@@ -9,6 +9,7 @@ namespace SF.ItemModule
     public class PickupItem : MonoBehaviour, IInteractable<PlayerController>
     {
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
+        
         public ItemData Item;
 
         
@@ -22,7 +23,7 @@ namespace SF.ItemModule
             if(controller == null || Item == null)
                 return;
            
-            // Make sure we added a instantiated inventory to the player first.
+            // Make sure we added an instantiated inventory to the player first.
             if(controller.TryGetComponent(out PlayerInventory playerInventory))
             {
                 PickUpItem(playerInventory);

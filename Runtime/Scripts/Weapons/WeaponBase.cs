@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using SF.Characters;
@@ -22,12 +23,12 @@ namespace SF.Weapons
         [SerializeField] protected Timer _attackTimer;
         
         public bool OnCooldown { get; protected set;}
+        
         public System.Action UseCompleted;
         
         public virtual void Initialize(Controller2D controller2D = null)
         {
             _controller2D = controller2D;
-            
             
             if(_controller2D != null)
                 _controller2D.OnDirectionChanged += OnDirectionChange;

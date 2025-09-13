@@ -1,6 +1,4 @@
-using SF.Characters.Controllers;
 using SF.LevelModule;
-using SF.Managers;
 using SF.Pathfinding;
 using SF.StateMachine.Decisions;
 using UnityEngine;

@@ -60,7 +60,7 @@ namespace SF.Managers
             else
                 Destroy(gameObject); // We want to destroy the child object managers so they are not doubles as well.
         }
-        
+
         protected void OnExitGame()
         {
             // Will need to do checks later for preventing shutdowns during saving and loading.
