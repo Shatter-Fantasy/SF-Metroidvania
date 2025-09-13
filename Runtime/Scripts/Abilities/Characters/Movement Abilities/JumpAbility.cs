@@ -59,7 +59,9 @@ namespace SF.AbilityModule.Characters
 
 			_controller2d.IsJumping = true;
             _controller2d.IsFalling = false;
-            _controller2d.IsClimbing = false;
+            
+            if(_controller2d.IsClimbing)
+                _controller2d.IsClimbing = false;
 
             if(_jumpSFX != null)
                 AudioManager.Instance.PlayOneShot(_jumpSFX);
