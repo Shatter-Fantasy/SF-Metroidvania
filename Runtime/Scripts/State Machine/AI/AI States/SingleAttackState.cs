@@ -1,6 +1,5 @@
 using SF.Characters.Controllers;
 using SF.StateMachine.Core;
-using SF.StateMachine.Decisions;
 using SF.Weapons;
 using UnityEngine;
 
@@ -22,7 +21,7 @@ namespace SF.StateMachine
                 _weapon.UseCompleted += OnUseCompleted;
         }
 
-        protected override void OnUpdateState()
+        protected override void OnStateEnter()
         {
             if (_weapon == null)
                 return;
