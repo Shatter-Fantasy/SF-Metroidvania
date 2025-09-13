@@ -15,14 +15,13 @@
                         <ui:Instance template="DTOGeneral" name="dto-general__section" />
                         <ui:Instance template="CharacterGeneral" name="character-general__section" />
                         <ui:Instance template="StatsList" name="stats-list__section" />
-                        <ui:Instance template="ExperienceList" name="expierence__section" />
+                        <ui:Instance template="ExperienceList" name="experience__section" />
                         <ui:Instance template="LootTableDrops" name="loot-table-drops__section" />
                     </ui:VisualElement>
                 </ui:TwoPaneSplitView>
             </ui:VisualElement>
         </ui:Tab>
         <ui:Tab name="item__view-root" label="Items">
-            <ui:IntegerField binding-path="TestNum"/>
             <ui:VisualElement data-source-type="SF.Inventory.ItemDTO, SF.MetroidvaniaToolkit">
                 <ui:TwoPaneSplitView class="unity-two-pane-split-view">
                     <sfitem:SFItemListView />

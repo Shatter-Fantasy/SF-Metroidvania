@@ -1,4 +1,3 @@
-using System;
 using SF.Characters.Data;
 using SF.RoomModule;
 using SF.StatModule;

@@ -37,7 +37,7 @@ namespace SFEditor.Data
 
         public ItemDataToolbar(ItemDatabase itemDatabase)
         {
-            EnumField _itemSubFilterField = new(ItemSubType.None) { label = "Item Sub Type Filter" };
+            EnumField _itemSubFilterField = new(ItemSubType.Consumable) { label = "Item Sub Type Filter" };
             _itemSubFilterField.RegisterValueChangedCallback(evt =>
             {
                 ItemSubTypeFilter = (ItemSubType)evt.newValue;

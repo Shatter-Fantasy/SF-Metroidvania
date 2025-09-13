@@ -2,8 +2,6 @@ using UnityEngine;
 
 namespace SF.DataModule
 {
-
-
     /// <summary>
     /// This is an empty wrapper class for DTO based classes.
     /// 

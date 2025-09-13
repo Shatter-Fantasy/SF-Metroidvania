@@ -217,7 +217,6 @@ namespace SF.Characters.Controllers
                 }
             }
 
-
             /*
             if(CollisionInfo.CollisionHits != null 
                 && CollisionInfo.CollisionHits.Count > 0)
@@ -522,7 +521,7 @@ namespace SF.Characters.Controllers
         /// Corects the posiution if the character clips or goes through an object due to moving to fast during a frame.
         /// </summary>
         [Obsolete("In the move position we now have a small test that uses Unity ColliderDistance2D struct. It works a lot better and is simplier to work with.")]
-        protected virtual void PositionCorection()
+        protected virtual void PositionCorrection()
         {
             var raycastHit2D = Physics2D.Raycast(
                     transform.position, Vector2.down,
@@ -540,8 +539,8 @@ namespace SF.Characters.Controllers
             if(_rigidbody2D == null)
                 _rigidbody2D = GetComponent<Rigidbody2D>();
 
-            /* This un childs characters from attached platforms like
-             * moving, climables, and so forth on death to prevent being linked to them if dying while on one. */
+            /* This unchilds characters from attached platforms like
+             * moving, climbable, and so forth on death to prevent being linked to them if dying while on one. */
             transform.parent = null;
             IsFrozen = false;
             _calculatedVelocity = Vector3.zero;
