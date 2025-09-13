@@ -1,8 +1,4 @@
-using System;
-
 using SF.Characters.Controllers;
-
-using UnityEngine;
 
 namespace SF.Interactables
 {
@@ -20,9 +16,6 @@ namespace SF.Interactables
 	public interface IInteractable
 	{
 		InteractableMode InteractableMode { get; set; }
-
-        // TODO: There has to be a better way than just having two functions.
-        // Need to look into a cleaner code design.
 
 		void Interact();
 	}
