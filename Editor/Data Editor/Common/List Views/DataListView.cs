@@ -33,7 +33,7 @@ namespace SFEditor.Data
         /// </summary>
         protected abstract string _dataFilePath { get; }
 
-        private ContextualMenuManipulator _dropDownMenu;
+        protected ContextualMenuManipulator _dropDownMenu;
 
         public DataListView() { }
 
