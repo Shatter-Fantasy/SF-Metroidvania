@@ -62,11 +62,15 @@ namespace SF
                 if(TimerStopped)
                     break;
                 
-                await Awaitable.EndOfFrameAsync();
                 RemainingTime -= Time.deltaTime;
                 ElapsedTimer += Time.deltaTime;
+                
+                if (RemainingTime > 0)
+                    await Awaitable.EndOfFrameAsync();
             }
+            
             RemainingTime = 0;
+            ElapsedTimer = 0;
             
             if(!TimerStopped)
                 _onTimerComplete?.Invoke();
