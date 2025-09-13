@@ -9,6 +9,7 @@ namespace SF.InventoryModule
 {
     public class ItemContainer : MonoBehaviour
     {
+        [SerializeReference]
         public List<ItemData> Items = new List<ItemData>();
 
         public virtual void AddItem(int itemID)

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using SF.DataManagement;
-using SF.Inventory;
 using SF.ItemModule;
 using SF.Managers;
 using UnityEngine;
@@ -12,8 +12,9 @@ namespace SF.InventoryModule
     [Serializable]
     public class PlayerInventory : ItemContainer
     {
-        [NonSerialized] public List<Weapon> _filteredWeapons = new List<Weapon>();
-        [NonSerialized] public List<Armor> _filteredArmor = new List<Armor>();
+        [NonSerialized] public List<ItemData> FilteredConsumable = new List<ItemData>();
+        [NonSerialized] public List<Weapon> FilteredWeapons = new List<Weapon>();
+        [NonSerialized] public List<Armor> FilteredArmor = new List<Armor>();
         
         private void Start()
         {
@@ -26,7 +27,7 @@ namespace SF.InventoryModule
             var item = GameLoader.Instance?.ItemDatabase[itemID];
             ItemData itemData = new ItemData();
 
-            if (item is EquipmentDTO equipmentDTO)
+            if (item is WeaponDTO equipmentDTO)
                 itemData = (Weapon)equipmentDTO;
             else
                 itemData = item;
@@ -36,15 +37,22 @@ namespace SF.InventoryModule
 
         public void FilterInventory()
         {
-            _filteredWeapons = Items
-                .Where(item => (item is Weapon))
-                .Cast<Weapon>()
+            FilteredConsumable = Items
+                .Where(data => data.ItemSubType == ItemSubType.Consumable)
                 .ToList();
             
-            _filteredArmor = Items
-                .Where(item => (item is Armor))
-                .Cast<Armor>()
-                .ToList();
+            FilteredWeapons = Items.OfType<Weapon>().ToList();
+            FilteredArmor = Items.OfType<Armor>().ToList();
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"Items Count: {Items.Count} ");
+            sb.Append($"Consumables Count: {FilteredConsumable.Count} ");
+            sb.Append($"Weapons Count: {FilteredWeapons.Count} ");
+            sb.Append($"Armor Count: {FilteredArmor.Count} ");
+            return sb.ToString();
         }
     }
 }
