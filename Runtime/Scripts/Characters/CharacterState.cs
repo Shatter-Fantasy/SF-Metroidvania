@@ -20,7 +20,8 @@ namespace SF.Characters
 		Gliding = 64,
 		Climbing = 128,
 		ClimbingIdle = 256,
-		Paused = 512
+		Paused = 512,
+		Attacking = 1024
 	}
 	
 	/// <summary>
@@ -80,6 +81,7 @@ namespace SF.Characters
 
 		public Action OnMovementStateChanged;
 		
+		[SerializeField]
 		private CharacterStatus _characterStatus;
 
 		public CharacterStatus CharacterStatus
