@@ -2,10 +2,12 @@
 using Unity.Profiling;
 #endif
 
+using System.Collections.Generic;
 using UnityEngine;
 
 using SF.Characters.Controllers;
 using SF.Managers;
+using UnityEngine.Playables;
 
 
 namespace SF.Characters
@@ -20,6 +22,8 @@ namespace SF.Characters
 #if DEBUG
 		private static ProfilerMarker s_AnimationUpdateMarker = new(ProfilerCategory.Animation, "SF.Animation.Update" );
 #endif
+
+	    public bool UseAnimatorTransitions;
 		public CharacterTypes CharacterType = CharacterTypes.Player;
 		public CharacterState CharacterState => _controller?.CharacterState;
 
@@ -27,17 +31,27 @@ namespace SF.Characters
 		public bool StartedFacingRight = true;
 		#region Common Components
 		private SpriteRenderer _spriteRend;
-		private Animator _animator;
+		public Animator _animator;
+		/// <summary>
+		/// The runtime animator for <see cref="_animator"/>.
+		/// This is used to update animation clips at runtime for forced states.
+		/// </summary>
+		private RuntimeAnimatorController _runtimeAnimator;
 		private Controller2D _controller;
 		#endregion
 
-		private int AnimationHash => Animator.StringToHash(CharacterState?.CurrentMovementState.ToString());
+		private  string MovementAnimationName => CharacterState?.CurrentMovementState.ToString();
+		private int MovementAnimationHash => Animator.StringToHash(CharacterState?.CurrentMovementState.ToString());
 		[SerializeField] private int _forcedStateHash = 0;
-		private float _animationFadeTime = 0;
-		[SerializeField] private bool _isForcedCrossFading = false;
+		[SerializeField] private float _animationFadeTime = 0;
 		[SerializeField] private int _lastAnimationHash;
 		[SerializeField] private string _lastAnimationName;
-		[SerializeField] private int _deathAnimationHash;
+		
+		private static readonly int _deathAnimationHash = Animator.StringToHash(nameof(CharacterStatus.Dead));
+		private static readonly int AttackingStateHash = Animator.StringToHash( nameof(MovementState.Attacking));
+		[SerializeField] private bool _hasForcedState;
+
+		public AnimatorControllerParameter[] AnimatorParameters;
 		#region Lifecycle Functions  
 		private void Awake()
 		{
@@ -49,7 +63,8 @@ namespace SF.Characters
 		#endregion
 		private void Init()
 		{
-			_deathAnimationHash = Animator.StringToHash(CharacterStatus.Dead.ToString());
+			Playable playable;
+			AnimatorParameters = _animator.parameters;
 			OnInit();
 		}
 		
@@ -64,70 +79,100 @@ namespace SF.Characters
 
 		private void LateUpdate()
 		{
-			UpdateAnimator(); 
+			if (UseAnimatorTransitions)
+				UpdateAnimatorParameters();
+			else
+				SetAnimations();
 		}
-		private void UpdateAnimator()
+
+		private void UpdateAnimatorParameters()
 		{
-			SetAnimations();
+			if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			{
+				_animator.Play(_deathAnimationHash,0);
+				return;
+			}
+			
+			if (_controller?.CharacterState.CurrentMovementState == MovementState.Attacking)
+			{
+				_animator.Play(AttackingStateHash,0);
+				return;
+			}
+			
+			// Welcome to jank code 101
+			foreach (var parameter in AnimatorParameters)
+			{
+				if(parameter.type == AnimatorControllerParameterType.Bool)
+					_animator.SetBool(parameter.name,false);
+			}
+
+			
+			if (_controller is GroundedController2D groundedController2D)
+				_animator.SetBool("Grounded", groundedController2D.IsGrounded);
+			
+			if(_animator.HasParameter(_controller.CharacterState.CurrentMovementState.ToString()))
+				_animator.SetBool(MovementAnimationName,true);
 		}
+		
         /// <summary>
 		/// The Movement State is calculated in the Physics Controller.
         /// <see cref="GroundedController2D.CalculateMovementState"/>
         /// </summary>
         private void SetAnimations()
         {
-	        
 	        if(_animator == null 
 	           || _animator.runtimeAnimatorController == null)
 		        return;
-
+	        
 	        if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 	        {
 		        _animator.Play(_deathAnimationHash,0);
 		        return;
 	        }
-
-			
-			if(_isForcedCrossFading)
-			{
-				_animationFadeTime -= Time.deltaTime;
-				if(_animationFadeTime < 0)
-					_isForcedCrossFading = false;
-				return;
-			}
-
-			if(_forcedStateHash != 0)
-			{
-				if (_animator.HasState(0, _forcedStateHash))
-				{
-					if(_animationFadeTime > 0)
-						_isForcedCrossFading = true;
-					
-					_animator.CrossFadeInFixedTime(_forcedStateHash, _animationFadeTime,0);
-					_lastAnimationHash = _forcedStateHash;
-					_forcedStateHash = 0;
-				}
-				else
-				{
-					// If no state was found or set up in the animator just ignore the forced state.
-					_isForcedCrossFading = false;
-					_forcedStateHash = 0;
-				}
-			}
-			else if(_animator.HasState(0, AnimationHash)
-					&& _lastAnimationHash != AnimationHash
-					)
-			{
-				_animator.CrossFadeInFixedTime(AnimationHash, 0,0);
-				_lastAnimationHash = AnimationHash;
-			}
+	       
+	        MovementCrossfade();
         }
 
+        /// <summary>
+        /// Plays a crossfade to an animation state that is being forced on the controller preventing other non-forced state animations from playing. 
+        /// </summary>
+        private void ForcedCrossFade()
+        {
+	        // If the forced animation finished clear the forced animation state.
+	        if(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+	        {
+		        _forcedStateHash = 0;
+		        _hasForcedState = false;
+		        _lastAnimationHash = _forcedStateHash;
+		        return;
+	        }
+	        
+	        // Make sure we are not resetting to the first frame of a forced animation state that is already being played.
+	        if (_lastAnimationHash != _forcedStateHash &&  _animator.HasState(0, _forcedStateHash))
+	        {
+		        _animator.CrossFadeInFixedTime(_forcedStateHash, 0,0);
+		        _lastAnimationHash = _forcedStateHash;
+	        }
+        }
+
+        private void MovementCrossfade()
+        {
+	        // Don't reset the animation for lopping movement animations.
+	        if (!_animator.HasState(0, MovementAnimationHash)
+	            || _lastAnimationHash == MovementAnimationHash
+	           )
+		        return;
+	        
+	        _animator.CrossFadeInFixedTime(MovementAnimationHash, 0,0);
+	        _lastAnimationHash = MovementAnimationHash;
+        }
+        
         // The 0.3f is the default fade time for Unity's crossfade api.
         public void SetAnimationState(string stateName, float animationFadeTime = 0.01f)
-		{
+        {
 			_forcedStateHash = Animator.StringToHash(stateName);
             _animationFadeTime = animationFadeTime;
+            _hasForcedState = true;
         }
 		private void SpriteFlip(Vector2 direction)
 		{
