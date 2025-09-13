@@ -156,15 +156,6 @@ namespace SF.InputModule
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
-                    ""id"": ""60ba434d-d8da-4a19-b280-29680b1290ce"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -528,17 +519,6 @@ namespace SF.InputModule
                     ""processors"": """",
                     ""groups"": "";Controller"",
                     ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""68f4bfb7-1bce-4c6c-80f1-8d8e7bb487ea"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Controller"",
-                    ""action"": ""New action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1228,7 +1208,6 @@ namespace SF.InputModule
             m_Player_Glide = m_Player.FindAction("Glide", throwIfNotFound: true);
             m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-            m_Player_Newaction = m_Player.FindAction("New action", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1335,7 +1314,6 @@ namespace SF.InputModule
         private readonly InputAction m_Player_Glide;
         private readonly InputAction m_Player_Crouch;
         private readonly InputAction m_Player_Interact;
-        private readonly InputAction m_Player_Newaction;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1375,10 +1353,6 @@ namespace SF.InputModule
             /// Provides access to the underlying input action "Player/Interact".
             /// </summary>
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/Newaction".
-            /// </summary>
-            public InputAction @Newaction => m_Wrapper.m_Player_Newaction;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1426,9 +1400,6 @@ namespace SF.InputModule
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
-                @Newaction.started += instance.OnNewaction;
-                @Newaction.performed += instance.OnNewaction;
-                @Newaction.canceled += instance.OnNewaction;
             }
 
             /// <summary>
@@ -1461,9 +1432,6 @@ namespace SF.InputModule
                 @Interact.started -= instance.OnInteract;
                 @Interact.performed -= instance.OnInteract;
                 @Interact.canceled -= instance.OnInteract;
-                @Newaction.started -= instance.OnNewaction;
-                @Newaction.performed -= instance.OnNewaction;
-                @Newaction.canceled -= instance.OnNewaction;
             }
 
             /// <summary>
@@ -1905,13 +1873,6 @@ namespace SF.InputModule
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteract(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "New action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnNewaction(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

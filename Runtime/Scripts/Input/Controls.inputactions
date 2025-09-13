@@ -68,15 +68,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "60ba434d-d8da-4a19-b280-29680b1290ce",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -440,17 +431,6 @@
                     "processors": "",
                     "groups": ";Controller",
                     "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "68f4bfb7-1bce-4c6c-80f1-8d8e7bb487ea",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Controller",
-                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
