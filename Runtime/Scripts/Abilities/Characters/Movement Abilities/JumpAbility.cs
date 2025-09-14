@@ -52,6 +52,7 @@ namespace SF.AbilityModule.Characters
 		{
             if(!CanStartAbility()) return;
 
+            // TODO: Only add the running height bonus to the first jump.
             _calculatedJumpHeight = _controller2d.IsRunning
                 ? JumpHeight * RunningJumpMultiplier
                 : JumpHeight;
@@ -60,14 +61,11 @@ namespace SF.AbilityModule.Characters
 
 			_controller2d.IsJumping = true;
             _controller2d.IsFalling = false;
-            
-            if(_controller2d.IsClimbing)
-                _controller2d.IsClimbing = false;
+            _controller2d.IsClimbing = false;
 
             if(_jumpSFX != null)
                 AudioManager.Instance.PlayOneShot(_jumpSFX);
-
-            // TODO: Only add the running height bonus to the first jump.
+            
             _controller2d.SetVerticalVelocity(_calculatedJumpHeight);
 		}
 
@@ -82,16 +80,20 @@ namespace SF.AbilityModule.Characters
 			InputManager.Controls.Player.Jump.performed += OnInputJump;
             
             // Have to check for null because you can have OnEnable run sometimes before initialization from the ability controller.
-            if(_controller2d != null)
+            if (_controller2d != null)
+            { 
                 _controller2d.CollisionInfo.OnGroundedHandler += ResetJumps;
-		}
+            }
+        }
 
         private void OnDisable()
 		{
 			if(InputManager.Controls == null) return;
 
 			InputManager.Controls.Player.Jump.performed -= OnInputJump;
-            _controller2d.CollisionInfo.OnGroundedHandler -= ResetJumps;
+            
+            if(_controller2d != null)
+                _controller2d.CollisionInfo.OnGroundedHandler -= ResetJumps;
 		}
     }
 }

@@ -11,12 +11,12 @@ namespace SF.Characters.Controllers
 	public class GroundedController2D : Controller2D
 	{
 		#region Booleans
-		[Header("Booleans")]
 		public bool IsGrounded
 		{
 			get => CollisionInfo.IsGrounded;
 			set => CollisionInfo.IsGrounded = value;
 		}
+		[Header("Movement Booleans")]
 		public bool IsRunning;
 		public bool IsSwimming;
 		public bool IsJumping;
@@ -27,8 +27,12 @@ namespace SF.Characters.Controllers
 		public bool IsClimbing
 		{
 			get { return _isClimbing; }
-			set 
-			{ 
+			set
+			{
+				// Don't do any other checks if we are setting is climbing to the exact same value.
+				if (_isClimbing == value)
+					return;
+				
 				_isClimbing = value; 
 
 				if(!_isClimbing)
@@ -220,16 +224,8 @@ namespace SF.Characters.Controllers
 		{
 			_boxCollider.size = _originalColliderSize;
 
-			//TODO: Do checks if colliding on the sides or ceiling to make sure the default collider size doesn't click through them.
-
-			// TODO: When the game is paused or in dialogue sometimes the crouching input can still come through when calling this and it causes the player to jump.
-			//	 This is because the is IsGrounded is not being checked while paused, but why is it even going through for some reason. 
-			
-			// Put character above ground.
-			if(IsGrounded)
-			{
-				transform.position += new Vector3(0, CollisionController.VerticalRayDistance, 0);
-			}
+			// TODO: Do checks if colliding on the sides or ceiling to make sure the default collider size doesn't click through them.
+			// TODO: Make sure the new Collider size doesn't clip us into the ground.
 		}
 
         public override void UpdatePhysicsProperties(MovementProperties movementProperties,

@@ -27,7 +27,7 @@ namespace SF.Characters.Controllers
                     LevelPlayData.Instance.SpawnedPlayerController = this;
 
                 if (!GameLoader.Instance.GameLoaderData.SettingUpNewGame)
-                    CollisionController.CollisionActivated = true;
+                    CollisionInfo.CollisionActivated = true;
             }
         }
         

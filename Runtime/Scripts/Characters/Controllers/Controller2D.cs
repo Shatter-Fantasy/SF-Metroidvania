@@ -19,8 +19,6 @@ namespace SF.Characters.Controllers
 		/// </summary>
 		[NonSerialized] public float ReferenceSpeed;
 
-        public float DistanceToGround;
-
         [Header("Physics Properties")]
         public MovementProperties DefaultPhysics = new(new Vector2(5, 5));
         public MovementProperties CurrentPhysics = new(new Vector2(5, 5));
@@ -30,7 +28,6 @@ namespace SF.Characters.Controllers
         public PhysicsVolumeType PhysicsVolumeType;
         
         public CharacterState CharacterState;
-        public ContactFilter2D PlatformFilter;
         
         public Vector2 Direction
         {
@@ -58,13 +55,11 @@ namespace SF.Characters.Controllers
         protected Rigidbody2D _rigidbody2D;
         #endregion
 
-        #region
+        #region Collision 
         [NonSerialized] public Bounds Bounds;
-        #endregion
-        [Header("Collision Data")]
         public CollisionInfo CollisionInfo = new();
-        public CollisionController CollisionController = new(0.05f, 0.02f, 3, 4);
-
+        #endregion
+        
         /// <summary>
         /// The overall velocity to be added this frame.
         /// </summary>
@@ -76,8 +71,8 @@ namespace SF.Characters.Controllers
 
         public bool CollisionActivated
         {
-            get => CollisionController.CollisionActivated;
-            set => CollisionController.CollisionActivated = value;
+            get => CollisionInfo.CollisionActivated;
+            set => CollisionInfo.CollisionActivated = value;
         }
         
         #region Lifecycle Methods
@@ -97,7 +92,7 @@ namespace SF.Characters.Controllers
             // Even flying enemies need colliders to hurt the player. 
             _rigidbody2D = _rigidbody2D != null ? _rigidbody2D : GetComponent<Rigidbody2D>();
             _boxCollider = _boxCollider != null ? _boxCollider : GetComponent<BoxCollider2D>();
-            CollisionInfo.Collider2D = _boxCollider;
+            CollisionInfo.Initialize(_boxCollider);
             SetComponentSetting();
             OnInit();
         }
@@ -129,9 +124,7 @@ namespace SF.Characters.Controllers
 
             CharacterState.StatusEffectChanged += OnStatusEffectChanged;
             DefaultPhysics.GroundSpeed = Mathf.Clamp(DefaultPhysics.GroundSpeed, 0, DefaultPhysics.GroundMaxSpeed);
-
-            PlatformFilter.useLayerMask = true;
-
+            
             CurrentPhysics = DefaultPhysics;
             ReferenceSpeed = CurrentPhysics.GroundSpeed;
 

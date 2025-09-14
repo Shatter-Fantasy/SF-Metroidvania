@@ -30,7 +30,6 @@ namespace SF.AbilityModule
         private void Awake()
         {
             Abilities = GetComponents<AbilityCore>().ToList();
-
             
             _controller2D = AbilityOwner != null ? AbilityOwner.GetComponent<Controller2D>() : GetComponent<Controller2D>();
             

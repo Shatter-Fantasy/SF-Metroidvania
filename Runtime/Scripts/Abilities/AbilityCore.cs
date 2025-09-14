@@ -15,7 +15,7 @@ namespace SF.AbilityModule
 		public MovementState BlockingMovementStates;
 		public CharacterStatus BlockingCharacterStatus = CharacterStatus.Dead;
 
-		protected bool _isInitialized = false;		
+		protected bool _isInitialized;		
 
 		protected GroundedController2D _controller2d;
 		protected bool _isPerformingAbility;

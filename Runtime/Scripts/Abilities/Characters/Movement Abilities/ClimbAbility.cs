@@ -77,11 +77,14 @@ namespace SF.AbilityModule.Characters
 
         private void OnClimbStart()
         {
+            /*
             Vector2 characterOffset = new Vector2
                 (CollisionInfo.ClimbableSurfaceHit.point.x + _controller2d.CollisionController.HoriztonalRayDistance,
                 CollisionInfo.ClimbableSurfaceHit.point.y);
 
-            _controller2d.transform.position = (Vector3)characterOffset; 
+            _controller2d.transform.position = (Vector3)characterOffset;
+            */
+            
             _controller2d.IsClimbing = true;
             _controller2d.IsFalling = false;
             _controller2d.IsGliding = false;

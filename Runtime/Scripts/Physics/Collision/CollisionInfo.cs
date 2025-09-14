@@ -18,6 +18,7 @@ namespace SF.Physics
 	public class CollisionInfo
 	{
 
+		public bool CollisionActivated;
 		/// <summary>
 		/// The <see cref="BoxCollider2D"/> to use for collision and contacts checks.
 		/// </summary>
@@ -176,6 +177,16 @@ namespace SF.Physics
 		public Action OnCeilingCollidedHandler;
 		public Action OnGroundedHandler;
 
+		public void Initialize(BoxCollider2D collider2d = null)
+		{
+			if (collider2d != null)
+				Collider2D = collider2d;
+			
+			GroundFilter2D.layerMask = _platformLayer;
+			CeilingFilter2D.layerMask = _platformLayer;
+			RightFilter2D.layerMask = _platformLayer;
+			LeftFilter2D.layerMask = _platformLayer;
+		}
 		public void CheckCollisions()
 		{
 			_wasGroundedLastFrame = IsGrounded;

@@ -43,7 +43,10 @@ namespace SF.StateMachine
 			if(_controller == null || _controller is GroundedController2D { IsFalling:true } || !DoesTurnOnHoles )
 				return;
 			
+			/*
 			RaycastHit2D hit2D = new RaycastHit2D();
+			
+			
 			if(_controller.Direction == Vector2.left)
 			{
                 hit2D = Physics2D.Raycast(_controller.Bounds.BottomLeft(),
@@ -68,6 +71,7 @@ namespace SF.StateMachine
             {
                 _controller.ChangeDirection();
             }
+            */
         }
         
 		private void OnCollidingLeft()
