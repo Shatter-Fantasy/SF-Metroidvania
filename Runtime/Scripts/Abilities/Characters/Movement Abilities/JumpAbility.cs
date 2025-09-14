@@ -35,9 +35,10 @@ namespace SF.AbilityModule.Characters
         /// <returns></returns>
         protected override bool CheckAbilityRequirements()
         {
-            // If we are currently gliding don't jump. 
-            // Do note we could add the ability to jump in mid-glide for more movement customization. Maybe a boolean in the Glide called CanGlideJump.
-            if(_controller2d.IsGliding)
+            /* If we are currently gliding don't jump. 
+             * Do note we could add the ability to jump in mid-glide for more movement customization. Maybe a boolean in the Glide called CanGlideJump.
+             * If we are touching a ceiling don't jump because it will be wierd to jump in place without moving upward animation wise. */
+            if(_controller2d.IsGliding || _controller2d.CollisionInfo.IsCollidingAbove)
                 return false;
 
 
