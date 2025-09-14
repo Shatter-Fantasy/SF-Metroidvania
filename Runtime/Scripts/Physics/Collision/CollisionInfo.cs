@@ -22,11 +22,17 @@ namespace SF.Physics
 		/// The <see cref="BoxCollider2D"/> to use for collision and contacts checks.
 		/// </summary>
 		public BoxCollider2D Collider2D;
-		
 		public GameObject StandingOnObject;
 
 
 		public int ContactHitCount;
+		
+		[Header("Platform Layers")]
+		[SerializeField] protected LayerMask _platformLayer;
+		[SerializeField] protected LayerMask _movingPlatformLayer;
+		[SerializeField] protected LayerMask _oneWayPlatformFilter;
+		protected int OneWayFilterBitMask => _platformLayer & _oneWayPlatformFilter;
+		
         public List<ContactPoint2D> CeilingContacts = new();
         public List<ContactPoint2D> GroundContacts = new();
         public List<ContactPoint2D> RightContacts = new();

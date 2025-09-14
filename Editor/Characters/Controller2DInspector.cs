@@ -39,7 +39,8 @@ namespace SFEditor.Characters
 
         private void SetupControllerComponents()
         {
-            Controller2D controller2D = target as Controller2D;
+            if (target is not Controller2D controller2D)
+                return;
             
             Rigidbody2D rgb = controller2D.GetComponent<Rigidbody2D>();
             if(rgb != null)
@@ -47,23 +48,17 @@ namespace SFEditor.Characters
                 rgb.bodyType = RigidbodyType2D.Kinematic;
                 rgb.useFullKinematicContacts = true;
             }
-
-            controller2D.PlatformFilter.useLayerMask = true;
-
-            if(controller2D is GroundedController2D groundedController)
-            {
-                groundedController.OneWayPlatformFilter.useLayerMask = true;
-            }
         }
 
         /// <summary>
         /// Casts a ray to using the platform mask layers as possible checks.
-        /// Than lowers the controller object using the distance the ray travelled to reach the ground.
+        /// Then lowers the controller object using the distance the ray travelled to reach the ground.
         /// </summary>
         private void LowerControllerToGround()
         {
-            Controller2D controller2D = target as Controller2D;
-          
+            if (target is not Controller2D controller2D)
+                return;
+            
             RaycastHit2D hit2D = Physics2D.Raycast(
                 controller2D.GetColliderBounds().BottomCenter(),
                 Vector2.down,

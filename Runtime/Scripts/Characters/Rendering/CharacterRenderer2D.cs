@@ -1,7 +1,3 @@
-#if DEBUG
-using Unity.Profiling;
-#endif
-
 using UnityEngine;
 
 using SF.Characters.Controllers;
@@ -17,10 +13,6 @@ namespace SF.Characters
 	[RequireComponent(typeof(Animator), typeof(SpriteRenderer))]
     public class CharacterRenderer2D : MonoBehaviour
     {
-#if DEBUG
-		private static ProfilerMarker s_AnimationUpdateMarker = new(ProfilerCategory.Animation, "SF.Animation.Update" );
-#endif
-
 	    public bool UseAnimatorTransitions;
 		public CharacterTypes CharacterType = CharacterTypes.Player;
 		public CharacterState CharacterState => _controller?.CharacterState;
@@ -102,7 +94,6 @@ namespace SF.Characters
 				if(parameter.type == AnimatorControllerParameterType.Bool)
 					Animator.SetBool(parameter.name,false);
 			}
-
 			
 			if (_controller is GroundedController2D groundedController2D)
 				Animator.SetBool("Grounded", groundedController2D.IsGrounded);

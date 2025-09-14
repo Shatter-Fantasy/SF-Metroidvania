@@ -4,12 +4,6 @@ using UnityEngine;
 
 using SF.Physics;
 
-#if SF_Utilities
-using SF.Utilities;
-#else
-using SF.Platformer.Utilities;
-#endif
-
 namespace SF.Characters.Controllers
 {
     /// <summary>
@@ -21,7 +15,7 @@ namespace SF.Characters.Controllers
     public class Controller2D : MonoBehaviour, IForceReciever
     {
         /// <summary>
-		/// Reference speed if used for passing in a value in horizontal calculatin based on running or not.
+		/// Reference speed if used for passing in a value in horizontal calculating based on running or not.
 		/// </summary>
 		[NonSerialized] public float ReferenceSpeed;
 
@@ -159,7 +153,7 @@ namespace SF.Characters.Controllers
             
             OnPreFixedUpdate();
 
-            // Set the bools for what sides there was a collision on last frame.
+            // Set all bools for what sides there was a collision on last frame.
             CollisionInfo.WasCollidingRight = CollisionInfo.IsCollidingRight;
             CollisionInfo.WasCollidingLeft = CollisionInfo.IsCollidingLeft;
             CollisionInfo.WasCollidingAbove = CollisionInfo.IsCollidingAbove;
@@ -326,7 +320,7 @@ namespace SF.Characters.Controllers
             if(_rigidbody2D == null)
                 _rigidbody2D = GetComponent<Rigidbody2D>();
 
-            /* This unchilds characters from attached platforms like
+            /* This un-child characters from attached platforms like
              * moving, climbable, and so forth on death to prevent being linked to them if dying while on one. */
             transform.parent = null;
             IsFrozen = false;
@@ -338,7 +332,7 @@ namespace SF.Characters.Controllers
         
         /// TODO: Remove this now that CollisionInfo has all collision details.
         /// <summary>
-        /// This is called from external classes to get the current colliders bounds value when a box collider has not been set and had it bounds cached yet. Useful for editor debugging.
+        /// This is called from external classes to get the current colliders bounds value when a box collider has not been set and had bounds cached yet. Useful for editor debugging.
         /// </summary>
         /// <returns></returns>
         public Bounds GetColliderBounds()

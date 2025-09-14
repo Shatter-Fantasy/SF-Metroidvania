@@ -1,19 +1,5 @@
-#if UNITY_EDITOR
-// The two below namespaces are only used in the OnDrawGizmos
-// at the time of typing this comment.
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-#endif
-
 using UnityEngine;
 using SF.Physics;
-using System;
-
-#if SF_Utilities
-using SF.Utilities;
-#else
-using SF.Platformer.Utilities;
-#endif
 
 namespace SF.Characters.Controllers
 {
@@ -24,24 +10,19 @@ namespace SF.Characters.Controllers
 	[RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D), typeof(CharacterRenderer2D))]
 	public class GroundedController2D : Controller2D
 	{
-		[Header("Platform Settings")]
-		public ContactFilter2D OneWayPlatformFilter;
-		[SerializeField] protected LayerMask MovingPlatformLayer;
-
 		#region Booleans
-
 		[Header("Booleans")]
 		public bool IsGrounded
 		{
 			get => CollisionInfo.IsGrounded;
 			set => CollisionInfo.IsGrounded = value;
 		}
-		public bool IsRunning = false;
-		public bool IsSwimming = false;
-		public bool IsJumping = false;
-		public bool IsFalling = false;
-		public bool IsGliding = false;
-		public bool IsCrouching = false;
+		public bool IsRunning;
+		public bool IsSwimming;
+		public bool IsJumping;
+		public bool IsFalling;
+		public bool IsGliding;
+		public bool IsCrouching;
 		
 		public bool IsClimbing
 		{
@@ -62,23 +43,21 @@ namespace SF.Characters.Controllers
 				}
 			}
 		}
-		[SerializeField] private bool _isClimbing = false;
+		[SerializeField] private bool _isClimbing;
 		#endregion
 		
 		#region Slope Settings
 
 		[Header("Slope Settings")]
-		[SerializeField] private bool _useSlopes = false;
+		[SerializeField] private bool _useSlopes;
 		[SerializeField] private float _slopeUpperLimit = 65;
 		[SerializeField] private float _slopeLowerLimit = 15;
 		[SerializeField] protected Vector2 _slopeNormal;
 		[SerializeField] private float _standingOnSlopeAngle;
 		[SerializeField] private float _slopeMultiplier = 0.9f;
-        [SerializeField] private bool _onSlope = false;
+        [SerializeField] private bool _onSlope;
         private Vector2 _slopeSideDirection;
         #endregion
-        
-		protected int OneWayFilterBitMask => PlatformFilter.layerMask & OneWayPlatformFilter.layerMask;
 
 		protected CharacterRenderer2D _character;
 		#region Components 
@@ -192,10 +171,9 @@ namespace SF.Characters.Controllers
 
 			if(IsClimbing)
 			{
-				if(_calculatedVelocity.y != 0)
-					CharacterState.CurrentMovementState = MovementState.Climbing;
-				else
-					CharacterState.CurrentMovementState = MovementState.ClimbingIdle;
+				CharacterState.CurrentMovementState = _calculatedVelocity.y != 0 
+					? MovementState.Climbing 
+					: MovementState.ClimbingIdle;
 			}
 
 			// If our velocity is negative we are either falling/gliding.
@@ -284,38 +262,5 @@ namespace SF.Characters.Controllers
 	        IsJumping = false;
 	        IsFalling = true;
         }
-
-#if UNITY_EDITOR
-
-        private readonly List<Vector3> _listOfPoints = new();
-
-        public void OnDrawGizmos()
-        {
-            _listOfPoints.Clear();
-            _boxCollider = (_boxCollider == null) ? GetComponent<BoxCollider2D>() : _boxCollider;
-
-            Bounds = _boxCollider.bounds;
-            Vector2 startPosition;
-            float stepPercent;
-            int numberOfRays = CollisionController.HorizontalRayAmount;
-
-            for(int x = 0; x < numberOfRays; x++) // Left
-            {
-	            stepPercent = (float)x / (float)(numberOfRays - 1);
-	            startPosition = Vector2.Lerp(Bounds.BottomLeft(), Bounds.TopLeft(), stepPercent);
-	            _listOfPoints.Add(startPosition);
-	            _listOfPoints.Add(startPosition - new Vector2(CollisionController.HoriztonalRayDistance, 0));
-            }
-
-            ReadOnlySpan<Vector3> pointsAsSpan = CollectionsMarshal.AsSpan(_listOfPoints);
-            Gizmos.DrawLineList(pointsAsSpan);
-
-            Gizmos.color = Color.coral;
-            Gizmos.DrawWireCube(Bounds.MiddleRight(),new Vector2(CollisionController.SkinWidth,Bounds.size.y - CollisionController.SkinWidth));
-            if(CollisionInfo.ClimbableSurfaceHit)
-                Gizmos.DrawWireSphere(CollisionInfo.ClimbableSurfaceHit.point, .25f);
-
-        }
-#endif
     }
 }

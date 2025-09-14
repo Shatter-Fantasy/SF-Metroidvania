@@ -109,7 +109,7 @@ namespace SF.Physics
 		public Action OnCollidedAbove;
 		public Action OnCollidedBelow;
 		
-		
+		/*
 		protected RaycastHit2D DebugBoxCast(Vector2 origin, 
 			Vector2 size,
 			float angle,
@@ -166,5 +166,6 @@ namespace SF.Physics
 
 			return false;
 		}
+		*/
     }
 }
