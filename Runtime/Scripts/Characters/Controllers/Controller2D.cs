@@ -68,7 +68,7 @@ namespace SF.Characters.Controllers
         [NonSerialized] public Bounds Bounds;
         #endregion
         [Header("Collision Data")]
-        public CollisionInfo CollisionInfo = new() { CollisionHits = new()};
+        public CollisionInfo CollisionInfo = new();
         public CollisionController CollisionController = new(0.05f, 0.02f, 3, 4);
 
         /// <summary>
@@ -103,6 +103,7 @@ namespace SF.Characters.Controllers
             // Even flying enemies need colliders to hurt the player. 
             _rigidbody2D = _rigidbody2D != null ? _rigidbody2D : GetComponent<Rigidbody2D>();
             _boxCollider = _boxCollider != null ? _boxCollider : GetComponent<BoxCollider2D>();
+            CollisionInfo.Collider2D = _boxCollider;
             SetComponentSetting();
             OnInit();
         }
@@ -145,7 +146,6 @@ namespace SF.Characters.Controllers
         protected virtual void OnStart()
         {
         }
-
         protected virtual void FixedUpdate()
         { 
             Bounds = _boxCollider.bounds;
@@ -163,9 +163,9 @@ namespace SF.Characters.Controllers
             CollisionInfo.WasCollidingRight = CollisionInfo.IsCollidingRight;
             CollisionInfo.WasCollidingLeft = CollisionInfo.IsCollidingLeft;
             CollisionInfo.WasCollidingAbove = CollisionInfo.IsCollidingAbove;
-            CollisionInfo.WasCollidingBelow = CollisionInfo.IsCollidingBelow;
+            CollisionInfo.WasCollidingBelow = CollisionInfo.IsGrounded;
 
-            ColisionChecks();
+            CollisionInfo.CheckCollisions();
             CalculateHorizontal();
             CalculateVertical();
             Move();
@@ -175,7 +175,6 @@ namespace SF.Characters.Controllers
             CalculateMovementState();
             OnLateUpdate();
         }
-
         protected virtual void OnLateUpdate()
         {
 
@@ -197,71 +196,7 @@ namespace SF.Characters.Controllers
             }
             
             _rigidbody2D.linearVelocity = _calculatedVelocity;
-
-            /* If we are detecting a collision before the transform.Translate moved our character,
-            * than we should make sure we didn't clip through the collider.
-            * If we did correct our character's position.
-            */
-       
-            if(CollisionInfo.BelowHit)
-            {
-                /* Important Note: we should make sure any CollisionInfo hits is not our own player collider.
-                This happens if the player is on one of the physics layers we are casting against. */
-
-                /* Make sure if someone accidentally places the player on a layer being casted against
-                    We don't take it into calculations. We should do this on the line after casting the ray so no other checks using CollisionInfo.BelowHit using a player collider.
-                */
-                if(CollisionInfo.BelowHit.collider == _boxCollider)
-                {
-                    CollisionInfo.BelowHit = new RaycastHit2D();
-                }
-            }
-
-            /*
-            if(CollisionInfo.CollisionHits != null 
-                && CollisionInfo.CollisionHits.Count > 0)
-                CorrectCollisionClipping();
-                */
         }
-
-        /// <summary>
-        /// If the transform translate puts us through a collider do to a off update frame for movement than correct the transform to prevent overlapping.
-        /// </summary>
-        protected virtual void CorrectCollisionClipping()
-        {
-            /* If for some reason this frame we are colliding on all four side we shouldn't try to correct our position.
-             * If we try to correct our position in this state we could just be corrected from one direction making us clip into another direction.
-             * Example case this happens. Imagine you have a crushing enemy like Mario's Thwomp meant to hurt, but not killl the player.
-             * The thwomp would be pushing you into the floor and the correction formula would place you back upward.
-             * Samething for side collisions.
-             */
-            if(CollisionInfo.CeilingHit && CollisionInfo.BelowHit
-                && CollisionInfo.LeftHit && CollisionInfo.RightHit)
-                return;
-            
-            // Adjust the position of the Character if we do have a clip inside a wall.
-            // Do this for each hit we have in our CollisionInfo struct.
-            foreach(RaycastHit2D hit in CollisionInfo.CollisionHits)
-            {
-                ColliderDistance2D colliderDistance = _boxCollider.Distance(hit.collider);
-
-                if(colliderDistance is { isOverlapped: true, distance: < 0 })
-                    // This means we are inside something.
-                {
-                    Vector2 adjustedPosition = 
-                        colliderDistance.distance * colliderDistance.normal;
-                    transform.position += (Vector3)adjustedPosition;
-                }
-            }
-        }
-
-        protected void LowerToGround()
-        {
-            transform.position = new Vector2(transform.position.x,
-                CollisionInfo.BelowHit.point.y + (Bounds.size.y / 2f + 0.01f)
-            );
-        }
-
         protected virtual void CalculateHorizontal()
         {
             if(Direction.x != 0)
@@ -289,10 +224,7 @@ namespace SF.Characters.Controllers
                 _calculatedVelocity.x = Mathf.MoveTowards(_calculatedVelocity.x, 0, CurrentPhysics.GroundDeacceleration);
             }
         }
-
-        protected virtual void CalculateVertical()
-        {
-        }
+        protected virtual void CalculateVertical() { }
 
         public void FreezeController()
         {
@@ -301,7 +233,6 @@ namespace SF.Characters.Controllers
             _rigidbody2D.linearVelocity = Vector2.zero;
             IsFrozen = true;
         }
-        
         public void UnfreezeController()
         {
             IsFrozen = false;
@@ -317,7 +248,6 @@ namespace SF.Characters.Controllers
         {
             _externalVelocity = force * -_directionLastFrame.x;
         }
-        
         public virtual void AddVelocity(Vector2 velocity)
         {
             _externalVelocity += velocity;
@@ -330,7 +260,6 @@ namespace SF.Characters.Controllers
         {
             _calculatedVelocity.y += verticalVelocity;
         }
-
         public virtual void SetVelocity(Vector2 velocity)
         {
             _calculatedVelocity = velocity;
@@ -350,131 +279,7 @@ namespace SF.Characters.Controllers
 
         }
         #endregion
-
-        #region Collision Calculations
-
-        /* TODO: We should make sure any CollisionInfo hits is not our own player collider.
-               This happens if the player is on one of the physics layers we are casting against. */
-
-        protected virtual void ColisionChecks()
-        {
-            GroundChecks();
-            CeilingChecks();
-            SideCollisionChecks();
-            CheckOnCollisionActions();
-        }
-
-        protected RaycastHit2D DebugBoxCast(Vector2 origin, 
-            Vector2 size,
-            float angle,
-            Vector2 direction, 
-            float distance, 
-            LayerMask layerMask)
-        {
-#if UNITY_EDITOR
-            Debug.DrawLine(origin, origin + (direction * distance));
-#endif
-            return Physics2D.BoxCast(origin, size,angle,direction, distance, layerMask);
-        }
-
-        protected RaycastHit2D DebugRayCast(Vector2 origin, Vector2 direction, float distance, LayerMask layerMask)
-        {
-#if UNITY_EDITOR
-
-            Debug.DrawLine(origin, origin + (direction * distance));
-#endif
-            return Physics2D.Raycast(origin, direction, distance, layerMask);
-        }
-
-
-        protected virtual void GroundChecks()
-        {
-            // This will eventually also show colliding with other things than platforms.
-            CollisionInfo.IsCollidingBelow = RaycastMultiple(Bounds.BottomLeft(), Bounds.BottomRight(), Vector2.down, CollisionController.VerticalRayDistance, PlatformFilter, CollisionController.VerticalRayAmount);
-        }
-        protected virtual void CeilingChecks()
-        {
-            CollisionInfo.IsCollidingAbove = RaycastMultiple(Bounds.TopLeft(), Bounds.TopRight(), Vector2.up, CollisionController.VerticalRayDistance, PlatformFilter, CollisionController.VerticalRayAmount);
-
-            if(CollisionInfo.IsCollidingAbove)
-            {
-                // If colliding above reset the vertical velocity if it is above zero
-                // This prevents that hanging feeling when touching a ceiling.
-
-                if(_calculatedVelocity.y > 0)
-                    _calculatedVelocity.y = 0;
-            }
-        }
-        protected virtual void SideCollisionChecks()
-        {
-            // Right Side
-            CollisionInfo.IsCollidingRight = RaycastMultiple(Bounds.TopRight(), Bounds.BottomRight(), Vector2.right, CollisionController.HoriztonalRayDistance, PlatformFilter, CollisionController.HoriztonalRayAmount);
-
-            // Left Side
-            CollisionInfo.IsCollidingLeft = RaycastMultiple(Bounds.TopLeft(), Bounds.BottomLeft(), Vector2.left, CollisionController.HoriztonalRayDistance, PlatformFilter, CollisionController.HoriztonalRayAmount);
-        }
-
-        public bool RaycastMultiple(Vector2 origin, Vector2 end, Vector2 direction, float distance, LayerMask layerMask, int numberOfRays = 4)
-        {
-            RaycastHit2D hasHit;
-            Vector2 startPosition;
-            float stepPercent;
-            for(int x = 0; x < numberOfRays; x++)
-            {
-                stepPercent = (float)x / (float)(numberOfRays - 1);
-                startPosition = Vector2.Lerp(origin, end, stepPercent);
-                hasHit = DebugRayCast(startPosition, direction, distance, layerMask);
-
-                if(hasHit)
-                {
-                    if(direction.x > 0 && direction.y == 0 )
-                        CollisionInfo.RightHit = hasHit;
-                    else if(direction.x < 0 && direction.y == 0)
-                        CollisionInfo.LeftHit = hasHit;
-
-                    if(direction.y > 0)
-                        CollisionInfo.CeilingHit = hasHit;
-                    else if(direction.y < 0)
-                        CollisionInfo.BelowHit = hasHit;
-
-                    CollisionInfo.CollisionHits.Add(hasHit);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public bool RaycastMultiple(Vector2 origin, Vector2 end, Vector2 direction, float distance, ContactFilter2D contactFilter2D, int numberOfRays = 4)
-        {
-            return RaycastMultiple(origin, end, direction, distance, contactFilter2D.layerMask, numberOfRays);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Checks to see what sides might have a new collision that was started the current frame. If a new collision is detected on the side invoke the action related to that sides collisions.
-        /// </summary>
-        protected virtual void CheckOnCollisionActions()
-        {
-            // If we were not colliding on a side with anything last frame, but is now Invoke the OnCollisionActions.
-
-            // Right Side
-            if(!CollisionInfo.WasCollidingRight && CollisionInfo.IsCollidingRight)
-                CollisionInfo.OnCollidedRight?.Invoke();
-
-            // Left Side
-            if(!CollisionInfo.WasCollidingLeft && CollisionInfo.IsCollidingLeft)
-                CollisionInfo.OnCollidedLeft?.Invoke();
-
-            // Above Side
-            if(!CollisionInfo.WasCollidingAbove && CollisionInfo.IsCollidingAbove)
-                CollisionInfo.OnCollidedAbove?.Invoke();
-
-            //Below Side
-            if(!CollisionInfo.WasCollidingBelow && CollisionInfo.IsCollidingBelow)
-                CollisionInfo.OnCollidedBelow?.Invoke();
-        }
+        
         public void ChangeDirection()
         {
             Direction *= -1;
@@ -485,7 +290,7 @@ namespace SF.Characters.Controllers
             Direction = new Vector2(newDirection, 0);
         }
 
-        public virtual void UpdatePhysics(MovementProperties movementProperties, 
+        public virtual void UpdatePhysicsProperties(MovementProperties movementProperties, 
             PhysicsVolumeType volumeType = PhysicsVolumeType.None)
         {
             CurrentPhysics.GroundSpeed = movementProperties.GroundSpeed;
@@ -516,24 +321,6 @@ namespace SF.Characters.Controllers
                 GetComponent<SpriteRenderer>().color = Color.red;
         }
 
-
-        /// <summary>
-        /// Corects the posiution if the character clips or goes through an object due to moving to fast during a frame.
-        /// </summary>
-        [Obsolete("In the move position we now have a small test that uses Unity ColliderDistance2D struct. It works a lot better and is simplier to work with.")]
-        protected virtual void PositionCorrection()
-        {
-            var raycastHit2D = Physics2D.Raycast(
-                    transform.position, Vector2.down,
-                    3,
-                    PlatformFilter.layerMask
-                );
-            if(raycastHit2D)
-                DistanceToGround = raycastHit2D.distance - (Bounds.size.y / 2);
-            else
-                DistanceToGround = 0;
-        }
-
         public virtual void Reset()
         {
             if(_rigidbody2D == null)
@@ -548,8 +335,10 @@ namespace SF.Characters.Controllers
             _externalVelocity = Vector3.zero;
         }
 
+        
+        /// TODO: Remove this now that CollisionInfo has all collision details.
         /// <summary>
-        /// This is called from external classes to get the current colliders bounds value when a boxcollider has not been set and had it's bounds cached yet. Useful for editor debugging.
+        /// This is called from external classes to get the current colliders bounds value when a box collider has not been set and had it bounds cached yet. Useful for editor debugging.
         /// </summary>
         /// <returns></returns>
         public Bounds GetColliderBounds()
@@ -560,6 +349,34 @@ namespace SF.Characters.Controllers
                 return Bounds;
             else 
                 return new Bounds();
+        }
+
+        #region Collision Events
+        protected virtual void OnCeilingCollided()
+        {
+            /* If colliding above reset the vertical velocity if it is above zero, but not if we already started to fall downward away from the ceiling.
+             * This prevents that hanging feeling when touching a ceiling.
+             * If anything adds velocity for y while still touching the ceiling we might have an issue.
+             * Something to keep in mind.*/
+            if(_calculatedVelocity.y > 0)
+                _calculatedVelocity.y = 0;
+        }
+        protected virtual void OnGrounded()
+        {
+            _calculatedVelocity.y = 0;
+        }
+        #endregion
+        
+        protected void OnEnable()
+        {
+            CollisionInfo.OnGroundedHandler += OnGrounded;
+            CollisionInfo.OnCeilingCollidedHandler += OnCeilingCollided;
+        }
+        
+        protected void OnDisable()
+        {
+            CollisionInfo.OnGroundedHandler -= OnGrounded;
+            CollisionInfo.OnCeilingCollidedHandler -= OnCeilingCollided;
         }
     }
 }

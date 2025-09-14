@@ -31,7 +31,7 @@ namespace SF.Physics
         {
             if(collision.TryGetComponent(out Controller2D controller2D))
             {
-                controller2D.UpdatePhysics(_volumeProperties, _physicsVolumeType);
+                controller2D.UpdatePhysicsProperties(_volumeProperties, _physicsVolumeType);
             }
         }
 
@@ -47,7 +47,7 @@ namespace SF.Physics
         {
             if(collision.gameObject.TryGetComponent(out Controller2D controller2D))
             {
-                controller2D.UpdatePhysics(_volumeProperties, _physicsVolumeType);
+                controller2D.UpdatePhysicsProperties(_volumeProperties, _physicsVolumeType);
             }
         }
 

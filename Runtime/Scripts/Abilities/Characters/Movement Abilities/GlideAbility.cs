@@ -18,7 +18,7 @@ namespace SF.AbilityModule.Characters
 
         protected override void OnInitialize()
         {
-           _controller2d.OnGrounded += GlideReset;
+            _controller2d.CollisionInfo.OnGroundedHandler += GlideReset;
         }
 
         protected override bool CheckAbilityRequirements()
@@ -39,7 +39,7 @@ namespace SF.AbilityModule.Characters
             if(!CheckAbilityRequirements()) return;
 
             _controller2d.SetVerticalVelocity(0);
-            _controller2d.UpdatePhysics(DefaultGlideProperties);
+            _controller2d.UpdatePhysicsProperties(DefaultGlideProperties);
             _controller2d.IsGliding = true;
         }
 
@@ -70,7 +70,7 @@ namespace SF.AbilityModule.Characters
 
             InputManager.Controls.Player.Glide.performed -= OnInputGlide;
             InputManager.Controls.Player.Jump.performed -= OnMidGlideJump;
-            _controller2d.OnGrounded -= GlideReset;
+            _controller2d.CollisionInfo.OnGroundedHandler-= GlideReset;
         }
     }
 }

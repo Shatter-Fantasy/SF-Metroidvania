@@ -23,8 +23,8 @@ namespace SF.StateMachine
 			if(_controller == null)
 				return;
 			
-			_controller.CollisionInfo.OnCollidedLeft += OnCollidingLeft;
-			_controller.CollisionInfo.OnCollidedRight += OnCollidingRight;
+			_controller.CollisionInfo.OnCollidedLeftHandler += OnCollidingLeft;
+			_controller.CollisionInfo.OnCollidedRightHandler += OnCollidingRight;
 		}
 
         protected override void OnUpdateState()

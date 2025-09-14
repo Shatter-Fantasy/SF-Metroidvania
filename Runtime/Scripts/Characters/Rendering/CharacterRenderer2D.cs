@@ -2,12 +2,10 @@
 using Unity.Profiling;
 #endif
 
-using System.Collections.Generic;
 using UnityEngine;
 
 using SF.Characters.Controllers;
 using SF.Managers;
-using UnityEngine.Playables;
 
 
 namespace SF.Characters
@@ -31,9 +29,9 @@ namespace SF.Characters
 		public bool StartedFacingRight = true;
 		#region Common Components
 		private SpriteRenderer _spriteRend;
-		public Animator _animator;
+		public Animator Animator;
 		/// <summary>
-		/// The runtime animator for <see cref="_animator"/>.
+		/// The runtime animator for <see cref="Animator"/>.
 		/// This is used to update animation clips at runtime for forced states.
 		/// </summary>
 		private RuntimeAnimatorController _runtimeAnimator;
@@ -55,7 +53,7 @@ namespace SF.Characters
 		#region Lifecycle Functions  
 		private void Awake()
 		{
-			_animator = GetComponent<Animator>();
+			Animator = GetComponent<Animator>();
 			_spriteRend = GetComponent<SpriteRenderer>();
 			_controller = GetComponent<Controller2D>();
 			Init();
@@ -63,8 +61,7 @@ namespace SF.Characters
 		#endregion
 		private void Init()
 		{
-			Playable playable;
-			AnimatorParameters = _animator.parameters;
+			AnimatorParameters = Animator.parameters;
 			OnInit();
 		}
 		
@@ -89,13 +86,13 @@ namespace SF.Characters
 		{
 			if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
-				_animator.Play(_deathAnimationHash,0);
+				Animator.Play(_deathAnimationHash,0);
 				return;
 			}
 			
 			if (_controller?.CharacterState.CurrentMovementState == MovementState.Attacking)
 			{
-				_animator.Play(AttackingStateHash,0);
+				Animator.Play(AttackingStateHash,0);
 				return;
 			}
 			
@@ -103,15 +100,15 @@ namespace SF.Characters
 			foreach (var parameter in AnimatorParameters)
 			{
 				if(parameter.type == AnimatorControllerParameterType.Bool)
-					_animator.SetBool(parameter.name,false);
+					Animator.SetBool(parameter.name,false);
 			}
 
 			
 			if (_controller is GroundedController2D groundedController2D)
-				_animator.SetBool("Grounded", groundedController2D.IsGrounded);
+				Animator.SetBool("Grounded", groundedController2D.IsGrounded);
 			
-			if(_animator.HasParameter(_controller.CharacterState.CurrentMovementState.ToString()))
-				_animator.SetBool(MovementAnimationName,true);
+			if(Animator.HasParameter(_controller.CharacterState.CurrentMovementState.ToString()))
+				Animator.SetBool(MovementAnimationName,true);
 		}
 		
         /// <summary>
@@ -120,13 +117,13 @@ namespace SF.Characters
         /// </summary>
         private void SetAnimations()
         {
-	        if(_animator == null 
-	           || _animator.runtimeAnimatorController == null)
+	        if(Animator == null 
+	           || Animator.runtimeAnimatorController == null)
 		        return;
 	        
 	        if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 	        {
-		        _animator.Play(_deathAnimationHash,0);
+		        Animator.Play(_deathAnimationHash,0);
 		        return;
 	        }
 	       
@@ -139,7 +136,7 @@ namespace SF.Characters
         private void ForcedCrossFade()
         {
 	        // If the forced animation finished clear the forced animation state.
-	        if(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+	        if(Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
 	        {
 		        _forcedStateHash = 0;
 		        _hasForcedState = false;
@@ -148,9 +145,9 @@ namespace SF.Characters
 	        }
 	        
 	        // Make sure we are not resetting to the first frame of a forced animation state that is already being played.
-	        if (_lastAnimationHash != _forcedStateHash &&  _animator.HasState(0, _forcedStateHash))
+	        if (_lastAnimationHash != _forcedStateHash &&  Animator.HasState(0, _forcedStateHash))
 	        {
-		        _animator.CrossFadeInFixedTime(_forcedStateHash, 0,0);
+		        Animator.CrossFadeInFixedTime(_forcedStateHash, 0,0);
 		        _lastAnimationHash = _forcedStateHash;
 	        }
         }
@@ -158,12 +155,12 @@ namespace SF.Characters
         private void MovementCrossfade()
         {
 	        // Don't reset the animation for lopping movement animations.
-	        if (!_animator.HasState(0, MovementAnimationHash)
+	        if (!Animator.HasState(0, MovementAnimationHash)
 	            || _lastAnimationHash == MovementAnimationHash
 	           )
 		        return;
 	        
-	        _animator.CrossFadeInFixedTime(MovementAnimationHash, 0,0);
+	        Animator.CrossFadeInFixedTime(MovementAnimationHash, 0,0);
 	        _lastAnimationHash = MovementAnimationHash;
         }
         
@@ -190,6 +187,18 @@ namespace SF.Characters
 				return;
 
 			SpriteFlip(direction);
+		}
+	}
+	
+	public static class AnimationUtilities
+	{
+		public static bool HasParameter(this Animator anim, string paramName)
+		{
+			foreach (AnimatorControllerParameter param in anim.parameters)
+			{
+				if (param.name == paramName) return true;
+			}
+			return false;
 		}
 	}
 }

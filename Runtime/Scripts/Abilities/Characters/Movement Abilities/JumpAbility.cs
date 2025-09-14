@@ -22,7 +22,7 @@ namespace SF.AbilityModule.Characters
 
         protected override void OnInitialize()
         {
-            _controller2d.OnGrounded += ResetJumps;
+            _controller2d.CollisionInfo.OnGroundedHandler += ResetJumps;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace SF.AbilityModule.Characters
             
             // Have to check for null becuase you can have OnEnable run sometimes before initialization from the ability controller.
             if(_controller2d != null)
-                _controller2d.OnGrounded += ResetJumps;
+                _controller2d.CollisionInfo.OnGroundedHandler += ResetJumps;
 		}
 
         private void OnDisable()
@@ -90,7 +90,7 @@ namespace SF.AbilityModule.Characters
 			if(InputManager.Controls == null) return;
 
 			InputManager.Controls.Player.Jump.performed -= OnInputJump;
-			_controller2d.OnGrounded -= ResetJumps;
+            _controller2d.CollisionInfo.OnGroundedHandler -= ResetJumps;
 		}
     }
 }

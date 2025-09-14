@@ -27,12 +27,15 @@ namespace SF.Characters.Controllers
 		[Header("Platform Settings")]
 		public ContactFilter2D OneWayPlatformFilter;
 		[SerializeField] protected LayerMask MovingPlatformLayer;
-		[field: SerializeField] public GameObject StandingOnObject { get; protected set; }
 
 		#region Booleans
+
 		[Header("Booleans")]
-		public bool IsGrounded = false;
-		protected bool _wasGroundedLastFrame = false;
+		public bool IsGrounded
+		{
+			get => CollisionInfo.IsGrounded;
+			set => CollisionInfo.IsGrounded = value;
+		}
 		public bool IsRunning = false;
 		public bool IsSwimming = false;
 		public bool IsJumping = false;
@@ -76,7 +79,6 @@ namespace SF.Characters.Controllers
         #endregion
         
 		protected int OneWayFilterBitMask => PlatformFilter.layerMask & OneWayPlatformFilter.layerMask;
-		public Action OnGrounded;
 
 		protected CharacterRenderer2D _character;
 		#region Components 
@@ -91,122 +93,8 @@ namespace SF.Characters.Controllers
 			Bounds = _boxCollider.bounds;
 			_originalColliderSize = _boxCollider.size;
 		}
-
-		#region Collision Calculations
-		protected override void ColisionChecks()
-		{
-			CollisionInfo.CollisionHits.Clear();
-            _wasGroundedLastFrame = IsGrounded;
-			GroundChecks();
-			SlopeChecks();
-			CeilingChecks();
-			SideCollisionChecks();
-			ClimbableSurfaceChecks();
-			CheckOnCollisionActions();
-		}
-		protected override void GroundChecks()
-		{
-			Bounds = _boxCollider.bounds;
-
-			CollisionInfo.DistanceToGround = Physics2D.Raycast(
-				Bounds.BottomCenter(),
-				Vector2.down,
-				10,PlatformFilter.layerMask).distance;
-
-			// This will eventually also show colliding with other things than platforms.
-            CollisionInfo.BelowHit = DebugBoxCast(
-                        Bounds.BottomCenter(),
-                        new Vector2(Bounds.size.x, .02f),
-                        0,
-                        Vector2.down,
-                        CollisionController.VerticalRayDistance,
-                        PlatformFilter.layerMask
-                    );
-
-			// If we did collide with something below.
-			if(CollisionInfo.BelowHit)
-			{
-				CollisionInfo.CollisionHits.Add(CollisionInfo.BelowHit);
-
-                // If we are standing on something keep track of it. This can be useful for things like moving platforms.
-                StandingOnObject = CollisionInfo.BelowHit.collider.gameObject;
-
-				// Only set the transform if we already are not a child of another game object.
-				// If we don't do this than we will constantly be restuck to the moving platforms transform.
-				if(transform.parent == null && LayerMask.LayerToName(CollisionInfo.BelowHit.collider.gameObject.layer) == "MovingPlatforms")
-                    transform.SetParent(CollisionInfo.BelowHit.collider.gameObject.transform);
-
-                CollisionInfo.IsCollidingBelow = true;
-                IsGrounded = true;
-				//LowerToGround();
-            }
-			else // If we are not colliding with anything below.
-			{
-				StandingOnObject = null;
-
-                // If we are attached to another object and was standing on something last frame
-                // unattach the character from the object.
-                if(transform.parent != null)
-					transform.SetParent(null);
-
-                CollisionInfo.IsCollidingBelow = false;
-                IsGrounded = false;
-            }
-
-            if(IsJumping)
-			{
-				IsGrounded = false;
-				// We return to prevent and grounded collision resetting velocity for y on the
-				// frame we are leaving the ground.
-				return;
-			}
-
-			// At this point we are not jumping or falling
-            if(IsGrounded)
-				_calculatedVelocity.y = 0;
-
-			// If not grounded last frame, but grounded this frame call OnGrounded
-			if(!_wasGroundedLastFrame && IsGrounded)
-			{
-				OnGrounded?.Invoke();
-			}
-        }
-		protected override void SideCollisionChecks()
-		{
-			//TODO: Clean the below up and fuse the IsColliding value setting with the variable hit2D checks.
-			
-			// Right Side
-			CollisionInfo.RightHit = Physics2D.BoxCast(Bounds.MiddleRight() + new Vector2(CollisionController.SkinWidth, 0),
-				new Vector2(CollisionController.SkinWidth, Bounds.size.y - CollisionController.SkinWidth), 0, Vector2.right,
-				CollisionController.HoriztonalRayDistance, PlatformFilter.layerMask);
-
-			CollisionInfo.IsCollidingRight = CollisionInfo.RightHit;
-
-			
-			// Left Side
-			CollisionInfo.LeftHit = Physics2D.BoxCast(Bounds.MiddleLeft() - new Vector2(CollisionController.SkinWidth, 0),
-				new Vector2(CollisionController.SkinWidth, Bounds.size.y - CollisionController.SkinWidth), 0, Vector2.left,
-				CollisionController.HoriztonalRayDistance, PlatformFilter.layerMask);
-
-			CollisionInfo.IsCollidingLeft = CollisionInfo.LeftHit;
-		}
-
-		protected virtual void ClimbableSurfaceChecks()
-		{
-			foreach(RaycastHit2D hit2D in CollisionInfo.CollisionHits)
-			{
-				if(!hit2D)
-					CollisionInfo.ClimbableSurfaceHit = new RaycastHit2D();
-				else if(hit2D.collider.TryGetComponent(out ClimbableSurface climbableSurface))
-				{
-					CollisionInfo.ClimbableSurfaceHit = hit2D;
-                    // We return and break out of the loop so any other collision hits don't go through the
-                    // initial if statement making the CollisionInfo.ClimbableSurfaceHit = a new RaycastHit2D()
-                    return;
-				}
-            }
-        }
-
+		
+		/* Slope Checks.
 		public virtual void SlopeChecks()
 		{
 			if(!_useSlopes)
@@ -217,9 +105,9 @@ namespace SF.Characters.Controllers
 			_onSlope = _slopeUpperLimit > _standingOnSlopeAngle 
 			               && _standingOnSlopeAngle > _slopeLowerLimit;
 		}
-
-        #endregion
-
+		
+		*/
+		
         protected override void CalculateHorizontal()
 		{
 			if(IsClimbing)
@@ -243,13 +131,13 @@ namespace SF.Characters.Controllers
             }
 			
 			// If we are moving left and not hitting a slope, but an obstacle, stop moving left.
-			if (CollisionInfo.IsCollidingLeft && Direction.x < 0 && CollisionInfo.LeftHit.normal.x > .95)
+			if (CollisionInfo.IsCollidingLeft && Direction.x < 0 && CollisionInfo.IsCollidingLeft)
 			{
 				_calculatedVelocity.x = 0;
 			}
 			
 			// If we are moving Right and not hitting a slope, but an obstacle, stop moving Right.
-			if (CollisionInfo.IsCollidingRight && Direction.x > 0 && CollisionInfo.RightHit.normal.x < -.95)
+			if (CollisionInfo.IsCollidingRight && Direction.x > 0 && CollisionInfo.IsCollidingRight)
 			{
 				_calculatedVelocity.x = 0;
 			}
@@ -348,8 +236,6 @@ namespace SF.Characters.Controllers
 			_previousColliderSize = _boxCollider.size;
 			_modifiedColliderSize = newSize;
             _boxCollider.size = newSize;
-
-            LowerToGround();
 		}
 
         public void ResetColliderSize()
@@ -368,10 +254,10 @@ namespace SF.Characters.Controllers
 			}
 		}
 
-        public override void UpdatePhysics(MovementProperties movementProperties,
+        public override void UpdatePhysicsProperties(MovementProperties movementProperties,
              PhysicsVolumeType volumeType = PhysicsVolumeType.None)
         {
-			base.UpdatePhysics(movementProperties, volumeType);
+			base.UpdatePhysicsProperties(movementProperties, volumeType);
 
            ReferenceSpeed =  IsRunning
                     ? CurrentPhysics.GroundRunningSpeed
@@ -386,6 +272,19 @@ namespace SF.Characters.Controllers
                     : CurrentPhysics.GroundSpeed;
         }
 
+        protected override void OnGrounded()
+        {
+	        base.OnGrounded();
+	        IsFalling = false;
+        }
+
+        protected override void OnCeilingCollided()
+        {
+	        base.OnCeilingCollided();
+	        IsJumping = false;
+	        IsFalling = true;
+        }
+
 #if UNITY_EDITOR
 
         private readonly List<Vector3> _listOfPoints = new();
@@ -398,7 +297,7 @@ namespace SF.Characters.Controllers
             Bounds = _boxCollider.bounds;
             Vector2 startPosition;
             float stepPercent;
-            int numberOfRays = CollisionController.HoriztonalRayAmount;
+            int numberOfRays = CollisionController.HorizontalRayAmount;
 
             for(int x = 0; x < numberOfRays; x++) // Left
             {
