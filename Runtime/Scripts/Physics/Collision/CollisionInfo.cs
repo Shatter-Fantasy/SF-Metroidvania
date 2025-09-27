@@ -18,7 +18,7 @@ namespace SF.Physics
 	public class CollisionInfo
 	{
 
-		public bool CollisionActivated;
+		public bool CollisionActivated = true;
 		/// <summary>
 		/// The <see cref="BoxCollider2D"/> to use for collision and contacts checks.
 		/// </summary>
@@ -189,11 +189,17 @@ namespace SF.Physics
 		}
 		public void CheckCollisions()
 		{
+			WasCollidingLeft = IsCollidingLeft;
+			WasCollidingRight = IsCollidingRight;
+			WasCollidingAbove = IsCollidingAbove;
+			WasCollidingBelow = IsGrounded;
+			
 			_wasGroundedLastFrame = IsGrounded;
 			
 			GroundCollisionChecks();
 			CeilingChecks();
 			SideCollisionChecks();
+			CheckOnCollisionActions();
 		}
 		
 		public void SideCollisionChecks()
@@ -268,7 +274,7 @@ namespace SF.Physics
 
 			//Below Side
 			if(!_wasGroundedLastFrame && IsGrounded)
-				OnCollidedRightHandler?.Invoke();
+				OnGroundedHandler?.Invoke();
 		}
 	}
 }
