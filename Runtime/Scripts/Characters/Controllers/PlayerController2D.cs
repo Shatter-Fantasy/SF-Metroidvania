@@ -17,6 +17,7 @@ namespace SF.Characters.Controllers
     /// </summary>
 	public class PlayerController : GroundedController2D
     {
+        
         protected override void OnAwake()
         {
             base.OnAwake();

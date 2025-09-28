@@ -7,7 +7,7 @@ namespace SF.Characters.Controllers
 	/// A physics controller for grounded characters that help implement gravity, slope mechanics, collision for platforms,
 	/// and updates the <see cref="MovementState"/> while using the <see cref="CollisionController"/> for custom collision callbacks. 
 	/// </summary>
-	[RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D), typeof(CharacterRenderer2D))]
+	[RequireComponent(typeof(CharacterRenderer2D))]
 	public class GroundedController2D : Controller2D
 	{
 		#region Booleans
@@ -54,8 +54,8 @@ namespace SF.Characters.Controllers
 
 		[Header("Slope Settings")]
 		[SerializeField] private bool _useSlopes;
-		[SerializeField] private float _slopeUpperLimit = 65;
-		[SerializeField] private float _slopeLowerLimit = 15;
+		//[SerializeField] private float _slopeUpperLimit = 65;
+		//[SerializeField] private float _slopeLowerLimit = 15;
 		[SerializeField] protected Vector2 _slopeNormal;
 		[SerializeField] private float _standingOnSlopeAngle;
 		[SerializeField] private float _slopeMultiplier = 0.9f;

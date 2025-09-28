@@ -18,8 +18,6 @@ namespace SF.AbilityModule.Characters
 
             if(!CheckAbilityRequirements()) return;
             
-
-            
             _controller2d.IsCrouching = !_controller2d.IsCrouching;
 
             // If statement acts like a toggle for crouching.

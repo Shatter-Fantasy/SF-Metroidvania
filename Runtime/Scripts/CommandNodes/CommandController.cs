@@ -38,7 +38,7 @@ namespace SF.CommandModule
             }
         }
 
-        public async void StartCommands()
+        public void StartCommands()
         {
             if (_commandType == CommandType.Cutscene)
                 GameManager.Instance.ControlState = GameControlState.Cutscenes;
