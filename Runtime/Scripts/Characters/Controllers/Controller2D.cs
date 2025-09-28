@@ -11,7 +11,6 @@ namespace SF.Characters.Controllers
     /// This physics controller adds the ability to invoke events when colliding on per direction basis by
     /// using the <see cref="CollisionController"/> 
     /// </summary>
-    [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
     public class Controller2D : MonoBehaviour, IForceReciever
     {
         /// <summary>
@@ -69,6 +68,7 @@ namespace SF.Characters.Controllers
         /// </summary>
         protected Vector2 _externalVelocity;
 
+        public Vector2 CurrentVelocity => _calculatedVelocity;
         public bool CollisionActivated
         {
             get => CollisionInfo.CollisionActivated;
@@ -213,6 +213,7 @@ namespace SF.Characters.Controllers
         }
         protected virtual void CalculateVertical() { }
 
+        
         public void FreezeController()
         {
             _calculatedVelocity.x = 0;
