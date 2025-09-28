@@ -29,8 +29,7 @@ namespace SF.Characters
 		private RuntimeAnimatorController _runtimeAnimator;
 		private Controller2D _controller;
 		#endregion
-
-		private  string MovementAnimationName => CharacterState?.CurrentMovementState.ToString();
+		
 		private int MovementAnimationHash => Animator.StringToHash(CharacterState?.CurrentMovementState.ToString());
 		[SerializeField] private int _forcedStateHash = 0;
 		[SerializeField] private float _animationFadeTime = 0;
@@ -39,7 +38,7 @@ namespace SF.Characters
 		
 		private static readonly int _deathAnimationHash = Animator.StringToHash(nameof(CharacterStatus.Dead));
 		private static readonly int AttackingStateHash = Animator.StringToHash( nameof(MovementState.Attacking));
-		[SerializeField] private bool _hasForcedState;
+		//[SerializeField] private bool _hasForcedState;
 
 		public AnimatorControllerParameter[] AnimatorParameters;
 		#region Lifecycle Functions  
@@ -76,30 +75,41 @@ namespace SF.Characters
 
 		private void UpdateAnimatorParameters()
 		{
+			
 			if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
 				Animator.Play(_deathAnimationHash,0);
 				return;
 			}
 			
+			
 			if (_controller?.CharacterState.CurrentMovementState == MovementState.Attacking)
 			{
 				Animator.Play(AttackingStateHash,0);
 				return;
 			}
+
+			if (_controller is null)
+				return;
 			
-			// Welcome to jank code 101
-			foreach (var parameter in AnimatorParameters)
-			{
-				if(parameter.type == AnimatorControllerParameterType.Bool)
-					Animator.SetBool(parameter.name,false);
-			}
+			/* All Controller2D have the next set of parameters*/
 			
+			if (_controller?.CharacterState.CurrentMovementState == MovementState.Attacking)
+				Animator.SetTrigger("Attacking");
+			
+			Animator.SetFloat("XSpeed", Mathf.Abs(_controller.CurrentVelocity.x));
+
 			if (_controller is GroundedController2D groundedController2D)
-				Animator.SetBool("Grounded", groundedController2D.IsGrounded);
-			
-			if(Animator.HasParameter(_controller.CharacterState.CurrentMovementState.ToString()))
-				Animator.SetBool(MovementAnimationName,true);
+			{
+				// Grounded States
+				Animator.SetBool("IsGrounded", groundedController2D.IsGrounded);
+				Animator.SetBool("IsCrouching", groundedController2D.IsCrouching);
+				
+				// Jump/Air States
+				Animator.SetBool("IsJumping", groundedController2D.IsJumping);
+				Animator.SetBool("IsFalling", groundedController2D.IsFalling);
+				Animator.SetBool("IsGliding", groundedController2D.IsGliding);
+			}
 		}
 		
         /// <summary>
@@ -130,7 +140,7 @@ namespace SF.Characters
 	        if(Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
 	        {
 		        _forcedStateHash = 0;
-		        _hasForcedState = false;
+		        //_hasForcedState = false;
 		        _lastAnimationHash = _forcedStateHash;
 		        return;
 	        }
@@ -160,7 +170,7 @@ namespace SF.Characters
         {
 			_forcedStateHash = Animator.StringToHash(stateName);
             _animationFadeTime = animationFadeTime;
-            _hasForcedState = true;
+            //_hasForcedState = true;
         }
 		private void SpriteFlip(Vector2 direction)
 		{
