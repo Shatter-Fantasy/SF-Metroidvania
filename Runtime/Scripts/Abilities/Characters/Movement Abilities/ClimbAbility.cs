@@ -9,7 +9,7 @@ namespace SF.AbilityModule.Characters
     public class ClimbAbility : AbilityCore, IInputAbility
     {
         protected ClimbableSurface ClimableSurface => _controller2d.CollisionInfo.ClimbableSurface;
-        protected CollisionInfo CollisionInfo => _controller2d.CollisionInfo;
+        protected CollisionInfoBase CollisionInfo => _controller2d.CollisionInfo;
 
         public Vector2 ClimbSpeed = new Vector2(5,5);
         public Vector2 ColliderBoxSize = new Vector2(1.22f, 2.31f);

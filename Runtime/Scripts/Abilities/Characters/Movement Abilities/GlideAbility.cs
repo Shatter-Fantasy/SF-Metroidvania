@@ -30,7 +30,7 @@ namespace SF.AbilityModule.Characters
                 return false;
 
             // If we are grounded we don't need to glide.
-            if(_controller2d.IsGrounded)
+            if(_controller2d.CollisionInfo.IsGrounded)
                 return false;
             return true;
         }

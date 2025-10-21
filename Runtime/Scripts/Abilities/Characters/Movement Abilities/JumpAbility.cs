@@ -51,7 +51,6 @@ namespace SF.AbilityModule.Characters
         private void OnInputJump(InputAction.CallbackContext context)
 		{
             if(!CanStartAbility()) return;
-
             // TODO: Only add the running height bonus to the first jump.
             _calculatedJumpHeight = _controller2d.IsRunning
                 ? JumpHeight * RunningJumpMultiplier

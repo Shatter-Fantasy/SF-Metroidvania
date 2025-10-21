@@ -3,6 +3,8 @@ using UnityEngine;
 using SF.Characters;
 using SF.Characters.Controllers;
 using SF.Managers;
+using SF.Physics;
+using SF.PhysicsLowLevel;
 
 namespace SF.AbilityModule
 {
@@ -17,24 +19,22 @@ namespace SF.AbilityModule
 
 		protected bool _isInitialized;		
 
-		protected GroundedController2D _controller2d;
+		protected ControllerBody2D _controller2d;
 		protected bool _isPerformingAbility;
 
-		public void Initialize(Controller2D controller2D = null)
+		public void Initialize(PhysicController2D physicController2D)
 		{
 			if (_isInitialized)
 				return;
 			
-			if(controller2D is GroundedController2D groundedController2D)
-				_controller2d = groundedController2D;
-			
-			if(controller2D is PlayerController playerController)
-				_controller2d = playerController;
+			if (physicController2D is ControllerBody2D controllerBody2D)
+				_controller2d = controllerBody2D;
 			
 			OnInitialize();
-
 			_isInitialized = true;
 		}
+		
+		
 		/// <summary>
 		/// Overload this to do initialization for abilities.
 		/// By this point the Controller2D class is safe to reference and use for event registering.

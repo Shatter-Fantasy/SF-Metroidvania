@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using SF.Characters.Controllers;
+using SF.Physics;
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.AbilityModule
@@ -24,28 +26,31 @@ namespace SF.AbilityModule
         //The gameobject the abilities will control.
         public GameObject AbilityOwner;
         public List<AbilityCore> Abilities = new List<AbilityCore>();
-
-        private Controller2D _controller2D;
+        
+        private PhysicController2D _physicController2D;
 
         private void Awake()
         {
             Abilities = GetComponents<AbilityCore>().ToList();
             
-            _controller2D = AbilityOwner != null ? AbilityOwner.GetComponent<Controller2D>() : GetComponent<Controller2D>();
+            _physicController2D = AbilityOwner != null 
+                ? AbilityOwner.GetComponent<PhysicController2D>() 
+                : GetComponent<PhysicController2D>();
             
             // Set the correct type of controller so the abilities can do different things based on if it is player, a enemy affected by gravity, or another type.
-            _controller2D = _controller2D switch
+            _physicController2D = _physicController2D switch
             {
+                ControllerBody2D controllerBody2D => controllerBody2D,
                 PlayerController playerController => playerController,
                 GroundedController2D groundedController2D => groundedController2D,
-                _ => _controller2D
+                _ => _physicController2D
             };
         }
         private void Start()
         {
             for (int i = 0; i < Abilities.Count; i++)
             {
-                Abilities[i].Initialize(_controller2D);
+                Abilities[i].Initialize(_physicController2D);
             }
         }
     }

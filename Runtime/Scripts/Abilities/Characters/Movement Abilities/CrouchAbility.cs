@@ -64,7 +64,7 @@ namespace SF.AbilityModule.Characters
                     || _controller2d.IsFalling
                     || _controller2d.IsSwimming
                     || _controller2d.IsGliding
-                    || !_controller2d.IsGrounded
+                    || !_controller2d.CollisionInfo.IsGrounded
                     || _controller2d.Direction.x != 0
                 )
             {
