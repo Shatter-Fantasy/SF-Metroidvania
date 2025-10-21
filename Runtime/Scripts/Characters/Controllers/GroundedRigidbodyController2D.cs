@@ -8,7 +8,7 @@ namespace SF.Characters.Controllers
 	/// and updates the <see cref="MovementState"/> while using the <see cref="CollisionController"/> for custom collision callbacks. 
 	/// </summary>
 	[RequireComponent(typeof(CharacterRenderer2D))]
-	public class GroundedController2D : Controller2D
+	public class GroundedController2D : RigidbodyController2D
 	{
 		#region Booleans
 		public bool IsGrounded

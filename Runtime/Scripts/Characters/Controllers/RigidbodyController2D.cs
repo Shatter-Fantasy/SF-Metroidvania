@@ -7,48 +7,15 @@ using SF.Physics;
 namespace SF.Characters.Controllers
 {
     /// <summary>
-    /// A physics controller used to add custom physics logic to any object. 
+    /// A physics controller used to add custom physics logic to any object with a rigidbody.
     /// This physics controller adds the ability to invoke events when colliding on per direction basis by
     /// using the <see cref="CollisionController"/> 
     /// </summary>
-    public class Controller2D : MonoBehaviour, IForceReciever
+    public class RigidbodyController2D : PhysicController2D, IForceReciever
     {
-        /// <summary>
-		/// Reference speed if used for passing in a value in horizontal calculating based on running or not.
-		/// </summary>
-		[NonSerialized] public float ReferenceSpeed;
-
-        [Header("Physics Properties")]
-        public MovementProperties DefaultPhysics = new(new Vector2(5, 5));
-        public MovementProperties CurrentPhysics = new(new Vector2(5, 5));
-        /// <summary>
-        /// The type of PhysicsVolumeType the controller is in. Sets as none if not in one.
-        /// </summary>
-        public PhysicsVolumeType PhysicsVolumeType;
         
         public CharacterState CharacterState;
         
-        public Vector2 Direction
-        {
-            get { return _direction; }
-            set
-            {
-                if (_previousDirection != value)
-                    _previousDirection = _direction;
-                
-                value.x = Mathf.RoundToInt(value.x);
-                _direction = value;
-                OnDirectionChanged?.Invoke(this, _direction);
-            }
-        }
-        [SerializeField] protected Vector2 _direction;
-        [SerializeField] protected Vector2 _directionLastFrame;
-        /// <summary>
-        /// Used to keep track of the direction to restore after unfreezing the Controller2D.
-        /// </summary>
-        protected Vector2 _previousDirection;
-        public EventHandler<Vector2> OnDirectionChanged;
-        public bool IsFrozen;
         #region Components 
         protected BoxCollider2D _boxCollider;
         protected Rigidbody2D _rigidbody2D;
@@ -56,19 +23,9 @@ namespace SF.Characters.Controllers
 
         #region Collision 
         [NonSerialized] public Bounds Bounds;
-        public CollisionInfo CollisionInfo = new();
+        public CollisionInfoBase CollisionInfo = new CollisionInfo();
         #endregion
         
-        /// <summary>
-        /// The overall velocity to be added this frame.
-        /// </summary>
-        protected Vector2 _calculatedVelocity;
-        /// <summary>
-        /// Velocity adding through external physics forces such as gravity and interactable objects.
-        /// </summary>
-        protected Vector2 _externalVelocity;
-
-        public Vector2 CurrentVelocity => _calculatedVelocity;
         public bool CollisionActivated
         {
             get => CollisionInfo.CollisionActivated;
@@ -92,7 +49,14 @@ namespace SF.Characters.Controllers
             // Even flying enemies need colliders to hurt the player. 
             _rigidbody2D = _rigidbody2D != null ? _rigidbody2D : GetComponent<Rigidbody2D>();
             _boxCollider = _boxCollider != null ? _boxCollider : GetComponent<BoxCollider2D>();
-            CollisionInfo.Initialize(_boxCollider);
+            
+            if(CollisionInfo is CollisionInfo collisionInfo)
+                collisionInfo.Initialize(_boxCollider);
+            else
+            {
+                CollisionInfo.Initialize();
+            }
+            
             SetComponentSetting();
             OnInit();
         }
@@ -108,12 +72,8 @@ namespace SF.Characters.Controllers
                 _rigidbody2D.freezeRotation = true;
             }
         }
-
-        protected virtual void OnInit()
-        {
-
-        }
-        protected virtual void OnAwake()
+        
+        protected override void OnAwake()
         {
             _rigidbody2D.gravityScale = 0;
         }
@@ -130,10 +90,7 @@ namespace SF.Characters.Controllers
 
             OnStart();
         }
-        protected virtual void OnStart()
-        {
-        }
-        protected virtual void FixedUpdate()
+        protected override void FixedUpdate()
         { 
             Bounds = _boxCollider.bounds;
             
@@ -162,16 +119,9 @@ namespace SF.Characters.Controllers
             CalculateMovementState();
             OnLateUpdate();
         }
-        protected virtual void OnLateUpdate()
-        {
-
-        }
-        protected virtual void OnPreFixedUpdate()
-        {
-        }
         #endregion
         #region Movement Calculations
-        protected virtual void Move()
+        protected override void Move()
         {
             if(CharacterState.CharacterStatus == CharacterStatus.Dead)
                 _calculatedVelocity = Vector2.zero;
@@ -184,7 +134,7 @@ namespace SF.Characters.Controllers
             
             _rigidbody2D.linearVelocity = _calculatedVelocity;
         }
-        protected virtual void CalculateHorizontal()
+        protected override void CalculateHorizontal()
         {
             if(Direction.x != 0)
             {
@@ -211,58 +161,16 @@ namespace SF.Characters.Controllers
                 _calculatedVelocity.x = Mathf.MoveTowards(_calculatedVelocity.x, 0, CurrentPhysics.GroundDeacceleration);
             }
         }
-        protected virtual void CalculateVertical() { }
-
+        protected override void CalculateVertical() { }
         
-        public void FreezeController()
+        public override void FreezeController()
         {
             _calculatedVelocity.x = 0;
             _externalVelocity.x = 0;
             _rigidbody2D.linearVelocity = Vector2.zero;
             IsFrozen = true;
         }
-        public void UnfreezeController()
-        {
-            IsFrozen = false;
-        }
-        public void SetExternalVelocity(Vector2 force)
-        {
-            _externalVelocity = force;
-        }
-        /// <summary>
-        /// This function applies velocity compared to the direction the user is facing.
-        /// </summary>
-        public virtual void SetDirectionalForce(Vector2 force)
-        {
-            _externalVelocity = force * -_directionLastFrame.x;
-        }
-        public virtual void AddVelocity(Vector2 velocity)
-        {
-            _externalVelocity += velocity;
-        }
-        public virtual void AddHorizontalVelocity(float horizontalVelocity)
-        {
-            _externalVelocity.x += horizontalVelocity;
-        }
-        public virtual void AddVerticalVelocity(float verticalVelocity)
-        {
-            _calculatedVelocity.y += verticalVelocity;
-        }
-        public virtual void SetVelocity(Vector2 velocity)
-        {
-            _calculatedVelocity = velocity;
-        }
-        public virtual void SetHorizontalVelocity(float horizontalVelocity)
-        {
-            _calculatedVelocity.x = horizontalVelocity;
-        }
-        public virtual void SetVerticalVelocity(float verticalVelocity)
-        {
-            // Need to compare this to _rigidbody2D.velocityY to see which one feels better. 
-            _calculatedVelocity.y = verticalVelocity;
-        }
-
-        protected virtual void CalculateMovementState()
+        protected override void CalculateMovementState()
         {
 
         }
@@ -359,12 +267,26 @@ namespace SF.Characters.Controllers
         {
             CollisionInfo.OnGroundedHandler += OnGrounded;
             CollisionInfo.OnCeilingCollidedHandler += OnCeilingCollided;
+
+            PostOnEnable();
+        }
+
+        protected virtual void PostOnEnable()
+        {
+            
         }
         
         protected void OnDisable()
         {
             CollisionInfo.OnGroundedHandler -= OnGrounded;
             CollisionInfo.OnCeilingCollidedHandler -= OnCeilingCollided;
+
+            PostOnDiable();
+        }
+        
+        protected virtual void PostOnDiable()
+        {
+            
         }
     }
 }
