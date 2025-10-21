@@ -1,0 +1,19 @@
+{
+    "name": "SF.Common",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:2665a8d13d1b3f18800f46e256720795",
+        "GUID:c3352a8bbbe14fb4ab52ae7bfff927ea",
+        "GUID:d4d4feea66c3d8f4489a0b92318aec3a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
