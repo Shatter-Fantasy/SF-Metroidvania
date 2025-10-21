@@ -10,7 +10,7 @@ namespace SF.CommandModule
         
         protected override async Awaitable DoAsyncCommand()
         {
-            Controller2D.CharacterState.StatusEffect = StatusEffect;
+            RigidbodyController2D.CharacterState.StatusEffect = StatusEffect;
             await Awaitable.EndOfFrameAsync();
         }
     }

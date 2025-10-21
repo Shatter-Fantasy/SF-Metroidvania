@@ -13,18 +13,18 @@ namespace SF.StateMachine
 		
 		[SerializeField] private bool _isHoleAhead;
 
-        protected override void OnInit(Controller2D controller2D)
+        protected override void OnInit(RigidbodyController2D rigidbodyController2D)
 		{
-			_controller = controller2D;
+			_rigidbodyController = rigidbodyController2D;
 		}
         
         protected override void OnStart()
 		{
-			if(_controller == null)
+			if(_rigidbodyController == null)
 				return;
 			
-			_controller.CollisionInfo.OnCollidedLeftHandler += OnCollidingLeft;
-			_controller.CollisionInfo.OnCollidedRightHandler += OnCollidingRight;
+			_rigidbodyController.CollisionInfo.OnCollidedLeftHandler += OnCollidingLeft;
+			_rigidbodyController.CollisionInfo.OnCollidedRightHandler += OnCollidingRight;
 		}
 
         protected override void OnUpdateState()
@@ -34,13 +34,13 @@ namespace SF.StateMachine
 
         protected override void OnStateEnter()
         {
-	        _controller.Direction = StartingRight
+	        _rigidbodyController.Direction = StartingRight
 		        ? Vector2.right : Vector2.left;
         }
 
 		private void HoleDetection()
 		{
-			if(_controller == null || _controller is GroundedController2D { IsFalling:true } || !DoesTurnOnHoles )
+			if(_rigidbodyController == null || _rigidbodyController is GroundedController2D { IsFalling:true } || !DoesTurnOnHoles )
 				return;
 			
 			/*
@@ -76,13 +76,13 @@ namespace SF.StateMachine
         
 		private void OnCollidingLeft()
 		{
-			if(_controller.Direction == Vector2.left)
-				_controller.SetDirection(1);
+			if(_rigidbodyController.Direction == Vector2.left)
+				_rigidbodyController.SetDirection(1);
 		}
 		private void OnCollidingRight()
 		{
-            if(_controller.Direction == Vector2.right)
-                _controller.SetDirection(-1);
+            if(_rigidbodyController.Direction == Vector2.right)
+                _rigidbodyController.SetDirection(-1);
         }
 	}
 }

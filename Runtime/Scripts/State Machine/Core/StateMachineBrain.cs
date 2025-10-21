@@ -24,23 +24,23 @@ namespace SF.StateMachine.Core
         public GameObject ControlledGameObject;
         protected List<StateCore> _states = new();
 
-        protected Controller2D _controller2D;
+        protected RigidbodyController2D _rigidbodyController2D;
 		private void Awake()
 		{
             _states.Clear();
             _states = GetComponentsInChildren<StateCore>().ToList();
 
             if(ControlledGameObject != null)
-                _controller2D = ControlledGameObject.GetComponent<Controller2D>();
+                _rigidbodyController2D = ControlledGameObject.GetComponent<RigidbodyController2D>();
             else
-                _controller2D = GetComponent<Controller2D>();
+                _rigidbodyController2D = GetComponent<RigidbodyController2D>();
 
             if(!_states.Any()) return;
             
             foreach(StateCore state in _states)
             {
                 state.StateBrain = this;
-                state.Init(_controller2D);
+                state.Init(_rigidbodyController2D);
             }
 		}
 

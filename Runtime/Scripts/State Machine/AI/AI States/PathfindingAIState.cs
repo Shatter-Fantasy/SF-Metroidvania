@@ -33,7 +33,7 @@ namespace SF.StateMachine.Core
             base.OnInit();
             if (_chasePlayer)
             {
-                _target = LevelPlayData.Instance.SpawnedPlayerController.transform;
+                _target = LevelPlayData.Instance.spawnedPlayerController.transform;
                 _currentTargetPos = _target.position;
             }
 

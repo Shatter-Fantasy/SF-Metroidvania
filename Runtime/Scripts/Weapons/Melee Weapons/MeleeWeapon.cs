@@ -28,8 +28,8 @@ namespace SF.Weapons
             _comboTimer = new Timer(ComboAttacks[0].ComboInputDelay, OnComboReset);
             
             
-            if(_controller2D != null)
-                _controller2D.OnDirectionChanged += OnDirectionChange;
+            if(_controllerBody2D != null)
+                _controllerBody2D.OnDirectionChanged += OnDirectionChange;
 
                 
             if (_hitBox != null)
@@ -53,7 +53,7 @@ namespace SF.Weapons
                 return;
 
             // Stop attack while dead attack while dead.
-            if (_controller2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
+            if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
             
             _character2D.CharacterState.CurrentMovementState = MovementState.Attacking;

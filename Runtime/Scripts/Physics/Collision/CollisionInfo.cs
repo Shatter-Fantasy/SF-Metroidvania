@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using SF.Characters.Controllers;
+
 
 using UnityEngine;
 
@@ -8,42 +10,48 @@ namespace SF.Physics
     /// <summary>
     /// Keeps track of the current frames collision information.
     /// This is used in all character controllers to help with knowing when a collision action needs to be invoked.
-    /// <see cref="SF.Characters.Controllers.GroundedController2D"/> for an example implementation. 
+    /// <see cref="GroundedController2D"/> for an example implementation. 
     /// </summary>
     /// <remarks>
+    /// Depending on if you are using the low or high level physics you will either use <see cref="Rigidbody2D"/> and <see cref="Collider2D"/>,
+    /// or you will use <see cref="UnityEngine.LowLevelPhysics2D.PhysicsShape"/> and <see cref="UnityEngine.LowLevelPhysics2D.PhysicsBody"/>
     ///	These are collisions from Collision based callbacks that interact with a non-trigger collider.
     /// Used for platforms, walls, and physical objects that can stop the player.
     /// </remarks>
     [Serializable]
-	public class CollisionInfo
+	public class CollisionInfo : CollisionInfoBase
 	{
-
-		public bool CollisionActivated = true;
 		/// <summary>
 		/// The <see cref="BoxCollider2D"/> to use for collision and contacts checks.
 		/// </summary>
 		public BoxCollider2D Collider2D;
-		public GameObject StandingOnObject;
-
-
-		public int ContactHitCount;
 		
 		[Header("Platform Layers")]
 		[SerializeField] protected LayerMask _platformLayer;
 		[SerializeField] protected LayerMask _movingPlatformLayer;
 		[SerializeField] protected LayerMask _oneWayPlatformFilter;
 		protected int OneWayFilterBitMask => _platformLayer & _oneWayPlatformFilter;
-		
-        public List<ContactPoint2D> CeilingContacts = new();
-        public List<ContactPoint2D> GroundContacts = new();
-        public List<ContactPoint2D> RightContacts = new();
-        public List<ContactPoint2D> LeftContacts = new();
 
+		// TODO: Add the Above and Below Filter now that grounded and below collisions are two different things.
+		// TODO: Make a custom VisualElement for ReadOnly List so I can mark a list as readonly and still have the values show in the inspector.
+#region MyRegion
+		public List<ContactPoint2D> CeilingContacts = new();
+		public List<ContactPoint2D> GroundContacts = new();
+		public List<ContactPoint2D> RightContacts = new();
+		public List<ContactPoint2D> LeftContacts = new();
+#endregion
+      
+
+        // TODO: Add the Above and Below Filter now that grounded and below collisions are two different things.
+#region ContactFilters
         [NonSerialized] public ContactFilter2D GroundFilter2D = DefaultGroundFilter2D;
         [NonSerialized] public ContactFilter2D CeilingFilter2D = DefaultCeilingFilter2D;
         [NonSerialized] public ContactFilter2D RightFilter2D = DefaultRightFilter2D;
         [NonSerialized] public ContactFilter2D LeftFilter2D = DefaultLeftFilter2D;
-        
+#endregion
+
+		// TODO: Add the Above and Below Filter now that grounded and below collisions are two different things.
+        #region DefaultFilter values
         public static ContactFilter2D DefaultGroundFilter2D = new ContactFilter2D()
         {
 	        useTriggers = false,
@@ -100,25 +108,8 @@ namespace SF.Physics
 	        minNormalAngle = -5,
 	        maxNormalAngle = 5f
         };
+        #endregion
         
-        
-		/// <summary>
-		/// Keeps track if the current character controller using this collision info is colliding with anything on the right that matches any of it's collision mask filters.
-		/// </summary>
-		public bool IsCollidingRight;
-        /// <summary>
-        /// Keeps track if the current character controller using this collision info is colliding with anything on the left that matches any of it's collision mask filters.
-        /// </summary>
-        public bool IsCollidingLeft;
-        /// <summary>
-        /// Keeps track if the current character controller using this collision info is colliding with anything above that matches any of it's collision mask filters.
-        /// </summary>
-        public bool IsCollidingAbove;
-        /// <summary>
-        /// Keeps track if the current character controller using this collision info is colliding with anything below that matches any of it platform collision filters.
-        /// </summary>
-        public bool IsGrounded;
-        private bool _wasGroundedLastFrame;
 
         /// <summary>
         /// The result of the last raycast used to check if there is any climbable surfaces. If no raycast detected a climable surface this will return false when checked if null in an if statement. 
@@ -145,38 +136,7 @@ namespace SF.Physics
 					ClimbableSurface = null;
             }
         }
-
-        /// <summary>
-        /// The last detected climable surface. If no surface is currently found that is climable this will be set to null. 
-        /// </summary>
-        [SerializeField] private ClimbableSurface _climableSurface;
-        public ClimbableSurface ClimbableSurface
-		{
-			get { return _climableSurface; }
-			set 
-			{ 
-				if(value == null)
-					WasClimbing = false;
-				_climableSurface = value;
-			}
-		}
-
-		// The below is for seeing if we were colliding in a direction on the previous frame. These allow us to see when we need to invoke any of the oncolliding events by comparing them to the current frame after doing the current frames collision checks.
-
-        //TODO: Make summary documentation notes for these so they appear in the documentation.
-		[NonSerialized] public bool WasCollidingRight;
-		[NonSerialized] public bool WasCollidingLeft;
-		[NonSerialized] public bool WasCollidingAbove;
-		[NonSerialized] public bool WasCollidingBelow;
-		[NonSerialized] public bool WasClimbing;
-
-        // These are for invoking actions on the frame a new collision takes place.
-        //TODO: Make summary documentation notes for these so they appear in the documentation.
-        public Action OnCollidedRightHandler;
-		public Action OnCollidedLeftHandler;
-		public Action OnCeilingCollidedHandler;
-		public Action OnGroundedHandler;
-
+        
 		public void Initialize(BoxCollider2D collider2d = null)
 		{
 			if (collider2d != null)
@@ -187,22 +147,8 @@ namespace SF.Physics
 			RightFilter2D.layerMask = _platformLayer;
 			LeftFilter2D.layerMask = _platformLayer;
 		}
-		public void CheckCollisions()
-		{
-			WasCollidingLeft = IsCollidingLeft;
-			WasCollidingRight = IsCollidingRight;
-			WasCollidingAbove = IsCollidingAbove;
-			WasCollidingBelow = IsGrounded;
-			
-			_wasGroundedLastFrame = IsGrounded;
-			
-			GroundCollisionChecks();
-			CeilingChecks();
-			SideCollisionChecks();
-			CheckOnCollisionActions();
-		}
 		
-		public void SideCollisionChecks()
+		public override void SideCollisionChecks()
 		{
 			Collider2D.GetContacts(RightFilter2D, RightContacts);
 			Collider2D.GetContacts(LeftFilter2D, LeftContacts);
@@ -211,7 +157,7 @@ namespace SF.Physics
 			IsCollidingLeft = LeftContacts.Count > 0;
 		}
 		
-		public void GroundCollisionChecks()
+		public override void GroundCollisionChecks()
 		{
 			Collider2D.GetContacts(GroundFilter2D,GroundContacts);
 			
@@ -241,13 +187,13 @@ namespace SF.Physics
             }
 
 			// If not grounded last frame, but grounded this frame call OnGrounded
-			if(!_wasGroundedLastFrame && IsGrounded)
+			if(!WasGroundedLastFrame && IsGrounded)
 			{
 				OnGroundedHandler?.Invoke();
 			}
         }
 		
-		public void CeilingChecks()
+		public override void CeilingChecks()
 		{
 			Collider2D.GetContacts(CeilingFilter2D,CeilingContacts);
 			IsCollidingAbove = CeilingContacts.Count > 0;
@@ -256,7 +202,7 @@ namespace SF.Physics
 		/// <summary>
 		/// Checks to see what sides might have a new collision that was started the current frame. If a new collision is detected on the side invoke the action related to that sides collisions.
 		/// </summary>
-		protected virtual void CheckOnCollisionActions()
+		protected override void CheckOnCollisionActions()
 		{
 			// If we were not colliding on a side with anything last frame, but is now Invoke the OnCollisionActions.
 
@@ -273,7 +219,7 @@ namespace SF.Physics
 				OnCeilingCollidedHandler?.Invoke();
 
 			//Below Side
-			if(!_wasGroundedLastFrame && IsGrounded)
+			if(!WasGroundedLastFrame && IsGrounded)
 				OnGroundedHandler?.Invoke();
 		}
 	}

@@ -60,9 +60,9 @@ namespace SF.CameraModule
 
         public void Start()
         {
-            if (GameManager.Instance != null && LevelPlayData.Instance.SpawnedPlayerController != null)
+            if (GameManager.Instance != null && LevelPlayData.Instance.spawnedPlayerController != null)
             {
-                _instance.CameraTarget = LevelPlayData.Instance.SpawnedPlayerController.transform;
+                _instance.CameraTarget = LevelPlayData.Instance.spawnedPlayerController.transform;
             }
         }
 

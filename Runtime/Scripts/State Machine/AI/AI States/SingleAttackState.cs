@@ -10,9 +10,9 @@ namespace SF.StateMachine
 
         [SerializeField, SerializeReference] private WeaponBase _weapon;
         
-        protected override void OnInit(Controller2D controller2D)
+        protected override void OnInit(RigidbodyController2D rigidbodyController2D)
         {
-            base.OnInit(controller2D);
+            base.OnInit(rigidbodyController2D);
 
             if (_weapon == null)
                 _weapon = GetComponent<WeaponBase>();
@@ -27,12 +27,12 @@ namespace SF.StateMachine
                 return;
             
             _weapon.Use();
-            _controller.FreezeController();
+            _rigidbodyController.FreezeController();
         }
 
         protected void OnUseCompleted()
         {
-            _controller.UnfreezeController();
+            _rigidbodyController.UnfreezeController();
             StateBrain.ChangeStateWithCheck(StateBrain.PreviousState);
         }
     }

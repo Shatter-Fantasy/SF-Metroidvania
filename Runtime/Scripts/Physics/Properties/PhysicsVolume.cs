@@ -29,7 +29,7 @@ namespace SF.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.TryGetComponent(out Controller2D controller2D))
+            if(collision.TryGetComponent(out RigidbodyController2D controller2D))
             {
                 controller2D.UpdatePhysicsProperties(_volumeProperties, _physicsVolumeType);
             }
@@ -37,7 +37,7 @@ namespace SF.Physics
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if(collision.TryGetComponent(out Controller2D controller2D))
+            if(collision.TryGetComponent(out RigidbodyController2D controller2D))
             {
                 controller2D.ResetPhysics(_volumeProperties);
             }
@@ -45,7 +45,7 @@ namespace SF.Physics
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if(collision.gameObject.TryGetComponent(out Controller2D controller2D))
+            if(collision.gameObject.TryGetComponent(out RigidbodyController2D controller2D))
             {
                 controller2D.UpdatePhysicsProperties(_volumeProperties, _physicsVolumeType);
             }
@@ -53,7 +53,7 @@ namespace SF.Physics
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if(collision.gameObject.TryGetComponent(out Controller2D controller2D))
+            if(collision.gameObject.TryGetComponent(out RigidbodyController2D controller2D))
             {
                 controller2D.ResetPhysics(_volumeProperties);
             }

@@ -35,7 +35,7 @@ namespace SF.StateMachine.Core
 		protected DecisionTransition _decision = new();
 		protected bool _initialized = false;
 
-        protected Controller2D _controller;
+        protected RigidbodyController2D _rigidbodyController;
 
         private void Awake()
 		{
@@ -59,17 +59,17 @@ namespace SF.StateMachine.Core
 		/// This is run the very first time this object is enabled and when the StateMachineBrain inits it.
 		/// This won't run everytime this state is interacted with.
 		/// </summary>
-		public void Init(Controller2D controller2D = null)
+		public void Init(RigidbodyController2D rigidbodyController2D = null)
 		{
 			if(!_initialized)
 				_initialized = true;
 
-			if(controller2D == null)
+			if(rigidbodyController2D == null)
 				OnInit();
 			else
 			{
-				_controller = controller2D;
-                OnInit(controller2D);
+				_rigidbodyController = rigidbodyController2D;
+                OnInit(rigidbodyController2D);
 			}
 		}
 
@@ -81,7 +81,7 @@ namespace SF.StateMachine.Core
 
 		}
 
-        protected virtual void OnInit(Controller2D controller2D)
+        protected virtual void OnInit(RigidbodyController2D rigidbodyController2D)
         {
 
         }
@@ -95,7 +95,7 @@ namespace SF.StateMachine.Core
 			CheckTransitions();
 
 			
-			if (_controller == null && _controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			if (_rigidbodyController == null && _rigidbodyController?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
 				return;
 			}
@@ -138,8 +138,8 @@ namespace SF.StateMachine.Core
 		}
 		public virtual bool CheckEnterableState(StateCore currentState)
 		{
-			if (_controller == null
-			    || _controller.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			if (_rigidbodyController == null
+			    || _rigidbodyController.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
 				return false;
 			}

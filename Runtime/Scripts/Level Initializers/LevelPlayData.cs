@@ -1,4 +1,6 @@
 using SF.Characters.Controllers;
+using SF.Physics;
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.LevelModule
@@ -12,11 +14,11 @@ namespace SF.LevelModule
     {
         /// <summary>
         /// This is the player prefab asset that should be spawned in playable scenes.
-        /// After this is spawned you use the <see cref="SpawnedPlayerController"/> value.
+        /// After this is spawned you use the <see cref="spawnedPlayerController"/> value.
         /// </summary>
-        [SerializeField] private PlayerController _playerPrefab;
+        [SerializeField] private ControllerBody2D _playerPrefab;
 
-        private PlayerController _spawnedPlayerController;
+        private ControllerBody2D _spawnedPlayerController;
         
         /// <summary>
         /// The spawned <see cref="PlayerController"/> inside the current loaded scene.
@@ -25,7 +27,7 @@ namespace SF.LevelModule
         /// This is only assigned right before the Awake/OnEnable calls of the first playable character scene is loaded.
         /// First set of menus do will not be able to use this.
         /// </remarks>
-        public PlayerController SpawnedPlayerController
+        public ControllerBody2D spawnedPlayerController
         {
             get
             {
@@ -33,7 +35,7 @@ namespace SF.LevelModule
                 {
                     // If none is already assigned make sure we don't have one in the scene for debugging purposes.
                     // TODO: We should check and make sure this is finding objects in all active scenes not just the game loader scene.
-                    var playerInScene = FindFirstObjectByType<PlayerController>();
+                    var playerInScene = FindFirstObjectByType<ControllerBody2D>();
 
                     if (playerInScene != null)
                     {

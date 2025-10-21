@@ -20,7 +20,7 @@ namespace SF.StateMachine.Decisions
         {
             if (_chasePlayer)
             {
-                Target = LevelPlayData.Instance.SpawnedPlayerController.transform;
+                Target = LevelPlayData.Instance.spawnedPlayerController.transform;
             }
         }
         

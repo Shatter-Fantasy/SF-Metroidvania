@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace SFEditor.Characters
 {
-    [CustomEditor(typeof(Controller2D), true)]
+    [CustomEditor(typeof(RigidbodyController2D), true)]
     public class Controller2DInspector : Editor
     {
         public override VisualElement CreateInspectorGUI()
@@ -31,7 +31,7 @@ namespace SFEditor.Characters
 
         private void SetupControllerComponents()
         {
-            if (target is not Controller2D controller2D)
+            if (target is not RigidbodyController2D controller2D)
                 return;
             
             Rigidbody2D rgb = controller2D.GetComponent<Rigidbody2D>();

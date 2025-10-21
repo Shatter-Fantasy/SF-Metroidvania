@@ -33,7 +33,7 @@ namespace SF.CommandModule
                 if(cmd is CharacterCommandNode characterCommand)
                 {
                     characterCommand.Character2D = GetComponent<CharacterRenderer2D>();
-                    characterCommand.Controller2D = GetComponent<Controller2D>();
+                    characterCommand.RigidbodyController2D = GetComponent<RigidbodyController2D>();
                 }    
             }
         }

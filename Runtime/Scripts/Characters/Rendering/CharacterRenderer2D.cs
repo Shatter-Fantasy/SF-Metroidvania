@@ -2,6 +2,7 @@ using UnityEngine;
 
 using SF.Characters.Controllers;
 using SF.Managers;
+using SF.PhysicsLowLevel;
 
 
 namespace SF.Characters
@@ -15,7 +16,7 @@ namespace SF.Characters
     {
 	    public bool UseAnimatorTransitions;
 		public CharacterTypes CharacterType = CharacterTypes.Player;
-		public CharacterState CharacterState => _controller?.CharacterState;
+		public CharacterState CharacterState => _rigidbodyController?.CharacterState;
 
 		public bool CanTurnAround = true;
 		public bool StartedFacingRight = true;
@@ -27,7 +28,8 @@ namespace SF.Characters
 		/// This is used to update animation clips at runtime for forced states.
 		/// </summary>
 		private RuntimeAnimatorController _runtimeAnimator;
-		private Controller2D _controller;
+		private RigidbodyController2D _rigidbodyController;
+		private ControllerBody2D _controllerBody2D;
 		#endregion
 		
 		private int MovementAnimationHash => Animator.StringToHash(CharacterState?.CurrentMovementState.ToString());
@@ -36,7 +38,7 @@ namespace SF.Characters
 		[SerializeField] private int _lastAnimationHash;
 		[SerializeField] private string _lastAnimationName;
 		
-		private static readonly int _deathAnimationHash = Animator.StringToHash(nameof(CharacterStatus.Dead));
+		private static readonly int DeathAnimationHash = Animator.StringToHash(nameof(CharacterStatus.Dead));
 		private static readonly int AttackingStateHash = Animator.StringToHash( nameof(MovementState.Attacking));
 		//[SerializeField] private bool _hasForcedState;
 
@@ -46,7 +48,8 @@ namespace SF.Characters
 		{
 			Animator = GetComponent<Animator>();
 			_spriteRend = GetComponent<SpriteRenderer>();
-			_controller = GetComponent<Controller2D>();
+			_rigidbodyController = GetComponent<RigidbodyController2D>();
+			_controllerBody2D = GetComponent<ControllerBody2D>();
 			Init();
 		}
 		#endregion
@@ -58,8 +61,11 @@ namespace SF.Characters
 		
 		protected virtual void OnInit()
 		{
-			if(_controller) // Can happen when attached to an NPC not moving and just idle.
-				_controller.OnDirectionChanged += OnDirectionChanged;
+			if(_rigidbodyController) // Can happen when attached to an NPC not moving and just idle.
+				_rigidbodyController.OnDirectionChanged += OnDirectionChanged;
+
+			if (_controllerBody2D)
+				_controllerBody2D.OnDirectionChanged += OnDirectionChanged;
 
 			// TODO: Make the attacking change the state the animation state to attacking. 
 			//_controller.CharacterState.OnMovementStateChanged += UpdateAnimator;
@@ -76,40 +82,38 @@ namespace SF.Characters
 		private void UpdateAnimatorParameters()
 		{
 			
-			if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
-				Animator.Play(_deathAnimationHash,0);
+				Animator.Play(DeathAnimationHash,0);
 				return;
 			}
 			
 			
-			if (_controller?.CharacterState.CurrentMovementState == MovementState.Attacking)
+			if (_controllerBody2D?.CharacterState.CurrentMovementState == MovementState.Attacking)
 			{
 				Animator.Play(AttackingStateHash,0);
 				return;
 			}
-
-			if (_controller is null)
+			
+			if (_controllerBody2D is null)
 				return;
 			
 			/* All Controller2D have the next set of parameters*/
 			
-			if (_controller?.CharacterState.CurrentMovementState == MovementState.Attacking)
+			if (_controllerBody2D?.CharacterState.CurrentMovementState == MovementState.Attacking)
 				Animator.SetTrigger("Attacking");
 			
-			Animator.SetFloat("XSpeed", Mathf.Abs(_controller.CurrentVelocity.x));
+			Animator.SetFloat("XSpeed", Mathf.Abs(_controllerBody2D.Direction.x));
 
-			if (_controller is GroundedController2D groundedController2D)
-			{
-				// Grounded States
-				Animator.SetBool("IsGrounded", groundedController2D.IsGrounded);
-				Animator.SetBool("IsCrouching", groundedController2D.IsCrouching);
-				
-				// Jump/Air States
-				Animator.SetBool("IsJumping", groundedController2D.IsJumping);
-				Animator.SetBool("IsFalling", groundedController2D.IsFalling);
-				Animator.SetBool("IsGliding", groundedController2D.IsGliding);
-			}
+
+			// Grounded States
+			Animator.SetBool("IsGrounded", _controllerBody2D.CollisionInfo.IsGrounded);
+			Animator.SetBool("IsCrouching", _controllerBody2D.IsCrouching);
+			
+			// Jump/Air States
+			Animator.SetBool("IsJumping", _controllerBody2D.IsJumping);
+			Animator.SetBool("IsFalling", _controllerBody2D.IsFalling);
+			Animator.SetBool("IsGliding", _controllerBody2D.IsGliding);
 		}
 		
         /// <summary>
@@ -122,9 +126,9 @@ namespace SF.Characters
 	           || Animator.runtimeAnimatorController == null)
 		        return;
 	        
-	        if (_controller?.CharacterState.CharacterStatus == CharacterStatus.Dead)
+	        if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 	        {
-		        Animator.Play(_deathAnimationHash,0);
+		        Animator.Play(DeathAnimationHash,0);
 		        return;
 	        }
 	       

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using SF.Characters;
 using SF.Characters.Controllers;
 using SF.CombatModule;
-
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.Weapons
@@ -17,7 +17,7 @@ namespace SF.Weapons
         public List<ComboAttack> ComboAttacks = new();
         [SerializeField] protected Vector2 _knockBackForce;
         [SerializeField] protected CharacterRenderer2D _character2D;
-        [SerializeField] protected Controller2D _controller2D;
+        [SerializeField] protected ControllerBody2D _controllerBody2D;
         [SerializeField] protected ContactFilter2D _hitBoxFilter;
 
         [SerializeField] protected Timer _attackTimer;
@@ -26,12 +26,12 @@ namespace SF.Weapons
         
         public System.Action UseCompleted;
         
-        public virtual void Initialize(Controller2D controller2D = null)
+        public virtual void Initialize(ControllerBody2D controllerBody2D = null)
         {
-            _controller2D = controller2D;
+            _controllerBody2D = controllerBody2D;
             
-            if(_controller2D != null)
-                _controller2D.OnDirectionChanged += OnDirectionChange;
+            if(_controllerBody2D != null)
+                _controllerBody2D.OnDirectionChanged += OnDirectionChange;
         }
         
         public virtual void Use()

@@ -147,7 +147,7 @@ namespace SF.Managers
                 return;
             
             GameLoaderData.SettingUpNewGame = false;
-            LevelPlayData.Instance.SpawnedPlayerController.CollisionActivated = true;
+            LevelPlayData.Instance.spawnedPlayerController.CollisionInfo.CollisionActivated = true;
         }
         private void OnDisable()
         {
