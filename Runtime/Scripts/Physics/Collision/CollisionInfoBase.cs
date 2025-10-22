@@ -100,7 +100,7 @@ namespace SF.Physics
         }
 
         
-        public void CheckCollisions()
+        public virtual void CheckCollisions()
         {
             WasCollidingLeft = IsCollidingLeft;
             WasCollidingRight = IsCollidingRight;
