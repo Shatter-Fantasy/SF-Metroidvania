@@ -12,60 +12,12 @@ namespace SF.PhysicsLowLevel
     
     public static class ContactExtensions
     {
-        public enum FilterFunctionMode
-        {
-            NormalVector = 0, // Using the Vector2 normalized value for a filter.
-            NormalAngle = 1,
-            NormalImpulse = 2,
-            NormalAngleAndImpulse = 4
-        }
-    
-        public enum FilterMathOperator
-        {
-            GreaterThan = 0, 
-            LessThan = 1,
-            Equal = 2,
-            GreaterThanOrEqual = 4,
-            LessThanOrEqual = 8,
-            NotEqual = 16
-        }
-
-        /// <summary>
-        /// Used to choose which value or values of a Vector2 should a filter operation be done on. 
-        /// </summary>
-        public enum FilterVector2Operator
-        {
-            BothXY = 0, // Both have to pass the filter predicate check.
-            JustX = 1,
-            JustY = 2,
-            EitherXY = 4, // Only one needs to pass the filter predicate check.
-        }
-
-        
-        /// <summary>
-        /// A delegate used as a filter for contacts.
-        /// The PhysicsShape is passed to the filter function which can be used if filtering the normal as it is always returned as the normal from shape A to shape B.
-        /// </summary>
-        public delegate bool ContactFilterFunction(ref PhysicsShape.Contact contact, PhysicsShape shapeContext);
-        
-        public delegate bool ContactNormalVectorFilterFunction(
+        public delegate bool ContactNormalFilterFunction(
             ref PhysicsShape.Contact contact, 
             PhysicsShape shapeContext,
-            FilterMathOperator filterMathOperator, 
-            FilterVector2Operator filterVector2Operator);
+            float normalizedXValue = 0f, 
+            FilterMathOperator filterMathOperator = FilterMathOperator.Equal);
         
-        
-
-        /// <summary>
-        /// Enumerate an array of contacts based upon a filter function.
-        /// </summary>
-        /// <param name="contacts">The array of contacts to enumerate.</param>
-        /// <param name="filterFunction">The filter function to use to check each element.</param>
-        /// <param name="shapeContext">The shape context to pass to the filter function. Used when filtering the normal.</param>
-        /// <returns>An enumerable set of contacts filtered by the filter function.</returns>
-        public static IEnumerable<PhysicsShape.Contact> Filter(this NativeArray<PhysicsShape.Contact> contacts,
-            ContactFilterFunction filterFunction, PhysicsShape shapeContext = default) =>
-            new FilteredContacts(contacts, filterFunction, shapeContext);
         
         /// <summary>
         /// Enumerate an array of contacts based upon a filter function.
@@ -74,86 +26,64 @@ namespace SF.PhysicsLowLevel
         /// <param name="filterFunction">The filter function to use to check each element.</param>
         /// <param name="shapeContext">The shape context to pass to the filter function. Used when filtering the normal.</param>
         /// <returns>An enumerable set of contacts filtered by the filter function.</returns>
-        public static IEnumerable<PhysicsShape.Contact> Filter(this NativeArray<PhysicsShape.Contact> contacts,
-            ContactNormalVectorFilterFunction filterFunction, PhysicsShape shapeContext = default) =>
-            new FilteredContacts(contacts, filterFunction, shapeContext);
+        public static IEnumerable<PhysicsShape.Contact> Filter(
+            this NativeArray<PhysicsShape.Contact> contacts,
+            ContactNormalFilterFunction filterFunction,
+            PhysicsShape shapeContext = default,
+            float normalizedYValue = 0f, 
+            FilterMathOperator filterMathOperator = FilterMathOperator.Equal) =>
+             new FilteredContacts(contacts, filterFunction, shapeContext, normalizedYValue, filterMathOperator);
+        
 
-        /// <summary>
-        /// Create a list of contacts based upon a filter function.
-        /// </summary>
-        /// <param name="contacts">The array of contacts to enumerate.</param>
-        /// <param name="filterFunction">The filter function to use to check each element.</param>
-        /// <param name="shapeContext">The shape context to pass to the filter function. Used when filtering the normal.</param>
-        /// <param name="allocator">The allocator to use to create the list.</param>
-        /// <returns>A native list of contacts filtered by the filter function.</returns>
-        public static NativeList<PhysicsShape.Contact> ToFilteredList(this NativeArray<PhysicsShape.Contact> contacts,
-            ContactFilterFunction filterFunction, PhysicsShape shapeContext = default,
-            Allocator allocator = Allocator.Temp)
-        {
-            var filterList = new NativeList<PhysicsShape.Contact>(initialCapacity: contacts.Length, allocator);
-
-            // Filter the contacts.
-            foreach (var contact in new FilteredContacts(contacts, filterFunction, shapeContext))
-                filterList.Add(contact);
-
-            return filterList;
-        }
-
-        // Enumerate contacts via a user-defined contact filter function.
         private struct FilteredContacts : IEnumerable<PhysicsShape.Contact>, IEnumerator<PhysicsShape.Contact>
         {
-            public FilteredContacts(NativeArray<PhysicsShape.Contact> contacts, ContactFilterFunction filterFunction,
-                PhysicsShape shapeContext)
-            {
-                m_Contacts = contacts;
-                m_ShapeContext = shapeContext;
-                _normalFilterFunction = filterFunction;
-                _normalVectorFilterFunction = null;
-                m_Index = -1;
-            }
+            private readonly NativeArray<PhysicsShape.Contact> _contacts;
+            private readonly PhysicsShape _shapeContext;
+            private readonly ContactNormalFilterFunction _normalFilterFunction;
+            private float _normalizedValue;
+            private FilterMathOperator _filterMathOperator;
+            private int _index;
             
             public FilteredContacts(NativeArray<PhysicsShape.Contact> contacts,
-                ContactNormalVectorFilterFunction filterFunction,
-                PhysicsShape shapeContext)
+                ContactNormalFilterFunction filterFunction,
+                PhysicsShape shapeContext,
+                float normalizedValue = 0f, 
+                FilterMathOperator filterMathOperator = FilterMathOperator.Equal
+                )
             {
-                m_Contacts = contacts;
-                m_ShapeContext = shapeContext;
-                _normalFilterFunction = null;
-                _normalVectorFilterFunction = filterFunction;
-                m_Index = -1;
+                _contacts = contacts;
+                _shapeContext = shapeContext;
+                _normalFilterFunction = filterFunction;
+                _normalizedValue = normalizedValue;
+                _filterMathOperator = filterMathOperator;
+                _index = -1;
             }
-
-            private readonly NativeArray<PhysicsShape.Contact> m_Contacts;
-            private readonly PhysicsShape m_ShapeContext;
-            private readonly ContactFilterFunction _normalFilterFunction;
-            private readonly ContactNormalVectorFilterFunction _normalVectorFilterFunction;
-            private int m_Index;
-
+            
             #region Enumeration
 
-            object IEnumerator.Current => m_Contacts[m_Index];
-            PhysicsShape.Contact IEnumerator<PhysicsShape.Contact>.Current => m_Contacts[m_Index];
+            object IEnumerator.Current => _contacts[_index];
+            PhysicsShape.Contact IEnumerator<PhysicsShape.Contact>.Current => _contacts[_index];
 
             bool IEnumerator.MoveNext()
             {
                 // Filter the contacts.
-                while (++m_Index < m_Contacts.Length)
+                while (++_index < _contacts.Length)
                 {
-                    var contact = m_Contacts[m_Index];
-                    if (_normalFilterFunction(ref contact, m_ShapeContext))
+                    var contact = _contacts[_index];
+                    if (_normalFilterFunction(ref contact, _shapeContext,_normalizedValue,_filterMathOperator))
                         return true;
                 }
 
                 return false;
             }
 
-            void IEnumerator.Reset() => m_Index = -1;
+            void IEnumerator.Reset() => _index = -1;
 
             public IEnumerator<PhysicsShape.Contact> GetEnumerator() =>
-                new FilteredContacts(m_Contacts, _normalFilterFunction, m_ShapeContext);
+                new FilteredContacts(_contacts, _normalFilterFunction, _shapeContext);
 
             IEnumerator IEnumerable.GetEnumerator() =>
-                new FilteredContacts(m_Contacts, _normalFilterFunction, m_ShapeContext);
+                new FilteredContacts(_contacts, _normalFilterFunction, _shapeContext);
 
             // Iterator does not own the buffer, nothing to dispose.
             public readonly void Dispose()
@@ -162,5 +92,6 @@ namespace SF.PhysicsLowLevel
 
             #endregion
         }
+
     }
 }

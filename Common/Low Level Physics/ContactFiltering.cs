@@ -18,28 +18,39 @@ namespace SF.PhysicsLowLevel
     
     public enum FilterMathOperator
     {
-        GreaterThan,
-        LessThan,
-        Equal
+        GreaterThan = 0,
+        LessThan = 1,
+        Equal = 2,
+        GreaterThanOrEqual = 4,
+        LessThanOrEqual = 8
+    }
+    
+    /// <summary>
+    /// Used to choose which value or values of a Vector2 should a filter operation be done on. 
+    /// </summary>
+    public enum FilterVector2Operator
+    {
+        BothXY = 0, // Both have to pass the filter predicate check.
+        JustX = 1,
+        JustY = 2,
+        EitherXY = 4, // Only one needs to pass the filter predicate check.
     }
 
     public static class ContactFiltering
     {
-        // Example filter that checks if the normal angle is within a set range.
-        private static bool NormalAngleFilter(ref PhysicsShape.Contact contact, PhysicsShape shapeContext)
-        {
-            // Fetch the normal.
-            // NOTE: Normal is always in the direction of shape A to shape B so always ensure we're referring to it in context.
-            var manifold = contact.manifold;
-            var normal = shapeContext == contact.shapeB ? manifold.normal : -manifold.normal;
         
-            // Filter the normal.
-            var normalAngle = PhysicsMath.ToDegrees(new PhysicsRotate(normal).angle);
-            return normalAngle is > 85f and < 95f;
+        public static bool NormalImpulseFilter(ref PhysicsShape.Contact contact, PhysicsShape shapeContext)
+        {
+            foreach (var point in contact.manifold)
+            {
+                if (point.totalNormalImpulse > 4.0f)
+                    return true;
+            }
+
+            return false;
         }
         
-         
-        // Example filter that checks if the normal angle is within a set range.
+        
         public static bool NormalAngleFilter(ref PhysicsShape.Contact contact, PhysicsShape shapeContext, float lowRange, float highRange)
         {
             // Fetch the normal.
@@ -52,26 +63,28 @@ namespace SF.PhysicsLowLevel
             return normalAngle > lowRange && normalAngle < highRange;
         }
         
-        // Example filter that checks if the normal impulse is above a threshold.
-        public static bool NormalImpulseFilter(ref PhysicsShape.Contact contact, PhysicsShape shapeContext)
+        
+        public static bool NormalXFilter(ref PhysicsShape.Contact contact, 
+            PhysicsShape shapeContext, 
+            float normalizedXValue = 0f, 
+            FilterMathOperator filterMathOperator = FilterMathOperator.Equal)
         {
-            foreach (var point in contact.manifold)
-            {
-                if (point.totalNormalImpulse > 4.0f)
-                    return true;
-            }
+            // Fetch the normal.
+            // NOTE: Normal is always in the direction of shape A to shape B so always ensure we're referring to it in context.
+            var manifold = contact.manifold;
+            var normal = shapeContext == contact.shapeB ? manifold.normal : -manifold.normal;
 
-            return false;
+            bool passFilter = filterMathOperator switch
+            {
+                FilterMathOperator.GreaterThan => normal.x > normalizedXValue,
+                FilterMathOperator.LessThan => normal.x > normalizedXValue,
+                FilterMathOperator.Equal => normal.x > normalizedXValue,
+                _ => false
+            };
+
+            return passFilter;
         }
         
-        // Example filter that checks both the normal angle and impulse threshold.
-        public static bool NormalAngleAndImpulseFilter(ref PhysicsShape.Contact contact, PhysicsShape shapeContext)
-        {
-            return NormalAngleFilter(ref contact, shapeContext) && NormalImpulseFilter(ref contact, shapeContext);
-        }
-        
-        
-        // Example filter that checks if the normal angle is within a set range.
         public static bool NormalYFilter(ref PhysicsShape.Contact contact, 
             PhysicsShape shapeContext, 
             float normalizedYValue = 0f, 
