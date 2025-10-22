@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SF.Characters;
 using SF.Physics;
@@ -42,7 +43,7 @@ namespace SF.PhysicsLowLevel
         [SerializeField] private SceneWorld _sceneWorld;
         
         /// <summary>
-        /// The <see cref="PhysicsBodyDefinition"/> that defines the physics properties of the controller's <see cref="_controllerBody"/>
+        /// The <see cref="PhysicsBodyDefinition"/> that defines the physics properties of the controller's <see cref="ControllerBody"/>
         /// </summary>
         /// <remarks>
         /// This includes <see cref="RigidbodyType2D"/>, transform syncing for the controlling object, <see cref="RigidbodyConstraints2D"/>
@@ -64,7 +65,7 @@ namespace SF.PhysicsLowLevel
         /// <see cref="PhysicsBody"/> is the low level physics version of Rigidbody2D.
         /// It just has a lot more options and customization to it compared to the Rigidbody2D component.
         /// </remarks>
-        private PhysicsBody _controllerBody;
+        [NonSerialized] public PhysicsBody ControllerBody;
 
         /// <summary>
         /// Owner key tells the physics backend what object is allowed to create or destroy a physics body.
@@ -118,6 +119,14 @@ namespace SF.PhysicsLowLevel
         public event ControllerBodyDestroyEventHandler DestroyBodyEvent;
         #endregion
 
+        /// <summary>
+        /// Should the debug rendering and log system be active.
+        /// </summary>
+        /// <remarks>
+        /// Debug rendering works in builds and in editor, but requires a device that supports compute shaders.
+        /// WebGL doesn't work, but WebGPU does work.
+        /// </remarks>
+        public bool DebugMode = false;
         
         #region IWorldSceneTransformChanged implementation
         /// <summary>
@@ -125,7 +134,7 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         public void TransformChanged()
         {
-            if (_controllerBody.isValid)
+            if (ControllerBody.isValid)
                 CreatePhysicsBody();
         }
         #endregion
@@ -136,18 +145,18 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         void IWorldSceneDrawable.Draw()
         {
-            if (!_controllerBody.isValid)
+            if (!ControllerBody.isValid || !DebugMode)
                 return;
 
             // Draw if we're drawing selections.
-            if (_controllerBody.world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedBodies))
-                _controllerBody.Draw();
+            if (ControllerBody.world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedBodies))
+                ControllerBody.Draw();
         }
         #endregion
                 
         protected override void Move()
         {
-            if (!_controllerBody.isValid)
+            if (!ControllerBody.isValid)
                 return;
             
             /* Slope Calculations
@@ -170,7 +179,7 @@ namespace SF.PhysicsLowLevel
                 _externalVelocity = Vector2.zero;
             }
             
-            _controllerBody.linearVelocity = _calculatedVelocity;
+            ControllerBody.linearVelocity = _calculatedVelocity;
         }
 
         protected override void CalculateHorizontal()
@@ -304,10 +313,6 @@ namespace SF.PhysicsLowLevel
             Move();
         }
         
-        private void FilterContacts(PhysicsWorld world, float deltaTime)
-        {
-            CollisionInfo.FilterContacts();
-        }
         
         public void Reset()
         {
@@ -367,7 +372,6 @@ namespace SF.PhysicsLowLevel
             CreatePhysicsShape();
             DebugPhysics();
 
-            PhysicsEvents.PostSimulate += FilterContacts;
             
 #if UNITY_EDITOR
             // This allows the editor to keep track of the transform out of play mode and update the scene view for drawing the visuals. 
@@ -381,8 +385,6 @@ namespace SF.PhysicsLowLevel
         {
             DestroyPhysicsBody();
             DestroyPhysicsShape();
-            
-            PhysicsEvents.PostSimulate -= FilterContacts;
             
             if (_sceneWorld != null)
             {
@@ -429,21 +431,21 @@ namespace SF.PhysicsLowLevel
             PhysicsBodyDefinition.rotation = new PhysicsRotate(PhysicsMath.ToRotation2D(transform.rotation, transformPlane));
             
             // Create the _controllerBody in the used SceneWorld with our defined PhysicsBodyDefinition
-            _controllerBody = PhysicsBody.Create(world:world, definition: PhysicsBodyDefinition);
+            ControllerBody = PhysicsBody.Create(world:world, definition: PhysicsBodyDefinition);
             
             // If all the required information has been set up for the _controllerBody we can now add it to the PhysicsWorld simulations.
-            if (_controllerBody.isValid)
+            if (ControllerBody.isValid)
             {
                 // Set the transform object.
-                _controllerBody.transformObject = transform;
+                ControllerBody.transformObject = transform;
 
                 /* Set the callback target as this game object to allow for doing a custom filtering in this component
                  that than send the callback events to the defined CallbackTargets list allowing other mono behaviors to also react
                  to callbacks from this ControllerBody2D. */
-                _controllerBody.callbackTarget = this;
+                ControllerBody.callbackTarget = this;
 
                 // Set Owner.
-                _ownerKey = _controllerBody.SetOwner(this);
+                _ownerKey = ControllerBody.SetOwner(this);
                 
                 CreateBodyEvent?.Invoke(this);
             }
@@ -454,23 +456,23 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         private void DestroyPhysicsBody()
         {
-            if (_controllerBody.isValid)
+            if (ControllerBody.isValid)
             {
                 DestroyBodyEvent?.Invoke(this);
 
                 // Because the PhysicsBody _controllerBody is a struct we set it to default and call the clean up Destroy method on it.
-                _controllerBody.Destroy(_ownerKey);
-                _controllerBody = default;
+                ControllerBody.Destroy(_ownerKey);
+                ControllerBody = default;
                 _ownerKey = 0;
             }
         }
         
         private void CreatePhysicsShape()
         {
-            if (!_controllerBody.isValid)
+            if (!ControllerBody.isValid)
                 return;
             
-            PhysicsShape = _controllerBody.CreateShape(CapsuleGeometry, PhysicsShapeDefinition);
+            PhysicsShape = ControllerBody.CreateShape(CapsuleGeometry, PhysicsShapeDefinition);
 
             if (PhysicsShape.isValid)
             {
@@ -519,7 +521,7 @@ namespace SF.PhysicsLowLevel
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         private void DebugPhysics()
         {
-            if (!_controllerBody.isValid)
+            if (!ControllerBody.isValid)
             {
                 Debug.LogWarning($"The _controllerBody was not valid for ControllerBody2D component on game object named: {gameObject}", gameObject);
             }
@@ -532,7 +534,7 @@ namespace SF.PhysicsLowLevel
             }
             else
             {
-                if (_controllerBody.bodyType == RigidbodyType2D.Dynamic && PhysicsShape.definition.density <= 0)
+                if (ControllerBody.bodyType == RigidbodyType2D.Dynamic && PhysicsShape.definition.density <= 0)
                     Debug.LogWarning(
                         $"The PhysicsShape's density value was set to be a zero or negative value while the PhysicsBody is RigidbodyType2D is set to Dynamic. This means gravity will not be applied to the PhysicsBody.",
                         gameObject);
