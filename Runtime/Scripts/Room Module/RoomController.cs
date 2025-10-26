@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using SF.Characters.Controllers;
 using SF.Managers;
+using SF.PhysicsLowLevel;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
+using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.RoomModule
 {
-    public class RoomController : MonoBehaviour
+    public class RoomController : MonoBehaviour, PhysicsCallbacks.ITriggerCallback
     {
         /* TODO List:
             Room Auto Align: Make a method that allows taking in two transforms.
@@ -21,6 +24,9 @@ namespace SF.RoomModule
         /// </summary>
         public int RoomID;
         [NonSerialized] public List<int> RoomIdsToLoadOnEnter = new();
+        /// <summary>
+        /// The camera confined to the room.
+        /// </summary>
         public CinemachineCamera RoomCamera;
 
         /// <summary>
@@ -30,8 +36,15 @@ namespace SF.RoomModule
 
         public Action OnRoomEnteredHandler;
         public Action OnRoomExitHandler;
+        
+        private SceneShape _sceneShape;
         private void Awake()
         {
+            if (TryGetComponent(out _sceneShape))
+            {
+                _sceneShape.CallbackTarget = this;
+            }
+             
             // This is the ignore ray cast physics layer.
             gameObject.layer = 2;
             if (RoomSystem.RoomDB[RoomID] == null)
@@ -42,6 +55,7 @@ namespace SF.RoomModule
             RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
             
             RoomSystem.LoadRoomManually(RoomID, gameObject);
+            
         }
         
         
@@ -69,26 +83,26 @@ namespace SF.RoomModule
             RoomSystem.SetCurrentRoom(RoomID);
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnDestroy()
+        {
+            RoomSystem.CleanUpRoom(RoomID);
+        }
+
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
                 return;
             
-            if (other.TryGetComponent(out PlayerController controller) 
-                && controller.CollisionActivated)
+            if (((GameObject)beginEvent.visitorShape.callbackTarget).TryGetComponent(out ControllerBody2D controller)
+                && controller.CollisionInfo.CollisionActivated)
             {
                 MakeCurrentRoom();
             }
         }
-        
-        private void OnTriggerExit2D(Collider2D other)
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
         {
             OnRoomExitHandler?.Invoke();
-        }
-
-        private void OnDestroy()
-        {
-            RoomSystem.CleanUpRoom(RoomID);
         }
     }
 }
