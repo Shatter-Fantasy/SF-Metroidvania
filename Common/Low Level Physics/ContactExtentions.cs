@@ -25,14 +25,16 @@ namespace SF.PhysicsLowLevel
         /// <param name="contacts">The array of contacts to enumerate.</param>
         /// <param name="filterFunction">The filter function to use to check each element.</param>
         /// <param name="shapeContext">The shape context to pass to the filter function. Used when filtering the normal.</param>
+        /// <param name="normalizedValue"></param>
+        /// <param name="filterMathOperator"></param>
         /// <returns>An enumerable set of contacts filtered by the filter function.</returns>
         public static IEnumerable<PhysicsShape.Contact> Filter(
             this NativeArray<PhysicsShape.Contact> contacts,
             ContactNormalFilterFunction filterFunction,
             PhysicsShape shapeContext = default,
-            float normalizedYValue = 0f, 
+            float normalizedValue = 0f, 
             FilterMathOperator filterMathOperator = FilterMathOperator.Equal) =>
-             new FilteredContacts(contacts, filterFunction, shapeContext, normalizedYValue, filterMathOperator);
+             new FilteredContacts(contacts, filterFunction, shapeContext, normalizedValue, filterMathOperator);
         
 
         private struct FilteredContacts : IEnumerable<PhysicsShape.Contact>, IEnumerator<PhysicsShape.Contact>
@@ -80,10 +82,10 @@ namespace SF.PhysicsLowLevel
             void IEnumerator.Reset() => _index = -1;
 
             public IEnumerator<PhysicsShape.Contact> GetEnumerator() =>
-                new FilteredContacts(_contacts, _normalFilterFunction, _shapeContext);
+                new FilteredContacts(_contacts, _normalFilterFunction, _shapeContext,_normalizedValue,_filterMathOperator);
 
             IEnumerator IEnumerable.GetEnumerator() =>
-                new FilteredContacts(_contacts, _normalFilterFunction, _shapeContext);
+                new FilteredContacts(_contacts, _normalFilterFunction, _shapeContext,_normalizedValue,_filterMathOperator);
 
             // Iterator does not own the buffer, nothing to dispose.
             public readonly void Dispose()
