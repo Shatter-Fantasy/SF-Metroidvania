@@ -160,6 +160,9 @@ namespace SF.PhysicsLowLevel
         {
             if (SceneBody == null)
                 SceneBody = SceneBody.FindSceneBody(gameObject);
+            
+            if (_tilemap == null)
+                _tilemap = GetComponent<Tilemap>();
         }
 
         void IWorldSceneTransformChanged.TransformChanged() => CreateShapes();
