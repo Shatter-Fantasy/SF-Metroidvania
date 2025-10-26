@@ -118,10 +118,10 @@ namespace SF.PhysicsLowLevel
             }
             
             var filteredContacts = _contacts.Filter(
-                ContactFiltering.NormalXFilter, 
+                ContactFiltering.NormalYFilter, 
                 ControllerBody2D.PhysicsShape, 
                 0,
-                FilterMathOperator.GreaterThan);
+                FilterMathOperator.LessThan);
 
             IsCollidingAbove = (filteredContacts.ToList().Count > 0);;
         }
