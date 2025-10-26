@@ -476,7 +476,7 @@ namespace SF.PhysicsLowLevel
 
             if (PhysicsShape.isValid)
             {
-                PhysicsShape.callbackTarget = this;
+                PhysicsShape.callbackTarget = gameObject;
             }
         }
         
