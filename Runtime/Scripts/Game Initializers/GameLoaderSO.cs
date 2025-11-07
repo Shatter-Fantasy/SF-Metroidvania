@@ -11,7 +11,6 @@ namespace SF.Managers
     [CreateAssetMenu(fileName = "SF GameLoader SO", menuName = "SF/Managers/GameLoader SO")]
     public class GameLoaderSO : ScriptableObject
     {
-
         /// <summary>
         /// The index of the scene for a new game inside the build profile list.
         /// </summary>

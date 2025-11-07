@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using SF.Characters.Controllers;
+using SF.CameraModule;
 using SF.Managers;
 using SF.PhysicsLowLevel;
+using SF.SpawnModule;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -37,6 +38,7 @@ namespace SF.RoomModule
         public Action OnRoomEnteredHandler;
         public Action OnRoomExitHandler;
         
+        
         private SceneShape _sceneShape;
         private void Awake()
         {
@@ -47,17 +49,7 @@ namespace SF.RoomModule
              
             // This is the ignore ray cast physics layer.
             gameObject.layer = 2;
-            if (RoomSystem.RoomDB[RoomID] == null)
-            {
-                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
-                return;
-            }
-            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
-            
-            RoomSystem.LoadRoomManually(RoomID, gameObject);
-            
         }
-        
         
         /// <summary>
         /// Changes the current room and invokes all the required CameraSystem, RoomSystem, and GameManagers calls. 
@@ -81,6 +73,33 @@ namespace SF.RoomModule
             }
 
             RoomSystem.SetCurrentRoom(RoomID);
+        }
+
+        private void InitializeRoom()
+        {
+            if (RoomSystem.RoomDB[RoomID] == null)
+            {
+                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
+                return;
+            }
+            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
+            
+            RoomSystem.LoadRoomManually(RoomID, gameObject);
+
+            if (RoomCamera == null)
+                return;
+            
+            CameraController.SetCameraFollow(RoomCamera, SpawnSystem.SpawnedPlayer.transform);
+        }
+        
+        private void OnEnable()
+        {
+            GameLoader.LevelReadyHandler += InitializeRoom;
+        }
+
+        private void OnDisable()
+        {
+            GameLoader.LevelReadyHandler -= InitializeRoom;
         }
 
         private void OnDestroy()

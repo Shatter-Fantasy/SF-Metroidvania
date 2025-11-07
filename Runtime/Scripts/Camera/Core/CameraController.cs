@@ -1,6 +1,4 @@
-using System;
-using SF.LevelModule;
-using SF.Managers;
+using SF.SpawnModule;
 using Unity.Cinemachine;
 
 using UnityEngine;
@@ -56,16 +54,19 @@ namespace SF.CameraModule
             {
                 Instance = this;
             }
+            SpawnSystem.InitialPlayerSpawnHandler += SetInitialCameraTarget;
         }
-
-        public void Start()
+        
+        private void OnDestroy()
         {
-            if (GameManager.Instance != null && LevelPlayData.Instance.spawnedPlayerController != null)
-            {
-                _instance.CameraTarget = LevelPlayData.Instance.spawnedPlayerController.transform;
-            }
+            SpawnSystem.InitialPlayerSpawnHandler -= SetInitialCameraTarget;
         }
-
+        
+        private void SetInitialCameraTarget(GameObject spawnedPlayer)
+        {
+            _instance.CameraTarget = spawnedPlayer.transform;
+        }
+        
         public static void SwitchPlayerCMCamera(CinemachineCamera cmCamera, int priority = ActivePriority)
         {
             if(cmCamera == null)
@@ -89,7 +90,8 @@ namespace SF.CameraModule
                 ActiveRoomCamera.Priority = DeactivatedPriority;
             }
             
-            ActiveRoomCamera = cmCamera;             
+            ActiveRoomCamera = cmCamera;        
+            
             // From here Instance.ActiveRoomCamera is the new camera.
             if(Instance.CameraTarget != null)
                 ActiveRoomCamera.transform.position = Instance.CameraTarget.position;
@@ -98,6 +100,8 @@ namespace SF.CameraModule
             
             // We don't add setting the ActiveRoomCamera.Follow in the null check above for when we need to do cutscenes and not have a follow target
             ActiveRoomCamera.Follow = Instance.CameraTarget;  
+            ActiveRoomCamera.Target.TrackingTarget = Instance.CameraTarget;  
+            ActiveRoomCamera.Target.LookAtTarget = Instance.CameraTarget;  
         }
         
         
@@ -129,6 +133,13 @@ namespace SF.CameraModule
             ActiveCutsceneCamera.Priority = CutsceneCameraPriority;
         }
 
+        public static void SetCameraFollow(CinemachineCamera camera,Transform target)
+        {
+            if (camera == null || target == null)
+                return;
+
+            camera.Follow = target;
+        }
         
         public static void ChangeCameraConfiner(CinemachineCamera cmCamera)
         {
@@ -138,26 +149,5 @@ namespace SF.CameraModule
                 ActiveRoomCamera = cmCamera;
             }
         }
-        
-        /* There is a bug in here on Unity's side confirmed by devs in Cinemachine 3.1.3 and other Cinemachine 3.x.x versions.
-        // See link for devs talking about it being fixed in 3.1.4
-        // Bounding shapes are not being updated properly.
-        // https://discussions.unity.com/t/cinemachine-confiner2d-not-respected-in-v3-1-3/1607171/3
-        // https://discussions.unity.com/t/latest-cinemachine-3-1-3-not-handling-confiners-as-well-as-previous-versions-2-10-3/1631522/4
-        public static void ChangeCameraConfiner(Collider2D collider2D)
-        {
-            if (Instance.CameraConfiner?.BoundingShape2D == collider2D)
-                return;
-            if(Instance.ActiveRoomCamera != null)
-            {
-                if (Instance.CameraConfiner == null)
-                    Instance.CameraConfiner = Instance.ActiveRoomCamera.GetComponent<CinemachineConfiner2D>();
-                
-                Instance.CameraConfiner.InvalidateBoundingShapeCache();
-                Instance.CameraConfiner.BoundingShape2D = collider2D;
-                Instance.CameraConfiner.BakeBoundingShape(Instance.ActiveRoomCamera, 1);
-            }
-        }
-        */
     }
 }
