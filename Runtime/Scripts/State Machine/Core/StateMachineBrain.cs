@@ -68,7 +68,7 @@ namespace SF.StateMachine.Core
 			if (DefaultState != null)
 				CurrentState = DefaultState;
 			        
-			if(CurrentState == null)
+			if(CurrentState == null && _states.Count > 0)
 				CurrentState = _states.First();
 
 			// Don't do first Enter State in awake or you might call it before the _states init.
