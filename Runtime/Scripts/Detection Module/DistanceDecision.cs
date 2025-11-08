@@ -1,5 +1,6 @@
 using SF.LevelModule;
 using SF.Managers;
+using SF.SpawnModule;
 using SF.StateMachine.Core;
 
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace SF.StateMachine.Decisions
         {
             if (_chasePlayer)
             {
-                Target = LevelPlayData.Instance.spawnedPlayerController.transform;
+                Target = SpawnSystem.SpawnedPlayerController.transform;
             }
         }
         

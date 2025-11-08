@@ -1,14 +1,14 @@
-using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using SF.Utilities;
 using UnityEngine.LowLevelPhysics2D;
+using UnityEngine.Profiling;
 using UnityEngine.U2D.Physics.LowLevelExtras;
 
-namespace SF.PhysicsLowLevel
-{
+namespace SF.PhysicsLowLevel   
+{   
     [ExecuteAlways]
     [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
     [AddComponentMenu("Physics 2D/LowLevel/TileMap Shape", 22)]
@@ -42,9 +42,7 @@ namespace SF.PhysicsLowLevel
             
             _tilemap.GetUsedTileData(out _tilesInBlock);
         }
-        
-        public void UpdateShape() => CreateShapes();
-        
+
         private void CreateShapes()
         {
             if (!SceneBody)
@@ -58,8 +56,17 @@ namespace SF.PhysicsLowLevel
             var composer = PhysicsComposer.Create();
             composer.useDelaunay = _useDelaunay;
             var vertexPath = new NativeList<Vector2>(Allocator.Temp);
-            
+            Profiler.BeginSample("Getting Tile Data");
+            // Code to measure...
+         
+#if UNITY_6000_4_OR_NEWER
             _tilemap.GetUsedTileData(out _tilesInBlock);
+#else
+            _tilemap.GetUsedTileData(out _tilesInBlock);
+#endif
+            Profiler.EndSample();
+            
+            
             var positions = _tilemap.GetTileCellPositions();
             
             for (int i = 0; i < _tilesInBlock.Count; i++)

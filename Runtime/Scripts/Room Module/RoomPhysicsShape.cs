@@ -49,9 +49,15 @@ namespace SF.RoomModule
             
             _isConfined = IsConfined(state.Lens,vcam.transform.position);
 
-            if (!_isConfined)
-                state.PositionCorrection = PreviousCameraPosition - state.GetCorrectedPosition();
+            /* Step One: Check which direction the camera is going over.
+             * Step Two: Limit the camera delta along the axis that is not outside the contained shape 
+             */
             
+            if (!_isConfined)
+            {
+                state.PositionCorrection = PreviousCameraPosition - state.GetCorrectedPosition();
+            }
+
             PreviousCameraPosition = state.GetCorrectedPosition();
 
 
@@ -97,7 +103,7 @@ namespace SF.RoomModule
 
 
             Debug.DrawLine(topRightPos, bottomRightPos);
-            
+
             return Shape.OverlapPoint(topRightPos) 
                 && Shape.OverlapPoint(topLeftPos) 
                 && Shape.OverlapPoint(bottomRightPos) 
