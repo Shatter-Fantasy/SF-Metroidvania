@@ -1,6 +1,7 @@
 using System;
 using SF.PhysicsLowLevel;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace SF.SpawnModule
 {
@@ -30,14 +31,14 @@ namespace SF.SpawnModule
                 return null;
 
             SpawnedPlayer = Instantiate(playerPrefab);
-            
-            if(SpawnedPlayer != null)
-            {
-                // Instead of the RoomSyystem current room we should use the active spawn point.
-                //SpawnedPlayer.transform.position = RoomSystem.CurrentRoom.SpawnedInstance.transform.position;
-                SpawnedPlayer.TryGetComponent(out SpawnedPlayerController);
-            }
 
+            if (SpawnedPlayer == null)
+                return null;
+            
+            // Instead of the RoomSystem current room we should use the active spawn point.
+            //SpawnedPlayer.transform.position = RoomSystem.CurrentRoom.SpawnedInstance.transform.position;
+            SpawnedPlayer.TryGetComponent(out SpawnedPlayerController);
+            
             InitialPlayerSpawnHandler?.Invoke(SpawnedPlayer);
             
             return SpawnedPlayer.GetComponent<ControllerBody2D>();

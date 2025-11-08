@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SF.CameraModule;
+using SF.LevelModule;
 using SF.Managers;
 using SF.PhysicsLowLevel;
 using SF.SpawnModule;
@@ -51,6 +52,21 @@ namespace SF.RoomModule
             gameObject.layer = 2;
         }
         
+        private void OnEnable()
+        {
+            LevelLoader.LevelReadyHandler += InitializeRoom;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.LevelReadyHandler -= InitializeRoom;
+        }
+
+        private void OnDestroy()
+        {
+            RoomSystem.CleanUpRoom(RoomID);
+        }
+        
         /// <summary>
         /// Changes the current room and invokes all the required CameraSystem, RoomSystem, and GameManagers calls. 
         /// </summary>
@@ -85,28 +101,8 @@ namespace SF.RoomModule
             RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
             
             RoomSystem.LoadRoomManually(RoomID, gameObject);
-
-            if (RoomCamera == null)
-                return;
-            
-            CameraController.SetCameraFollow(RoomCamera, SpawnSystem.SpawnedPlayer.transform);
         }
         
-        private void OnEnable()
-        {
-            GameLoader.LevelReadyHandler += InitializeRoom;
-        }
-
-        private void OnDisable()
-        {
-            GameLoader.LevelReadyHandler -= InitializeRoom;
-        }
-
-        private void OnDestroy()
-        {
-            RoomSystem.CleanUpRoom(RoomID);
-        }
-
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)

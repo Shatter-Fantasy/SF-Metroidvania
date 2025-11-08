@@ -18,10 +18,12 @@ namespace SF.LevelModule
         /// This is the player prefab asset that should be spawned in playable scenes.
         /// After this is spawned you use the <see cref="SpawnedPlayerController"/> value.
         /// </summary>
-        [field:SerializeField] public ControllerBody2D PlayerPrefab { get; private set; }
+        [field:SerializeField] public GameObject PlayerPrefab { get; private set; }
         
         [SerializeField] private GameObject _hudPrefab;
         public GameObject SpawnedHUD { get; private set; }
+
+        public int StartingRoomID;
         
         private static LevelPlayData _instance;
         public static LevelPlayData Instance
