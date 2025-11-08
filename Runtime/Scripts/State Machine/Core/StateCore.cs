@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SF.Characters;
 using SF.Characters.Controllers;
+using SF.PhysicsLowLevel;
 using SF.StateMachine.Decisions;
 
 using UnityEngine;
@@ -35,7 +36,7 @@ namespace SF.StateMachine.Core
 		protected DecisionTransition _decision = new();
 		protected bool _initialized = false;
 
-        protected RigidbodyController2D _rigidbodyController;
+        protected ControllerBody2D _controllerBody2D;
 
         private void Awake()
 		{
@@ -59,17 +60,17 @@ namespace SF.StateMachine.Core
 		/// This is run the very first time this object is enabled and when the StateMachineBrain inits it.
 		/// This won't run everytime this state is interacted with.
 		/// </summary>
-		public void Init(RigidbodyController2D rigidbodyController2D = null)
+		public void Init(ControllerBody2D controllerBody2D = null)
 		{
 			if(!_initialized)
 				_initialized = true;
 
-			if(rigidbodyController2D == null)
+			if(controllerBody2D == null)
 				OnInit();
 			else
 			{
-				_rigidbodyController = rigidbodyController2D;
-                OnInit(rigidbodyController2D);
+				_controllerBody2D = controllerBody2D;
+                OnInit(controllerBody2D);
 			}
 		}
 
@@ -81,7 +82,7 @@ namespace SF.StateMachine.Core
 
 		}
 
-        protected virtual void OnInit(RigidbodyController2D rigidbodyController2D)
+        protected virtual void OnInit(ControllerBody2D controllerBody2D)
         {
 
         }
@@ -95,7 +96,7 @@ namespace SF.StateMachine.Core
 			CheckTransitions();
 
 			
-			if (_rigidbodyController == null && _rigidbodyController?.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			if (_controllerBody2D == null && _controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
 				return;
 			}
@@ -138,8 +139,8 @@ namespace SF.StateMachine.Core
 		}
 		public virtual bool CheckEnterableState(StateCore currentState)
 		{
-			if (_rigidbodyController == null
-			    || _rigidbodyController.CharacterState.CharacterStatus == CharacterStatus.Dead)
+			if (_controllerBody2D == null
+			    || _controllerBody2D.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
 				return false;
 			}

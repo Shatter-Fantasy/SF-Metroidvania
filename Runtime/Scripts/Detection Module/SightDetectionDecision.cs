@@ -29,6 +29,7 @@ namespace SF.StateMachine.Decisions
 
         public override void CheckDecision(ref DecisionTransition decision, StateCore currentState)
         {
+            /*
             if(Physics2D.Raycast(transform.position, _rigidbodyController2D.Direction, _detectionFilter,_filteredHits,_sightDistance) > 0)
             {
                 decision.CanTransist = true;
@@ -39,6 +40,7 @@ namespace SF.StateMachine.Decisions
                 decision.CanTransist = true;
                 decision.StateGoingTo = _falseState;
             }
+            */
         }
     }
 }

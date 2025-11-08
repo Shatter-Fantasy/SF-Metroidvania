@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using SF.Characters.Controllers;
-
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.StateMachine.Core
@@ -24,23 +24,23 @@ namespace SF.StateMachine.Core
         public GameObject ControlledGameObject;
         protected List<StateCore> _states = new();
 
-        protected RigidbodyController2D _rigidbodyController2D;
+        protected ControllerBody2D _controllerBody2D;
 		private void Awake()
 		{
             _states.Clear();
             _states = GetComponentsInChildren<StateCore>().ToList();
 
             if(ControlledGameObject != null)
-                _rigidbodyController2D = ControlledGameObject.GetComponent<RigidbodyController2D>();
+                _controllerBody2D = ControlledGameObject.GetComponent<ControllerBody2D>();
             else
-                _rigidbodyController2D = GetComponent<RigidbodyController2D>();
+                _controllerBody2D = GetComponent<ControllerBody2D>();
 
             if(!_states.Any()) return;
             
             foreach(StateCore state in _states)
             {
                 state.StateBrain = this;
-                state.Init(_rigidbodyController2D);
+                state.Init(_controllerBody2D);
             }
 		}
 

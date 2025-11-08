@@ -1,5 +1,5 @@
 using SF.Characters.Controllers;
-using SF.Platformer.Utilities;
+using SF.PhysicsLowLevel;
 using SF.StateMachine.Core;
 
 using UnityEngine;
@@ -13,18 +13,20 @@ namespace SF.StateMachine
 		
 		[SerializeField] private bool _isHoleAhead;
 
-        protected override void OnInit(RigidbodyController2D rigidbodyController2D)
+        protected override void OnInit(ControllerBody2D controllerBody2D)
 		{
-			_rigidbodyController = rigidbodyController2D;
+			_controllerBody2D = controllerBody2D;
 		}
         
         protected override void OnStart()
 		{
-			if(_rigidbodyController == null)
+			if(_controllerBody2D == null)
 				return;
 			
-			_rigidbodyController.CollisionInfo.OnCollidedLeftHandler += OnCollidingLeft;
-			_rigidbodyController.CollisionInfo.OnCollidedRightHandler += OnCollidingRight;
+			_controllerBody2D.CollisionInfo.OnCollidedLeftHandler += OnCollidingLeft;
+			_controllerBody2D.CollisionInfo.OnCollidedRightHandler += OnCollidingRight;
+			
+			_controllerBody2D.SetDirection(1);
 		}
 
         protected override void OnUpdateState()
@@ -34,13 +36,15 @@ namespace SF.StateMachine
 
         protected override void OnStateEnter()
         {
-	        _rigidbodyController.Direction = StartingRight
+	        _controllerBody2D.Direction = StartingRight
 		        ? Vector2.right : Vector2.left;
         }
 
 		private void HoleDetection()
 		{
-			if(_rigidbodyController == null || _rigidbodyController is GroundedController2D { IsFalling:true } || !DoesTurnOnHoles )
+			if(_controllerBody2D == null 
+			   || _controllerBody2D.IsFalling 
+			   || !DoesTurnOnHoles )
 				return;
 			
 			/*
@@ -76,13 +80,13 @@ namespace SF.StateMachine
         
 		private void OnCollidingLeft()
 		{
-			if(_rigidbodyController.Direction == Vector2.left)
-				_rigidbodyController.SetDirection(1);
+			if(_controllerBody2D.Direction == Vector2.left)
+				_controllerBody2D.SetDirection(1);
 		}
 		private void OnCollidingRight()
 		{
-            if(_rigidbodyController.Direction == Vector2.right)
-                _rigidbodyController.SetDirection(-1);
+            if(_controllerBody2D.Direction == Vector2.right)
+                _controllerBody2D.SetDirection(-1);
         }
 	}
 }

@@ -199,6 +199,12 @@ namespace SF.Physics
             _calculatedVelocity.y = verticalVelocity;
         }
         #endregion
+        
+        public void SetDirection(float newDirection)
+        {
+            Direction = new Vector2(newDirection, 0);
+        }
+        
 
         protected abstract void CalculateMovementState();
     }
