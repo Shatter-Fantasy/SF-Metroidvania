@@ -1,6 +1,7 @@
 using SF.Characters.Controllers;
 using SF.LevelModule;
 using SF.Managers;
+using SF.SpawnModule;
 using UnityEngine;
 
 using SF.StateMachine.Core;
@@ -18,7 +19,7 @@ namespace SF.StateMachine
             base.OnInit(rigidbodyController2D);
             if (_chasePlayer)
             {
-                _target = LevelPlayData.Instance.spawnedPlayerController.transform;
+                _target = SpawnSystem.SpawnedPlayerController.transform;
             }
         }
 
