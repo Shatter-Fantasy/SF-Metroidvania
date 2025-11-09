@@ -20,8 +20,16 @@ namespace SF.Physics
         public GameObject ControlledGameObject;
         public GameObject StandingOnObject;
         
+        [Header("Collision Properties")]
         public bool CollisionActivated = true;
-        public int ContactHitCount;
+
+        /// <summary>
+        /// The threshold for the normals of a contact to pass to be considered an actual collision. 
+        /// </summary>
+        /// <example>
+        ///	Useful for removing ghost collisions and also collisions on physics shapes with rounded corners like capsules and circles.
+        /// </example>
+        public float CollisionContactThreshold = 0.5f;
         
         
         /// <summary>

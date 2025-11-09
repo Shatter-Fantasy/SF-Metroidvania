@@ -52,7 +52,7 @@ namespace SF.PhysicsLowLevel
             var filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalYFilter, 
                 ControllerBody2D.PhysicsShape, 
-                0,
+                CollisionContactThreshold,
                 FilterMathOperator.GreaterThan);
 
             if (filteredContacts.ToList().Count > 0)
@@ -92,7 +92,7 @@ namespace SF.PhysicsLowLevel
             var filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalXFilter, 
                 ControllerBody2D.PhysicsShape, 
-                0,
+                CollisionContactThreshold,
                 FilterMathOperator.GreaterThan);
             
             IsCollidingLeft = (filteredContacts.ToList().Count > 0);
@@ -102,7 +102,7 @@ namespace SF.PhysicsLowLevel
             filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalXFilter, 
                 ControllerBody2D.PhysicsShape, 
-                0,
+                -CollisionContactThreshold,
                 FilterMathOperator.LessThan);
             
             IsCollidingRight = (filteredContacts.ToList().Count > 0);
@@ -120,7 +120,7 @@ namespace SF.PhysicsLowLevel
             var filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalYFilter, 
                 ControllerBody2D.PhysicsShape, 
-                0,
+                -CollisionContactThreshold,
                 FilterMathOperator.LessThan);
 
             IsCollidingAbove = (filteredContacts.ToList().Count > 0);;
