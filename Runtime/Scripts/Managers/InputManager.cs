@@ -52,7 +52,7 @@ namespace SF.InputModule
 		
 		private void OnGameMenuToggled(InputAction.CallbackContext ctx)
 		{
-			GameEvent.Trigger(GameEventTypes.PauseToggle);
+			GameManager.OnPausedToggle();
 		}
 
 		public void EnableActionMap()

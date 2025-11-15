@@ -24,7 +24,7 @@ namespace SF.Managers
 	/// </summary>
 
     [DefaultExecutionOrder(-5)]
-    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>
+    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>
     {
         [SerializeReference]
         public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
@@ -65,7 +65,6 @@ namespace SF.Managers
         protected void OnEnable()
         {
             this.EventStartListening<ApplicationEvent>();
-            this.EventStartListening<GameEvent>();
             DialogueManager.DialogueStartedHandler += OnDialogueStarted;
             DialogueManager.DialogueEndedHandler += OnDialogueEnded;
         }
@@ -73,7 +72,6 @@ namespace SF.Managers
         protected void OnDisable ()
         {
             this.EventStopListening<ApplicationEvent>();
-            this.EventStopListening<GameEvent>();
             DialogueManager.DialogueStartedHandler -= OnDialogueStarted;
             DialogueManager.DialogueEndedHandler -= OnDialogueEnded;
         }
@@ -84,23 +82,23 @@ namespace SF.Managers
             Application.Quit();
         }
 
-        protected void OnPausedToggle()
+        public static void OnPausedToggle()
         {
-            if(_controlState == GameControlState.Player)
+            if(Instance._controlState == GameControlState.Player)
                 Pause();
             else // So we are already paused or in another menu.
                 Unpause();
         }
 
-        protected void Pause()
+        protected static void Pause()
         {
-            _controlState = GameControlState.Menu;
+            Instance._controlState = GameControlState.Menu;
             GameMenuEvent.Trigger(GameMenuEventTypes.OpenGameMenu);
         }
 
-        protected void Unpause()
+        protected static void Unpause()
         {
-            _controlState = GameControlState.Player;
+            Instance._controlState = GameControlState.Player;
             GameMenuEvent.Trigger(GameMenuEventTypes.CloseGameMenu);
         }
 
@@ -111,18 +109,6 @@ namespace SF.Managers
                 case ApplicationEventTypes.ExitApplication:
                     {
                         OnExitGame();
-                        break;
-                    }
-            }
-        }
-
-        public void OnEvent(GameEvent eventType)
-        {
-            switch(eventType.EventType)
-            {
-                case GameEventTypes.PauseToggle:
-                    {
-                        OnPausedToggle();
                         break;
                     }
             }

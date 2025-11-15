@@ -21,6 +21,5 @@ namespace SF.Events
         [Header("Event Activation Options")]
         public EventTriggerType EventTriggerType;
         public LocalPhysicsMode PhysicsMode;
-        public GameEventTypes GameEventTypes;
     }
 }
