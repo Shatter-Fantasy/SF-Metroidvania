@@ -25,8 +25,7 @@ namespace SF.Managers
          which set the values of the GameManager on first scene load. */
         [Header("Required Databases DB ")]
         [SerializeField] private RoomDB _roomDB;
-
-        [SerializeField] private DialogueDatabase _dialogueDatabase;
+        
         /// <summary>
         /// This data object that keeps track of references needed to be loaded in playable levels before anything else.
         /// </summary>
@@ -88,6 +87,7 @@ namespace SF.Managers
             GameLoaderData.SettingUpNewGame = true;
             MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
             SceneManager.LoadScene(GameLoaderData.NewGameSceneIndex);
+            GameLoaderData.SettingUpNewGame = false;
         }
 
         public void LoadGame()

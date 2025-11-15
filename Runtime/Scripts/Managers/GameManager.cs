@@ -24,7 +24,7 @@ namespace SF.Managers
 	/// </summary>
 
     [DefaultExecutionOrder(-5)]
-    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>, EventListener<DialogueEvent>
+    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>
     {
         [SerializeReference]
         public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
@@ -111,6 +111,7 @@ namespace SF.Managers
             }
         }
         
+        /*
         public void OnEvent(DialogueEvent eventType)
         {
             switch (eventType.EventType)
@@ -127,19 +128,18 @@ namespace SF.Managers
                 }
             }
         }
+        */
         
         protected void OnEnable()
 		{
             this.EventStartListening<ApplicationEvent>();
             this.EventStartListening<GameEvent>();
-            this.EventStartListening<DialogueEvent>();
 		}
 
         protected void OnDisable ()
 		{
             this.EventStopListening<ApplicationEvent>();
             this.EventStopListening<GameEvent>();
-            this.EventStopListening<DialogueEvent>();
         }
     }
 }
