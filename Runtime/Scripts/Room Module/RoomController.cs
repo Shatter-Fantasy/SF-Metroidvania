@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using SF.CameraModule;
 using SF.LevelModule;
 using SF.Managers;
@@ -38,7 +40,16 @@ namespace SF.RoomModule
 
         public Action OnRoomEnteredHandler;
         public Action OnRoomExitHandler;
-        
+
+        #region Room Extensions
+        /// <summary>
+        /// Unfiltered list of all <see cref="IRoomExtension"/> that are connected to this room. 
+        /// </summary>
+        private readonly List<IRoomExtension> _roomExtensions = new();
+
+        private ReadOnlyCollection<IRoomExtension> _roomEnteredExtensions;
+        private readonly List<IRoomExtension> _roomExitedExtensions = new();
+        #endregion
         
         private SceneShape _sceneShape;
         private void Awake()
@@ -50,6 +61,12 @@ namespace SF.RoomModule
              
             // This is the ignore ray cast physics layer.
             gameObject.layer = 2;
+            
+            // Non-allocating version when used with read only List<T>
+            gameObject.GetComponents(_roomExtensions);
+            
+            var rooms  = _roomExtensions.Where((room => room.RoomExtensionType == RoomExtensionType.OnRoomEntered));
+            _roomEnteredExtensions = new ReadOnlyCollection<IRoomExtension>(rooms.ToList());
         }
         
         private void OnEnable()
@@ -78,6 +95,10 @@ namespace SF.RoomModule
             }
             
             OnRoomEnteredHandler?.Invoke();
+            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
+            {
+                _roomEnteredExtensions[i].Process();
+            }
             
             // Probably should put this if and for loop in the RoomSystem itself.
             if (RoomSystem.DynamicRoomLoading)
