@@ -48,6 +48,9 @@ namespace SF.Managers
         public static GameManager Instance;
 
         public Action<GameControlState> OnGameControlStateChanged;
+
+        public static event Action GamePausedHandler;
+        public static event Action GameUnpausedHandler;
         
         private void Awake()
         {
@@ -94,13 +97,13 @@ namespace SF.Managers
         protected static void Pause()
         {
             Instance._controlState = GameControlState.Menu;
-            GameMenuEvent.Trigger(GameMenuEventTypes.OpenGameMenu);
+            GamePausedHandler?.Invoke();
         }
 
         protected static void Unpause()
         {
             Instance._controlState = GameControlState.Player;
-            GameMenuEvent.Trigger(GameMenuEventTypes.CloseGameMenu);
+            GameUnpausedHandler?.Invoke();
         }
         
         private void OnDialogueStarted()
