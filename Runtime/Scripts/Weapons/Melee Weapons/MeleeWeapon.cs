@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SF.Characters;
 using UnityEngine;
@@ -20,7 +21,6 @@ namespace SF.Weapons
         [SerializeField] private int _comboIndex = 0;
         private Vector2 _originalColliderOffset;
         
-        
         private void Awake()
         {
             _attackTimer = new Timer(ComboAttacks[0].AttackTimer, OnUseComplete);
@@ -28,8 +28,8 @@ namespace SF.Weapons
             _comboTimer = new Timer(ComboAttacks[0].ComboInputDelay, OnComboReset);
             
             
-            if(_controller2D != null)
-                _controller2D.OnDirectionChanged += OnDirectionChange;
+            if(_controllerBody2D != null)
+                _controllerBody2D.OnDirectionChanged += OnDirectionChange;
 
                 
             if (_hitBox != null)
@@ -53,8 +53,10 @@ namespace SF.Weapons
                 return;
 
             // Stop attack while dead attack while dead.
-            if (_controller2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
+            if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
+            
+            _character2D.CharacterState.CurrentMovementState = MovementState.Attacking;
             
             // If we have a combo enabled for the current weapon do it.
             if (ComboAttacks.Count > 1)
@@ -69,12 +71,13 @@ namespace SF.Weapons
 
         private void SingleAttack()
         {
-            if(_character2D != null)
+            if (_character2D != null && !_character2D.UseAnimatorTransitions)
+            {
                 _character2D.SetAnimationState(
-                    ComboAttacks[0].Name, 
-                    ComboAttacks[0].AttackAnimationClip.averageDuration
-                );
-            
+                    ComboAttacks[0].Name,
+                    ComboAttacks[0].AttackAnimationClip.length);
+            }
+
             _ = _hitBoxTimer.StartTimerAsync();
             _ = _attackTimer.StartTimerAsync();
 
@@ -94,7 +97,6 @@ namespace SF.Weapons
             // Stop the previous combo timer.
             _comboTimer.StopTimer();
             _comboTimer = new Timer(ComboAttacks[_comboIndex].ComboInputDelay, OnComboReset);
-            
             _ = _hitBoxTimer.StartTimerAsync();
             _ = _attackTimer.StartTimerAsync();
             _ = _comboTimer.StartTimerAsync();
@@ -125,6 +127,9 @@ namespace SF.Weapons
         
         private void OnUseComplete()
         {
+            _comboTimer.StopTimer();
+            _hitBoxTimer.StopTimer();
+            _attackTimer.StopTimer();
             UseCompleted?.Invoke();
             OnCooldown = false;
         }
@@ -142,10 +147,18 @@ namespace SF.Weapons
         [ContextMenu("Sync attack and animation timers.")]
         void SetAllAttacksTimerViaAnimation()
         {
+            AnimationClip clip;
+            
             for (int i = 0; i < ComboAttacks.Count; i++)
             {
-                ComboAttacks[i].AttackTimer = ComboAttacks[i].AttackAnimationClip.length;
+                clip = ComboAttacks[i].AttackAnimationClip;
+                
+                float targetFrameTimer = (ComboAttacks[i].HitBoxAnimationFrame + 1) * (float)Math.Round((1f / clip.frameRate), 3);
+                ComboAttacks[i].AttackTimer = clip.length;
+                ComboAttacks[i].HitBoxDelay = targetFrameTimer;
             }
+            
+            
         }
         #endif
     }

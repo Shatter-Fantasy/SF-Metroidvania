@@ -1,8 +1,6 @@
-using SF.Characters.Controllers;
-
 using UnityEngine;
 
-namespace SF
+namespace SF.Physics
 {
 
     public class DirectionalForceManipulator : MonoBehaviour, IForceManipulator
@@ -38,7 +36,6 @@ namespace SF
             {
                 _animator.Play("Adding Force",0);
             }
-            forceReciever.SetExternalVelocity(force);
         }
     }
 }

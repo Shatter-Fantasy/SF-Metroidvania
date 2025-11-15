@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
+using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF
 {
@@ -13,7 +15,7 @@ namespace SF
         Down = 8,
     }
 
-    public class Hazard : MonoBehaviour, IDamage
+    public class Hazard : MonoBehaviour, IDamage, PhysicsCallbacks.ITriggerCallback
     {
         private Collider2D _collider2D;
         private Vector2 _collisionNormal;
@@ -46,6 +48,29 @@ namespace SF
                     damagable.TakeDamage(DamageAmount,_knockBackForce);
             }
         }
+        
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
+        {
+            if (((GameObject)beginEvent.visitorShape.callbackTarget).TryGetComponent(out IDamagable damagable))
+            {
+                
+                Debug.Log(damagable);
+                damagable.TakeDamage(DamageAmount,_knockBackForce);
+                // Need to figure out the low level version of Collider2D.Distance.
+                //_collisionNormal = col2D.Distance(_collider2D).normal;
+
+                _collisionNormal = beginEvent.visitorShape.Intersect(beginEvent.triggerShape).normal;
+                
+                //if(CheckCollisionDirection())
+                    //damagable.TakeDamage(DamageAmount,_knockBackForce);
+            }
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
+        {
+            
+        }
+        
 
         private bool CheckCollisionDirection()
         {

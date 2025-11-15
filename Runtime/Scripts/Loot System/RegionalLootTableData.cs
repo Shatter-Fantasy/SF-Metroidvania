@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using SF.DataModule;
 namespace SF.LootModule
 {
 

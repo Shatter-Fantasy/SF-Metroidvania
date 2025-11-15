@@ -1,15 +1,87 @@
-using System.Collections.Generic;
-
-using UnityEditor;
 using UnityEngine.UIElements;
 
+using SFEditor.Data;
 using SF.Inventory;
-using System;
+using SF.ItemModule;
+using UnityEditor;
 using UnityEngine;
 
-namespace SFEditor.Inventory
+namespace SFEditor.Inventory.Data
 {
     [UxmlElement]
+    public partial class SFItemListView : DataListView<ItemDatabase, ItemDTO>
+    {
+        protected override string _dataFilePath => "Assets/Data/Item Data/";
+        protected string EquipmentFilePath => $"{_dataFilePath}/Equipment/";
+        protected string WeaponFilePath => $"{_dataFilePath}/Equipment/Weapon/";
+
+        public SFItemListView() { }
+        public SFItemListView(ItemDatabase itemDatabase) : base(itemDatabase) { }
+        
+        /// <summary>
+        /// Creates the DropDownMenu for the add new items button in the footer of the list view.
+        /// </summary>
+        protected override void CreateAddItemDropDownMenu()
+        {
+            // This is the button that Unity adds if the footer add button is enabled.
+            Button addButton = this.Q<Button>("unity-list-view__add-button");
+
+            _dropDownMenu = new ContextualMenuManipulator(e =>
+            {
+                e.menu.AppendAction($"Add {nameof(ItemDTO)}",
+                    action =>
+                    {
+                        var assetDTO = ItemDTO.CreateInstance(typeof(ItemDTO).FullName) as ItemDTO;
+                        assetDTO.Name = "New Data Entry" + assetDTO.GUID;
+                        assetDTO.name = assetDTO.Name;
+                        // We don't do Count - 1 because we haven't added this to the list datbase yet.
+                        assetDTO.ID = value.DataEntries.Count; 
+                        AssetDatabase.CreateAsset(assetDTO, $"{_dataFilePath}{assetDTO.name}.asset");
+                        value.AddData(assetDTO);
+                        EditorUtility.SetDirty(value);
+                        RefreshItems();
+                        AssetDatabase.SaveAssets();
+                    });
+                e.menu.AppendAction($"Add {nameof(WeaponDTO)}",
+                    action =>
+                    {
+                        var assetDTO = ScriptableObject.CreateInstance(typeof(WeaponDTO).FullName) as WeaponDTO;
+                        assetDTO.Name = "New Weapon" + assetDTO.GUID;
+                        assetDTO.name = assetDTO.Name;
+                        // We don't do Count - 1 because we haven't added this to the list database yet.
+                        assetDTO.ID = value.DataEntries.Count; 
+                        AssetDatabase.CreateAsset(assetDTO, $"{WeaponFilePath}{assetDTO.name}.asset");
+                        value.AddData(assetDTO);
+                        EditorUtility.SetDirty(value);
+                        RefreshItems();
+                        AssetDatabase.SaveAssets();
+                    });
+                e.menu.AppendAction($"Add {nameof(EquipmentDTO)}",
+                    action =>
+                    {
+                        var assetDTO = ScriptableObject.CreateInstance(typeof(EquipmentDTO).FullName) as EquipmentDTO;
+                        assetDTO.Name = "New Equipment Entry" + assetDTO.GUID;
+                        assetDTO.name = assetDTO.Name;
+                        // We don't do Count - 1 because we haven't added this to the list database yet.
+                        assetDTO.ID = value.DataEntries.Count; 
+                        AssetDatabase.CreateAsset(assetDTO, $"{EquipmentFilePath}{assetDTO.name}.asset");
+                        value.AddData(assetDTO);
+                        EditorUtility.SetDirty(value);
+                        RefreshItems();
+                        AssetDatabase.SaveAssets();
+                    });
+            });
+            _dropDownMenu.activators.Add(new ManipulatorActivationFilter
+            {
+                button = MouseButton.LeftMouse,
+                modifiers = UnityEngine.EventModifiers.None,
+            });
+
+            addButton.AddManipulator(_dropDownMenu);
+        }
+    }
+    
+    /*    [UxmlElement]
     public partial class SFItemListView : ListView, INotifyValueChanged<ItemDatabase>
     {
 
@@ -186,4 +258,6 @@ namespace SFEditor.Inventory
             return AssetDatabase.AssetPathExists($"{parentDirectory}/{newFolder}");
         }
     }
+    
+    */
 }

@@ -1,11 +1,7 @@
-using UnityEditor;
-
 using UnityEngine;
 
-namespace SF
+namespace SF.DataModule
 {
-
-
     /// <summary>
     /// This is an empty wrapper class for DTO based classes.
     /// 
@@ -26,6 +22,7 @@ namespace SF
     /// </summary>
     public class DTOAssetBase : ScriptableObject
     {
+        // TODO: Replace the below with either ItemData or Item
         public int ID = 0;
         public int GUID;
         public string Name;

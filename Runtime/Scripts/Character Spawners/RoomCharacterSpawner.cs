@@ -1,4 +1,3 @@
-using System;
 using SF.Characters.Data;
 using SF.RoomModule;
 using SF.StatModule;
@@ -153,10 +152,17 @@ namespace SF.SpawnModule
             {
                 EditorGUI.BeginChangeCheck();
                 Vector3 newTargetPosition = Handles.PositionHandle(t.SpawnSets[i].SpawnPosition, Quaternion.identity);
-                
-                if(t.CharacterDB != null && t.CharacterDB.GetDataByID(t.SpawnSets[i].SpawnCharacterID, out CharacterDTO characterDTO))
-                    Handles.Label(newTargetPosition,$"{characterDTO.name }");
-                
+
+                if (t.CharacterDB != null &&
+                    t.CharacterDB.GetDataByID(t.SpawnSets[i].SpawnCharacterID, out CharacterDTO characterDTO))
+                {
+                    Handles.Label(newTargetPosition, $"{characterDTO.name}");
+                    if (characterDTO.Prefab?.GetComponent<SpriteRenderer>() != null)
+                    {
+                        
+                    }
+                }
+
                 if (EditorGUI.EndChangeCheck())
                 {
                     Undo.RecordObject(t, "Change Look At Target Position");

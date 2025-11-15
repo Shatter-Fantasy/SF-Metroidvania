@@ -195,7 +195,7 @@ namespace SF.DataManagement
                     SceneManager.LoadSceneAsync(CurrentSaveFileData.CurrentScene.buildIndex, LoadSceneMode.Single);
             }
             // Set the spawning checkpoint which the SaveStation C# class ia a subclass of.
-            // Checkpoint manager will have a execution order after the script that calls load game.
+            // Checkpoint manager will have an execution order after the script that calls load game.
 
             
             // When you need to do stuff before event listeners do loading events use OnBeforeLoadDataFile.

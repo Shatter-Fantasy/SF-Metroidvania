@@ -2,7 +2,6 @@ using SF.DataManagement;
 
 using SF.Events;
 
-
 namespace SF.SpawnModule
 {
     public class PlayerHealth : CharacterHealth, IDamagable, EventListener<SaveLoadEvent>

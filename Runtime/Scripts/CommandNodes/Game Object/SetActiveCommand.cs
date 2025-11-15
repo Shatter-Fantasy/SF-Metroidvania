@@ -1,8 +1,9 @@
-using SF.CommandModule;
 using UnityEngine;
 
-namespace SF
+namespace SF.CommandModule
 {
+    [System.Serializable]
+    [CommandMenu("GameObject/Activate")]
     public class SetActiveCommand : CommandNode, ICommand
     {
         [SerializeField] private bool _setActive = false;
@@ -12,7 +13,17 @@ namespace SF
         {
             _setActive = setActive;
         }
-        public override async Awaitable Use()
+
+        protected override bool CanDoCommand()
+        {
+            return _gameObject != null;
+        }
+
+        protected override void DoCommand()
+        {
+        }
+
+        protected override async Awaitable DoAsyncCommand()
         {
             _gameObject.SetActive(_setActive);
 

@@ -1,39 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
-    xmlns:sfeditor="SFEditor.Characters.Data"
-    noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
->
-	<ui:Template src="../Common/Data Sections/DTOGeneralInfo.uxml" name="DTOGeneral"/>
-	<ui:Template src="../Character Editor/Character Data Sections/CharacterGeneralInfo.uxml" name="CharacterGeneral"/>
-	<ui:Template src="../Stats Editor/StatsList.uxml" name="StatsList"/>
-	<ui:Template src="../Loot Editor/LootTableDrops.uxml" name="LootTableDrops"/>
-	<ui:Template src="../Stats Editor/ExperienceList.uxml" name="ExperienceList"/>
-    
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:sfeditor="SFEditor.Characters.Data" xmlns:sfitem="SFEditor.Inventory.Data" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="DTOGeneral" src="project://database/Packages/shatter-fantasy.sf-metroidvania/Editor/Data%20Editor/Common/Data%20Sections/DTOGeneralInfo.uxml?fileID=9197481963319205126&amp;guid=0a07ed9a4a1a63447b51d36860e4331e&amp;type=3#DTOGeneralInfo" />
+    <ui:Template name="CharacterGeneral" src="project://database/Packages/shatter-fantasy.sf-metroidvania/Editor/Data%20Editor/Character%20Editor/Character%20Data%20Sections/CharacterGeneralInfo.uxml?fileID=9197481963319205126&amp;guid=f684d7fe1dd7f6c44b272494b5bc1365&amp;type=3#CharacterGeneralInfo" />
+    <ui:Template name="StatsList" src="project://database/Packages/shatter-fantasy.sf-metroidvania/Editor/Data%20Editor/Stats%20Editor/StatsList.uxml?fileID=9197481963319205126&amp;guid=3082c616e7036454bb0d58c47f4c4b95&amp;type=3#StatsList" />
+    <ui:Template name="ExperienceList" src="project://database/Packages/shatter-fantasy.sf-metroidvania/Editor/Data%20Editor/Stats%20Editor/ExperienceList.uxml?fileID=9197481963319205126&amp;guid=b12e0d75580483946b1d004efb2d2901&amp;type=3#ExperienceList" />
+    <ui:Template name="LootTableDrops" src="project://database/Packages/shatter-fantasy.sf-metroidvania/Editor/Data%20Editor/Loot%20Editor/LootTableDrops.uxml?fileID=9197481963319205126&amp;guid=ab997184d04661447b0a890656912027&amp;type=3#LootTableDrops" />
+    <ui:Template name="ItemPriceView" src="project://database/Packages/shatter-fantasy.sf-metroidvania/Editor/Data%20Editor/Inventory%20Editor/Data%20Sections/ItemPriceView.uxml?fileID=9197481963319205126&amp;guid=b7bb0fc86e7ec4d45a8590f0b2816dde&amp;type=3#ItemPriceView" />
     <Style src="project://database/Packages/shatter-fantasy.sf-metroidvania/Editor/Data%20Editor/Core/DataEditorWindow.uss?fileID=7433441132597879392&amp;guid=7bf347311f8e91242abf04e790cfbf7e&amp;type=3#DataEditorWindow" />
-	
-	<ui:TabView>
-		<ui:Tab label="Characters">
-			<ui:VisualElement name="root-datasource" data-source="project://database/Assets/Data/Character/Bloom%20Bug.asset?fileID=11400000&amp;guid=c2828686cc3a0d44283a670a1b61ce0c&amp;type=2#Bloom Bug" data-source-type="SF.Characters.Data.CharacterDTO, SF.MetroidvaniaToolkit">
-				<ui:TwoPaneSplitView class="unity-two-pane-split-view">
-					<sfeditor:CharacterListView/>
-					<ui:VisualElement>
-						<ui:Instance template="DTOGeneral" name="dto-general__section"/>
-						<ui:Instance template="CharacterGeneral" name="character-general__section"/>
-						<ui:Instance template="StatsList" name="stats-list__section"/>
-						<ui:Instance template="ExperienceList" name="expierence__section"/>
-						<ui:Instance template="LootTableDrops" name="loot-table-drops__section"/>
-					</ui:VisualElement>
-				</ui:TwoPaneSplitView>
-			</ui:VisualElement>
-		</ui:Tab>
-		<ui:Tab label="Data Definitions">
-			<ui:Label text="Data Definitions tab"/>
-		</ui:Tab>
-		<ui:Tab label="Items">
-			<ui:Label text="Items Tab"/>
-		</ui:Tab>
-	</ui:TabView>
-
+    <ui:TabView name="root-datasource">
+        <ui:Tab label="Characters">
+            <ui:VisualElement data-source="project://database/Assets/Data/Character/Bloom%20Bug.asset?fileID=11400000&amp;guid=c2828686cc3a0d44283a670a1b61ce0c&amp;type=2#Bloom Bug" data-source-type="SF.Characters.Data.CharacterDTO, SF.MetroidvaniaToolkit">
+                <ui:TwoPaneSplitView class="unity-two-pane-split-view">
+                    <sfeditor:CharacterListView />
+                    <ui:VisualElement>
+                        <ui:Instance template="DTOGeneral" name="dto-general__section" />
+                        <ui:Instance template="CharacterGeneral" name="character-general__section" />
+                        <ui:Instance template="StatsList" name="stats-list__section" />
+                        <ui:Instance template="ExperienceList" name="experience__section" />
+                        <ui:Instance template="LootTableDrops" name="loot-table-drops__section" />
+                    </ui:VisualElement>
+                </ui:TwoPaneSplitView>
+            </ui:VisualElement>
+        </ui:Tab>
+        <ui:Tab name="item__view-root" label="Items">
+            <ui:VisualElement data-source-type="SF.Inventory.ItemDTO, SF.MetroidvaniaToolkit">
+                <ui:TwoPaneSplitView class="unity-two-pane-split-view">
+                    <sfitem:SFItemListView />
+                    <ui:VisualElement>
+                        <ui:Instance template="DTOGeneral" name="dto-general__section" />
+                        <ui:Instance template="ItemPriceView" name="item-price__section" />
+                    </ui:VisualElement>
+                </ui:TwoPaneSplitView>
+            </ui:VisualElement>
+        </ui:Tab>
+    </ui:TabView>
 </ui:UXML>

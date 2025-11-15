@@ -1,4 +1,3 @@
-using System;
 using SF.AbilityModule;
 using SF.Events;
 using SF.Managers;
@@ -23,7 +22,7 @@ namespace SF.InputModule
 			{
 				if(_instance == null)
 					_instance = FindAnyObjectByType<InputManager>();
-
+				
 				return _instance;
 			}
 		}
@@ -42,7 +41,7 @@ namespace SF.InputModule
 		private void Awake()
 		{
 			if(Instance != null && Instance != this)
-				Destroy(this);
+				Destroy(gameObject);
 		}
 
 		private void Start()
@@ -53,7 +52,6 @@ namespace SF.InputModule
 		
 		private void OnGameMenuToggled(InputAction.CallbackContext ctx)
 		{
-			
 			GameEvent.Trigger(GameEventTypes.PauseToggle);
 		}
 
@@ -69,16 +67,22 @@ namespace SF.InputModule
         
         private void OnGameControlStateChanged(GameControlState controlState)
         {
-	        // If we are exiting dialogue or a menu unfreeze the player.
-	        if (controlState == GameControlState.Player)
+
+	        switch (controlState)
 	        {
-		        Controls.Player.Enable();
-		        Controls.UI.Disable();
-	        }
-	        else
-	        {
-		        Controls.UI.Enable();
-		        Controls.Player.Disable();
+		        case GameControlState.Player:
+		        {
+			        Controls.Player.Enable();
+			        Controls.UI.Disable();
+			        break;
+		        }
+		        case GameControlState.Dialogue:
+		        case GameControlState.Menu:
+		        {
+			        Controls.UI.Enable();
+			        Controls.Player.Disable();
+			        break;
+		        }
 	        }
         }
         
@@ -86,6 +90,7 @@ namespace SF.InputModule
         {
 			if(Controls != null)
 			{
+				Controls.GameControl.Enable();
 				Controls.GameControl.PauseToggle.performed += OnGameMenuToggled;
 			}
         }

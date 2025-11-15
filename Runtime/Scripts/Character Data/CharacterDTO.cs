@@ -1,8 +1,10 @@
+using UnityEngine;
+
+using SF.DataModule;
 using SF.Experience;
 using SF.LootModule;
 using SF.StatModule;
 
-using UnityEngine;
 
 namespace SF.Characters.Data
 {

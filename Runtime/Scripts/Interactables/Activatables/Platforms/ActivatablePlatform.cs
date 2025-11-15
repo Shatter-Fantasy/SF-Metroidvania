@@ -7,7 +7,7 @@ namespace SF
 {
     [RequireComponent(typeof(PositionHandle))]
     
-    public class ActivatablePlatform : ActivablteWrapper, IActivatable
+    public class ActivatablePlatform : ActivatableWrapper, IActivatable
     {
         [SerializeField] private float _speed = 5;
 

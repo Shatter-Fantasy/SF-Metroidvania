@@ -1,7 +1,6 @@
 using UnityEngine.UIElements;
 
-using SFEditor.Characters.Data;
-using SF;
+using SF.DataModule;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -34,7 +33,7 @@ namespace SFEditor.Data
         /// </summary>
         protected abstract string _dataFilePath { get; }
 
-        private ContextualMenuManipulator _dropDownMenu;
+        protected ContextualMenuManipulator _dropDownMenu;
 
         public DataListView() { }
 

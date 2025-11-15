@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns:ui="UnityEngine.UIElements"
+         noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd">
+    <ui:Foldout name="price-section__container" text="Price Setting"  class="data__section--container">
+        <ui:IntegerField label="Buy Price" name="buy-price__field" binding-path="PriceData.BuyPrice" />
+        <ui:IntegerField label="Sell Price" name="sell-price" binding-path="PriceData.SellPrice" />
+    </ui:Foldout>
+</ui:UXML>

@@ -23,21 +23,12 @@ namespace SF.Abilities.CombatModule
         /// <summary>
         /// This plays after the attack finishes. Use this to wait for the attack animation to finish.
         /// </summary>
-        private void OnUseCompleted()
-        {
-            _controller2d.UnfreezeController();
-        }
+        protected virtual void OnUseCompleted() { }
 
         private void OnAttackPerformed(InputAction.CallbackContext context)
         {
-            if(_weaponBase == null)
+            if(_weaponBase == null || !CanStartAbility())
                 return;
-            
-            if(!CanStartAbility()) 
-                return;
-            
-            if(!_controller2d.IsFrozen)
-                _controller2d.FreezeController();
             
             _weaponBase.Use();
         }

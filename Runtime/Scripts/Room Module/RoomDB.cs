@@ -8,23 +8,6 @@ namespace SF.RoomModule
     [CreateAssetMenu(fileName = "Room DB", menuName = "SF/Data/Rooms/Room Database")]
     public class RoomDB : ScriptableObject , IList<Room>
     {
-        private static RoomDB _instance;
-
-        public static RoomDB Instance
-        {
-            get
-            {
-                return _instance;
-            }
-            set
-            {
-                if (value == null)
-                    return;
-
-                _instance = value;
-            }
-        }
-        
         public List<Room> Rooms = new();
         
         /// <summary>
@@ -32,20 +15,6 @@ namespace SF.RoomModule
         /// This is also called when a new list is assigned into the Rooms value.
         /// </summary>
         public Action OnRoomsValueChanged;
-        private void Awake()
-        {
-            if (Instance == null)
-                Instance = this;
-        }
-
-        private void OnEnable()
-        {
-            if (Instance == null)
-            {
-
-                Instance = this;
-            }
-        }
 
         public IEnumerator<Room> GetEnumerator()
         {
@@ -140,7 +109,11 @@ namespace SF.RoomModule
         /// <exception cref="NotImplementedException"></exception>
         public Room this[int index]
         {
-            get => Rooms[index];
+            // We have to make sure we first have a value at that index.
+            get => !Contains(index) 
+                        ? null 
+                        : Rooms[index];
+
             set => throw new NotImplementedException();
         }
     }

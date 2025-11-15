@@ -1,9 +1,8 @@
 using System;
-using SF.Characters.Controllers;
+using System.Collections.Generic;
 using SF.DataManagement;
 using SF.DialogueModule;
 using SF.Events;
-
 using UnityEngine;
 
 namespace SF.Managers
@@ -16,34 +15,23 @@ namespace SF.Managers
 		Player,
 		SceneChanging,
 		Cutscenes,
-		CameraTransition,
-		TransformTransition, // Player being moved within a scene, but has no control over the player. Think teleporting.
-        Dialogue
+		Transition, // Player being moved within a scene, but has no control over the player. Think teleporting.
+        Dialogue,
+        Menu,
 	}
-
 	/// <summary>
 	/// The current play state of the game loop that describes what type of logic loop is being updated.
 	/// </summary>
-	public enum GamePlayState
-	{
-		Playing = 0,
-		Paused = 1,
-		MainMenu = 2,
-	}
 
     [DefaultExecutionOrder(-5)]
-    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>, EventListener<DialogueEvent>
+    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>
     {
-        #if UNITY_EDITOR
-        /// <summary>
-        /// Set false to not load a save file allowing the player to spawn in place for debugging in the editor.
-        /// </summary>
-        [SerializeField] protected bool _shouldLoadData;
-        #endif
+        [SerializeReference]
+        public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
         
         [SerializeField] protected int _targetFrameRate = 60;
         [SerializeField] private GameControlState _controlState;
-
+        
         public GameControlState ControlState
         {
             get { return _controlState;}
@@ -57,29 +45,22 @@ namespace SF.Managers
             }
         }
         
-		public GamePlayState PlayState;
-
-        public static GameObject PlayerSceneObject { get; protected set; }
         public static GameManager Instance;
 
-        public PlayerController PlayerController;
-
         public Action<GameControlState> OnGameControlStateChanged;
-        
         private void Awake()
         {
             Application.targetFrameRate = _targetFrameRate;
 
             if (Instance == null)
+            {
                 Instance = this;
+                DontDestroyOnLoad(gameObject); 
+            }
             else
-                Destroy(this);
+                Destroy(gameObject); // We want to destroy the child object managers so they are not doubles as well.
         }
-        protected virtual void Start()
-        {
-            PlayerSceneObject = FindAnyObjectByType<PlayerController>().gameObject;
-            SaveSystem.LoadDataFile();
-        }
+
         protected void OnExitGame()
         {
             // Will need to do checks later for preventing shutdowns during saving and loading.
@@ -88,7 +69,7 @@ namespace SF.Managers
 
         protected void OnPausedToggle()
         {
-            if(PlayState == GamePlayState.Playing)
+            if(_controlState == GameControlState.Player)
                 Pause();
             else // So we are already paused or in another menu.
                 Unpause();
@@ -96,13 +77,13 @@ namespace SF.Managers
 
         protected void Pause()
         {
-            PlayState = GamePlayState.MainMenu;
+            _controlState = GameControlState.Menu;
             GameMenuEvent.Trigger(GameMenuEventTypes.OpenGameMenu);
         }
 
         protected void Unpause()
         {
-            PlayState = GamePlayState.Playing;
+            _controlState = GameControlState.Player;
             GameMenuEvent.Trigger(GameMenuEventTypes.CloseGameMenu);
         }
 
@@ -130,6 +111,7 @@ namespace SF.Managers
             }
         }
         
+        /*
         public void OnEvent(DialogueEvent eventType)
         {
             switch (eventType.EventType)
@@ -146,19 +128,18 @@ namespace SF.Managers
                 }
             }
         }
-
+        */
+        
         protected void OnEnable()
 		{
             this.EventStartListening<ApplicationEvent>();
             this.EventStartListening<GameEvent>();
-            this.EventStartListening<DialogueEvent>();
 		}
 
         protected void OnDisable ()
 		{
             this.EventStopListening<ApplicationEvent>();
             this.EventStopListening<GameEvent>();
-            this.EventStopListening<DialogueEvent>();
         }
     }
 }

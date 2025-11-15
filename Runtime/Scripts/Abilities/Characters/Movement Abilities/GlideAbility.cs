@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +6,10 @@ using SF.Physics;
 
 namespace SF.AbilityModule.Characters
 {
+    /// <summary>
+    /// Grants the ability for a player to Glide with a set input command.
+    /// Controller by an <see cref="AbilityController"/>.
+    /// </summary>
     public class GlideAbility : AbilityCore, IInputAbility
     {
         [Header("Gravity Physics")]
@@ -15,7 +18,7 @@ namespace SF.AbilityModule.Characters
 
         protected override void OnInitialize()
         {
-           _controller2d.OnGrounded += GlideReset;
+            _controller2d.CollisionInfo.OnGroundedHandler += GlideReset;
         }
 
         protected override bool CheckAbilityRequirements()
@@ -27,7 +30,7 @@ namespace SF.AbilityModule.Characters
                 return false;
 
             // If we are grounded we don't need to glide.
-            if(_controller2d.IsGrounded)
+            if(_controller2d.CollisionInfo.IsGrounded)
                 return false;
             return true;
         }
@@ -36,7 +39,7 @@ namespace SF.AbilityModule.Characters
             if(!CheckAbilityRequirements()) return;
 
             _controller2d.SetVerticalVelocity(0);
-            _controller2d.UpdatePhysics(DefaultGlideProperties);
+            _controller2d.UpdatePhysicsProperties(DefaultGlideProperties);
             _controller2d.IsGliding = true;
         }
 
@@ -67,7 +70,7 @@ namespace SF.AbilityModule.Characters
 
             InputManager.Controls.Player.Glide.performed -= OnInputGlide;
             InputManager.Controls.Player.Jump.performed -= OnMidGlideJump;
-            _controller2d.OnGrounded -= GlideReset;
+            _controller2d.CollisionInfo.OnGroundedHandler-= GlideReset;
         }
     }
 }

@@ -4,6 +4,7 @@
     xmlns:ui="UnityEngine.UIElements"
     xmlns:ue="UnityEditor.UIElements"
     xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="True"
 >
   <ui:Foldout name="general-data__container" text="General Data" class="data__section--container">
     <ui:VisualElement style="flex-direction: row;">

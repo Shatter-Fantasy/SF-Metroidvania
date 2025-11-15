@@ -1,8 +1,6 @@
-using UnityEngine;
 
 using SF.Characters.Data;
 using SF.Experience;
-using SF.ItemModule;
 using SF.StateMachine.Core;
 
 
@@ -28,21 +26,12 @@ namespace SF.SpawnModule
                 //  Grant the player his expierence from the enemy kill.
                 
                 ExperienceEvent.Trigger(ExperienceEventTypes.Gain,_combatantData.Experience.BaseExperience);
-
-                // Loot Drop checks.
-                if (_combatantData.EnemyLootTable is not null
-                    && _combatantData.EnemyLootTable.LootTable.Count > 0)
+                
+                if (_combatantData.EnemyLootTable is not null)
                 {
-                    GameObject spawnedItem = Instantiate(
-                        _combatantData.EnemyLootTable.LootTable[0].Prefab,
-                        transform.position,
-                        Quaternion.identity
-                    );
-
-                    spawnedItem.GetComponent<PickupItem>().Item = _combatantData.EnemyLootTable.LootTable[0];
+                    _combatantData.EnemyLootTable.DropRandomLoot(transform.position);
                 }
             }
-
             base.Kill();
         }
 
@@ -56,7 +45,7 @@ namespace SF.SpawnModule
         
         protected override void OnEnable()
         {
-            _deathTimer = new Timer(_deathTimer.StartingTime,Despawn);
+            _deathTimer = new Timer(_deathTimer.Duration,Despawn);
         }
     }
 }

@@ -89,4 +89,3 @@ https://github.com/Shatter-Fantasy/SF-Metroidvania.git.git#v0.0.1
 
 Full example for wanting to get the SF Package that is being worked on in the alpha-one branch
 https://github.com/crowhound/SF-Platformer.git#alpha-one
-
