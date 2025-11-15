@@ -8,7 +8,6 @@ namespace SF.Events
         RespawnAll,
         PlayerRespawnAll, // This maily be used for multiplayer set ups.
         ItemsRespawnAll, //Items, Collectables, Interactables, and so forth.
-        PlayerRespawn,
         GameObjectRespawn, // This is used for respawning a single specific game object of any type.
     }
     public struct RespawnEvent : IEvent

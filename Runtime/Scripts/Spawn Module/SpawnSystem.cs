@@ -21,6 +21,7 @@ namespace SF.SpawnModule
         public static ControllerBody2D SpawnedPlayerController;
         
         public static event Action<GameObject> InitialPlayerSpawnHandler;
+        public static event Action PlayerRespawnHandler;
 
         /// <summary>
         /// Tell the game to start the initial spawning of the player when loading up a save file.
@@ -42,6 +43,14 @@ namespace SF.SpawnModule
             InitialPlayerSpawnHandler?.Invoke(SpawnedPlayer);
             
             return SpawnedPlayer.GetComponent<ControllerBody2D>();
+        }
+
+        /// <summary>
+        /// Respawns the player and invokes the <see cref="PlayerRespawnHandler"/> event.
+        /// </summary>
+        public static void RespawnPlayer()
+        {
+            PlayerRespawnHandler?.Invoke();
         }
     }
 }

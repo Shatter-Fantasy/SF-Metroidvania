@@ -12,7 +12,7 @@ namespace SF.SpawnModule
             base.Kill();
 
             LivesEvent.Trigger(LivesEventTypes.DecreaseLives, 1);
-            RespawnEvent.Trigger(RespawnEventTypes.PlayerRespawn);
+            SpawnSystem.RespawnPlayer();
             RespawnEvent.Trigger(RespawnEventTypes.GameObjectRespawn);
         }
 
@@ -37,11 +37,14 @@ namespace SF.SpawnModule
         protected override void OnEnable()
         {
             base.OnEnable();
+            SpawnSystem.PlayerRespawnHandler += Respawn;
             this.EventStartListening<SaveLoadEvent>();
         }
 
         protected override void OnDisable()
         {
+            // Might need to move this to the OnDestroy if we disable the player during respawning.
+            SpawnSystem.PlayerRespawnHandler -= Respawn;
             this.EventStopListening<SaveLoadEvent>();
         }
         
@@ -53,16 +56,6 @@ namespace SF.SpawnModule
                 {
                     break;
                 }
-            }
-        }
-        
-        public override void OnEvent(RespawnEvent respawnEvent)
-        {
-            switch (respawnEvent.EventType) 
-            {
-                case RespawnEventTypes.PlayerRespawn:
-                    Respawn();
-                    break;
             }
         }
         
