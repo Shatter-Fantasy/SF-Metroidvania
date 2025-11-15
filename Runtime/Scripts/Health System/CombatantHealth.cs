@@ -23,9 +23,9 @@ namespace SF.SpawnModule
             if (_combatantData is not null)
             {
                 // TODO: Will need checks later for allies and summonings to not grant experience.
-                //  Grant the player his expierence from the enemy kill.
+                //  Grant the player his experience from the enemy kill.
                 
-                ExperienceEvent.Trigger(ExperienceEventTypes.Gain,_combatantData.Experience.BaseExperience);
+                PlayerLevelStats.GainExperience(_combatantData.Experience.BaseExperience);
                 
                 if (_combatantData.EnemyLootTable is not null)
                 {
