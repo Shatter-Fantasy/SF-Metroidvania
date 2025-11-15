@@ -149,7 +149,7 @@ namespace SF.PhysicsLowLevel
 
             _ownedShapes.Clear();
 
-            if (SceneBody.Body.isValid)
+            if (SceneBody != null && SceneBody.Body.isValid)
                 SceneBody.Body.ApplyMassFromShapes();
         }
 
