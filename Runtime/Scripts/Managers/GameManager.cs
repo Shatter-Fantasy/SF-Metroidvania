@@ -24,7 +24,7 @@ namespace SF.Managers
 	/// </summary>
 
     [DefaultExecutionOrder(-5)]
-    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>
+    public class GameManager : MonoBehaviour
     {
         [SerializeReference]
         public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
@@ -64,19 +64,20 @@ namespace SF.Managers
         
         protected void OnEnable()
         {
-            this.EventStartListening<ApplicationEvent>();
             DialogueManager.DialogueStartedHandler += OnDialogueStarted;
             DialogueManager.DialogueEndedHandler += OnDialogueEnded;
         }
 
         protected void OnDisable ()
         {
-            this.EventStopListening<ApplicationEvent>();
             DialogueManager.DialogueStartedHandler -= OnDialogueStarted;
             DialogueManager.DialogueEndedHandler -= OnDialogueEnded;
         }
 
-        protected void OnExitGame()
+        /// <summary>
+        /// Exits the game and closes all related computer processes.
+        /// </summary>
+        public static void ExitGame()
         {
             // Will need to do checks later for preventing shutdowns during saving and loading.
             Application.Quit();
@@ -101,23 +102,12 @@ namespace SF.Managers
             Instance._controlState = GameControlState.Player;
             GameMenuEvent.Trigger(GameMenuEventTypes.CloseGameMenu);
         }
-
-        public void OnEvent(ApplicationEvent eventType)
-        {
-            switch(eventType.EventType)
-            {
-                case ApplicationEventTypes.ExitApplication:
-                    {
-                        OnExitGame();
-                        break;
-                    }
-            }
-        }
         
         private void OnDialogueStarted()
         {
             /* TODO: Switch statement for type of dialogue.
             * Allow for background dialogue that don't freeze the player control. */
+            
             _controlState = GameControlState.Dialogue;
         }
         
@@ -125,6 +115,7 @@ namespace SF.Managers
         {
             /* TODO: Switch statement for type of dialogue.
              * Allow for background dialogue that don't freeze the player control. */
+            
             _controlState = GameControlState.Player;
         }
     }

@@ -25,7 +25,7 @@ namespace SF.UI
 
         private void OnExitGameBtnClicked()
         {
-            ApplicationEvent.Trigger(ApplicationEventTypes.ExitApplication);
+            GameManager.ExitGame();
         }
 
         private void OnOptionsMenuBtnClicked()
