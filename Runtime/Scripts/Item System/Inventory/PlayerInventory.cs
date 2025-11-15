@@ -21,21 +21,10 @@ namespace SF.InventoryModule
         /// </summary>
         public static Action<int> ItemPickedUpHandler;
         
-        private void OnEnable()
-        {
-            
-        }
-        
-        private void OnDisable()
-        {
-            
-        }
-
         private void Start()
         {
             MetroidvaniaSaveManager.PlayerInventory = this;
         }
-        
         
         public override void AddItem(int itemID)
         {
