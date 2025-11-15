@@ -48,6 +48,7 @@ namespace SF.Managers
         public static GameManager Instance;
 
         public Action<GameControlState> OnGameControlStateChanged;
+        
         private void Awake()
         {
             Application.targetFrameRate = _targetFrameRate;
@@ -59,6 +60,22 @@ namespace SF.Managers
             }
             else
                 Destroy(gameObject); // We want to destroy the child object managers so they are not doubles as well.
+        }
+        
+        protected void OnEnable()
+        {
+            this.EventStartListening<ApplicationEvent>();
+            this.EventStartListening<GameEvent>();
+            DialogueManager.DialogueStartedHandler += OnDialogueStarted;
+            DialogueManager.DialogueEndedHandler += OnDialogueEnded;
+        }
+
+        protected void OnDisable ()
+        {
+            this.EventStopListening<ApplicationEvent>();
+            this.EventStopListening<GameEvent>();
+            DialogueManager.DialogueStartedHandler -= OnDialogueStarted;
+            DialogueManager.DialogueEndedHandler -= OnDialogueEnded;
         }
 
         protected void OnExitGame()
@@ -111,35 +128,18 @@ namespace SF.Managers
             }
         }
         
-        /*
-        public void OnEvent(DialogueEvent eventType)
+        private void OnDialogueStarted()
         {
-            switch (eventType.EventType)
-            {
-                case DialogueEventTypes.DialogueOpen:
-                {
-                    ControlState = GameControlState.Dialogue;
-                    break;
-                }
-                case DialogueEventTypes.DialogueClose:
-                {
-                    ControlState = GameControlState.Player;
-                    break;
-                }
-            }
+            /* TODO: Switch statement for type of dialogue.
+            * Allow for background dialogue that don't freeze the player control. */
+            _controlState = GameControlState.Dialogue;
         }
-        */
         
-        protected void OnEnable()
-		{
-            this.EventStartListening<ApplicationEvent>();
-            this.EventStartListening<GameEvent>();
-		}
-
-        protected void OnDisable ()
-		{
-            this.EventStopListening<ApplicationEvent>();
-            this.EventStopListening<GameEvent>();
+        private void OnDialogueEnded()
+        {
+            /* TODO: Switch statement for type of dialogue.
+             * Allow for background dialogue that don't freeze the player control. */
+            _controlState = GameControlState.Player;
         }
     }
 }
