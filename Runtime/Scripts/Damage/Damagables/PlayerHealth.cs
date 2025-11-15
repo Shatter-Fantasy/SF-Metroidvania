@@ -10,8 +10,7 @@ namespace SF.SpawnModule
         protected override void Kill()
         {
             base.Kill();
-
-            LivesEvent.Trigger(LivesEventTypes.DecreaseLives, 1);
+            
             SpawnSystem.RespawnPlayer();
         }
 
