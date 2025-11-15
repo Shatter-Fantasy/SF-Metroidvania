@@ -4,7 +4,7 @@ using SF.Events;
 
 namespace SF.SpawnModule
 {
-    public class PlayerHealth : CharacterHealth, IDamagable, EventListener<SaveLoadEvent>
+    public class PlayerHealth : CharacterHealth, IDamagable
     {
 
         protected override void Kill()
@@ -38,31 +38,12 @@ namespace SF.SpawnModule
         {
             base.OnEnable();
             SpawnSystem.PlayerRespawnHandler += Respawn;
-            this.EventStartListening<SaveLoadEvent>();
         }
 
         protected override void OnDisable()
         {
             // Might need to move this to the OnDestroy if we disable the player during respawning.
             SpawnSystem.PlayerRespawnHandler -= Respawn;
-            this.EventStopListening<SaveLoadEvent>();
-        }
-        
-        public void OnEvent(SaveLoadEvent saveLoadEvent)
-        {
-            switch (saveLoadEvent.EventType)
-            {
-                case SaveLoadEventTypes.Loading:
-                {
-                    break;
-                }
-            }
-        }
-        
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            this.EventStopListening<SaveLoadEvent>();
         }
     }
 }
