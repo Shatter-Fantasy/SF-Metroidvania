@@ -1,4 +1,5 @@
 using System;
+using SF.DataManagement;
 using SF.PhysicsLowLevel;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -10,6 +11,9 @@ namespace SF.SpawnModule
     /// </summary>
     public class SpawnSystem : MonoBehaviour
     {
+
+        public static Transform CurrentSpawnPosition;
+        
         /// <summary>
         /// The spawned root gameobject of the player.
         /// </summary>

@@ -47,7 +47,7 @@ namespace SF.DataManagement
                 RoomSystem.SetInitialRoom(StartingRoom);
             }
             
-            CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint, CurrentSaveFileData.CurrentSaveStation as CheckPoint);
+            CheckPointManager.ChangeCheckPoint(CurrentSaveFileData.CurrentSaveStation as CheckPoint);
         }
     }
 }

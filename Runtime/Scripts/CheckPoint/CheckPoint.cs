@@ -18,11 +18,11 @@ namespace SF.SpawnModule
 		}
 
         /// <summary>
-        /// Invokes the checkpoint <see cref="CheckPointEventTypes.ChangeCheckPoint"/> event to tell the checkpoint manager to set a new checkpoint.
+        /// Invokes the checkpoint <see cref="CheckPointManager.ChangeCheckPoint"/> event to tell the checkpoint manager to set a new checkpoint.
         /// </summary>
         public virtual void ActivateCheckPoint()
 		{
-			CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint,this);
+			CheckPointManager.ChangeCheckPoint(this);
 		}
 	}
 }
