@@ -1,3 +1,4 @@
+using System;
 using SF.Inventory;
 using SF.InventoryModule;
 using UnityEngine;
@@ -21,7 +22,17 @@ namespace SF.UIModule
         {
             _popTimer = new Timer(OnPopUpTimerCompleted);
         }
+
+        private void OnEnable()
+        {
+            PlayerInventory.ItemPickedUpHandler += OnPickUpItem;
+        }
         
+        private void OnDisable()
+        {
+            PlayerInventory.ItemPickedUpHandler -= OnPickUpItem;
+        }
+
         private void Start()
         {
             if (_overlayUXML == null)
@@ -34,6 +45,9 @@ namespace SF.UIModule
         
         private void OnPickUpItem(int itemID)
         {
+            if (_itemDatabase == null)
+                return;
+            
             var itemDTO = _itemDatabase[itemID];
             if (itemDTO == null)
             {
@@ -53,21 +67,6 @@ namespace SF.UIModule
         private void OnPopUpTimerCompleted()
         {
             _overlayContainer.style.visibility = Visibility.Hidden;
-        }
-        
-        public void OnEvent(ItemEvent itemEvent)
-        {
-            switch (itemEvent.EventType)
-            {
-                case ItemEventTypes.PickUp:
-                { 
-                    if (_itemDatabase == null)
-                        break;
-                    
-                    OnPickUpItem(itemEvent.ItemId);
-                    break;
-                }
-            }
         }
     }
 }

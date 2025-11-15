@@ -11,7 +11,6 @@ namespace SF.ItemModule
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
         
         public ItemData Item;
-
         
         public void Interact()
         {
@@ -26,15 +25,9 @@ namespace SF.ItemModule
             // Make sure we added an instantiated inventory to the player first.
             if(controller.TryGetComponent(out PlayerInventory playerInventory))
             {
-                PickUpItem(playerInventory);
+                playerInventory.PickUpItem(Item.ID);
+                Destroy(gameObject);
             }
-        }
-
-        private void PickUpItem(PlayerInventory playerInventory)
-        {         
-            playerInventory.AddItem(Item.ID);
-            ItemEvent.Trigger(ItemEventTypes.PickUp, itemID: Item.ID);
-            Destroy(gameObject);
         }
     }
 }
