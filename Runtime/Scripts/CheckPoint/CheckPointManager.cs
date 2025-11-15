@@ -28,9 +28,7 @@ namespace SF.SpawnModule
 				_instance = value;
 			}
 		}
-
-		public static event Action<CheckPoint> ChangeCheckPointHandler;
-
+		
         private void Awake()
         {
             Instance = this;
