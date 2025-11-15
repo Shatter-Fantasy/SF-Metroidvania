@@ -22,7 +22,7 @@ namespace SF.InventoryModule
         {
             itemEvent.EventType = eventType;
             itemEvent.ItemId = itemID;
-            EventManager.TriggerEvent(itemEvent);
+            //EventManager.TriggerEvent(itemEvent);
         }
     }
 }

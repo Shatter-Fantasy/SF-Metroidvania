@@ -1,4 +1,3 @@
-using SF.Events;
 using SF.Inventory;
 using SF.InventoryModule;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace SF.UIModule
 {
-    public class UIOverlayView : MonoBehaviour, EventListener<ItemEvent>
+    public class UIOverlayView : MonoBehaviour
     {
         [SerializeField] private UIDocument _overlayUXML;
         [SerializeField] private ItemDatabase _itemDatabase;
@@ -69,15 +68,6 @@ namespace SF.UIModule
                     break;
                 }
             }
-        }
-
-        private void OnEnable()
-        {
-            this.EventStartListening<ItemEvent>();
-        }
-        private void OnDisable()
-        {
-            this.EventStopListening<ItemEvent>();
         }
     }
 }

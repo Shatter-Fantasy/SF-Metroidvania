@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SF.StatModule
 {
-    public class PlayerStats : CharacterStats, EventListener<ExperienceEvent>
+    public class PlayerStats : CharacterStats
     {
         public LevelStats LevelStats;
         
@@ -18,15 +18,6 @@ namespace SF.StatModule
                     break;
                 }
             }
-        }
-        
-        protected virtual void OnEnable()
-        {
-            this.EventStartListening<ExperienceEvent>();
-        }
-        protected void OnDestroy()
-        {
-            this.EventStopListening<ExperienceEvent>();
         }
     }
 }

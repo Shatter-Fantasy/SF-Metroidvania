@@ -23,7 +23,7 @@ namespace SF.Experience
         {
             experienceEvent.EventType = eventType;
             experienceEvent.Experience = experience;
-            EventManager.TriggerEvent(experienceEvent);
+            //EventManager.TriggerEvent(experienceEvent);
         }
     }
 }
