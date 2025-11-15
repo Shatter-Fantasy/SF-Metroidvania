@@ -471,9 +471,9 @@ namespace SF.PhysicsLowLevel
         {
             if (!ControllerBody.isValid)
                 return;
-            
+           
             PhysicsShape = ControllerBody.CreateShape(CapsuleGeometry, PhysicsShapeDefinition);
-
+            
             if (PhysicsShape.isValid)
             {
                 PhysicsShape.callbackTarget = gameObject;

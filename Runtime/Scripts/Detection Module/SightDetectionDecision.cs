@@ -1,4 +1,5 @@
 using SF.Characters.Controllers;
+using SF.PhysicsLowLevel;
 using SF.StateMachine.Core;
 
 using UnityEngine;
@@ -13,14 +14,13 @@ namespace SF.StateMachine.Decisions
     {
         [SerializeField] private float _sightDistance = 4;
         [SerializeField] private ContactFilter2D _detectionFilter;
-
-        private readonly RaycastHit2D[] _filteredHits = new RaycastHit2D[1];
-        private RigidbodyController2D _rigidbodyController2D;
+        
+        private ControllerBody2D _controllerBody2D;
         
         protected override void Init()
         {
             if (TryGetComponent(out StateMachineBrain brain)
-                && brain.ControlledGameObject.TryGetComponent(out _rigidbodyController2D))
+                && brain.ControlledGameObject.TryGetComponent(out _controllerBody2D))
             {
                 // This is empty on purpose. The second TryGetComponent assigns the _controller2D value for this decision.
                 return;
