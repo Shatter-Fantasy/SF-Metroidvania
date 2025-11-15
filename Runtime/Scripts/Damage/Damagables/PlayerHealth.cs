@@ -13,7 +13,6 @@ namespace SF.SpawnModule
 
             LivesEvent.Trigger(LivesEventTypes.DecreaseLives, 1);
             SpawnSystem.RespawnPlayer();
-            RespawnEvent.Trigger(RespawnEventTypes.GameObjectRespawn);
         }
 
         public override void Respawn()
