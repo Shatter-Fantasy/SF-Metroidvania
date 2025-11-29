@@ -2,7 +2,6 @@ using SF.Characters.Data;
 using SF.Experience;
 using SF.StateMachine.Core;
 
-
 namespace SF.SpawnModule
 {
     public class CombatantHealth : CharacterHealth
