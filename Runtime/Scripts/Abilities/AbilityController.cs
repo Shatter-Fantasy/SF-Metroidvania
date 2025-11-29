@@ -40,9 +40,8 @@ namespace SF.AbilityModule
             // Set the correct type of controller so the abilities can do different things based on if it is player, a enemy affected by gravity, or another type.
             _physicController2D = _physicController2D switch
             {
-                ControllerBody2D controllerBody2D => controllerBody2D,
                 PlayerController playerController => playerController,
-                GroundedController2D groundedController2D => groundedController2D,
+                ControllerBody2D controllerBody2D => controllerBody2D,
                 _ => _physicController2D
             };
         }

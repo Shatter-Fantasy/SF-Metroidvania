@@ -16,7 +16,7 @@ namespace SF.Characters
     {
 	    public bool UseAnimatorTransitions;
 		public CharacterTypes CharacterType = CharacterTypes.Player;
-		public CharacterState CharacterState => _rigidbodyController?.CharacterState;
+		public CharacterState CharacterState => _controllerBody2D?.CharacterState;
 
 		public bool CanTurnAround = true;
 		public bool StartedFacingRight = true;
@@ -28,7 +28,6 @@ namespace SF.Characters
 		/// This is used to update animation clips at runtime for forced states.
 		/// </summary>
 		private RuntimeAnimatorController _runtimeAnimator;
-		private RigidbodyController2D _rigidbodyController;
 		private ControllerBody2D _controllerBody2D;
 		#endregion
 		
@@ -48,7 +47,6 @@ namespace SF.Characters
 		{
 			Animator = GetComponent<Animator>();
 			_spriteRend = GetComponent<SpriteRenderer>();
-			_rigidbodyController = GetComponent<RigidbodyController2D>();
 			_controllerBody2D = GetComponent<ControllerBody2D>();
 			Init();
 		}
@@ -61,14 +59,11 @@ namespace SF.Characters
 		
 		protected virtual void OnInit()
 		{
-			if(_rigidbodyController) // Can happen when attached to an NPC not moving and just idle.
-				_rigidbodyController.OnDirectionChanged += OnDirectionChanged;
-
 			if (_controllerBody2D)
 				_controllerBody2D.OnDirectionChanged += OnDirectionChanged;
 
 			// TODO: Make the attacking change the state the animation state to attacking. 
-			//_controller.CharacterState.OnMovementStateChanged += UpdateAnimator;
+			//_controllerBody2D.CharacterState.OnMovementStateChanged += UpdateAnimator;
 		}
 
 		private void LateUpdate()
