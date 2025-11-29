@@ -288,8 +288,10 @@ namespace SF.PhysicsLowLevel
 
         protected override void OnAwake()
         {
-            CollisionInfo = new BodyCollisionInfo();
-            CollisionInfo.ControllerBody2D = this;
+            CollisionInfo = new BodyCollisionInfo
+            {
+                ControllerBody2D = this
+            };
         }
 
         protected override void FixedUpdate()
@@ -534,7 +536,7 @@ namespace SF.PhysicsLowLevel
             }
             else
             {
-                if (ControllerBody.bodyType == RigidbodyType2D.Dynamic && PhysicsShape.definition.density <= 0)
+                if (ControllerBody.type == PhysicsBody.BodyType.Dynamic && PhysicsShape.definition.density <= 0)
                     Debug.LogWarning(
                         $"The PhysicsShape's density value was set to be a zero or negative value while the PhysicsBody is RigidbodyType2D is set to Dynamic. This means gravity will not be applied to the PhysicsBody.",
                         gameObject);
