@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using SF.DataManagement;
 using SF.DialogueModule;
-using SF.Events;
 using UnityEngine;
 
 namespace SF.Managers

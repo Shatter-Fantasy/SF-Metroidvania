@@ -1,5 +1,4 @@
 using SF.DamageModule;
-using SF.Events;
 using SF.SpawnModule;
 
 using UnityEngine;
