@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.PhysicsLowLevel
 {
     /// <summary>
     ///  Allows objects to have a custom implementation for force and velocity interactions for physics.

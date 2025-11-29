@@ -1,7 +1,5 @@
 using SF.Characters.Controllers;
 using SF.Interactables;
-using SF.InventoryModule;
-
 using UnityEngine;
 
 namespace SF.ItemModule

@@ -1,6 +1,4 @@
-using System;
-using SF.Inventory;
-using SF.InventoryModule;
+using SF.ItemModule;
 using UnityEngine;
 using UnityEngine.UIElements;
 

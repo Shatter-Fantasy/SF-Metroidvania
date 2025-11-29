@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace SF.SpawnModule
 {
+    /*  TODO: Merge this with the CombatantHealth.cs
+        and remove this script from the package.    */
+    
     public class CharacterHealth : Health
     {
         [SerializeField] protected Timer _invicibilityTimer;

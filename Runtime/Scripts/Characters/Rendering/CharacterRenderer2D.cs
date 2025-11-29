@@ -1,9 +1,7 @@
 using UnityEngine;
 
-using SF.Characters.Controllers;
 using SF.Managers;
 using SF.PhysicsLowLevel;
-
 
 namespace SF.Characters
 {
