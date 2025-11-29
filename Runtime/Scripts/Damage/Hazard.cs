@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 using UnityEngine.U2D.Physics.LowLevelExtras;
 
-namespace SF
+namespace SF.DamageModule
 {
     [System.Flags]
-    public enum Direction : int
+    public enum Direction : short
     {
         Any = 0,
         Left = 1,

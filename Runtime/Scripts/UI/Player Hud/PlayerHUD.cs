@@ -1,9 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-using SF.Events;
-
-namespace SF
+namespace SF.UIModule
 {
     public class PlayerHUD : MonoBehaviour
     {
