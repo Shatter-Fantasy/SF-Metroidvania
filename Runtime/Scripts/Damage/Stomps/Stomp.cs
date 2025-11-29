@@ -1,4 +1,4 @@
-using SF.Characters.Controllers;
+using SF.DamageModule;
 using SF.PhysicsLowLevel;
 using UnityEngine;
 
