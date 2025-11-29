@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using SF.Characters.Controllers;
-using SF.Physics;
 using SF.PhysicsLowLevel;
 using UnityEngine;
 
@@ -16,8 +15,8 @@ namespace SF.AbilityModule
     /// For NPC, Enemies, or Ally combatants not controlled by the Players use <see cref="SF.StateMachine.Core.StateMachineBrain"/>
     /// <remarks>
     /// The AbilityController default execution order is set one past the Controller2D.
-    /// This guarantees the controller is already set up it's current physic struct in case any external force is starting to change it.
-    /// <see cref="SF.Physics.PhysicsVolume"/> 
+    /// This guarantees the controller is already set up it's current physic struct in case any external force is starting to change it
+    /// <see cref="SF.PhysicsLowLevel.PhysicsVolume"/> on spawn. Think loading a save room in an underwater PhysicsVolume.
     /// </remarks>
     /// </summary>
     [DefaultExecutionOrder(1)]

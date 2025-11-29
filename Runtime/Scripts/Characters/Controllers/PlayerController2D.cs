@@ -17,7 +17,6 @@ namespace SF.Characters.Controllers
     /// </summary>
 	public class PlayerController : ControllerBody2D
     {
-        
         protected override void OnAwake()
         {
             base.OnAwake();

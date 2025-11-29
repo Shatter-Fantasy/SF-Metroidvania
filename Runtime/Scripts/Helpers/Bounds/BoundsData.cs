@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.PhysicsLowLevel
 {
 	[System.Serializable]
 	public struct BoundsData

@@ -1,9 +1,7 @@
 using UnityEngine;
 
 using SF.Characters;
-using SF.Characters.Controllers;
 using SF.Managers;
-using SF.Physics;
 using SF.PhysicsLowLevel;
 
 namespace SF.AbilityModule
