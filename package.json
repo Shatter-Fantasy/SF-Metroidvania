@@ -1,6 +1,6 @@
 {
   "name": "shatter-fantasy.sf-metroidvania",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "displayName": "SF Metroidvania",
   "description": "This is the Metroidvania Toolkit developed by \nJonathan Westfall of Shatter Fantasy studio.",
   "documentationUrl": "https://shatter-fantasy.gitbook.io/metroidvania-system/",
@@ -26,7 +26,7 @@
   "_upm": {
     "changelog": "### Changed\n- Started the 2D Character Controller"
   },
-  "unity": "2023.2",
+  "unity": "6000.3",
   "dependencies": {
     "com.unity.inputsystem": "1.8.1",
     "com.unity.cinemachine": "3.1.4"
