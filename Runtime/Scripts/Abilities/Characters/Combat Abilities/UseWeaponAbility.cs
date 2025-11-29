@@ -1,10 +1,9 @@
 using UnityEngine.InputSystem;
 
-using SF.AbilityModule;
 using SF.InputModule;
 using SF.Weapons;
 
-namespace SF.Abilities.CombatModule
+namespace SF.AbilityModule.CombatModule
 {
     public class UseWeaponAbility : AbilityCore, IInputAbility
     {
