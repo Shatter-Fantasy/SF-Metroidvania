@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using SF.Characters;
-using SF.Physics;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 using UnityEngine.U2D.Physics.LowLevelExtras;

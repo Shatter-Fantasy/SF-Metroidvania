@@ -1,16 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using SF.Physics;
 using Unity.Collections;
-using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.PhysicsLowLevel
 {
 
-    [System.Serializable]
+    [Serializable]
     public class BodyCollisionInfo : CollisionInfoBase
     {
         [NonSerialized] public ControllerBody2D ControllerBody2D;

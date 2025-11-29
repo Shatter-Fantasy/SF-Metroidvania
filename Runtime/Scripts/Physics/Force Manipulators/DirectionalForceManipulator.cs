@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.PhysicsLowLevel
 {
 
     public class DirectionalForceManipulator : MonoBehaviour, IForceManipulator
