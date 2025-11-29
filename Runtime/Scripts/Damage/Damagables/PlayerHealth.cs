@@ -1,10 +1,6 @@
-using SF.DataManagement;
-
-using SF.Events;
-
 namespace SF.SpawnModule
 {
-    public class PlayerHealth : CharacterHealth, IDamagable
+    public class PlayerHealth : CharacterHealth
     {
 
         protected override void Kill()

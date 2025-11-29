@@ -1,7 +1,7 @@
 using UnityEngine;
 using SF.Physics;
 
-namespace SF.DamageableModule
+namespace SF.DamageModule
 {
 
 	public class ZoneKill : MonoBehaviour
