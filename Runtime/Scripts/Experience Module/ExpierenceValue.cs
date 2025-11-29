@@ -1,3 +1,4 @@
+using System;
 using Unity.Properties;
 using UnityEngine;
 
@@ -10,9 +11,38 @@ namespace SF.Experience
         // TODO: Maybe add a system where killing in any with overkill damage or a certain way like element typed grants bonus exp. 
     }
     
+    /// <summary>
+    /// Keeps track of the player current level and also the players current experience.
+    /// </summary>
     [System.Serializable]
-    public class LevelStats
+    public class PlayerLevelStats
     {
+        // TODO: Add the experience curve system.
+        
+        protected static PlayerLevelStats _instance;
+        public static PlayerLevelStats Instance
+        {
+            get => _instance;
+            set
+            {
+                if(_instance != null)
+                    return;
+
+                _instance = value;
+            }
+        }
+        
+        /// <summary>
+        /// Creates a static instance of the class on compilation.
+        /// </summary>
+        /// <remarks>
+        /// Only works with non-Unity <see cref="UnityEngine.Object"/> classes.
+        /// </remarks>
+        static PlayerLevelStats()
+        {
+            Instance = new PlayerLevelStats();
+        }
+        
         [Header("Level Data")]
         [CreateProperty] public int CurrentLevel = 1;
         public int MaxLevel = 100;
@@ -33,16 +63,21 @@ namespace SF.Experience
         
         [CreateProperty] public int ExperienceToNextLevel = 40;
 
-        // TODO: Add the experience curve system.
+        
         /// <summary>
         /// The percentage of the previous level's experience needed to level up to add for the next level up amount.
         /// </summary>
         public float LevelUpModifier = 1.2f;
-
+        
         private void LevelUp()
         {
             ExperienceToNextLevel += Mathf.RoundToInt(ExperienceToNextLevel * LevelUpModifier);
             CurrentLevel++;
+        }
+
+        public static void GainExperience(int amount)
+        {
+            _instance._currentExperience += amount;
         }
     }
 }

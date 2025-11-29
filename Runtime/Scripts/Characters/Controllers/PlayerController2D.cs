@@ -1,5 +1,6 @@
 using SF.LevelModule;
 using SF.Managers;
+using SF.PhysicsLowLevel;
 
 namespace SF.Characters.Controllers
 {
@@ -15,7 +16,7 @@ namespace SF.Characters.Controllers
     /// the <see cref="PlayerController"/> after it is set in <see cref="PlayerRigPlayerController/>.
     /// </remarks> 
     /// </summary>
-	public class PlayerController : GroundedController2D
+	public class PlayerController : ControllerBody2D
     {
         
         protected override void OnAwake()
@@ -37,7 +38,7 @@ namespace SF.Characters.Controllers
             // For when in menu, in a conversation, and so forth.
             if (GameManager.Instance?.ControlState != GameControlState.Player)
             {
-                if (IsGrounded)
+                if (CollisionInfo.IsGrounded)
                 {
                     CharacterState.CurrentMovementState = MovementState.Idle;
                     // Freeze the controller only after grounded so if we are stopped in midair we still hit the ground.

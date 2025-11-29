@@ -3,6 +3,7 @@ using SF.Characters;
 using SF.CommandModule;
 using SF.DataManagement;
 using SF.Events;
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.SpawnModule
@@ -27,12 +28,12 @@ namespace SF.SpawnModule
         
         public SpriteBlinkCommand DamageBlink;
         
-        protected RigidbodyController2D _rigidbodyController;
+        protected ControllerBody2D _controllerBody2D;
         protected CharacterRenderer2D _character2D;
 
         protected virtual void Awake()
         {
-            _rigidbodyController = GetComponent<RigidbodyController2D>();
+            _controllerBody2D = GetComponent<ControllerBody2D>();
             _character2D = GetComponent<CharacterRenderer2D>();
             _invicibilityTimer = new Timer(_invicibilityTimer.Duration,OnInvicibilityTimerCompleted);
         }
@@ -40,8 +41,8 @@ namespace SF.SpawnModule
         protected override void Kill()
         {
 
-            if(_rigidbodyController != null)
-                _rigidbodyController.CharacterState.CharacterStatus = CharacterStatus.Dead;
+            if(_controllerBody2D != null)
+                _controllerBody2D.CharacterState.CharacterStatus = CharacterStatus.Dead;
 
             if(_character2D != null && !string.IsNullOrEmpty(DeathAnimationName))
                 _character2D.SetAnimationState(DeathAnimationName,0.01f);
@@ -53,10 +54,10 @@ namespace SF.SpawnModule
 
         public override void Respawn()
         {
-            if(_rigidbodyController != null)
+            if(_controllerBody2D != null)
             {
-                _rigidbodyController.Reset();
-                _rigidbodyController.CharacterState.CharacterStatus = CharacterStatus.Alive;
+                _controllerBody2D.Reset();
+                _controllerBody2D.CharacterState.CharacterStatus = CharacterStatus.Alive;
             }
 
             base.Respawn();
@@ -65,7 +66,7 @@ namespace SF.SpawnModule
         public override void TakeDamage(int damage, Vector2 knockback = new Vector2())
         {
            
-            if (_rigidbodyController?.CharacterState.CharacterStatus == CharacterStatus.Dead || _activeInvicibility)
+            if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead || _activeInvicibility)
                 return;
             
             if(_character2D != null && !string.IsNullOrEmpty(HitAnimationName))
@@ -74,7 +75,7 @@ namespace SF.SpawnModule
             base.TakeDamage(damage);
             _ = DamageBlink.Use();
             
-            _rigidbodyController?.SetDirectionalForce(knockback);
+            _controllerBody2D?.SetDirectionalForce(knockback);
             
             _activeInvicibility = true;
             _ = _invicibilityTimer.StartTimerAsync();

@@ -14,7 +14,7 @@ namespace SF.SpawnModule
     /// Adds a health system to anything. 
     /// This does not need to be on a character. You can add this to a crate or anything that wants to be damaged. There are checks in do stuff for character specific objects if you want to.
     /// </summary>
-    public class Health : MonoBehaviour, IDamagable, EventListener<RespawnEvent>
+    public class Health : MonoBehaviour, IDamagable
     {
         /// <summary>
         /// Is the character health being controlled by an external script to 
@@ -90,9 +90,7 @@ namespace SF.SpawnModule
 
             _ = _deathTimer.StartTimerAsync();
         }
-
-		public virtual void OnEvent(RespawnEvent respawnEvent) { }
-
+        
         public virtual void Respawn()
         {
             CurrentHealth = MaxHealth;
@@ -106,7 +104,6 @@ namespace SF.SpawnModule
 
 		protected virtual void OnEnable()
 		{
-            this.EventStartListening<RespawnEvent>();
             _deathTimer = new Timer(Despawn);
         }
 
@@ -114,10 +111,5 @@ namespace SF.SpawnModule
         {
             _deathTimer.StopTimer();
         }
-
-        protected virtual void OnDestroy()
-        {
-			this.EventStopListening<RespawnEvent>();
-		}
     }
 }

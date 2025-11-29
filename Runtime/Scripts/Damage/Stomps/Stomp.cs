@@ -1,4 +1,5 @@
 using SF.Characters.Controllers;
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF
@@ -7,12 +8,12 @@ namespace SF
     {
         public float BounceVelocity = 5f;
         private Collider2D _collider2d;
-        private GroundedController2D _controller2D;
+        private ControllerBody2D _controller2D;
 
         private void Awake()
         {
             _collider2d = GetComponent<Collider2D>();
-            _controller2D = GetComponent<GroundedController2D>();
+            _controller2D = GetComponent<ControllerBody2D>();
         }
         public void OnTriggerEnter2D(Collider2D other)
         {
