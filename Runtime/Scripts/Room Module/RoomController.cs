@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using SF.CameraModule;
 using SF.LevelModule;
 using SF.Managers;
 using SF.PhysicsLowLevel;
+using SF.SpawnModule;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -34,7 +36,7 @@ namespace SF.RoomModule
         /// <summary>
         /// These are optional transition ids for when room controller needs to keep track of fast travel points or using <see cref="TransitionTypes.Local"/>.
         /// </summary>
-        // public List<RoomTransition> RoomTransitions = new List<RoomTransition>();
+        public List<RoomTransition> RoomTransitions = new List<RoomTransition>();
 
         public Action OnRoomEnteredHandler;
         public Action OnRoomExitHandler;
@@ -66,12 +68,17 @@ namespace SF.RoomModule
             var rooms  = _roomExtensions.Where((room => room.RoomExtensionType == RoomExtensionType.OnRoomEntered));
             _roomEnteredExtensions = new ReadOnlyCollection<IRoomExtension>(rooms.ToList());
         }
-
-        private void Start()
-        {
-            InitializeRoom();
-        }
         
+        private void OnEnable()
+        {
+            LevelLoader.LevelReadyHandler += InitializeRoom;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.LevelReadyHandler -= InitializeRoom;
+        }
+
         private void OnDestroy()
         {
             RoomSystem.CleanUpRoom(RoomID);

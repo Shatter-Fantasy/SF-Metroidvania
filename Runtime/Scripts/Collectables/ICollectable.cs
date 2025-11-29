@@ -8,4 +8,13 @@ namespace SF.CollectableModule
     {
         public void Collect();
     }
+
+    public interface ICollectionGeneric
+    {
+        void OnCollected();
+        public void Test()
+        {
+            
+        }
+    }
 }

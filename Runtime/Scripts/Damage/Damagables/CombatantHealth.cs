@@ -1,6 +1,8 @@
+using UnityEngine;
 
 using SF.Characters.Data;
 using SF.Experience;
+using SF.ItemModule;
 using SF.StateMachine.Core;
 
 
@@ -32,6 +34,7 @@ namespace SF.SpawnModule
                     _combatantData.EnemyLootTable.DropRandomLoot(transform.position);
                 }
             }
+
             base.Kill();
         }
 
@@ -45,7 +48,7 @@ namespace SF.SpawnModule
         
         protected override void OnEnable()
         {
-            _deathTimer = new Timer(_deathTimer.Duration,Despawn);
+            _deathTimer = new Timer(_deathTimer.StartingTime,Despawn);
         }
     }
 }
