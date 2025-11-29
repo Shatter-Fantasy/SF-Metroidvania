@@ -48,7 +48,7 @@ namespace SF.SpawnModule
         
         protected override void OnEnable()
         {
-            _deathTimer = new Timer(_deathTimer.StartingTime,Despawn);
+            _deathTimer = new Timer(_deathTimer.Duration,Despawn);
         }
     }
 }
