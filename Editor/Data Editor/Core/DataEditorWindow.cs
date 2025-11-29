@@ -14,7 +14,6 @@ using SFEditor.Characters.Data;
 using SFEditor.Inventory.Data;
 using SFEditor.UIElements.Utilities;
 
-
 namespace SFEditor.Data
 {
     public class DataEditorWindow : EditorWindow
