@@ -1,7 +1,7 @@
 using System;
 using SF.DataManagement;
 using SF.RoomModule;
-using SF.Inventory;
+using SF.ItemModule;
 using SF.LevelModule;
 using UnityEngine;
 using UnityEngine.SceneManagement;

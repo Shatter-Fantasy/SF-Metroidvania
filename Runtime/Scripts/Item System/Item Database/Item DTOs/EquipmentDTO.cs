@@ -1,7 +1,6 @@
-using SF.ItemModule;
 using UnityEngine;
 
-namespace SF.Inventory
+namespace SF.ItemModule
 {
     public enum EquipmentType
     {
