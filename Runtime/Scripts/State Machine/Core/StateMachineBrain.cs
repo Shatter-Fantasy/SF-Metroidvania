@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using SF.Characters.Controllers;
-
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.StateMachine.Core
@@ -24,23 +24,23 @@ namespace SF.StateMachine.Core
         public GameObject ControlledGameObject;
         protected List<StateCore> _states = new();
 
-        protected Controller2D _controller2D;
+        protected ControllerBody2D _controllerBody2D;
 		private void Awake()
 		{
             _states.Clear();
             _states = GetComponentsInChildren<StateCore>().ToList();
 
             if(ControlledGameObject != null)
-                _controller2D = ControlledGameObject.GetComponent<Controller2D>();
+                _controllerBody2D = ControlledGameObject.GetComponent<ControllerBody2D>();
             else
-                _controller2D = GetComponent<Controller2D>();
+                _controllerBody2D = GetComponent<ControllerBody2D>();
 
             if(!_states.Any()) return;
             
             foreach(StateCore state in _states)
             {
                 state.StateBrain = this;
-                state.Init(_controller2D);
+                state.Init(_controllerBody2D);
             }
 		}
 
@@ -68,7 +68,7 @@ namespace SF.StateMachine.Core
 			if (DefaultState != null)
 				CurrentState = DefaultState;
 			        
-			if(CurrentState == null)
+			if(CurrentState == null && _states.Count > 0)
 				CurrentState = _states.First();
 
 			// Don't do first Enter State in awake or you might call it before the _states init.

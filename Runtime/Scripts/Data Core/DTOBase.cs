@@ -2,13 +2,10 @@ using UnityEngine;
 
 namespace SF.DataModule
 {
-
-
     /// <summary>
     /// This is an empty wrapper class for DTO based classes.
     /// 
     /// Example of this wrapper being utilized can be seen in the abstract DataView class that takes in a generic type that inherits from DTOBase.
-    /// <seealso cref="SF.Inventory.ItemGeneralDTO"/>
     /// <seealso cref="SF.Inventory.ItemPriceDTO"/>
     /// </summary>
     public class DTOBase 
@@ -24,6 +21,7 @@ namespace SF.DataModule
     /// </summary>
     public class DTOAssetBase : ScriptableObject
     {
+        // TODO: Replace the below with either ItemData or Item
         public int ID = 0;
         public int GUID;
         public string Name;
@@ -34,5 +32,4 @@ namespace SF.DataModule
            
         }
     }
-
 }

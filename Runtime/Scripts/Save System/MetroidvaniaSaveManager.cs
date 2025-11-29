@@ -20,7 +20,7 @@ namespace SF.DataManagement
         {
             CurrentSaveFileData.SaveDatas.Clear();
             // Trigger save event first just in case something lsitening to the event updates data that would be put in the save file.
-            SaveLoadEvent.Trigger(SaveLoadEventTypes.Saving);
+            SaveDataHandler?.Invoke();
             CurrentSaveFileData.TryAddOrSetDataBlock(CurrentMetroidvaniaSaveData);
             SaveDataFile();
         }
@@ -47,7 +47,7 @@ namespace SF.DataManagement
                 RoomSystem.SetInitialRoom(StartingRoom);
             }
             
-            CheckPointEvent.Trigger(CheckPointEventTypes.ChangeCheckPoint, CurrentSaveFileData.CurrentSaveStation as CheckPoint);
+            CheckPointManager.ChangeCheckPoint(CurrentSaveFileData.CurrentSaveStation as CheckPoint);
         }
     }
 }

@@ -28,9 +28,13 @@ namespace SFEditor.Data
         [SerializeField] private VisualTreeAsset m_VisualTreeAsset = default;
         
         private VisualElement _rootDataElement;
+        private VisualElement _itemRoot;
         
         private CharacterListView _characterListView;
         private SFItemListView _itemListView;
+        private SFItemListView _itemListViewTest;
+        
+        private DataView _selectedView;
         
         [MenuItem("SF/Data Editor")]
         public static void OpenDataEditor()
@@ -49,12 +53,14 @@ namespace SFEditor.Data
             
             
             _rootDataElement = root.Q<VisualElement>("root-datasource");
+            _itemRoot = root.Q<VisualElement>("item__view-root");
             
             InitListView();
         }
         
         private void InitListView()
-        {                // When first opening the editor guarantee at least a data entry is binded.
+        {                
+            // When first opening the editor guarantee at least a data entry is binded.
             _rootDataElement.Bind(new SerializedObject(_characterDatabase.DataEntries[0]));
             
             if(_characterDatabase != null)
@@ -66,7 +72,7 @@ namespace SFEditor.Data
 
             if (_itemDatabase != null)
             {
-                _itemListView = _rootDataElement.Q<SFItemListView>();
+                _itemListView = _itemRoot.Q<SFItemListView>();
                 _itemListView.InitDataListView(_itemDatabase);
                 _itemListView.selectionChanged += OnSelectionChanged;
             }
@@ -79,8 +85,10 @@ namespace SFEditor.Data
             
             if(Selection.activeObject is CharacterDTO)
                 _rootDataElement.Bind(new SerializedObject( Selection.activeObject as CharacterDTO));
+            else if(Selection.activeObject is EquipmentDTO)
+                _itemRoot.Bind(new SerializedObject( Selection.activeObject as EquipmentDTO));
             else  if(Selection.activeObject is ItemDTO)
-                _rootDataElement.Bind(new SerializedObject( Selection.activeObject as ItemDTO));
+                _itemRoot.Bind(new SerializedObject( Selection.activeObject as ItemDTO));
         }
         
         private void OnSelectionChanged(IEnumerable<object> selectedObjects)
@@ -91,14 +99,20 @@ namespace SFEditor.Data
 
             var dtoAsset = enumerable.First() as DTOAssetBase;
 
+            _rootDataElement.Unbind();
             if (dtoAsset is CharacterDTO characterDTO)
             {
                 _rootDataElement.Bind(new SerializedObject(characterDTO));
                 Selection.SetActiveObjectWithContext(characterDTO, null);
             }
+            else if (dtoAsset is EquipmentDTO equipmentDTO)
+            {
+                _itemRoot.Bind(new SerializedObject(equipmentDTO));
+                Selection.SetActiveObjectWithContext(equipmentDTO, null);
+            }
             else if (dtoAsset is ItemDTO itemDTO)
             {
-                _rootDataElement.Bind(new SerializedObject(itemDTO));
+                _itemRoot.Bind(new SerializedObject(itemDTO));
                 Selection.SetActiveObjectWithContext(itemDTO, null);
             }
         }

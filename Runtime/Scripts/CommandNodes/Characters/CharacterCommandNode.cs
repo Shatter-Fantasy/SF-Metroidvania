@@ -1,18 +1,25 @@
 using SF.Characters;
 using SF.Characters.Controllers;
-
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.CommandModule
 {
     public class CharacterCommandNode : CommandNode
     {
-        [HideInInspector] public Controller2D Controller2D;
+        [HideInInspector] public ControllerBody2D ControllerBody2D;
         [HideInInspector] public CharacterRenderer2D Character2D;
 
-        public override Awaitable Use()
+        protected override bool CanDoCommand()
         {
-            throw new System.NotImplementedException();
+            return ControllerBody2D != null && Character2D != null;
+        }
+
+        protected override void DoCommand() { }
+
+        protected override Awaitable DoAsyncCommand()
+        {
+            return null; 
         }
     }
 }

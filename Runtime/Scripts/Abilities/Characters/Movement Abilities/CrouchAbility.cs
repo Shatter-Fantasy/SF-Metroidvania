@@ -18,8 +18,6 @@ namespace SF.AbilityModule.Characters
 
             if(!CheckAbilityRequirements()) return;
             
-
-            
             _controller2d.IsCrouching = !_controller2d.IsCrouching;
 
             // If statement acts like a toggle for crouching.
@@ -41,10 +39,12 @@ namespace SF.AbilityModule.Characters
             // calling ResetColliderSize when are character doesn't need the collider size reset.
             if(!_controller2d.IsCrouching)
                 return;
-
+            
             // On Controllers sometimes the dead zone still registers a move axis when just ushing down on the controller.
             // If the value == (0,-1) the controllers are just slightly bumped sideways and this event doesn't actually need invoked.
-            if (context.ReadValue<Vector2>() == Vector2.down)
+            // context.valueSizeInBytes = 4 is a single value like space bar
+            // context.valueSizeInBytes = 8 is like a Vector2 value.
+            if (context.valueSizeInBytes >  4 && context.ReadValue<Vector2>() == Vector2.down)
                 return;
             
             _controller2d.IsCrouching = false;
@@ -64,7 +64,7 @@ namespace SF.AbilityModule.Characters
                     || _controller2d.IsFalling
                     || _controller2d.IsSwimming
                     || _controller2d.IsGliding
-                    || !_controller2d.IsGrounded
+                    || !_controller2d.CollisionInfo.IsGrounded
                     || _controller2d.Direction.x != 0
                 )
             {

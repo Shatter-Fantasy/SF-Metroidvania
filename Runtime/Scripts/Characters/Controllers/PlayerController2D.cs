@@ -1,5 +1,6 @@
 using SF.LevelModule;
 using SF.Managers;
+using SF.PhysicsLowLevel;
 
 namespace SF.Characters.Controllers
 {
@@ -12,31 +13,32 @@ namespace SF.Characters.Controllers
     /// <remarks>
     /// This sets up the PlayerController instance in the game manager during the awake call.
     /// In the start call for objects being loaded at the same time, other objects can now get a reference to
-    /// the <see cref="PlayerController"/> after it is set in <see cref="PlayerController.OnAwake"/>.
+    /// the <see cref="PlayerController"/> after it is set in <see cref="PlayerRigPlayerController/>.
     /// </remarks> 
     /// </summary>
-	public class PlayerController : GroundedController2D
+	public class PlayerController : ControllerBody2D
     {
+        
         protected override void OnAwake()
         {
             base.OnAwake();
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
-                if(LevelPlayData.Instance.SpawnedPlayerController == null)
-                    LevelPlayData.Instance.SpawnedPlayerController = this;
+                //if(LevelPlayData.Instance.spawnedPlayerController == null)
+                  //  LevelPlayData.Instance.spawnedPlayerController = this;
 
                 if (!GameLoader.Instance.GameLoaderData.SettingUpNewGame)
-                    CollisionController.CollisionActivated = true;
+                    CollisionInfo.CollisionActivated = true;
             }
         }
         
         protected override void CalculateMovementState()
         {
             // For when in menu, in a conversation, and so forth.
-            if (GameManager.Instance.ControlState != GameControlState.Player)
+            if (GameManager.Instance?.ControlState != GameControlState.Player)
             {
-                if (IsGrounded)
+                if (CollisionInfo.IsGrounded)
                 {
                     CharacterState.CurrentMovementState = MovementState.Idle;
                     // Freeze the controller only after grounded so if we are stopped in midair we still hit the ground.

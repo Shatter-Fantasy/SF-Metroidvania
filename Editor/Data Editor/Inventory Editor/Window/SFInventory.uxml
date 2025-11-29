@@ -2,8 +2,17 @@
 <ui:UXML
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ui="UnityEngine.UIElements"
+    xmlns:sfitem="SFEditor.Inventory.Data"
     noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
 >
     <Style src="project://database/Assets/SF%20Inventory/Editor/Inventory%20Editor/SFInventory.uss?fileID=7433441132597879392&amp;guid=ad6ff5d05965c314d9e7147b5387de83&amp;type=3#SFInventory" />
-  
+    <ui:VisualElement data-source-type="SF.Inventory.ItemDTO, SF.MetroidvaniaToolkit">
+        <ui:TwoPaneSplitView class="unity-two-pane-split-view">
+            <sfitem:SFItemListView />
+            <ui:VisualElement>
+                <ui:Instance template="DTOGeneral" name="dto-general__section" />
+                <ui:Instance template="ItemPriceView" name="item-price__section" />
+            </ui:VisualElement>
+        </ui:TwoPaneSplitView>
+    </ui:VisualElement>
 </ui:UXML>

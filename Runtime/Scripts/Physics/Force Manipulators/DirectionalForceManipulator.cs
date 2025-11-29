@@ -36,7 +36,6 @@ namespace SF.Physics
             {
                 _animator.Play("Adding Force",0);
             }
-            forceReciever.SetExternalVelocity(force);
         }
     }
 }

@@ -1,5 +1,5 @@
 using SF.Characters.Controllers;
-
+using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.Physics
@@ -29,15 +29,15 @@ namespace SF.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.TryGetComponent(out Controller2D controller2D))
+            if(collision.TryGetComponent(out ControllerBody2D controller2D))
             {
-                controller2D.UpdatePhysics(_volumeProperties, _physicsVolumeType);
+                controller2D.UpdatePhysicsProperties(_volumeProperties, _physicsVolumeType);
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if(collision.TryGetComponent(out Controller2D controller2D))
+            if(collision.TryGetComponent(out ControllerBody2D controller2D))
             {
                 controller2D.ResetPhysics(_volumeProperties);
             }
@@ -45,15 +45,15 @@ namespace SF.Physics
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if(collision.gameObject.TryGetComponent(out Controller2D controller2D))
+            if(collision.gameObject.TryGetComponent(out ControllerBody2D controller2D))
             {
-                controller2D.UpdatePhysics(_volumeProperties, _physicsVolumeType);
+                controller2D.UpdatePhysicsProperties(_volumeProperties, _physicsVolumeType);
             }
         }
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if(collision.gameObject.TryGetComponent(out Controller2D controller2D))
+            if(collision.gameObject.TryGetComponent(out ControllerBody2D controller2D))
             {
                 controller2D.ResetPhysics(_volumeProperties);
             }

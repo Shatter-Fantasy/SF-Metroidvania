@@ -1,7 +1,6 @@
-using SF.Characters.Controllers;
 using SF.LevelModule;
-using SF.Managers;
 using SF.Pathfinding;
+using SF.SpawnModule;
 using SF.StateMachine.Decisions;
 using UnityEngine;
 
@@ -35,7 +34,7 @@ namespace SF.StateMachine.Core
             base.OnInit();
             if (_chasePlayer)
             {
-                _target = LevelPlayData.Instance.SpawnedPlayerController.transform;
+                _target = SpawnSystem.SpawnedPlayerController.transform;
                 _currentTargetPos = _target.position;
             }
 

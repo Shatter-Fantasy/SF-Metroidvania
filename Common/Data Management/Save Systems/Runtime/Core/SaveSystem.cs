@@ -23,6 +23,13 @@ namespace SF.DataManagement
                 _instance = value;
             }
         }
+        
+        /// <summary>
+        /// Creates a static instance of the class on compilation.
+        /// </summary>
+        /// <remarks>
+        /// Only works with non-Unity <see cref="UnityEngine.Object"/> classes.
+        /// </remarks>
         static SaveSystem()
         {
             Instance = new SaveSystem();
@@ -49,9 +56,26 @@ namespace SF.DataManagement
             }
         }
 
-        public static Action OnUpdateSaveFile;
-        public static Action OnSaveDataFile;
-        public static Action OnBeforeLoadDataFile;
+        /// <summary>
+        /// Updates the data that will be saved next time <see cref="SaveDataFile"/> is called.
+        /// </summary>
+        public static event Action UpdateSaveHandler;
+        /// <summary>
+        /// Saves the game data to a real save file. 
+        /// </summary>
+        public static Action SaveDataHandler;
+        /// <summary>
+        /// Used to do stuff before event handler do loading events.
+        /// Think like scene loading data clean up or settings and so forth.
+        /// </summary>
+        public static event Action BeforeLoadSaveDataHandler;
+        /// <summary>
+        /// Runs when a save data has been loaded.
+        /// </summary>
+        /// <remarks>
+        /// To do stuff before the save data has been loaded use <see cref="BeforeLoadSaveDataHandler"/>
+        /// </remarks>
+        public static event Action LoadSaveDataHandler;
         
         // This is the path when called from Unity editor.
         // C:\Users\jonat\AppData\LocalLow\Shatter Fantasy\Immortal Chronicles - The Realm of Imprisoned Sorrows\ICSaveData.txt
@@ -77,7 +101,7 @@ namespace SF.DataManagement
                 CurrentSaveStation = CurrentSaveFileData.CurrentSaveStation
             };
             
-            OnUpdateSaveFile?.Invoke();
+            UpdateSaveHandler?.Invoke();
             // Save the scene with the last used save station so we know which one to load.
             CurrentSaveFileData.CurrentScene = SceneManager.GetActiveScene();
         }
@@ -195,13 +219,12 @@ namespace SF.DataManagement
                     SceneManager.LoadSceneAsync(CurrentSaveFileData.CurrentScene.buildIndex, LoadSceneMode.Single);
             }
             // Set the spawning checkpoint which the SaveStation C# class ia a subclass of.
-            // Checkpoint manager will have a execution order after the script that calls load game.
+            // Checkpoint manager will have an execution order after the script that calls load game.
 
             
-            // When you need to do stuff before event listeners do loading events use OnBeforeLoadDataFile.
-            // Think like scene loading data clean up or setting and so forth.
-            OnBeforeLoadDataFile?.Invoke();
-            SaveLoadEvent.Trigger(SaveLoadEventTypes.Loading);
+       
+            BeforeLoadSaveDataHandler?.Invoke();
+            LoadSaveDataHandler?.Invoke();
         }
 
         public static List<SaveDataBlock> CurrentSaveDataBlocks()

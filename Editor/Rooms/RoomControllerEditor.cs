@@ -23,6 +23,8 @@ namespace SFEditor.Rooms
         private Grid _grid;
 
         private BoundsIntField _selectionPositionField;
+        private Vector3 _lastFramePosition;
+        
         public override VisualElement CreateInspectorGUI()
         {
             _roomController = target as RoomController;
@@ -76,6 +78,40 @@ namespace SFEditor.Rooms
             if (_selectionPositionField != null)
             {
                 _selectionPositionField.value = GridSelection.position;
+            }
+        }
+        
+        private void OnSceneGUI()
+        {
+            var t = target as RoomController;
+            
+            if (t == null || t.RoomTransitions?.Count < 1)
+                return;
+
+            if (_lastFramePosition != t.transform.position)
+            {
+                Vector2 deltaPosition = t.transform.position - _lastFramePosition;
+                for (int i = 0; i < t.RoomTransitions?.Count; i++)
+                {
+                    t.RoomTransitions[i].LinkPosition += deltaPosition;
+                }
+
+                _lastFramePosition = t.transform.position;
+            }
+            
+            var color = new Color(1, 0.8f, 0.4f, 1);
+            Handles.color = color;
+
+            for (int i = 0; i < t.RoomTransitions?.Count; i++)
+            {
+                EditorGUI.BeginChangeCheck();
+                Vector3 newTargetPosition = Handles.PositionHandle(t.RoomTransitions[i].LinkPosition, Quaternion.identity);
+                
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(t, "Change Look At Target Position");
+                    t.RoomTransitions[i].LinkPosition = newTargetPosition;
+                }
             }
         }
     }

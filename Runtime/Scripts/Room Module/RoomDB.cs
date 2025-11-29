@@ -109,7 +109,11 @@ namespace SF.RoomModule
         /// <exception cref="NotImplementedException"></exception>
         public Room this[int index]
         {
-            get => Rooms[index];
+            // We have to make sure we first have a value at that index.
+            get => !Contains(index) 
+                        ? null 
+                        : Rooms[index];
+
             set => throw new NotImplementedException();
         }
     }

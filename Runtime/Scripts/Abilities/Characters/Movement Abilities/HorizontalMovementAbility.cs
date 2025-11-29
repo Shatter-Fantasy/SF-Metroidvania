@@ -1,6 +1,8 @@
+using SF.Characters.Controllers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SF.InputModule;
+using SF.PhysicsLowLevel;
 
 namespace SF.AbilityModule.Characters
 {
@@ -10,11 +12,11 @@ namespace SF.AbilityModule.Characters
 
         protected override void OnInitialize()
         {
-			if(_isRunningToggleable)
+			if(_isRunningToggleable && _controller2d != null)
 			{
 				_controller2d.ReferenceSpeed = _controller2d.IsRunning
-					? _controller2d.CurrentPhysics.GroundRunningSpeed
-					: _controller2d.CurrentPhysics.GroundSpeed;
+						? _controller2d.CurrentPhysics.GroundRunningSpeed
+						: _controller2d.CurrentPhysics.GroundSpeed;
 			}
         }
         #region Input Actions

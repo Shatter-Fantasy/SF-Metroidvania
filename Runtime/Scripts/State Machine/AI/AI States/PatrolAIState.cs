@@ -1,5 +1,5 @@
 using SF.Characters.Controllers;
-using SF.Platformer.Utilities;
+using SF.PhysicsLowLevel;
 using SF.StateMachine.Core;
 
 using UnityEngine;
@@ -13,18 +13,20 @@ namespace SF.StateMachine
 		
 		[SerializeField] private bool _isHoleAhead;
 
-        protected override void OnInit(Controller2D controller2D)
+        protected override void OnInit(ControllerBody2D controllerBody2D)
 		{
-			_controller = controller2D;
+			_controllerBody2D = controllerBody2D;
 		}
         
         protected override void OnStart()
 		{
-			if(_controller == null)
+			if(_controllerBody2D == null)
 				return;
 			
-			_controller.CollisionInfo.OnCollidedLeft += OnCollidingLeft;
-			_controller.CollisionInfo.OnCollidedRight += OnCollidingRight;
+			_controllerBody2D.CollisionInfo.OnCollidedLeftHandler += OnCollidingLeft;
+			_controllerBody2D.CollisionInfo.OnCollidedRightHandler += OnCollidingRight;
+			
+			_controllerBody2D.SetDirection(1);
 		}
 
         protected override void OnUpdateState()
@@ -34,16 +36,21 @@ namespace SF.StateMachine
 
         protected override void OnStateEnter()
         {
-	        _controller.Direction = StartingRight
+	        _controllerBody2D.Direction = StartingRight
 		        ? Vector2.right : Vector2.left;
         }
 
 		private void HoleDetection()
 		{
-			if(_controller == null || _controller is GroundedController2D { IsFalling:true } || !DoesTurnOnHoles )
+			if(_controllerBody2D == null 
+			   || _controllerBody2D.IsFalling 
+			   || !DoesTurnOnHoles )
 				return;
 			
+			/*
 			RaycastHit2D hit2D = new RaycastHit2D();
+			
+			
 			if(_controller.Direction == Vector2.left)
 			{
                 hit2D = Physics2D.Raycast(_controller.Bounds.BottomLeft(),
@@ -68,17 +75,18 @@ namespace SF.StateMachine
             {
                 _controller.ChangeDirection();
             }
+            */
         }
         
 		private void OnCollidingLeft()
 		{
-			if(_controller.Direction == Vector2.left)
-				_controller.SetDirection(1);
+			if(_controllerBody2D.Direction == Vector2.left)
+				_controllerBody2D.SetDirection(1);
 		}
 		private void OnCollidingRight()
 		{
-            if(_controller.Direction == Vector2.right)
-                _controller.SetDirection(-1);
+            if(_controllerBody2D.Direction == Vector2.right)
+                _controllerBody2D.SetDirection(-1);
         }
 	}
 }

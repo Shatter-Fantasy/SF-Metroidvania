@@ -12,15 +12,15 @@ namespace SF.AudioModule
         /// </summary>
         /// <param name="volumeAmplitude"></param>
         /// <returns>The a decibal as a float.</returns>
-        public static float VolumeToDecibal(this float volumeAmplitude)
+        public static float VolumeToDecibel(this float volumeAmplitude)
         {
             if (volumeAmplitude > 1)
                 volumeAmplitude = 1;
 
-            // Decibal = 20 * log10(amplitude aka float volume).
+            // Decibel = 20 * log10(amplitude aka float volume).
             return Mathf.Log10(volumeAmplitude) * 20;
         }
 
-        // TODO: Write the DecibalToVolume extension method.
+        // TODO: Write the DecibelToVolume extension method.
     }
 }

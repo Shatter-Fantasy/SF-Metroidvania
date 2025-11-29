@@ -1,9 +1,10 @@
+using SF.Characters.Controllers;
 using UnityEngine;
 
 namespace SF.Characters.Physics
 {
     /// <summary>
-    /// The current physics properties for a character. This is used in all <see cref="Controllers.Controller2D"/> and classes that inherit from it.
+    /// The current physics properties for a character. This is used in all <see cref="RigidbodyController2D"/> and classes that inherit from it.
     /// Also used in <see cref="SF.Physics.PhysicsVolume"/> which allows creating new states of physics like low gravity, swimming, gliding in the air.
     /// </summary>
     [System.Serializable]
