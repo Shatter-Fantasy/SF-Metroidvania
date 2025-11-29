@@ -1,6 +1,7 @@
 using System;
 using SF.DataManagement;
 using SF.PhysicsLowLevel;
+using SF.RoomModule;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -35,7 +36,7 @@ namespace SF.SpawnModule
             if (playerPrefab == null)
                 return null;
 
-            SpawnedPlayer = Instantiate(playerPrefab);
+            SpawnedPlayer = Instantiate(playerPrefab,RoomSystem.CurrentRoom.SpawnedInstance.transform.position,Quaternion.identity);
 
             if (SpawnedPlayer == null)
                 return null;

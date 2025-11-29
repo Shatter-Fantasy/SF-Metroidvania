@@ -34,14 +34,6 @@ namespace SF.StateMachine.Core
                 _controllerBody2D = ControlledGameObject.GetComponent<ControllerBody2D>();
             else
                 _controllerBody2D = GetComponent<ControllerBody2D>();
-
-            if(!_states.Any()) return;
-            
-            foreach(StateCore state in _states)
-            {
-                state.StateBrain = this;
-                state.Init(_controllerBody2D);
-            }
 		}
 
 		private void Start()
@@ -65,6 +57,16 @@ namespace SF.StateMachine.Core
 
 		public void InitStateBrain()
 		{
+			
+			if(!_states.Any()) return;
+            /* We initialize the states post Awake to make sure the
+             * LevelLoader.OnLevelLoaded uns first setting the static instance of the player object. */
+			foreach(StateCore state in _states)
+			{
+				state.StateBrain = this;
+				state.Init(_controllerBody2D);
+			}
+			
 			if (DefaultState != null)
 				CurrentState = DefaultState;
 			        

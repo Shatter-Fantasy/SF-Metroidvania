@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SF.RoomModule
 {
@@ -20,7 +21,7 @@ namespace SF.RoomModule
         /// <summary>
         /// The id of the room we are transitioning away from and exiting aka the current room we are in when starting a transition. <see cref="Room.RoomID"/>
         /// </summary>
-        public int RoomID;
+        [FormerlySerializedAs("RoomID")] public int LeavingRoomID;
         /// <summary>
         /// What form of transition logic needs to be run for the relavent transition.
         /// </summary>
@@ -34,10 +35,6 @@ namespace SF.RoomModule
         /// </summary>
         [Header("Data Ids")]
         public int EnteringRoomID;
-        /// <summary>
-        /// The id of the transition in the room, we are transitioning away from and exiting aka the current room we are in when starting a transition.  <see cref="Room.RoomID"/>
-        /// </summary>
-        public int CurrentRoomTransitionID;
         /// <summary>
         /// The id of the transition in the room, we are transitioning to and entering. <see cref="Room.RoomID"/>
         /// </summary>

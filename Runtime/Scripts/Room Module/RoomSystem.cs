@@ -80,6 +80,7 @@ namespace SF.RoomModule
                 // Also set it as the current SpawnedInstance in the RoomDB. This allows us to check if a room is already loaded later by checking 
                 // if the SpawnedInstance is null or not. We should check the _loadedRoomsIDs first for performance reasons. 
                 _roomDB[roomID].SpawnedInstance = GameObject.Instantiate(RoomDB[roomID].RoomPrefab);
+                _roomDB[roomID].SpawnedRoomController = _roomDB[roomID].SpawnedInstance?.GetComponent<RoomController>();
                 _loadedRoomsIDs.Add(roomID);
             }
 
