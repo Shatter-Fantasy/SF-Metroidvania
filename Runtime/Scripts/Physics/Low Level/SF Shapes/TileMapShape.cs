@@ -32,8 +32,8 @@ namespace SF.PhysicsLowLevel
             public PhysicsShape Shape;
             public int OwnerKey;
         }
-        
-        private NativeList<OwnedShapes> _ownedShapes = new NativeList<OwnedShapes>(Allocator.Persistent);
+
+        private NativeList<OwnedShapes> _ownedShapes;
         
         private void Awake()
         {
@@ -42,10 +42,51 @@ namespace SF.PhysicsLowLevel
             
             _tilemap.GetUsedTileData(out _tilesInBlock);
         }
+        
+        private void OnEnable()
+        {
+            Reset();
+
+            if (SceneBody != null)
+            {
+                SceneBody.CreateBodyEvent += OnCreateBody;
+                SceneBody.DestroyBodyEvent += OnDestroyBody;
+            }
+
+            _ownedShapes = new NativeList<OwnedShapes>(Allocator.Persistent);
+
+            CreateShapes();
+
+#if UNITY_EDITOR
+            WorldSceneTransformMonitor.AddMonitor(this);
+#endif
+        }
+        
+        private void OnDisable()
+        {
+            DestroyShapes();
+
+            if (_ownedShapes.IsCreated)
+                _ownedShapes.Dispose();
+
+            if (SceneBody != null)
+            {
+                SceneBody.CreateBodyEvent -= OnCreateBody;
+                SceneBody.DestroyBodyEvent -= OnDestroyBody;
+            }
+
+#if UNITY_EDITOR
+            WorldSceneTransformMonitor.RemoveMonitor(this);
+#endif
+        }
+
 
         private void CreateShapes()
         {
             if (!SceneBody)
+                return;
+            
+            if (!_ownedShapes.IsCreated)
                 return;
 
             var body = SceneBody.Body;
@@ -189,43 +230,7 @@ namespace SF.PhysicsLowLevel
                 ownedShape.Shape.Draw();
         }
         
-        private void OnEnable()
-        {
-            Reset();
-
-            if (SceneBody != null)
-            {
-                SceneBody.CreateBodyEvent += OnCreateBody;
-                SceneBody.DestroyBodyEvent += OnDestroyBody;
-            }
-
-            _ownedShapes = new NativeList<OwnedShapes>(Allocator.Persistent);
-
-            CreateShapes();
-
-#if UNITY_EDITOR
-            WorldSceneTransformMonitor.AddMonitor(this);
-#endif
-        }
-        
-        private void OnDisable()
-        {
-            DestroyShapes();
-
-            if (_ownedShapes.IsCreated)
-                _ownedShapes.Dispose();
-
-            if (SceneBody != null)
-            {
-                SceneBody.CreateBodyEvent -= OnCreateBody;
-                SceneBody.DestroyBodyEvent -= OnDestroyBody;
-            }
-
-#if UNITY_EDITOR
-            WorldSceneTransformMonitor.RemoveMonitor(this);
-#endif
-        }
-        
+ 
         private void OnValidate()
         {
             if (!isActiveAndEnabled)
