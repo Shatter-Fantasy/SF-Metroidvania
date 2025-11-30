@@ -70,17 +70,18 @@ namespace SF.CameraModule
         }
         
         private void OnDestroy()
-        {
+        { 
+            _instance = null;
+
+            CameraTarget= null;
+            MainCamera = null;
+            MainCameraBrain = null;
+            ActiveRoomCamera = null;
+            ActiveCutsceneCamera = null;
+            
             SpawnSystem.InitialPlayerSpawnHandler -= SetInitialCameraTarget;
         }
-
-        private void Start()
-        {
-            if(MainCameraBrain != null 
-               && MainCameraBrain.ActiveVirtualCamera as CinemachineCamera != null
-               && _instance.CameraTarget != null)
-                    SwitchPlayerCMCamera(MainCameraBrain.ActiveVirtualCamera as CinemachineCamera);
-        }
+        
 
         /// <summary>
         /// Set's the <see cref="CameraTarget"/> of the CameraManager <see cref="Instance"/>.
@@ -89,6 +90,11 @@ namespace SF.CameraModule
         private void SetInitialCameraTarget(GameObject spawnedPlayer)
         {
             _instance.CameraTarget = SpawnSystem.SpawnedPlayer.transform;
+            
+            if(MainCameraBrain != null 
+               && MainCameraBrain.ActiveVirtualCamera as CinemachineCamera != null
+               && _instance.CameraTarget != null)
+                SwitchPlayerCMCamera(MainCameraBrain.ActiveVirtualCamera as CinemachineCamera);
         }
         
         /// <summary>

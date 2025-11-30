@@ -56,20 +56,5 @@ namespace SF.LevelModule
             if (Instance == null)
                 Instance = this;
         }
-
-#if UNITY_EDITOR
-        /* Only do OnValidate in editor.
-            The idea is in editor when we set the LevelPlayData to the field we assign the
-            static instance of it that is used during Runtime. */
-        
-        
-        [SerializeField] private LevelPlayData _playDataObj;
-        
-        private void OnValidate()
-        {
-            if(_playDataObj != null)
-                _instance = _playDataObj;
-        }
-#endif
     }
 }

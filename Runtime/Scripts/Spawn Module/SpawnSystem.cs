@@ -1,4 +1,5 @@
 using System;
+using SF.Characters.Controllers;
 using SF.PhysicsLowLevel;
 using SF.RoomModule;
 using UnityEngine;
@@ -10,6 +11,19 @@ namespace SF.SpawnModule
     /// </summary>
     public class SpawnSystem : MonoBehaviour
     {
+        public GameObject Controller;
+        private void Start()
+        {
+            if (Controller != null)
+                OnInitialPlayerSpawn(Controller);
+        }
+
+        private void OnDestroy()
+        {
+            CurrentSpawnPosition = null;
+            SpawnedPlayer = null;
+            SpawnedPlayerController = null;
+        }
 
         public static Transform CurrentSpawnPosition;
         
@@ -33,9 +47,8 @@ namespace SF.SpawnModule
         {
             if (playerPrefab == null)
                 return null;
-
-            SpawnedPlayer = Instantiate(playerPrefab,RoomSystem.CurrentRoom.SpawnedInstance.transform.position,Quaternion.identity);
-
+            
+            SpawnedPlayer = GameObject.Instantiate(playerPrefab,RoomSystem.CurrentRoom.SpawnedInstance.transform.position,Quaternion.identity);
             if (SpawnedPlayer == null)
                 return null;
             
@@ -45,7 +58,7 @@ namespace SF.SpawnModule
             
             InitialPlayerSpawnHandler?.Invoke(SpawnedPlayer);
             
-            return SpawnedPlayer.GetComponent<ControllerBody2D>();
+            return SpawnedPlayer.GetComponent<PlayerController>();
         }
 
         /// <summary>
