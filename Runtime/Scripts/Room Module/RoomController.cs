@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SF.CameraModule;
+using SF.Characters.Controllers;
 using SF.LevelModule;
 using SF.Managers;
-using SF.PhysicsLowLevel;
-using SF.SpawnModule;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -93,13 +91,7 @@ namespace SF.RoomModule
             {
                 return;
             }
-            
-            OnRoomEnteredHandler?.Invoke();
-            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
-            {
-                _roomEnteredExtensions[i].Process();
-            }
-            
+
             // Probably should put this if and for loop in the RoomSystem itself.
             if (RoomSystem.DynamicRoomLoading)
             {
@@ -129,9 +121,17 @@ namespace SF.RoomModule
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
                 return;
             
-            if (((GameObject)beginEvent.visitorShape.callbackTarget).TryGetComponent(out ControllerBody2D controller)
-                && controller.CollisionInfo.CollisionActivated)
+            if (beginEvent.visitorShape.callbackTarget is not PlayerController body2D)
+                return;
+                    
+            if(body2D.CollisionInfo.CollisionActivated)
             {
+                OnRoomEnteredHandler?.Invoke();
+                for (int i = 0; i < _roomEnteredExtensions.Count; i++)
+                {
+                    _roomEnteredExtensions[i].Process();
+                }
+                
                 MakeCurrentRoom();
             }
         }
