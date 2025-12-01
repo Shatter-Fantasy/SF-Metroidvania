@@ -16,7 +16,7 @@ namespace SF.PhysicsLowLevel
     public class TileMapShape : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
     {
         [SerializeField] private Tilemap _tilemap;
-        [SerializeField] private List<TileData> _tilesInBlock = new ();
+        private List<TileData> _tilesInBlock = new ();
 
         [Header("Physics Definition")] 
         public SceneBody SceneBody;
