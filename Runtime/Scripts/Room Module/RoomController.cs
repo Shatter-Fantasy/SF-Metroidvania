@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SF.Characters.Controllers;
-using SF.LevelModule;
 using SF.Managers;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -66,15 +65,17 @@ namespace SF.RoomModule
             var rooms  = _roomExtensions.Where((room => room.RoomExtensionType == RoomExtensionType.OnRoomEntered));
             _roomEnteredExtensions = new ReadOnlyCollection<IRoomExtension>(rooms.ToList());
         }
-        
-        private void OnEnable()
-        {
-            LevelLoader.LevelReadyHandler += InitializeRoom;
-        }
 
-        private void OnDisable()
+        private void Start()
         {
-            LevelLoader.LevelReadyHandler -= InitializeRoom;
+            if (RoomSystem.RoomDB[RoomID] == null)
+            {
+                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
+                return;
+            }
+            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
+        
+            RoomSystem.LoadRoomManually(RoomID, gameObject);
         }
 
         private void OnDestroy()
@@ -104,17 +105,7 @@ namespace SF.RoomModule
             RoomSystem.SetCurrentRoom(RoomID);
         }
 
-        private void InitializeRoom()
-        {
-            if (RoomSystem.RoomDB[RoomID] == null)
-            {
-                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
-                return;
-            }
-            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
-            
-            RoomSystem.LoadRoomManually(RoomID, gameObject);
-        }
+       
         
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
@@ -126,6 +117,7 @@ namespace SF.RoomModule
                     
             if(body2D.CollisionInfo.CollisionActivated)
             {
+                
                 OnRoomEnteredHandler?.Invoke();
                 for (int i = 0; i < _roomEnteredExtensions.Count; i++)
                 {
