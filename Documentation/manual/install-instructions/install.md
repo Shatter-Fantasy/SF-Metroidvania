@@ -22,6 +22,8 @@ The options are as followed:
 2. Specific version for package release. Note the letter v before the numbers - #v0.0.1 would give you the first alpha release while for pre-alphas you would type #pre-alpha.9
 3. A specific commit if you want to try out a commit with a feature that hasn't been published in a release yet - #git-commit-hash Example for the specific commit hash #76c6efb35ac8d4226a22f974939f300231a3637f. This is the hash for the commit added right before pre-alpha 9 release.
 
-Full example for wanting to get the SF Package that is a release version https://github.com/Shatter-Fantasy/SF-Metroidvania.git.git#v0.0.1
+Full example for wanting to get the SF Package that is a release version
+https://github.com/Shatter-Fantasy/SF-Metroidvania.git#v0.0.1
 
-Full example for wanting to get the SF Package that is being worked on in the alpha-one branch https://github.com/crowhound/SF-Platformer.git#alpha-one
+Full example for wanting to get the SF Package that is being worked on in the alphas/alpha-five branch
+[https://github.com/crowhound/SF-Platformer.git#alpha-one](https://github.com/Shatter-Fantasy/SF-Metroidvania.git#alphas/alpha-five)
