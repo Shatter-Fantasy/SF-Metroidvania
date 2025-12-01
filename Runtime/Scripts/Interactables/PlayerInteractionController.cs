@@ -3,16 +3,22 @@ using UnityEngine.InputSystem;
 
 using SF.Characters.Controllers;
 using SF.InputModule;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.Interactables
 {
     public class PlayerInteractionController : InteractionController
     {
-        protected override void OnTriggerEnter2D(Collider2D collision)
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
-            if (!collision.TryGetComponent(out IInteractable interactable)
-                    || interactable.InteractableMode != InteractableMode.Collision)
+            Debug.Log("Player Interaction Controller");
+            
+            if (!((GameObject)beginEvent.visitorShape.GetOwner()).TryGetComponent(out IInteractable interactable)
+                || interactable.InteractableMode != InteractableMode.Collision)
+            {
                 return;
+            }
+            
             
             if(gameObject.TryGetComponent(out PlayerController controller))
             {

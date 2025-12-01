@@ -1,4 +1,7 @@
+using System;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
+using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.Interactables
 {
@@ -12,15 +15,6 @@ namespace SF.Interactables
         private void Awake()
         {
             _boxCollider2D = GetComponent<BoxCollider2D>();
-        }
-
-        protected virtual void OnTriggerEnter2D(Collider2D collision)
-        {
-            if(collision.TryGetComponent(out IInteractable interactable) 
-                && interactable.InteractableMode == InteractableMode.Collision)
-            {
-                interactable.Interact();
-            }
         }
     }
 }
