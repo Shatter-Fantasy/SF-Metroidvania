@@ -17,13 +17,19 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "SF_UIELEMENTS"
+        "SF_UIELEMENTS",
+        "UNITY_LOW_LEVEL_EXTRAS_2D"
     ],
     "versionDefines": [
         {
             "name": "shatter-fantasy.sf-ui-elements",
             "expression": "0.0.1",
             "define": "SF_UIELEMENTS"
+        },
+        {
+            "name": "com.unity.2d.physics.lowlevelextras",
+            "expression": "0.0.1",
+            "define": "UNITY_LOW_LEVEL_EXTRAS_2D"
         }
     ],
     "noEngineReferences": false
