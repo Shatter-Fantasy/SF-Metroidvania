@@ -23,7 +23,15 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
+    "defineConstraints": [
+        "UNITY_LOW_LEVEL_EXTRAS_2D"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.2d.physics.lowlevelextras",
+            "expression": "1.0.0",
+            "define": "UNITY_LOW_LEVEL_EXTRAS_2D"
+        }
+    ],
     "noEngineReferences": false
 }
