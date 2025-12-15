@@ -32,7 +32,7 @@ namespace SF.PhysicsLowLevel
                 Debug.LogWarning($"In the {nameof(SFRectangleShape)} component on gameobject: {gameObject.name}, the value for the Size.y was below the allowed min value of: {MinAllowedSize.y}", this);
 #endif
             }
-            Shape = Body.CreateShape(PolygonGeometry.CreateBox(Size));
+            Shape = Body.CreateShape(PolygonGeometry.CreateBox(Size), ShapeDefinition);
         }
     }
 }

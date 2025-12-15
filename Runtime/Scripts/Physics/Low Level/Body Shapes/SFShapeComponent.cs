@@ -18,7 +18,7 @@ namespace SF.PhysicsLowLevel
     /// </remarks>
     [ExecuteAlways]
     [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
-    public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
+    public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged, PhysicsCallbacks.IContactCallback
     {
         /// <summary>
         /// The completed physics shape data struct for the <see cref="SFShapeComponent"/>.
@@ -194,7 +194,16 @@ namespace SF.PhysicsLowLevel
             
             // Make sure the shape is valid and set this component as it's owner.
             if (!Shape.isValid)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning($"The Shape was not valid for the {nameof(SFShapeComponent)} on the game object: {gameObject.name}",this);
+#endif
                 return;
+            }
+
+            // If there was no custom callback target set use this component's gameobject as the callback target.
+            Shape.callbackTarget = CallbackTarget ?? gameObject;
+            Body.callbackTarget  = CallbackTarget ?? gameObject;
             
             Shape.SetOwner(this);
         }
@@ -242,6 +251,15 @@ namespace SF.PhysicsLowLevel
         }
         protected virtual void DestroyShape()
         {
+            DestroyBody();
+
+            if (Shape.isValid)
+            {
+                Shape.Destroy(true, ShapeOwnerKey);
+                Shape     = default;
+                ShapeOwnerKey = 0;
+            }
+            
             if (_ownedShapes.IsCreated)
             {
                 foreach (var ownedShape in _ownedShapes)
@@ -252,9 +270,6 @@ namespace SF.PhysicsLowLevel
 
                 _ownedShapes.Clear();
             }
-
-            if (Body.isValid)
-                Body.Destroy(BodyOwnerKey);
         }
 
         protected virtual void DestroyBody()
@@ -301,6 +316,16 @@ namespace SF.PhysicsLowLevel
         {
             if (Body.isValid)
                 CreateShape();
+        }
+
+        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent)
+        {
+           Debug.Log("MAKING CONTACT");
+        }
+
+        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent)
+        {
+            throw new NotImplementedException();
         }
     }
 }
