@@ -132,7 +132,7 @@ namespace SF.PhysicsLowLevel
         /// <summary>
         /// Should the Delaunay algorithm be used for creating meshes using <see cref="PhysicsComposer"/>.
         /// </summary>
-        private bool _useDelaunay;
+        protected bool _useDelaunay;
         
         public object CallbackTarget;
         
@@ -160,7 +160,7 @@ namespace SF.PhysicsLowLevel
 #endif
         }
         
-        protected void OnValidate()
+        protected virtual void OnValidate()
         {
             if (!isActiveAndEnabled)
                 return;
