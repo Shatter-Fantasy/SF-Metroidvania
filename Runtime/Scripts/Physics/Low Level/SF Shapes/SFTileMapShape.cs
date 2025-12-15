@@ -36,7 +36,14 @@ namespace SF.PhysicsLowLevel
             
             base.OnValidate();
         }
+        
+        /* TODO: We need to override the way we validate the Shape of the base class.
+            Because this is a multiple Shape composited shape we will probably need 
+            to use GeometryIslands for the base Shape parameter.0         */
 
+        /* TODO: Implement the ConvexHull Implementation using PhysicsComposer.CreateConvexHulls
+         *  This will be useful for Camera Confiners and the IPhysicsShapeContained list for calculating.
+         */
         protected override void CreateShapeGeometry()
         {
             var composer = PhysicsComposer.Create();
@@ -116,6 +123,11 @@ namespace SF.PhysicsLowLevel
 
                 // Add to owned shapes.
                 _ownedShapes.Add(new OwnedShapes(shape, ShapeOwnerKey));
+            }
+
+            if (_ownedShapes is { IsCreated: true, Length: > 0 })
+            {
+                Shape = _ownedShapes[0].Shape;
             }
         }
     }

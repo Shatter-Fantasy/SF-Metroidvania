@@ -1,3 +1,4 @@
+using SF.PhysicsLowLevel;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -11,7 +12,7 @@ namespace SF.RoomModule
     [DisallowMultipleComponent]
     public class RoomPhysicsShape : CinemachineExtension
     {
-        public SceneShape ConfinerShape;
+        public SFShapeComponent ConfinerShape;
 
         public PhysicsShape Shape;
 
@@ -41,11 +42,11 @@ namespace SF.RoomModule
 
             if(ConfinerShape == null)
                return;
-
+            
             Shape = ConfinerShape.Shape;
+            
             if (!Shape.isValid)
                 return;
-            
             
             _isConfined = IsConfined(state.Lens,vcam.transform.position);
 

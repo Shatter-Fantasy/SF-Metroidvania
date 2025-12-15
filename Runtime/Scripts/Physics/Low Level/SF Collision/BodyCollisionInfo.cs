@@ -24,7 +24,7 @@ namespace SF.PhysicsLowLevel
 			
             WasGroundedLastFrame = IsGrounded;
 
-            using (_contacts = ControllerBody2D.PhysicsShape.GetContacts())
+            using (_contacts = ControllerBody2D.ShapeComponent.Shape.GetContacts())
             {
                 GroundCollisionChecks();
                 CeilingChecks();
@@ -48,7 +48,7 @@ namespace SF.PhysicsLowLevel
             // Normal hits are within the context of shapeA to shapeB  = below hit normals return positive 1
             var filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalYFilter, 
-                ControllerBody2D.PhysicsShape, 
+                ControllerBody2D.ShapeComponent.Shape, 
                 CollisionContactThreshold,
                 FilterMathOperator.GreaterThan);
 
@@ -88,7 +88,7 @@ namespace SF.PhysicsLowLevel
             // Left Collision Check
             var filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalXFilter, 
-                ControllerBody2D.PhysicsShape, 
+                ControllerBody2D.ShapeComponent.Shape, 
                 CollisionContactThreshold,
                 FilterMathOperator.GreaterThan);
             
@@ -98,7 +98,7 @@ namespace SF.PhysicsLowLevel
             // Right Collision Check
             filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalXFilter, 
-                ControllerBody2D.PhysicsShape, 
+                ControllerBody2D.ShapeComponent.Shape, 
                 -CollisionContactThreshold,
                 FilterMathOperator.LessThan);
             
@@ -116,7 +116,7 @@ namespace SF.PhysicsLowLevel
             
             var filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalYFilter, 
-                ControllerBody2D.PhysicsShape, 
+                ControllerBody2D.ShapeComponent.Shape, 
                 -CollisionContactThreshold,
                 FilterMathOperator.LessThan);
 

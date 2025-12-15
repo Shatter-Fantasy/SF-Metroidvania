@@ -109,8 +109,12 @@ namespace SF.PhysicsLowLevel
                 if (value == null)
                     return;
                 
-                ShapeOwnerKey = Shape.SetOwner(value);
-                BodyOwnerKey = Body.SetOwner(value);
+                // If this is a composite shape than the first shape created will already have the owner value set.
+                if(Shape.isValid && !IsCompositeShape)
+                    ShapeOwnerKey = Shape.SetOwner(value);
+                
+                if(Body.isValid)
+                    BodyOwnerKey = Body.SetOwner(value);
             }
         }
 
@@ -126,7 +130,7 @@ namespace SF.PhysicsLowLevel
         protected NativeList<OwnedShapes> _ownedShapes;
 
         /// <summary>
-        /// Is the <see cref="Shape"/> created by multiple seperate <see cref="PhysicsShape"/>?
+        /// Is the <see cref="Shape"/> created by multiple separate <see cref="PhysicsShape"/>?
         /// </summary>
         [HideInInspector] public bool IsCompositeShape;
         /// <summary>
@@ -138,18 +142,18 @@ namespace SF.PhysicsLowLevel
         
         protected void OnEnable()
         {
-            if(IsCompositeShape)
-                _ownedShapes = new NativeList<OwnedShapes>(Allocator.Persistent);
-
             CreateShape();
 
 #if UNITY_EDITOR
             WorldSceneTransformMonitor.AddMonitor(this);
 #endif
+            
+            DebugPhysics();
         }
         
         protected void OnDisable()
         {
+            DestroyBody();
             DestroyShape();
 
             if (_ownedShapes.IsCreated)
@@ -165,7 +169,11 @@ namespace SF.PhysicsLowLevel
             if (!isActiveAndEnabled)
                 return;
 
-            DestroyShape();
+            CreateShape();
+        }
+
+        protected virtual void Reset()
+        {
             CreateShape();
         }
         
@@ -180,6 +188,9 @@ namespace SF.PhysicsLowLevel
             // Clean up any already created Shape data.
             DestroyShape();
 
+            if(IsCompositeShape)
+                _ownedShapes = new NativeList<OwnedShapes>(Allocator.Persistent);
+            
             // Create the physics body from the physics body definition that the Shape will use.
             CreateBody();
             
@@ -187,7 +198,7 @@ namespace SF.PhysicsLowLevel
             if (!Body.isValid)
             {
 #if UNITY_EDITOR
-                Debug.LogWarning($"The Body was not valid for the SFShapeComponent: {name}",this);
+                Debug.LogWarning($"The Body was not valid for the SFShapeComponent: {GetType().Name} on the game object: {gameObject.name}",this);
 #endif
                 return;
             }
@@ -200,7 +211,7 @@ namespace SF.PhysicsLowLevel
             if (!Shape.isValid)
             {
 #if UNITY_EDITOR
-                Debug.LogWarning($"The Shape was not valid for the {nameof(SFShapeComponent)} on the game object: {gameObject.name}",this);
+                Debug.LogWarning($"The Shape was not valid for the {GetType().Name} on the game object: {gameObject.name}",this);
 #endif
                 return;
             }
@@ -208,8 +219,10 @@ namespace SF.PhysicsLowLevel
             // If there was no custom callback target set use this component's gameobject as the callback target.
             Shape.callbackTarget = CallbackTarget ?? gameObject;
             Body.callbackTarget  = CallbackTarget ?? gameObject;
+
+            Owner = this;
             
-            Shape.SetOwner(this);
+            // TODO: Add some validation checks for disposing the NativeLIst<> for _ownedShapes.Dispose();
         }
 
         /// <summary>
@@ -248,15 +261,10 @@ namespace SF.PhysicsLowLevel
 
                 // Set the callback target.
                 Body.callbackTarget = CallbackTarget;
-
-                // Set Owner.
-                BodyOwnerKey = Body.SetOwner(this);
             }
         }
         protected virtual void DestroyShape()
         {
-            DestroyBody();
-
             if (Shape.isValid)
             {
                 Shape.Destroy(true, ShapeOwnerKey);
@@ -288,6 +296,36 @@ namespace SF.PhysicsLowLevel
                 BodyOwnerKey = 0;
             }
         }
+        
+        /// <summary>
+        /// If debugging is enabled in editor, a set of logs will be sent to console just in case something was not set right.
+        /// </summary>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        protected virtual void DebugPhysics()
+        {
+            if (!Body.isValid)
+            {
+                Debug.LogWarning($"The Body was not valid for SFShapeComponent component on game object named: {gameObject.name}", gameObject);
+            }
+
+            if (!Shape.isValid)
+            {
+                Debug.LogWarning(
+                    $"The Shape was not valid for SFShapeComponent component on game object named: {gameObject.name}",
+                    gameObject);
+            }
+            /*
+            else
+            {
+                if (Body.type == PhysicsBody.BodyType.Dynamic && Shape.definition.density <= 0)
+                    Debug.LogWarning(
+                        $"The PhysicsShape's density value was set to be a zero or negative value while the PhysicsBody is RigidbodyType2D is set to Dynamic. This means gravity will not be applied to the PhysicsBody.",
+                        gameObject);
+            }
+            */
+        }
+
+        
         
         /// <summary>
         /// Draws a debug render to the game and scene view to allow for visual debugging.

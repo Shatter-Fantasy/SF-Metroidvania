@@ -4,10 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using SF.Characters.Controllers;
 using SF.Managers;
+using SF.PhysicsLowLevel;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.RoomModule
 {
@@ -48,12 +48,12 @@ namespace SF.RoomModule
         private readonly List<IRoomExtension> _roomExitedExtensions = new();
         #endregion
         
-        private SceneShape _sceneShape;
+        [SerializeReference] private SFShapeComponent _physicsShapeComponent;
         private void Awake()
         {
-            if (TryGetComponent(out _sceneShape))
+            if (TryGetComponent(out _physicsShapeComponent))
             {
-                _sceneShape.CallbackTarget = this;
+                _physicsShapeComponent.CallbackTarget = this;
             }
              
             // This is the ignore ray cast physics layer.
