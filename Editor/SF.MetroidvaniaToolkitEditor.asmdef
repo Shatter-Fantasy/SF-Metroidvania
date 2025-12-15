@@ -1,11 +1,13 @@
 {
-    "name": "SF.MetroidvaniaToolkitEditor",
-    "rootNamespace": "",
+    "name": "SFEditor.MetroidvaniaToolkit",
+    "rootNamespace": "SFEditor",
     "references": [
         "GUID:3a9781db4804a9945b9883f3a7c46d45",
         "GUID:70643826bc633b246af1ece2db1e8338",
         "GUID:e35e215503ab6b34eb8cadb39b7719da",
         "GUID:5769175a692bee24cbd874f396613351",
+        "GUID:1fe1b561d22898344b997fad4e45b45d",
+        "GUID:3501f6086cdd0e648ac05237fdb4fbad",
         "GUID:e8ca73d31c2608e498b77118a366f5dd"
     ],
     "includePlatforms": [
