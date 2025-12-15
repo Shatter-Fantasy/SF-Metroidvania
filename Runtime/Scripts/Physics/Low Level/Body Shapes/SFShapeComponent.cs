@@ -18,7 +18,7 @@ namespace SF.PhysicsLowLevel
     /// </remarks>
     [ExecuteAlways]
     [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
-    public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged, PhysicsCallbacks.IContactCallback
+    public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
     {
         /// <summary>
         /// The completed physics shape data struct for the <see cref="SFShapeComponent"/>.
@@ -38,7 +38,7 @@ namespace SF.PhysicsLowLevel
         /// set in the LowLevelPhysics settings asset in the project settings.
         /// </remarks>
         public PhysicsShapeDefinition ShapeDefinition = PhysicsShapeDefinition.defaultDefinition;
-
+        
         /// <summary>
         /// The generic proxy data container for the <see cref="Shape"/>
         /// Used to allow support for all types of shapes and geometry when
@@ -129,7 +129,11 @@ namespace SF.PhysicsLowLevel
         /// Is the <see cref="Shape"/> created by multiple seperate <see cref="PhysicsShape"/>?
         /// </summary>
         [HideInInspector] public bool IsCompositeShape;
-
+        /// <summary>
+        /// Should the Delaunay algorithm be used for creating meshes using <see cref="PhysicsComposer"/>.
+        /// </summary>
+        private bool _useDelaunay;
+        
         public object CallbackTarget;
         
         protected void OnEnable()
@@ -316,16 +320,6 @@ namespace SF.PhysicsLowLevel
         {
             if (Body.isValid)
                 CreateShape();
-        }
-
-        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent)
-        {
-           Debug.Log("MAKING CONTACT");
-        }
-
-        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent)
-        {
-            throw new NotImplementedException();
         }
     }
 }
