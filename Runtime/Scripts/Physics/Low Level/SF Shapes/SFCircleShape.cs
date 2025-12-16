@@ -19,7 +19,7 @@ namespace SF.PhysicsLowLevel
 
         public static readonly float MinAllowedSize = 0.0000001f;
         
-        protected override void CreateShapeGeometry()
+        protected override void CreateBodyShapeGeometry()
         {
             if (MinAllowedSize > Radius)
                 Radius = MinAllowedSize;

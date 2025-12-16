@@ -24,7 +24,7 @@ namespace SF.PhysicsLowLevel
 
         public static readonly Vector2 MinAllowedSize = new Vector2(0.00000005f,0.00000005f);
         
-        protected override void CreateShapeGeometry()
+        protected override void CreateBodyShapeGeometry()
         {
             if (MinAllowedSize.x > Size.x)
             {

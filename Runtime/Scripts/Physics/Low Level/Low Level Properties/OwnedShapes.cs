@@ -16,12 +16,15 @@ namespace SF.PhysicsLowLevel
         public readonly PhysicsShape Shape;
         public readonly int OwnerKey;
 
-        public OwnedShapes(PhysicsShape shape, UnityEngine.Object owner)
+        public OwnedShapes(ref PhysicsShape shape, in UnityEngine.Object owner)
         {
             if (shape.isValid && owner != null)
             {
                 Shape    = shape;
-                OwnerKey = Shape.SetOwner(owner);
+                if(!Shape.isOwned)
+                    OwnerKey = Shape.SetOwner(owner);
+                
+                OwnerKey = -1;
             }
             else
             {
@@ -30,7 +33,7 @@ namespace SF.PhysicsLowLevel
             }
         }
         
-        public OwnedShapes(PhysicsShape shape, int ownerKey)
+        public OwnedShapes(ref PhysicsShape shape, in int ownerKey)
         {
             if (shape.isValid)
             {

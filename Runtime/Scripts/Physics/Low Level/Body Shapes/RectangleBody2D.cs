@@ -36,7 +36,7 @@ namespace SF.PhysicsLowLevel
             
             // Set the owner.
             _ownerKey = Shape.SetOwner(this);
-            _ownedShapes.Add(new OwnedShapes(Shape, _ownerKey));
+            _ownedShapes.Add(new OwnedShapes(ref Shape, _ownerKey));
         }
 
         protected override void DestroyShape()

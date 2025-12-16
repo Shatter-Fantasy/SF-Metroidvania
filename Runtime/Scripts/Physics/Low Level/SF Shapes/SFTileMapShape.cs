@@ -8,6 +8,7 @@ using UnityEngine.Tilemaps;
 
 namespace SF.PhysicsLowLevel
 {
+    [RequireComponent(typeof(Tilemap))]
     public class SFTileMapShape : SFShapeComponent
     {
         [SerializeField] private Tilemap _tilemap;
@@ -29,6 +30,12 @@ namespace SF.PhysicsLowLevel
             _tilemap.GetUsedTileData(out _tilesInBlock);
         }
 
+        protected override void PreEnabled()
+        {
+            if (_tilemap == null)
+                _tilemap = GetComponent<Tilemap>();
+        }
+
         protected override void OnValidate()
         {
             if (_tilemap == null)
@@ -36,19 +43,23 @@ namespace SF.PhysicsLowLevel
             
             base.OnValidate();
         }
-        
-        /* TODO: We need to override the way we validate the Shape of the base class.
-            Because this is a multiple Shape composited shape we will probably need 
-            to use GeometryIslands for the base Shape parameter.0         */
+
+        protected override void DebugPhysicsExtra()
+        {
+            if (_tilemap == null)
+            {
+                Debug.LogWarning($"The {GetType().Name} component on game object named: {gameObject.name} didn't have a TileMap assigned, so no shape can be created.", gameObject);
+            }
+        }
 
         /* TODO: Implement the ConvexHull Implementation using PhysicsComposer.CreateConvexHulls
          *  This will be useful for Camera Confiners and the IPhysicsShapeContained list for calculating.
          */
-        protected override void CreateShapeGeometry()
+        protected override void CreateBodyShapeGeometry()
         {
             var composer = PhysicsComposer.Create();
             composer.useDelaunay = _useDelaunay;
-            var vertexPath = new NativeList<Vector2>(Allocator.Temp);
+            using var vertexPath = new NativeList<Vector2>(Allocator.Temp);
             Profiler.BeginSample("Getting Tile Data");
             
             
@@ -61,7 +72,7 @@ namespace SF.PhysicsLowLevel
             Profiler.EndSample();
             
             
-            var positions = _tilemap.GetTileCellPositions();
+            using var positions = _tilemap.GetTileCellPositions();
             
             for (int i = 0; i < _tilesInBlock.Count; i++)
             {
@@ -96,9 +107,7 @@ namespace SF.PhysicsLowLevel
             
             using var polygons = composer.CreatePolygonGeometry(vertexScale: transform.lossyScale, Allocator.Temp);
             
-            vertexPath.Dispose();
             composer.Destroy();
-            positions.Dispose();
             
             // Calculate the relative transform from the scene body to this scene shape.
             var relativeTransform = PhysicsMath.GetRelativeMatrix(transform, transform, Body.world.transformPlane, useScale: false);
@@ -117,17 +126,17 @@ namespace SF.PhysicsLowLevel
                 
                 if (!shape.isValid)
                     continue;
-                
-                // Set the owner.
-                ShapeOwnerKey = shape.SetOwner(this);
 
                 // Add to owned shapes.
-                _ownedShapes.Add(new OwnedShapes(shape, ShapeOwnerKey));
+                if(ShapesInComposite.IsCreated)
+                    ShapesInComposite.Add(shape);
             }
 
-            if (_ownedShapes is { IsCreated: true, Length: > 0 })
+            if (ShapesInComposite is { IsCreated: true, Length: > 0 })
             {
-                Shape = _ownedShapes[0].Shape;
+                // For now we just set the default shape of the SFShapeComponent to be the first shape added to the ShapesInComposite list.
+                // This is a bad solution and needs more updates for composite shapes.
+                _shape = ShapesInComposite[0];
             }
         }
     }

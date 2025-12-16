@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
@@ -20,15 +19,46 @@ namespace SF.PhysicsLowLevel
     [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
     public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
     {
+        
+        protected PhysicsShape _shape;
         /// <summary>
         /// The completed physics shape data struct for the <see cref="SFShapeComponent"/>.
         /// </summary>
         /// <remarks>
         /// Keyword here is completed because you can use <see cref="PhysicsComposer"/> to merge shapes and vertexes into a single shape.
         /// If a <see cref="SFShapeComponent"/> is made from multiple individual shapes and a single shape is created this is the completed merged shape.
-        /// <see cref="TileMapShape"/> for an example of this.
+        /// <see cref="SF.PhysicsLowLevel.SFTileMapShape"/> for an example of this.
         /// </remarks>
-        public PhysicsShape Shape;
+        public PhysicsShape Shape
+        {
+            get
+            {
+                // For Composite Shapes we just return the very first shape in the ShapesInComposite NativeList
+                if (IsCompositeShape)
+                {
+                    if (ShapesInComposite is { IsCreated: true, Length: > 0 })
+                        return ShapesInComposite[0];
+                }
+
+                // For composite shapes reaching this point the _shape value will be null or the default.
+                return _shape;
+            }
+            set
+            {
+                if (IsCompositeShape)
+                {
+#if UNITY_EDITOR
+                    Debug.LogWarning($"The physics shape of the {GetType().Name} on gameobject: {gameObject.name} is set as a composite shape. " +
+                              $"composite shapes can not have the Shape value directly set. Instead the Shape is set at the same time as ShapesInComposite is set.", this);
+#endif
+                    return;
+                }
+                
+                _shape = value; 
+            }
+        }
+
+        public NativeList<PhysicsShape> ShapesInComposite;
         
         /// <summary>
         /// The definition for the <see cref="Shape"/> for the <see cref="SFShapeComponent"/>.
@@ -53,7 +83,7 @@ namespace SF.PhysicsLowLevel
                 if (Shape.isValid)
                     return Shape.CreateShapeProxy();
 #if UNITY_EDITOR
-                Debug.Log($"The physics shape of the SFShapeComponent on gameobject: {gameObject.name}  wasn't valid when trying to get it's ShapeProxy", this);
+                Debug.Log($"The physics shape of the {GetType().Name} on gameobject: {gameObject.name}  wasn't valid when trying to get it's ShapeProxy", this);
 #endif
                 return new PhysicsShape.ShapeProxy();
             }
@@ -70,66 +100,6 @@ namespace SF.PhysicsLowLevel
         public PhysicsWorld PhysicsWorld;
 
         /// <summary>
-        /// The owner key hash for the <see cref="Shape"/>
-        /// </summary>
-        [NonSerialized] public int ShapeOwnerKey;  
-        /// <summary>
-        /// The owner key hash for the <see cref="Body"/>
-        /// </summary>
-        [NonSerialized] public int BodyOwnerKey;
-
-        /// <summary>
-        /// The object that owns this <see cref="SFShapeComponent"/> <see cref="Shape"/> and the <see cref="Body"/>
-        /// </summary>
-        protected UnityEngine.Object _owner;
-        /// <summary>
-        /// The object that owns this <see cref="SFShapeComponent"/> <see cref="Shape"/> and the <see cref="Body"/>
-        /// </summary>
-        public UnityEngine.Object Owner
-        {
-            get
-            {
-                // Return the owner if the shape is valid.
-                // If the Shape is valid we know the Body is valid because we use the body to create the Shape.
-                // So only need to get the Shape Owner.
-                if(Shape.isValid)
-                    return Shape.GetOwner();
-#if UNITY_EDITOR
-                Debug.Log($"When trying to retrieve the Owner of the SFShapeComponent on gameobject: {gameObject.name}, the shape was not valid so it returned a null UnityEngine.Object", this);
-#endif
-                // Return null if the shape is not valid.
-                return null;
-            }
-
-            set
-            {
-                // Don't allow setting a null owner.
-                // If we want to erase an owner you call PhysicsBody.Destroy.
-                // This will destroy the PhysicsBody and connected PhysicShapes while erasing the owner connection.
-                if (value == null)
-                    return;
-                
-                // If this is a composite shape than the first shape created will already have the owner value set.
-                if(Shape.isValid && !IsCompositeShape)
-                    ShapeOwnerKey = Shape.SetOwner(value);
-                
-                if(Body.isValid)
-                    BodyOwnerKey = Body.SetOwner(value);
-            }
-        }
-
-        /// <summary>
-        /// Keeps track of Shape and owner ids pairs if (<see cref="OwnedShapes"/>) if this <see cref="SFShapeComponent"/>
-        /// has <see cref="IsCompositeShape"/> set to true and made from multiple smaller <see cref="PhysicsShape"/>
-        /// </summary>
-        /// <remarks>
-        /// Most times don't ever make this Allocator.Persistent in the actually variable declaration as default value.
-        /// This can cause memory leaks under certain cases when running in edit mode.
-        /// It is okay to set this by default under some cases, just be careful.
-        /// </remarks>
-        protected NativeList<OwnedShapes> _ownedShapes;
-
-        /// <summary>
         /// Is the <see cref="Shape"/> created by multiple separate <see cref="PhysicsShape"/>?
         /// </summary>
         [HideInInspector] public bool IsCompositeShape;
@@ -142,23 +112,26 @@ namespace SF.PhysicsLowLevel
         
         protected void OnEnable()
         {
+            PreEnabled();
             CreateShape();
 
 #if UNITY_EDITOR
             WorldSceneTransformMonitor.AddMonitor(this);
 #endif
-            
             DebugPhysics();
         }
+
+        /// <summary>
+        /// Override to set up required components when first adding a SFShapeComponent class to a gameobject.
+        /// Example <see cref="SFTileMapShape"/> requires a TileMap component to be set before generating the <see cref="Shape"/>. 
+        /// </summary>
+        protected virtual void PreEnabled() { }
         
         protected void OnDisable()
         {
             DestroyBody();
             DestroyShape();
-
-            if (_ownedShapes.IsCreated)
-                _ownedShapes.Dispose();
-
+            
 #if UNITY_EDITOR
             WorldSceneTransformMonitor.RemoveMonitor(this);
 #endif
@@ -170,6 +143,7 @@ namespace SF.PhysicsLowLevel
                 return;
 
             CreateShape();
+            DebugPhysics();
         }
 
         protected virtual void Reset()
@@ -187,48 +161,34 @@ namespace SF.PhysicsLowLevel
         {
             // Clean up any already created Shape data.
             DestroyShape();
-
-            if(IsCompositeShape)
-                _ownedShapes = new NativeList<OwnedShapes>(Allocator.Persistent);
+            
+            if(IsCompositeShape && !ShapesInComposite.IsCreated)
+                ShapesInComposite = new NativeList<PhysicsShape>(Allocator.Persistent);
             
             // Create the physics body from the physics body definition that the Shape will use.
             CreateBody();
             
             // Make sure the Physics Body is valid before moving to shape creation.
             if (!Body.isValid)
-            {
-#if UNITY_EDITOR
-                Debug.LogWarning($"The Body was not valid for the SFShapeComponent: {GetType().Name} on the game object: {gameObject.name}",this);
-#endif
                 return;
-            }
 
             // Called from classes inheriting from the abstract class SFShapeComponent.
             // The CreateShapeGeometry is overridden to set up custom shape components for game objects. 
-            CreateShapeGeometry();
+            CreateBodyShapeGeometry();
             
-            // Make sure the shape is valid and set this component as it's owner.
+            // Make sure the shape is valid.
             if (!Shape.isValid)
-            {
-#if UNITY_EDITOR
-                Debug.LogWarning($"The Shape was not valid for the {GetType().Name} on the game object: {gameObject.name}",this);
-#endif
                 return;
-            }
 
             // If there was no custom callback target set use this component's gameobject as the callback target.
-            Shape.callbackTarget = CallbackTarget ?? gameObject;
+            _shape.callbackTarget = CallbackTarget ?? gameObject;
             Body.callbackTarget  = CallbackTarget ?? gameObject;
-
-            Owner = this;
-            
-            // TODO: Add some validation checks for disposing the NativeLIst<> for _ownedShapes.Dispose();
         }
 
         /// <summary>
         /// Creates the <see cref="Shape"/> geometry to use when calling the <see cref="Body.CreateShape()"/> method. 
         /// </summary>
-        protected virtual void CreateShapeGeometry()
+        protected virtual void CreateBodyShapeGeometry()
         {
             // For the abstract method just creating a example shape for people to see how to do.
             Shape = Body.CreateShape(PolygonGeometry.CreateBox(Vector2.one));
@@ -244,9 +204,6 @@ namespace SF.PhysicsLowLevel
             {
                 PhysicsWorld = PhysicsWorld.defaultWorld;
             }
-
-            if (IsCompositeShape && !_ownedShapes.IsCreated)
-                return;
             
             // Sync the shape position with the component's transform position.
             BodyDefinition.position = PhysicsMath.ToPosition2D(transform.position, PhysicsWorld.transformPlane);
@@ -265,23 +222,25 @@ namespace SF.PhysicsLowLevel
         }
         protected virtual void DestroyShape()
         {
-            if (Shape.isValid)
+            if (IsCompositeShape 
+                && ShapesInComposite.IsCreated)
             {
-                Shape.Destroy(true, ShapeOwnerKey);
-                Shape     = default;
-                ShapeOwnerKey = 0;
-            }
-            
-            if (_ownedShapes.IsCreated)
-            {
-                foreach (var ownedShape in _ownedShapes)
+                if (ShapesInComposite.Length > 0)
                 {
-                    if (ownedShape.Shape.isValid)
-                        ownedShape.Shape.Destroy(updateBodyMass: false, ownerKey: ownedShape.OwnerKey);
+                    for (int i = 0; i < ShapesInComposite.Length; i++)
+                    {
+                        if (ShapesInComposite[i].isValid)
+                            ShapesInComposite[i].Destroy();
+                    }
                 }
-
-                _ownedShapes.Clear();
+                ShapesInComposite.Dispose();
             }
+
+            if (!Shape.isValid)
+                return;
+            
+            Shape.Destroy();
+            Shape     = default;
         }
 
         protected virtual void DestroyBody()
@@ -289,11 +248,8 @@ namespace SF.PhysicsLowLevel
             // Destroy the body.
             if (Body.isValid)
             {
-                if(Body.isOwned)
-                    Body.Destroy(BodyOwnerKey);
-                
+                Body.Destroy();
                 Body         = default;
-                BodyOwnerKey = 0;
             }
         }
         
@@ -303,30 +259,53 @@ namespace SF.PhysicsLowLevel
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         protected virtual void DebugPhysics()
         {
-            if (!Body.isValid)
-            {
-                Debug.LogWarning($"The Body was not valid for SFShapeComponent component on game object named: {gameObject.name}", gameObject);
-            }
-
+            DebugPhysicsExtra();
             if (!Shape.isValid)
             {
-                Debug.LogWarning(
-                    $"The Shape was not valid for SFShapeComponent component on game object named: {gameObject.name}",
-                    gameObject);
+                if (IsCompositeShape)
+                {
+                    if (!ShapesInComposite.IsCreated)
+                    {
+                        Debug.LogWarning(
+                            $"The Shape was marked not valid for in {GetType().Name} component on game object named: {gameObject.name} " +
+                            $"because it is a composite type shaped, but the ShapesInComposite NativeList hasn't been created yet." +
+                            $"If this is not a custom component, but a built in SF Component please file a bug report at the GitHub repo.",
+                            gameObject);
+                    }
+                    else if (ShapesInComposite.Length < 1)
+                    {
+                        Debug.LogWarning(
+                            $"The Shape was marked not valid for in {GetType().Name} component on game object named: {gameObject.name} " +
+                            $"because it is a composite type shaped, but the ShapesInComposite NativeList has zero elements in it so no default Shape was set making the Shape invalid." +
+                            $"If this is a SFTileMapShape there was no valid tiles painted on the TileMap.",
+                            gameObject);
+                    }
+                }
+                else
+                { 
+                    // The default warning message if we haven't created a message for other valid checks.
+                    Debug.LogWarning($"The Shape was not valid for the {GetType().Name} on the game object: {gameObject.name}",gameObject);
+                }
             }
-            /*
-            else
+            else if (!Body.isValid)
             {
                 if (Body.type == PhysicsBody.BodyType.Dynamic && Shape.definition.density <= 0)
                     Debug.LogWarning(
                         $"The PhysicsShape's density value was set to be a zero or negative value while the PhysicsBody is RigidbodyType2D is set to Dynamic. This means gravity will not be applied to the PhysicsBody.",
                         gameObject);
+                else
+                {
+                    // The default warning message for body validation if we haven't created a message for the specific valid check that failed.
+                    Debug.LogWarning($"The Body was marked not valid for {GetType().Name} component on game object named: {gameObject.name}", gameObject);
+                }
             }
-            */
         }
-
         
-        
+        /// <summary>
+        /// Override this to add custom debug log checking on top of the normal checks in DebugPhysics.
+        /// </summary>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        protected virtual void DebugPhysicsExtra(){}
         /// <summary>
         /// Draws a debug render to the game and scene view to allow for visual debugging.
         /// </summary>
@@ -339,15 +318,15 @@ namespace SF.PhysicsLowLevel
             
             // Finish if we've nothing to draw.
             if (IsCompositeShape
-                && _ownedShapes is { IsCreated: true, Length: > 0 })
+                && ShapesInComposite is { IsCreated: true, Length: > 0 })
             {
                 // Finish if we're not drawing selections.
-                if (!_ownedShapes[0].Shape.world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedShapes))
+                if (!ShapesInComposite[0].world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedShapes))
                     return;
             
                 // Draw selections.
-                foreach (var ownedShape in _ownedShapes)
-                    ownedShape.Shape.Draw();
+                foreach (var shape in ShapesInComposite)
+                    shape.Draw();
             }
         }
 
