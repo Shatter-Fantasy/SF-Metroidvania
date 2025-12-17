@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace SF.PhysicsLowLevel
     public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
     {
         
-        protected PhysicsShape _shape;
+        public PhysicsShape _shape;
         /// <summary>
         /// The completed physics shape data struct for the <see cref="SFShapeComponent"/>.
         /// </summary>
@@ -29,6 +30,7 @@ namespace SF.PhysicsLowLevel
         /// If a <see cref="SFShapeComponent"/> is made from multiple individual shapes and a single shape is created this is the completed merged shape.
         /// <see cref="SF.PhysicsLowLevel.SFTileMapShape"/> for an example of this.
         /// </remarks>
+        
         public PhysicsShape Shape
         {
             get
@@ -55,6 +57,44 @@ namespace SF.PhysicsLowLevel
                 }
                 
                 _shape = value; 
+            }
+        }
+
+        public virtual void SetShape<TGeometryType>(TGeometryType geometryType) where  TGeometryType : struct
+        {
+            if (!_shape.isValid)
+                return;
+
+            switch (geometryType)
+            {
+                case CircleGeometry circleGeometry:
+                {
+                    Debug.Log(circleGeometry.radius);
+                    _shape.circleGeometry = circleGeometry;
+                    break;
+                }
+                case PolygonGeometry polygonGeometry:
+                {
+                    _shape.polygonGeometry = polygonGeometry;
+                    break;
+                }
+                case CapsuleGeometry capsuleGeometry:
+                {
+                    _shape.capsuleGeometry = capsuleGeometry;
+                    break;
+                }
+                case SegmentGeometry segmentGeometry:
+                {
+                    _shape.segmentGeometry = segmentGeometry;
+                    break;
+                }
+                default:
+                {
+#if UNITY_EDITOR
+                    Debug.LogWarning($"When trying to set the shape geometry of the {GetType().Name} on the game object : {gameObject.name}, an unsupported geometry type was passed in ", gameObject);
+                    break;
+#endif
+                }
             }
         }
 
@@ -103,6 +143,11 @@ namespace SF.PhysicsLowLevel
         /// Is the <see cref="Shape"/> created by multiple separate <see cref="PhysicsShape"/>?
         /// </summary>
         [HideInInspector] public bool IsCompositeShape;
+        
+        /// <summary>
+        /// Should the <see cref="Shape"/> size be scaled wiht the game objects transform.
+        /// </summary>
+        public bool ScaleSize = true;
         /// <summary>
         /// Should the Delaunay algorithm be used for creating meshes using <see cref="PhysicsComposer"/>.
         /// </summary>
