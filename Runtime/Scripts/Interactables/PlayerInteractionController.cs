@@ -64,12 +64,12 @@ namespace SF.Interactables
         
         private void OnEnable()
         {
-            InputManager.Controls.Player.Interact.performed += OnInteractPerformed;
+            SFInputManager.Controls.Player.Interact.performed += OnInteractPerformed;
         }
 
         private void OnDisable()
         {
-            InputManager.Controls.Player.Interact.performed -= OnInteractPerformed;
+            SFInputManager.Controls.Player.Interact.performed -= OnInteractPerformed;
         }
         
     }

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace SF.InputModule
 {
-    public class InputManager : MonoBehaviour
+    public class SFInputManager : MonoBehaviour
     {
 	    
 	    /// <summary>
@@ -14,13 +14,13 @@ namespace SF.InputModule
 	    /// </summary>
 	    private AbilityController _playerAbilityController;
 	    
-		private static InputManager _instance;
-		public static InputManager Instance
+		private static SFInputManager _instance;
+		public static SFInputManager Instance
 		{
 			get
 			{
 				if(_instance == null)
-					_instance = FindAnyObjectByType<InputManager>();
+					_instance = FindAnyObjectByType<SFInputManager>();
 				
 				return _instance;
 			}

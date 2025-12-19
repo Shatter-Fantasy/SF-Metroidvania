@@ -62,23 +62,23 @@ namespace SF.AbilityModule.Characters
         #endregion Input Actions
         private void OnEnable()
 		{
-			InputManager.Controls.Player.Enable();
-			InputManager.Controls.Player.Move.performed += OnInputMove;
-			InputManager.Controls.Player.Move.canceled += OnInputMove;
+			SFInputManager.Controls.Player.Enable();
+			SFInputManager.Controls.Player.Move.performed += OnInputMove;
+			SFInputManager.Controls.Player.Move.canceled += OnInputMove;
 
-            InputManager.Controls.Player.Running.performed += OnMoveInputRun;
-			InputManager.Controls.Player.Running.canceled += OnMoveInputRunCancelled;
+            SFInputManager.Controls.Player.Running.performed += OnMoveInputRun;
+			SFInputManager.Controls.Player.Running.canceled += OnMoveInputRunCancelled;
 		}
 
         private void OnDisable()
 		{
-			if(InputManager.Controls == null) return;
+			if(SFInputManager.Controls == null) return;
 
-			InputManager.Controls.Player.Move.performed -= OnInputMove;
-			InputManager.Controls.Player.Move.canceled -= OnInputMove;
+			SFInputManager.Controls.Player.Move.performed -= OnInputMove;
+			SFInputManager.Controls.Player.Move.canceled -= OnInputMove;
 
-            InputManager.Controls.Player.Running.performed -= OnMoveInputRun;
-			InputManager.Controls.Player.Running.canceled -= OnMoveInputRunCancelled;
+            SFInputManager.Controls.Player.Running.performed -= OnMoveInputRun;
+			SFInputManager.Controls.Player.Running.canceled -= OnMoveInputRunCancelled;
 		}
 	}
 }
