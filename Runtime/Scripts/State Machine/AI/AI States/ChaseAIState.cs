@@ -16,18 +16,17 @@ namespace SF.StateMachine
         [SerializeField] private Transform _target;
         private float _targetDirection; 
         
-        protected override void OnInit(ControllerBody2D controllerBody2D)
+        /// <summary>
+        /// Set the initial target in ONStart because the SpawnSystem should have already finished up spawning the player for the first time by now.
+        /// </summary>
+        protected override void OnStart()
         {
-            base.OnInit(controllerBody2D);
-            if (_chasePlayer)
-            {
-                _target = SpawnSystem.SpawnedPlayerController?.transform;
-            }
+            _target = SpawnSystem.SpawnedPlayerController?.transform;
         }
-
         protected override void OnUpdateState()
         {
-            if(_target == null)
+            if(!_chasePlayer 
+               || _target == null ) 
                 return;
 
             _targetDirection = Vector3.Cross(transform.position,_target.position).normalized.z;
