@@ -21,14 +21,12 @@ namespace SF.RoomModule
     /// </summary>
     public static class RoomSystem
     {
-
         public static bool DynamicRoomLoading = false;
         
         /// <summary>
         /// List of the loaded Rooms data.
         /// </summary>
-        private static List<int> _loadedRoomsIDs = new();
-        
+        private static readonly List<int> LoadedRoomsIDs = new();
         private static RoomDB _roomDB;
         /// <summary>
         /// The RoomDatabase to be loaded into the game logic.
@@ -72,16 +70,16 @@ namespace SF.RoomModule
                 RefreshRoom(roomID);
                 return _roomDB[roomID];
             }
-
+            
             // We can choose to skip the spawning of the instance. This is done for debugging reasons and to catch errors.
             if (DynamicRoomLoading)
             {
                 // If no room instance with the passed in roomID is currently loaded spawn and load an instance. 
                 // Also set it as the current SpawnedInstance in the RoomDB. This allows us to check if a room is already loaded later by checking 
                 // if the SpawnedInstance is null or not. We should check the _loadedRoomsIDs first for performance reasons. 
-                _roomDB[roomID].SpawnedInstance = GameObject.Instantiate(RoomDB[roomID].RoomPrefab);
+                _roomDB[roomID].SpawnedInstance = Object.Instantiate(RoomDB[roomID].RoomPrefab);
                 _roomDB[roomID].SpawnedRoomController = _roomDB[roomID].SpawnedInstance?.GetComponent<RoomController>();
-                _loadedRoomsIDs.Add(roomID);
+                LoadedRoomsIDs.Add(roomID);
             }
 
             return _roomDB[roomID];
@@ -96,7 +94,7 @@ namespace SF.RoomModule
             if (IsRoomLoaded(roomID))
                 return _roomDB[roomID];
             
-            _loadedRoomsIDs.Add(roomID);
+            LoadedRoomsIDs.Add(roomID);
 
             if (spawnedInstance != null)
             {
@@ -113,11 +111,11 @@ namespace SF.RoomModule
         /// <returns></returns>
         public static bool IsRoomLoaded(int roomID)
         {
-            for (int i = 0; i < _loadedRoomsIDs.Count; i++)
+            for (int i = 0; i < LoadedRoomsIDs.Count; i++)
             {
                 // We check the _loadedRoomsIDs first for performance reasons and
                 // as a safety check just in case somehow a spawned instance hasn't been cleaned up fully yet.
-                if (_loadedRoomsIDs[i] == roomID && _roomDB[roomID].SpawnedInstance != null)
+                if (LoadedRoomsIDs[i] == roomID && _roomDB[roomID].SpawnedInstance != null)
                 {
                     return true;
                 }
@@ -137,7 +135,7 @@ namespace SF.RoomModule
             if (!IsRoomLoaded(roomID))
                 return;
             
-            //Debug.Log($"Room with ID: {roomID} was refreshed, but at the moment the RefreshRoom is not implemented yet.");
+            
         }
 
         /// <summary>
@@ -178,7 +176,7 @@ namespace SF.RoomModule
                 return;
             
             _roomDB[roomId].SpawnedInstance = null;
-            _loadedRoomsIDs.Remove(roomId);
+            LoadedRoomsIDs.Remove(roomId);
         }
     }
     

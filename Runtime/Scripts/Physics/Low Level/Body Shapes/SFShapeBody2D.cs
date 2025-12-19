@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.U2D.Physics.Extras;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.PhysicsLowLevel
 {
@@ -10,7 +10,7 @@ namespace SF.PhysicsLowLevel
     /// Base class for all SF Shape Body components that act as a low level equivalent to the high level Unity Collider2D.
     /// </summary>
     [ExecuteAlways]
-    [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
+    [DefaultExecutionOrder(LowLevelPhysicsExecutionOrder.PhysicsBody)]
     public class SFShapeBody2D : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
     {
         public PhysicsShapeDefinition ShapeDefinition;

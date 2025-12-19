@@ -1,7 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.Interactables
 {

@@ -1,6 +1,5 @@
 using SF.Characters;
 using UnityEngine;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.PhysicsLowLevel
 {
@@ -12,7 +11,6 @@ namespace SF.PhysicsLowLevel
     /// This can be used for Character Controllers, real time editable terrain (think Team 17 Worms games), and fast pace physics based 2D games that need high performance. 
     /// </remarks>
     [DisallowMultipleComponent]
-    [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneBody)]
     [Icon("Packages/com.unity.2d.physics.lowlevelextras/Editor/Icons/SceneBody.png")]
     public class ControllerBody2D : PhysicController2D
     {

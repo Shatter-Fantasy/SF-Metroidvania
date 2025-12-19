@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
-
+using Unity.U2D.Physics.Extras;
 namespace SF.PhysicsLowLevel
 {
     /// <summary>
@@ -17,10 +15,10 @@ namespace SF.PhysicsLowLevel
     /// Create a custom implicit casting to a <see cref="PhysicsShape.ShapeProxy"/> that calls one of the constructors for geometry.
     /// </remarks>
     [ExecuteAlways]
-    [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
+    [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
+    [DefaultExecutionOrder(LowLevelPhysicsExecutionOrder.PhysicsBody)] 
     public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
     {
-        
         public PhysicsShape _shape;
         /// <summary>
         /// The completed physics shape data struct for the <see cref="SFShapeComponent"/>.
@@ -161,7 +159,7 @@ namespace SF.PhysicsLowLevel
             CreateShape();
 
 #if UNITY_EDITOR
-            WorldSceneTransformMonitor.AddMonitor(this);
+            Unity.U2D.Physics.Extras.WorldSceneTransformMonitor.AddMonitor(this);
 #endif
             DebugPhysics();
         }
@@ -178,7 +176,7 @@ namespace SF.PhysicsLowLevel
             DestroyShape();
             
 #if UNITY_EDITOR
-            WorldSceneTransformMonitor.RemoveMonitor(this);
+            Unity.U2D.Physics.Extras.WorldSceneTransformMonitor.RemoveMonitor(this);
 #endif
         }
         
@@ -354,7 +352,7 @@ namespace SF.PhysicsLowLevel
         /// <summary>
         /// Draws a debug render to the game and scene view to allow for visual debugging.
         /// </summary>
-        void IWorldSceneDrawable.Draw()
+        void Unity.U2D.Physics.Extras.IWorldSceneDrawable.Draw()
         {
             if (Shape.world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedShapes))
             {
