@@ -73,7 +73,7 @@ namespace SF.CameraModule
         { 
             _instance = null;
 
-            CameraTarget= null;
+            CameraTarget = null;
             MainCamera = null;
             MainCameraBrain = null;
             ActiveRoomCamera = null;
@@ -82,7 +82,6 @@ namespace SF.CameraModule
             SpawnSystem.InitialPlayerSpawnHandler -= SetInitialCameraTarget;
         }
         
-
         /// <summary>
         /// Set's the <see cref="CameraTarget"/> of the CameraManager <see cref="Instance"/>.
         /// </summary>

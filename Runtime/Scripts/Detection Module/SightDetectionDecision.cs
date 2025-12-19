@@ -1,10 +1,11 @@
-using SF.PhysicsLowLevel;
-using SF.StateMachine.Core;
-
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.StateMachine.Decisions
 {
+    using PhysicsLowLevel;
+    using Core;
+    
     public enum SightShapeType
     {
         Box, Line, Arc
@@ -12,7 +13,8 @@ namespace SF.StateMachine.Decisions
     public class SightDetectionDecision : StateDecisionCore
     {
         [SerializeField] private float _sightDistance = 4;
-        [SerializeField] private ContactFilter2D _detectionFilter;
+        [SerializeField] private PhysicsQuery.CastRayInput _rayInput;
+        [SerializeField] private PhysicsQuery.QueryFilter _queryFilter;
         
         private ControllerBody2D _controllerBody2D;
         
@@ -26,20 +28,29 @@ namespace SF.StateMachine.Decisions
             }
         }
 
-        public override void CheckDecision(ref DecisionTransition decision, StateCore currentState)
+        public override void CheckDecision(ref DecisionTransition decision,StateCore currentState)
         {
-            /*
-            if(Physics2D.Raycast(transform.position, _rigidbodyController2D.Direction, _detectionFilter,_filteredHits,_sightDistance) > 0)
+            ref PhysicsShape   shape = ref _controllerBody2D.ShapeComponent._shape;
+            PhysicsWorld world = _controllerBody2D.ShapeComponent._shape.world;
+            if (!shape.isValid)
+                return;
+
+            // shape.transform = PhysicsTransform type not Transform type.
+            _rayInput.origin      = shape.transform.position;
+            _rayInput.translation = _controllerBody2D.Direction * _sightDistance;
+            
+            using var castResults = world.CastRay(_rayInput,_queryFilter);
+
+            if (castResults.Length > 0)
             {
-                decision.CanTransist = true;
+                decision.CanTransist  = true;
                 decision.StateGoingTo = _trueState;
             }
             else
             {
-                decision.CanTransist = true;
+                decision.CanTransist  = true;
                 decision.StateGoingTo = _falseState;
             }
-            */
         }
     }
 }

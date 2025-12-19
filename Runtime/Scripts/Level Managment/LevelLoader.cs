@@ -37,9 +37,13 @@ namespace SF.LevelModule
             SceneManager.sceneLoaded += OnLevelLoaded;
         }
 
+        private void Start()
+        {
+            RoomSystem.SetInitialRoom(_levelData.StartingRoomID);
+        }
+
         private void OnDestroy()
         {
-            // This has to be done in awake. OnEnable/Start is called after the first sceneLoaded call.
             SceneManager.sceneLoaded -= OnLevelLoaded;
         }
         
@@ -78,7 +82,6 @@ namespace SF.LevelModule
             if (_levelData != null)
             {
                 LevelPlayData.Instance = _levelData;
-                RoomSystem.SetInitialRoom(_levelData.StartingRoomID);
             }
 
             LevelReadyHandler?.Invoke();
