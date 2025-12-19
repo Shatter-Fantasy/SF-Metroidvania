@@ -24,9 +24,7 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [
-        "UNITY_LOW_LEVEL_EXTRAS_2D"
-    ],
+    "defineConstraints": [],
     "versionDefines": [
         {
             "name": "com.unity.2d.physics.lowlevelextras",
