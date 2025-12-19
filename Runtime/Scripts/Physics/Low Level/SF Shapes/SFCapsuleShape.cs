@@ -1,11 +1,9 @@
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.PhysicsLowLevel
 {
     [ExecuteAlways]
-    [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
     [AddComponentMenu("Physics 2D/LowLevel/SF Capsule Shape", 23)]
     [Icon("Packages/com.unity.2d.physics.lowlevelextras/Editor/Icons/SceneShape.png")]
     public class SFCapsuleShape : SFShapeComponent

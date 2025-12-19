@@ -117,7 +117,6 @@ namespace SF.RoomModule
                     
             if(body2D.CollisionInfo.CollisionActivated)
             {
-                
                 OnRoomEnteredHandler?.Invoke();
                 for (int i = 0; i < _roomEnteredExtensions.Count; i++)
                 {
