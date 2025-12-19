@@ -1,30 +1,29 @@
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.PhysicsLowLevel
 {
     [ExecuteAlways]
-    [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
     [AddComponentMenu("Physics 2D/LowLevel/SF Circle Shape", 23)]
-    [Icon("Packages/com.unity.2d.physics.lowlevelextras/Editor/Icons/SceneShape.png")]
+    [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
     public class SFCircleComponent : SFShapeComponent
     {
         /// <summary>
-        /// The radius of the circle.
+        /// The geometry properties that are used to create the <see cref="SFShapeComponent.Shape"/> for the SFCircleComponent.
         /// </summary>
-        public float Radius = .5f;
+        public CircleGeometry CircleGeometry = new CircleGeometry()
+        {
+            radius = 0.5f,
+        };
 
-        public Vector2 CenterPoint;
-
-        public static readonly float MinAllowedSize = 0.0000001f;
+        public static readonly float MinAllowedSize = 0.00001f;
         
         protected override void CreateBodyShapeGeometry()
         {
-            if (MinAllowedSize > Radius)
-                Radius = MinAllowedSize;
+            if (MinAllowedSize > CircleGeometry.radius)
+                CircleGeometry.radius = MinAllowedSize;
             
-            Shape = Body.CreateShape(CircleGeometry.Create(Radius,CenterPoint), ShapeDefinition);
+            Shape = Body.CreateShape(CircleGeometry, ShapeDefinition);
         }
 
         public override void SetShape<TGeometryType>(TGeometryType geometryType)
@@ -33,7 +32,7 @@ namespace SF.PhysicsLowLevel
                 return;
 
             if (geometryType is CircleGeometry circleGeometry)
-                Radius = circleGeometry.radius;
+                CircleGeometry = circleGeometry;
         }
     }
 }

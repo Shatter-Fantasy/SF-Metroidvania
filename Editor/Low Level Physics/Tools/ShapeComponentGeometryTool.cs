@@ -55,7 +55,7 @@ namespace SFEditor.PhysicsLowLevel
 
         public virtual bool IsValid => _shapeComponent != null && _shape.isValid && _shapeComponent.isActiveAndEnabled;
 
-        public virtual bool UpdateTool()
+        public bool UpdateTool()
         {
             _targetShapeChanged = false;
 
@@ -108,84 +108,6 @@ namespace SFEditor.PhysicsLowLevel
         public override void OnToolGUI(EditorWindow window)
         {
             throw new System.NotImplementedException();
-        }
-    }
-
-    public class CircleShapeGeometryTool : ShapeComponentGeometryTool
-    {
-        public CircleShapeGeometryTool(SFShapeComponent shapeComponent) : base(shapeComponent)
-        {
-            
-        }
-
-        public override void OnToolGUI(EditorWindow window)
-        {
-            // world space geometry.
-            var geometry = _shape.circleGeometry;
-            // localGeometry = the geometry in local space
-            var localGeometry = _shapeComponent.Shape.circleGeometry;
-            
-            // Set-up handles for allowing in scene editing of the shapes properties.
-            var snap            = EditorSnapSettings.move;
-            var handleDirection = PhysicsMath.GetTranslationIgnoredAxes(_transformPlane);
-            var handleRight     = _body.rotation.GetMatrix(_transformPlane).MultiplyVector(PhysicsMath.Swizzle(Vector3.right, _transformPlane)).normalized;
-            var handleUp     = _body.rotation.GetMatrix(_transformPlane).MultiplyVector(PhysicsMath.Swizzle(Vector3.up, _transformPlane)).normalized;
-            
-            // Set up any labels - use Handles.DrawingScope with the shape's transform to ToPosition3D for better label positioning.
-            // Update the shape if handles change it
-            var shapeOrigin = PhysicsMath.ToPosition3D
-                (
-                    _body.transform.TransformPoint(geometry.center),
-                    _shapeComponent.transform.position, 
-                    _transformPlane
-                );
-            var handleSize = HandleUtility.GetHandleSize(shapeOrigin) * 0.1f;;
-            
-            using (new Handles.DrawingScope(Matrix4x4.TRS(shapeOrigin,Quaternion.identity, Vector3.one)))
-            {
-                Handles.color = GrabHandleColor;
-
-                // Grab the radius
-                {
-                    EditorGUI.BeginChangeCheck();
-                    var radius    = handleRight * geometry.radius;
-                    var newRadius = Handles.Slider2D
-                        (
-                            radius,
-                            handleDirection, 
-                            handleRight, 
-                            handleUp, 
-                            handleSize, 
-                            Handles.SphereHandleCap,
-                            snap
-                        );
-                    
-                    Debug.Log($"Old Radius: {radius}, Updated Radius: {newRadius}");
-
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        Undo.RecordObject(_shapeComponent, "Change SF Circle Shape Radius.");
-                        geometry.radius = newRadius.magnitude;
-                        localGeometry = geometry.InverseTransform(Matrix4x4.identity, _shapeComponent.ScaleSize);
-                        _shapeComponent.SetShape(localGeometry);
-                        _targetShapeChanged = true;
-                    }
-                    
-                    // Draw the radius label.
-                    Handles.color = LabelColor;
-                    // Make it where the user can switch between local and world space for tool labels positioning.
-                    // var labelGeometry = are we in local space ? localGeometry : geometry
-                    var labelGeometry = localGeometry;
-                    Handles.Label((geometry.radius + handleSize) * handleRight, $"Radius = {labelGeometry.radius.ToString()}");
-                }
-            }
-            
-            // Update the actual physic shape on the component.
-            if(_targetShapeChanged)
-                _shapeComponent.UpdateShape();
-            
-            _world.SetElementDepth3D(shapeOrigin);
-            _world.DrawCircle(PhysicsMath.ToPosition2D(shapeOrigin,_transformPlane), geometry.radius, Color.green);
         }
     }
 }
