@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
@@ -5,15 +6,19 @@ namespace SF.PhysicsLowLevel
 {
     [ExecuteAlways]
     [AddComponentMenu("Physics 2D/LowLevel/SF Rectangle Shape", 22)]
-    [Icon("Packages/com.unity.2d.physics.lowlevelextras/Editor/Icons/SceneShape.png")]
+    [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
     public class SFRectangleShape : SFShapeComponent
     {
         [Header("Rectangle Properties")]
         public Vector2 Size = Vector2.one; 
+        public Vector2 Offset = Vector2.zero; 
         /// <summary>
         /// The radius of the <see cref="SFRectangleShape"/> box corner radius.
         /// </summary>
         public float CornerRadius;
+
+        [NonSerialized] public PolygonGeometry PolygonGeometry;
+        
         /// <summary>
         /// When creating the physics shape should the corner radius be inscribed during the
         /// <see cref="PolygonGeometry.CreateBox"/> method call.
@@ -38,7 +43,23 @@ namespace SF.PhysicsLowLevel
                 Debug.LogWarning($"In the {nameof(SFRectangleShape)} component on gameobject: {gameObject.name}, the value for the Size.y was below the allowed min value of: {MinAllowedSize.y}", this);
 #endif
             }
-            Shape = Body.CreateShape(PolygonGeometry.CreateBox(Size,CornerRadius,InscribeRadius), ShapeDefinition);
+            
+            PolygonGeometry          =  PolygonGeometry.CreateBox(Size, CornerRadius, InscribeRadius);
+            PhysicsTransform transform = PhysicsTransform.identity;
+            transform.position += Offset;
+            var geometry = PolygonGeometry.Transform(transform);
+            Shape                    =  Body.CreateShape(geometry, ShapeDefinition);
+        }
+        
+        public override void SetShape<TGeometryType>(TGeometryType geometryType)
+        {  
+            if (!_shape.isValid)
+                return;
+
+            if (geometryType is PolygonGeometry polygonGeometry)
+            {
+                PolygonGeometry          = polygonGeometry;
+            }
         }
     }
 }

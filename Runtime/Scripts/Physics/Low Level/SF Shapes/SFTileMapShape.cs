@@ -11,7 +11,7 @@ namespace SF.PhysicsLowLevel
     [RequireComponent(typeof(Tilemap))]
     public class SFTileMapShape : SFShapeComponent
     {
-        [SerializeField] private Tilemap _tilemap;
+        [SerializeField, HideInInspector] private Tilemap _tilemap;
         private List<TileData> _tilesInBlock = new ();
 
         private readonly List<Vector2> _physicsShapeVertex = new();
@@ -21,27 +21,24 @@ namespace SF.PhysicsLowLevel
             _useDelaunay     = true;
             IsCompositeShape = true;
         }
-        
-        private void Awake()
-        {
-            if (_tilemap == null)
-                return;
-            
-            _tilemap.GetUsedTileData(out _tilesInBlock);
-        }
-
-        protected override void PreEnabled()
-        {
-            if (_tilemap == null)
-                _tilemap = GetComponent<Tilemap>();
-        }
 
         protected override void OnValidate()
         {
+            if (!isActiveAndEnabled)
+                return;
+            
             if (_tilemap == null)
                 _tilemap = GetComponent<Tilemap>();
-            
+
+            BodyDefinition.type = PhysicsBody.BodyType.Static;
             base.OnValidate();
+        }
+
+        protected override void CreateBody()
+        {
+            BodyDefinition.type = PhysicsBody.BodyType.Static;
+            BodyDefinition.constraints = PhysicsBody.BodyConstraints.All;
+            base.CreateBody();
         }
 
         protected override void DebugPhysicsExtra()
@@ -59,21 +56,18 @@ namespace SF.PhysicsLowLevel
         {
             var composer = PhysicsComposer.Create();
             composer.useDelaunay = _useDelaunay;
-            using var vertexPath = new NativeList<Vector2>(Allocator.Temp);
+            
+            using var   vertexPath        = new NativeList<Vector2>(Allocator.Temp);
+            
             Profiler.BeginSample("Getting Tile Data");
-            
-            
 #if UNITY_6000_4_OR_NEWER
-            // Not yet implemented the updated method yet.
-            _tilemap.GetUsedTileData(out _tilesInBlock);
+            Tilemap.PositionArray tilePosition = new Tilemap.PositionArray();
+            _tilemap.GetUsedTileData(out _tilesInBlock, out tilePosition);
 #else
             _tilemap.GetUsedTileData(out _tilesInBlock);
+            using var positions = _tilemap.GetTileCellPositions();
 #endif
             Profiler.EndSample();
-            
-            
-            using var positions = _tilemap.GetTileCellPositions();
-            
             for (int i = 0; i < _tilesInBlock.Count; i++)
             {
                 if(_tilesInBlock[i].sprite == null)
@@ -93,7 +87,12 @@ namespace SF.PhysicsLowLevel
                         // Add to something we can use.
                         for (int v = 0; v <  _physicsShapeVertex.Count; v++)
                         {
-                            vertexPath.Add(_physicsShapeVertex[v] + positions[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
+#if UNITY_6000_4_OR_NEWER
+                        vertexPath.Add(_physicsShapeVertex[v] + tilePosition[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
+#else
+                        vertexPath.Add(_physicsShapeVertex[v] + positions[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
+#endif
+                            
                         }
                        
                         // Add the layer to the composer.
