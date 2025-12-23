@@ -13,6 +13,7 @@ namespace SF.RoomModule
 {
     public class RoomController : MonoBehaviour, PhysicsCallbacks.ITriggerCallback
     {
+        
         /* TODO List:
             Room Auto Align: Make a method that allows taking in two transforms.
             each transform is the floor of two connected rooms. 
@@ -54,6 +55,7 @@ namespace SF.RoomModule
             if (TryGetComponent(out _physicsShapeComponent))
             {
                 _physicsShapeComponent.CallbackTarget = this;
+                _physicsShapeComponent.BodyDefinition.type      = PhysicsBody.BodyType.Static;
             }
              
             // This is the ignore ray cast physics layer.
@@ -68,6 +70,13 @@ namespace SF.RoomModule
 
         private void Start()
         {
+            if (RoomSystem.RoomDB == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning($"There is no database set in the {nameof(RoomSystem)}");
+                return;
+#endif
+            }
             if (RoomSystem.RoomDB[RoomID] == null)
             {
                 Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
@@ -109,22 +118,30 @@ namespace SF.RoomModule
         
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
+     
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
                 return;
-            
-            if (beginEvent.visitorShape.callbackTarget is not PlayerController body2D)
-                return;
-                    
-            if(body2D.CollisionInfo.CollisionActivated)
+
+            var visitorTarget = beginEvent.visitorShape.callbackTarget;
+            if (visitorTarget is not PlayerController body2D)
             {
-                OnRoomEnteredHandler?.Invoke();
-                for (int i = 0; i < _roomEnteredExtensions.Count; i++)
-                {
-                    _roomEnteredExtensions[i].Process();
-                }
-                
-                MakeCurrentRoom();
+                if (visitorTarget is not GameObject visitor)
+                    return;
+
+                if(!visitor.TryGetComponent(out body2D))
+                    return;
             }
+
+            if (!body2D.CollisionInfo.CollisionActivated)
+                return;
+            
+            OnRoomEnteredHandler?.Invoke();
+            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
+            {
+                _roomEnteredExtensions[i].Process();
+            }
+            
+            MakeCurrentRoom();
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
