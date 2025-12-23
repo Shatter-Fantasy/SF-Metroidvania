@@ -16,7 +16,7 @@ namespace SF.PhysicsLowLevel
     /// </remarks>
     [ExecuteAlways]
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
-    [DefaultExecutionOrder(LowLevelPhysicsExecutionOrder.PhysicsBody)] 
+    
     public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
     {
         public PhysicsShape _shape;
@@ -184,14 +184,8 @@ namespace SF.PhysicsLowLevel
         {
             if (!isActiveAndEnabled)
                 return;
-
             CreateShape();
             DebugPhysics();
-        }
-
-        protected virtual void Reset()
-        {
-            CreateShape();
         }
         
         /// <summary>
@@ -204,10 +198,16 @@ namespace SF.PhysicsLowLevel
         {
             // Clean up any already created Shape data.
             DestroyShape();
-            
-            if(IsCompositeShape && !ShapesInComposite.IsCreated)
+
+            if (IsCompositeShape)
+            {
+                if (ShapesInComposite.IsCreated)
+                {
+                    ShapesInComposite.Dispose();
+                }
                 ShapesInComposite = new NativeList<PhysicsShape>(Allocator.Persistent);
-            
+            }
+
             // Create the physics body from the physics body definition that the Shape will use.
             CreateBody();
             
@@ -247,7 +247,6 @@ namespace SF.PhysicsLowLevel
             {
                 PhysicsWorld = PhysicsWorld.defaultWorld;
             }
-            
             // Sync the shape position with the component's transform position.
             BodyDefinition.position = PhysicsMath.ToPosition2D(transform.position, PhysicsWorld.transformPlane);
             BodyDefinition.rotation = new PhysicsRotate(PhysicsMath.ToRotation2D(transform.rotation, PhysicsWorld.transformPlane));
@@ -374,10 +373,14 @@ namespace SF.PhysicsLowLevel
         }
 
         /// <summary>
-        /// Updates the Physics shape when transform changes in the game scene. 
+        /// Updates the Physics shape when transform changes in the game scene.
+        /// <remarks>
+        /// This only runs if EditorApplication.isPlaying returns false.
+        /// </remarks>
         /// </summary>
         void IWorldSceneTransformChanged.TransformChanged()
         {
+            
             if (Body.isValid)
                 CreateShape();
         }

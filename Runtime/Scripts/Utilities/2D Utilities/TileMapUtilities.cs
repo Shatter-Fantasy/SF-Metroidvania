@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Unity.Collections;
-using Unity.Jobs;
+//using Unity.Tilemaps.Experimental;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
 namespace SF.Utilities
 {
     public static class TileMapUtilities
@@ -47,8 +46,29 @@ namespace SF.Utilities
 
             return tilePositions;
         }
+        
+#if UNITY_6000_4_OR_NEWER
+        public static int GetUsedTileData(this Tilemap tilemap, out List<TileData> usedTileData, out Tilemap.PositionArray positionArray)
+        {
+            usedTileData  = new();
+            positionArray = new Tilemap.PositionArray();
+            
+            // This can not be called during awake, CheckConsistency, or OnValidate.
+            //tilemap.CompressBounds();
+            BoundsInt bounds             = tilemap.cellBounds;
+            int count = tilemap.GetTiles(bounds,out positionArray, out var tilesArray, withinBounds: true);
 
-        public static void GetUsedTileData(this Tilemap tilemap, out List<TileData> usedTileData)
+            for (int i = 0; i < tilesArray.Length; i++)
+            {
+                var tileData = new TileData();
+                tilesArray[i].GetTileData(positionArray[i],tilemap, ref tileData);
+                usedTileData.Add(tileData);
+            }
+
+            return count;
+        }
+#endif
+public static void GetUsedTileData(this Tilemap tilemap, out List<TileData> usedTileData)
         {
             usedTileData = new();
 
@@ -69,19 +89,6 @@ namespace SF.Utilities
                     usedTileData.Add(tileData);
                 }
             }
-        }
-    }
-
-    public struct TilePositionPositionEnumeratorJob : IJob
-    {
-        public NativeList<Vector3Int> TilePositions;
-        
-        [ReadOnly]
-        public BoundsInt.PositionEnumerator PositionEnumerator;
-        
-        public void Execute()
-        {
-            
         }
     }
 }
