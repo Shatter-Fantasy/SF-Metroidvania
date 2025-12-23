@@ -1,13 +1,9 @@
 using System;
-
-using TMPro;
-
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-namespace SF.UI
+namespace SF.UIModule
 {
     [Serializable]
     public class FillBarEvent : UnityEvent<float> { }
@@ -18,13 +14,11 @@ namespace SF.UI
         UpToDown,
         DownToUp
     }
-
-    [AddComponentMenu("UI/SF/Fill Bar UGUI")]
-    [RequireComponent(typeof(RectTransform))]
-    public class FillBarUGUI : UIBehaviour, ICanvasElement
+    
+    public partial class FillBarUGUI : VisualElement
     {
         [SerializeField] protected Image _fillImage;
-        [SerializeField] protected TMP_Text _valueText;
+        [SerializeField] protected Label _valueLabel;
         [SerializeField] protected FillBarDirection _fillDirection;
 
         public bool WholeNumbers = false;
@@ -54,25 +48,10 @@ namespace SF.UI
                 _value = input;
             }
 
-            if(_fillImage != null)
-                _fillImage.fillAmount = _value;
-        }
-
-        #region Not needed for our elements, but interface requires it.
-        public virtual void GraphicUpdateComplete()
-        {}
-
-        public void LayoutComplete()
-        {}
-        #endregion
-
-        public void Rebuild(CanvasUpdate executing)
-        {
-#if UNITY_EDITOR
-            if(executing == CanvasUpdate.Prelayout)
-                _onValueChanged?.Invoke(Value);
-#endif
+            if (_fillImage != null)
+            {
+                //_fillImage.fillAmount = _value;
+            }
         }
     }
-
 }
