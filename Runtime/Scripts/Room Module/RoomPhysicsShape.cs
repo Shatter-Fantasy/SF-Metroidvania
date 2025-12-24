@@ -1,4 +1,5 @@
 using SF.PhysicsLowLevel;
+using Unity.Burst;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -19,6 +20,16 @@ namespace SF.RoomModule
         public Vector3 PreviousCameraPosition;
         
         [SerializeField] private bool _isConfined;
+        
+        /// <summary>Damping applied automatically around corners to avoid jumps.</summary>
+        [Tooltip("Damping applied around corners to avoid jumps.  Higher numbers are more gradual.")]
+        [Range(0, 5)]
+        [SerializeField] private float _damping;
+        
+        /// <summary>Size of the slow-down zone at the edge of the bounding shape.</summary>
+        [Tooltip("Size of the slow-down zone at the edge of the bounding shape.")]
+        [SerializeField] private float _slowingDistance = 0.5f;
+        
         // Shortest way is to use clipper just like the original CinemachineConfiner2D,
         // but honestly think it would be better to use the low level physics math.
         // See the Unity class called ConfinerOven. This is what bakes the Confiner for CinemachineConfiner2D.
@@ -47,69 +58,92 @@ namespace SF.RoomModule
             if (!Shape.isValid)
                 return;
             
-            _isConfined = IsConfined(state.Lens,vcam.transform.position);
+            _isConfined = IsConfined(Shape,state.Lens,vcam.transform.position);
 
+            var camPos  = state.GetCorrectedPosition();
+            var prevPos = PreviousCameraPosition;
+            
+            GetDistanceToEdge(Shape,state.Lens,vcam.transform.position);
+            
+            if (_slowingDistance > Epsilon && deltaTime >= 0 && vcam.PreviousStateIsValid)
+            {
+                // Only reduce the speed when moving toward the edge and close to it.
+                
+            }
             /* Step One: Check which direction the camera is going over.
              * Step Two: Limit the camera delta along the axis that is not outside the contained shape 
              */
             
-            if (!_isConfined)
-            {
-                state.PositionCorrection = PreviousCameraPosition - state.GetCorrectedPosition();
-            }
 
             PreviousCameraPosition = state.GetCorrectedPosition();
-
-
-            // Step 1: Get current camera state and properties
-            // 1. aspect ratio
-            // 2. correct camera position => state.GetCorrectedPosition()
-
-            /* Step 2 Make sure the current frustum size has a possible solution for the calculation.
-             *  Note: deltaWorldToBaked.lossyScale is always uniform.
-             *  We might be able to use some of the new low level PhysicsMath utilities to make this easier or a PhysicsShape.isvalid.
-             *
-             * 1. Get frustum height from the baked confine space and amke sure it is a valid shape.
-             * 2. Convert frustum height from world to baked space - makes it easier to do calculations if we are inside of it.
-             */
-
-            /* Step 3: get corrected GetCorrectedOrientation and do the calculation for confining the position */
-
-            /* Step 4: Do the slowing distance check for when we are moving closer to the edge.
-             * Check previous position and get the magnitude of the direction by (new position - previous pos).magnitude */
-
-            /* Step 5: Cached the previous displacement for next frame. This is used for damping in multiple camera stages.
-             * Not doing this can mess with other cinemachine extensions that calculate after the Body Stage. */
-
-            /* Step 6: Set the corrected position and the previous camera position.*/
         }
 
-        private bool IsConfined(in LensSettings settings, in Vector3 cameraOriginPos)
+        private static float GetDistanceToEdge(in PhysicsShape shape, in LensSettings settings, in Vector3 cameraOriginPos)
         {
+            if (!shape.isValid)
+                return 0;
+            
+            /* Camera.orthographicSize => Camera's half-size when in orthographic mode.
+             * The orthographicSize property defines the viewing volume of an orthographic Camera.
+             * To edit orthographicSize, you must set the Camera projection to orthographic.
+             * The height of the viewing volume is (orthographicSize * 2).
+             * Unity calculates the width of the viewing volume using orthographicSize and the camera's aspect.
+             */
+            
+            float frustumHalfHeight = CalculateFrustumHalfHeight(settings, cameraOriginPos.z);
+            float frustumHalfWidth  = frustumHalfHeight * settings.Aspect;
+
+            Vector2       frustum       = new Vector2(frustumHalfWidth * 2, frustumHalfHeight * 2);
+            // Create a shape using the camera frustum for the geometry outline and physical transform.
+            PolygonGeometry  frustumGeometry  = PolygonGeometry.CreateBox(frustum);
+            PhysicsTransform frustumTransform = new PhysicsTransform(cameraOriginPos);
+            PhysicsQuery.DistanceInput distanceInput = new PhysicsQuery.DistanceInput()
+            {
+                shapeProxyA = shape.CreateShapeProxy(),
+                shapeProxyB = new PhysicsShape.ShapeProxy(frustumGeometry),
+                transformA  = shape.transform, 
+                transformB  = frustumTransform,
+                useRadii    = false
+            };
+            
+            var distanceResult = PhysicsQuery.ShapeDistance(distanceInput);
+            float distance       = distanceResult.distance;
+            
+            // Camera frustum is confined in the confiner shape.
+            if (distance == 0)
+            {
+             
+            }
+            shape.world.DrawPoint(distanceResult.pointA,5f,Color.red);
+            shape.world.DrawPoint(distanceResult.pointB,5f,Color.red);
+            return distanceResult.distance;
+        }
+
+        [BurstCompile]
+        private static bool IsConfined(in PhysicsShape shape, in LensSettings settings, in Vector3 cameraOriginPos)
+        {
+            if (!shape.isValid)
+                return false;
+            
             /* Camera.orthographicSize => Camera's half-size when in orthographic mode.
              * The orthographicSize property defines the viewing volume of an orthographic Camera.
              * To edit orthographicSize, you must set the Camera projection to orthographic.
              * The height of the viewing volume is (orthographicSize * 2). 
              * Unity calculates the width of the viewing volume using orthographicSize and the camera's aspect.
              */
+            
             float frustumHalfHeight = CalculateFrustumHalfHeight(settings, cameraOriginPos.z);
             float frustumHalfWidth = frustumHalfHeight * settings.Aspect;
+
+            Vector2 frustum = new Vector2(frustumHalfWidth * 2, frustumHalfHeight * 2);
+
+            // Create a shape using the camera frustum for the geometry outline and physical transform.
+            PolygonGeometry  frustumGeometry  = PolygonGeometry.CreateBox(frustum);
+            PhysicsTransform frustumTransform = new PhysicsTransform(cameraOriginPos); 
             
-            // Starting with top right corner
-            Vector2 topRightPos = new Vector2(cameraOriginPos.x + frustumHalfWidth, cameraOriginPos.y + frustumHalfHeight);
-            Vector2 topLeftPos = new Vector2(cameraOriginPos.x - frustumHalfWidth, cameraOriginPos.y + frustumHalfHeight);
-            Vector2 bottomRightPos = new Vector2(cameraOriginPos.x + frustumHalfWidth, cameraOriginPos.y - frustumHalfHeight);
-            Vector2 bottomLeftPos = new Vector2(cameraOriginPos.x - frustumHalfWidth, cameraOriginPos.y - frustumHalfHeight);
-
-
-            Debug.DrawLine(topRightPos, bottomRightPos);
-
-            return Shape.OverlapPoint(topRightPos) 
-                && Shape.OverlapPoint(topLeftPos) 
-                && Shape.OverlapPoint(bottomRightPos) 
-                && Shape.OverlapPoint(bottomLeftPos);
+            return shape.aabb.Contains(frustumGeometry.CalculateAABB(frustumTransform));
         }
-
+        
         /// <summary>
         /// Calculates half frustum height for orthographic or perspective camera.
         /// </summary>
@@ -119,6 +153,7 @@ namespace SF.RoomModule
         /// <remarks>
         /// This method assumes the passed in Z has already been transformed from the 
         /// </remarks>
+        [BurstCompile]
         public static float CalculateFrustumHalfHeight(in LensSettings lens, in float cameraPosLocalZ)
         {
             float frustumHeight;
