@@ -24,7 +24,7 @@ namespace SF.PhysicsLowLevel
 
         protected override void OnValidate()
         {
-            if (!isActiveAndEnabled)
+            if (!isActiveAndEnabled || !Application.isPlaying)
                 return;
             
             if (_tilemap == null)
@@ -32,6 +32,39 @@ namespace SF.PhysicsLowLevel
 
             BodyDefinition.type = PhysicsBody.BodyType.Static;
             base.OnValidate();
+        }
+
+        protected override void PreEnabled()
+        {
+            Tilemap.tilemapTileChanged += TilemapTilesChanged;
+        }
+
+        protected override void PreDisable()
+        {
+            Tilemap.tilemapTileChanged -= TilemapTilesChanged;
+        }
+
+        /// <summary>
+        /// Updates physics shape when tiles on the linked tilemap has been updated.
+        /// </summary>
+        /// <param name="tilemap"></param>
+        /// <param name="syncTiles"></param>
+        private void TilemapTilesChanged(Tilemap tilemap, Tilemap.SyncTile[] syncTiles)
+        {
+            if(_tilemap != null && _tilemap == tilemap)
+                CreateShape();
+        }
+
+        protected override void CreateShape()
+        {
+            if (_tilemap == null)
+            {
+                DestroyBody();
+                DestroyShape();
+                return;
+            }
+
+            base.CreateShape();
         }
 
         protected override void CreateBody()

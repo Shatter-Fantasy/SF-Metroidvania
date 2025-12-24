@@ -90,8 +90,8 @@ namespace SF.PhysicsLowLevel
                 {
 #if UNITY_EDITOR
                     Debug.LogWarning($"When trying to set the shape geometry of the {GetType().Name} on the game object : {gameObject.name}, an unsupported geometry type was passed in ", gameObject);
-                    break;
 #endif
+                    break;
                 }
             }
         }
@@ -170,8 +170,14 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         protected virtual void PreEnabled() { }
         
+        /// <summary>
+        /// Used to clean up any resources before changing cleaning up the <see cref="Shape"/> and <see cref="Body"/>.
+        /// </summary>
+        protected virtual void PreDisable() { }
+        
         protected void OnDisable()
         {
+            PreDisable();
             DestroyBody();
             DestroyShape();
             
@@ -179,7 +185,9 @@ namespace SF.PhysicsLowLevel
             Unity.U2D.Physics.Extras.WorldSceneTransformMonitor.RemoveMonitor(this);
 #endif
         }
-        
+
+
+
         protected virtual void OnValidate()
         {
             if (!isActiveAndEnabled)
