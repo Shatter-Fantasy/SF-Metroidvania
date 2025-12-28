@@ -35,8 +35,10 @@ namespace SF.PhysicsLowLevel
 
         protected override void PreEnabled()
         {
-            if(_tilemap != null)
+            if(TryGetComponent(out _tilemap))
+            {
                 _tilemap.CompressBounds();
+            }
             
             Tilemap.tilemapTileChanged += TilemapTilesChanged;
         }
@@ -105,12 +107,18 @@ namespace SF.PhysicsLowLevel
             Profiler.EndSample();
             
             Profiler.BeginSample("SFTileMapShape Geometry",this);
+            if (_tilesInBlock.Count == 0)
+                return;
+            
+            Sprite tileSprite; 
             for (int i = 0; i < _tilesInBlock.Count; i++)
             {
                 if(_tilesInBlock[i].sprite == null)
                     continue;
+
+                tileSprite = _tilesInBlock[i].sprite;
                 
-                var physicsShapeCount = _tilesInBlock[i].sprite.GetPhysicsShapeCount();
+                var physicsShapeCount = tileSprite.GetPhysicsShapeCount();
                 if (physicsShapeCount == 0)
                     return;
                 
@@ -118,20 +126,22 @@ namespace SF.PhysicsLowLevel
                 for (var j = 0; j < physicsShapeCount; ++j)
                 {
                     // Get the physics shape.
-                    if (_tilesInBlock[i].sprite.GetPhysicsShape(j, _physicsShapeVertex) > 0)
+                    if (tileSprite.GetPhysicsShape(j, _physicsShapeVertex) > 0)
                     {
-                       
                         // Add to something we can use.
                         for (int v = 0; v <  _physicsShapeVertex.Count; v++)
                         {
+                            // The (Vector2)_tilesInBlock[i].transform.MultiplyPoint3x4 below matches the tiles rotation or scale value of the placed tile data.
 #if UNITY_6000_4_OR_NEWER
-                        vertexPath.Add(_physicsShapeVertex[v] + tilePosition[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
+                        vertexPath.Add((Vector2)_tilesInBlock[i].transform.MultiplyPoint3x4(_physicsShapeVertex[v]) + tilePosition[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
 #else
-                        vertexPath.Add(_physicsShapeVertex[v] + positions[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
+                        vertexPath.Add((Vector2)_tilesInBlock[i].transform.MultiplyPoint3x4(_physicsShapeVertex[v])+ positions[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
 #endif
-                            
                         }
-                       
+                        
+                        PhysicsTransform tileTransform = PhysicsTransform.identity;
+                        
+                        Debug.Log(_tilesInBlock[i].transform);
                         // Add the layer to the composer.
                         // I use PhysicsTransform.identity to get the relative position of tiles away from the grid origin.
                         composer.AddLayer(vertexPath.AsArray(), PhysicsTransform.identity);
@@ -145,9 +155,6 @@ namespace SF.PhysicsLowLevel
             
             composer.Destroy();
             
-            // Calculate the relative transform from the scene body to this scene shape.
-            var relativeTransform = PhysicsMath.GetRelativeMatrix(transform, transform, Body.world.transformPlane, useScale: false);
-
             if (polygons.Length == 0)
                 return;
             
