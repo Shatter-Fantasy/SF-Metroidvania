@@ -24,18 +24,20 @@ namespace SF.PhysicsLowLevel
 
         protected override void OnValidate()
         {
-            if (!isActiveAndEnabled || !Application.isPlaying)
+            if (!isActiveAndEnabled || Application.isPlaying)
                 return;
             
             if (_tilemap == null)
                 _tilemap = GetComponent<Tilemap>();
 
             BodyDefinition.type = PhysicsBody.BodyType.Static;
-            base.OnValidate();
         }
 
         protected override void PreEnabled()
         {
+            if(_tilemap != null)
+                _tilemap.CompressBounds();
+            
             Tilemap.tilemapTileChanged += TilemapTilesChanged;
         }
 
@@ -101,6 +103,8 @@ namespace SF.PhysicsLowLevel
             using var positions = _tilemap.GetTileCellPositions();
 #endif
             Profiler.EndSample();
+            
+            Profiler.BeginSample("SFTileMapShape Geometry",this);
             for (int i = 0; i < _tilesInBlock.Count; i++)
             {
                 if(_tilesInBlock[i].sprite == null)
@@ -143,8 +147,22 @@ namespace SF.PhysicsLowLevel
             
             // Calculate the relative transform from the scene body to this scene shape.
             var relativeTransform = PhysicsMath.GetRelativeMatrix(transform, transform, Body.world.transformPlane, useScale: false);
+
+            if (polygons.Length == 0)
+                return;
+            
+            using var shapes = Body.CreateShapeBatch(polygons, ShapeDefinition);
+            
+            if (ShapesInComposite.IsCreated)
+            {
+                ShapesInComposite.AddRange(shapes);
+                // For now we just set the default shape of the SFShapeComponent to be the first shape added to the ShapesInComposite list.
+                // This is a bad solution and needs more updates for composite shapes.
+                _shape = ShapesInComposite[0];
+            }
             
             // Iterate the polygons.
+            /*
             foreach (var geometry in polygons)
             {
                 if (!geometry.isValid)
@@ -163,13 +181,8 @@ namespace SF.PhysicsLowLevel
                 if(ShapesInComposite.IsCreated)
                     ShapesInComposite.Add(shape);
             }
-
-            if (ShapesInComposite is { IsCreated: true, Length: > 0 })
-            {
-                // For now we just set the default shape of the SFShapeComponent to be the first shape added to the ShapesInComposite list.
-                // This is a bad solution and needs more updates for composite shapes.
-                _shape = ShapesInComposite[0];
-            }
+            */
+            Profiler.EndSample();
         }
     }
 }
