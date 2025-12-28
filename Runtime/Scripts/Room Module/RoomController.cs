@@ -54,7 +54,6 @@ namespace SF.RoomModule
         {
             if (TryGetComponent(out _physicsShapeComponent))
             {
-                _physicsShapeComponent.CallbackTarget = this;
                 _physicsShapeComponent.BodyDefinition.type      = PhysicsBody.BodyType.Static;
             }
              
@@ -70,6 +69,9 @@ namespace SF.RoomModule
 
         private void Start()
         {
+            if(_physicsShapeComponent != null)
+                _physicsShapeComponent.SetCallbackTarget(this,true);
+            
             if (RoomSystem.RoomDB == null)
             {
 #if UNITY_EDITOR
@@ -113,12 +115,9 @@ namespace SF.RoomModule
 
             RoomSystem.SetCurrentRoom(RoomID);
         }
-
-       
         
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
-     
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
                 return;
 

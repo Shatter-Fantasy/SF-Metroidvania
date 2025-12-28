@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
@@ -16,8 +17,10 @@ namespace SF.PhysicsLowLevel
     /// </remarks>
     [ExecuteAlways]
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
-    
-    public abstract class SFShapeComponent : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
+    public abstract class SFShapeComponent : MonoBehaviour, 
+        IWorldSceneDrawable, 
+        IWorldSceneTransformChanged,
+        PhysicsCallbacks.ITriggerCallback
     {
         public PhysicsShape _shape;
         /// <summary>
@@ -151,10 +154,19 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         protected bool _useDelaunay;
         
+        /// <summary>
+        /// The callback target has to implement the interfaces for the type of Physics Event you want to have sent to it.
+        /// Because of this you can not set a GameObject for example as the callback target currently as of 6.3
+        /// </summary>
         public object CallbackTarget;
-        
+
+        public Action ShapeCreatedHandler;
+        public Action ShapeDestroyedHandler;
         protected void OnEnable()
         {
+            if (!Application.isPlaying)
+                return;
+            
             PreEnabled();
             CreateShape();
 
@@ -186,12 +198,11 @@ namespace SF.PhysicsLowLevel
 #endif
         }
 
-
-
         protected virtual void OnValidate()
         {
             if (!isActiveAndEnabled)
                 return;
+            
             CreateShape();
             DebugPhysics();
         }
@@ -230,10 +241,11 @@ namespace SF.PhysicsLowLevel
             // Make sure the shape is valid.
             if (!Shape.isValid)
                 return;
-
+            
             // If there was no custom callback target set use this component's gameobject as the callback target.
-            _shape.callbackTarget = CallbackTarget ?? gameObject;
-            Body.callbackTarget  = CallbackTarget ?? gameObject;
+            // Avoid setting callback target to a GameObject. There are issues in some versions preventing callbacks from happening.
+            SetCallbackTarget(this);
+            ShapeCreatedHandler?.Invoke();
         }
 
         /// <summary>
@@ -266,8 +278,7 @@ namespace SF.PhysicsLowLevel
                 // Set the transform object.
                 Body.transformObject = transform;
 
-                // Set the callback target.
-                Body.callbackTarget = CallbackTarget;
+                Body.callbackTarget = gameObject;
             }
         }
         protected virtual void DestroyShape()
@@ -291,6 +302,7 @@ namespace SF.PhysicsLowLevel
             
             Shape.Destroy();
             Shape     = default;
+            ShapeDestroyedHandler?.Invoke();
         }
 
         protected virtual void DestroyBody()
@@ -302,6 +314,34 @@ namespace SF.PhysicsLowLevel
                 Body         = default;
             }
         }
+
+        public void SetCallbackTarget(object target, bool overrideSetTarget = false)
+        {
+            // Prevent an already set target from being overridden if we don't tell it be.
+            if (!overrideSetTarget && CallbackTarget != null)
+                return;
+                
+            if (target is GameObject)
+            {
+                Debug.LogWarning($"Warning the target being set for physic callbacks of the Shape in a {GetType()} was type GameObject. GameObject types do not implement any interfaces for PhysicEvent callbacks, so setting it as the callback target does nothing.");
+            }
+            CallbackTarget = target;
+            if (Body.isValid)
+                Body.callbackTarget = target;
+            if (_shape.isValid)
+                _shape.callbackTarget = target;
+        }
+        
+        public void ClearCallbackTarget()
+        {
+            CallbackTarget = null;
+            if (Body.isValid)
+                Body.callbackTarget = null;
+            if (_shape.isValid)
+                _shape.callbackTarget = null;
+        }
+        
+        
         
         /// <summary>
         /// If debugging is enabled in editor, a set of logs will be sent to console just in case something was not set right.
@@ -391,6 +431,16 @@ namespace SF.PhysicsLowLevel
             
             if (Body.isValid)
                 CreateShape();
+        }
+
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
+        {
+            
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
+        {
+           
         }
     }
 }

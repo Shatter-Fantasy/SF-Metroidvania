@@ -102,7 +102,6 @@ namespace SF.PhysicsLowLevel
             
             CurrentPhysics = DefaultPhysics;
             ReferenceSpeed = CurrentPhysics.GroundSpeed;
-
             OnStart();
         }
         protected virtual void OnStart()

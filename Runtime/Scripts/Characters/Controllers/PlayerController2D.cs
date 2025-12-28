@@ -1,5 +1,6 @@
 using SF.Managers;
 using SF.PhysicsLowLevel;
+using UnityEngine;
 
 namespace SF.Characters.Controllers
 {
@@ -30,7 +31,14 @@ namespace SF.Characters.Controllers
                     CollisionInfo.CollisionActivated = true;
             }
         }
-        
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            if(ShapeComponent != null)
+                    ShapeComponent.SetCallbackTarget(this, true);
+        }
+
         protected override void CalculateMovementState()
         {
             // For when in menu, in a conversation, and so forth.
