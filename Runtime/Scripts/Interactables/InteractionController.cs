@@ -1,17 +1,15 @@
+using SF.PhysicsLowLevel;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.Interactables
 {
     public class InteractionController : MonoBehaviour
     {
-        [SerializeField] protected ContactFilter2D _interactableFilter;
-        protected BoxCollider2D _boxCollider2D;
-
-        [SerializeField] protected Collider2D[] _hitColliders = new Collider2D[5];
-        
-        private void Awake()
-        {
-            _boxCollider2D = GetComponent<BoxCollider2D>();
-        }
+        [SerializeField] protected PhysicsQuery.QueryFilter _interactableFilter;
+        [SerializeField] protected SFShapeComponent _hitShape;
+        [SerializeField] protected PhysicsQuery.CastShapeInput _castInput;
+        protected NativeArray<PhysicsShape> _hitShapes;
     }
 }

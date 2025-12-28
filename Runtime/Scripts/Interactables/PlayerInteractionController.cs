@@ -1,63 +1,93 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 using SF.Characters.Controllers;
 using SF.InputModule;
+using Unity.Collections;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.Interactables
 {
-    public class PlayerInteractionController : InteractionController
+    public class PlayerInteractionController : InteractionController, PhysicsCallbacks.ITriggerCallback
     {
+        private PlayerController _controller;
+        
+        private void Awake()
+        {
+            TryGetComponent(out _controller);
+            
+            if (!TryGetComponent(out _hitShape))
+                return;
+            
+            _hitShape.ShapeCreatedHandler   += OnShapeCreated;
+            _hitShape.ShapeDestroyedHandler += OnShapeDestroyed;
+        }
+
+        private void OnDestroy()
+        {
+            if (_hitShape == null)
+                return;
+            
+            _hitShape.ShapeCreatedHandler   -= OnShapeCreated;
+            _hitShape.ShapeDestroyedHandler -= OnShapeDestroyed;
+        }
+        
+        private void OnShapeCreated()
+        {
+            Debug.Log("Creating Shape");
+           // if (_hitShape != null)
+                //_hitShape.SetCallbackTarget(gameObject);
+        }
+
+        private void OnShapeDestroyed()
+        {
+            //if (_hitShape != null)
+               // _hitShape.ClearCallbackTarget();
+        }
+  
+
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
             Debug.Log("Player Interaction Controller");
             
-            if (!((GameObject)beginEvent.visitorShape.GetOwner()).TryGetComponent(out IInteractable interactable)
-                || interactable.InteractableMode != InteractableMode.Collision)
+            if (beginEvent.visitorShape.callbackTarget is GameObject hitObject
+                && hitObject.TryGetComponent(out IInteractable interactable)
+                && interactable.InteractableMode == InteractableMode.Collision)
             {
-                return;
-            }
-            
-            
-            if(gameObject.TryGetComponent(out PlayerController controller))
-            {
-                if (interactable is IInteractable<PlayerController> interactableController)
-                {
-                    interactableController.Interact(controller);
-                }
-            }
-            else
-            {
-                interactable.Interact();
+                if(interactable is IInteractable<PlayerController> interactableController
+                   && _controller is not null)
+                    interactableController.Interact(_controller);
+                else
+                    interactable.Interact();
             }
         }
-        
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent) { }
+
         protected void OnInteractPerformed(InputAction.CallbackContext ctx)
         {
-            if(_boxCollider2D == null) return;
+            if(!_hitShape.Shape.isValid) return;
 
-            _hitColliders = new Collider2D[_hitColliders.Length];
-            
-            Physics2D.OverlapBox((Vector2)transform.position, _boxCollider2D.bounds.size, 0f, _interactableFilter, _hitColliders);
+            _hitShapes            = new NativeArray<PhysicsShape>(5, Allocator.Temp);
+            _castInput.shapeProxy = _hitShape.ShapeProxy;
+            using var result = _hitShape.PhysicsWorld.OverlapShape(_hitShape._shape, _interactableFilter);
 
-            for (int i = 0; i < _hitColliders.Length; i++)
+            if (result.Length < 0)
+                return;
+
+            // This is a painful looking thing, but it is actually decent performance, so oh well.
+            for (int i = 0; i < result.Length; i++)
             {
-                // Make sure if we do find something we can interact with, it is set to input mode. 
-                if (_hitColliders[i] == null
-                    || !_hitColliders[i].TryGetComponent(out IInteractable interactable)
-                        || interactable.InteractableMode != InteractableMode.Input)
-                    return;
-                
-                // If we are interacting with something needing to know any data about our player send the PlayerController. 
-                if(gameObject.TryGetComponent(out PlayerController controller) && 
-                   interactable is IInteractable<PlayerController> interactableController)
+                if (result[i].shape.callbackTarget is GameObject hitObject 
+                    && hitObject.TryGetComponent(out IInteractable interactable)
+                    && interactable.InteractableMode == InteractableMode.Input)
                 {
-                    interactableController.Interact(controller);
-                }
-                else
-                {
-                    interactable.Interact();
+                    if(interactable is IInteractable<PlayerController> interactableController
+                            && _controller is not null)
+                        interactableController.Interact(_controller);
+                    else
+                        interactable.Interact();
                 }
             }
         }

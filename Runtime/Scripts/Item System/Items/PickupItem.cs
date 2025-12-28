@@ -7,13 +7,19 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.ItemModule
 {
-    public class PickupItem : MonoBehaviour, IInteractable<PlayerController>, PhysicsCallbacks.ITriggerCallback
+    public class PickupItem : MonoBehaviour, IInteractable<PlayerController>, 
+        PhysicsCallbacks.ITriggerCallback
     {
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
         
         public ItemData Item;
 
-        
+        private void Start()
+        {
+            if (TryGetComponent(out SFShapeComponent component))
+                component.SetCallbackTarget(this,true);
+        }
+
         public void Interact()
         {
             
@@ -43,7 +49,7 @@ namespace SF.ItemModule
         {
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
                 return;
-            
+           
             if (beginEvent.visitorShape.callbackTarget is not PlayerController body2D)
                 return;
                     
@@ -52,6 +58,10 @@ namespace SF.ItemModule
                 Interact(body2D);
             }
         }
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent) { }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
+        {
+            
+        }
     }
 }
