@@ -29,7 +29,7 @@
             "define": "SF_UIELEMENTS"
         },
         {
-            "name": "com.unity.2d.physics.lowlevelextras",
+            "name": "com.unity.2d.physics.extras",
             "expression": "0.0.1",
             "define": "UNITY_LOW_LEVEL_EXTRAS_2D"
         }

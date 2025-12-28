@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Properties;
 using UnityEngine;
 
 namespace SF.Settings
@@ -10,20 +11,15 @@ namespace SF.Settings
     [CreateAssetMenu(fileName = "GameSettings", menuName = "SF/Settings/GameSettings")]
     public class GameSettings : ScriptableObject
     {
-
         private List<SettingsBase> _settings = new();
         
+        [CreateProperty]
         public DisplaySettings DisplaySettings;
-
-        private void Awake()
-        {
-            Debug.Log("Awake");
-            
-        }
         
         private void OnEnable()
         {
-            _settings.Add(DisplaySettings);
+            if(DisplaySettings != null)
+                _settings.Add(DisplaySettings);
         }
 
         /// <summary>
@@ -49,10 +45,25 @@ namespace SF.Settings
         /// </summary>
         public abstract void ProcessSettings();
     } 
+    
+    public enum VSyncCount : ushort
+    {
+        None = 0, // VSync is off.
+        EveryFrame = 1,
+        EveryTwoFrames = 2
+    }
+    
     [Serializable]
     public class DisplaySettings : SettingsBase
     {
-        public bool IsVsyncOn = true;
+        /// <summary>
+        /// Is Vsync currently active or not.
+        /// <remarks>
+        /// This is true when the <see cref="VSyncCount"/> has not been set to VSyncCount.None.
+        /// </remarks>
+        /// </summary>
+        public bool IsVsyncOn => VSyncCount != VSyncCount.None;
+        public VSyncCount VSyncCount;
         public int FrameRateLimit = 60;
         
         /// <summary>
@@ -62,6 +73,11 @@ namespace SF.Settings
         {
             if (IsVsyncOn)
             {
+                QualitySettings.vSyncCount  = (int)VSyncCount;
+            }
+            else
+            {
+                QualitySettings.vSyncCount  = 0;
                 Application.targetFrameRate = FrameRateLimit;
             }
         }
