@@ -6,9 +6,9 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SFEditor.PhysicsLowLevel
 {
-    public class CircleShapeGeometryTool : ShapeComponentGeometryTool
+    public class CircleShapeGeometryTool : ShapeComponentGeometryTool<SFCircleShape>
     {
-        public CircleShapeGeometryTool(SFShapeComponent shapeComponent) : base(shapeComponent)
+        public CircleShapeGeometryTool(SFCircleShape shapeComponent) : base(shapeComponent)
         {
             
         }

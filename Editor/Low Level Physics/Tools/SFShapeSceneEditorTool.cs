@@ -4,7 +4,6 @@ using SF.PhysicsLowLevel;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEditor.Overlays;
-using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 using UnityEngine.UIElements;
 
@@ -81,13 +80,18 @@ namespace SFEditor.PhysicsLowLevel
 
         private ShapeComponentGeometryTool CreateTool(SFShapeComponent shapeComponent)
         {
-            return shapeComponent.Shape.shapeType switch
+            
+            switch (shapeComponent)
             {
-                PhysicsShape.ShapeType.Circle => new CircleShapeGeometryTool(shapeComponent),
-                PhysicsShape.ShapeType.Capsule => new CapsuleShapeGeometryTool(shapeComponent),
-                PhysicsShape.ShapeType.Polygon => new PolygonShapeGeometryTool(shapeComponent),
-                _ => throw new ArgumentOutOfRangeException(nameof(shapeComponent.Shape.shapeType), shapeComponent.Shape.shapeType, null)
-            };
+                case SFCircleShape circleShape:
+                    return new CircleShapeGeometryTool(circleShape);
+                case SFRectangleShape rectangleShape:
+                    return new RectangleGeometryTool(rectangleShape);
+                case SFCapsuleShape capsuleShape:
+                    return new CapsuleShapeGeometryTool(capsuleShape);
+            }
+
+            return new PolygonShapeGeometryTool(shapeComponent);
         }
 
     }
