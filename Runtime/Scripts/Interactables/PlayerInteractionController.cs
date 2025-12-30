@@ -71,7 +71,7 @@ namespace SF.Interactables
 
             _hitShapes            = new NativeArray<PhysicsShape>(5, Allocator.Temp);
             _castInput.shapeProxy = _hitShape.ShapeProxy;
-            using var result = _hitShape.PhysicsWorld.OverlapShape(_hitShape._shape, _interactableFilter);
+            using var result = _hitShape.PhysicsWorld.OverlapShape(_hitShape.Shape, _interactableFilter);
 
             if (result.Length < 0)
                 return;

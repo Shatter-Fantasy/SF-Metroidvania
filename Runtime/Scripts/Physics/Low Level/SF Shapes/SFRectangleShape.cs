@@ -48,7 +48,7 @@ namespace SF.PhysicsLowLevel
             PhysicsTransform transform = PhysicsTransform.identity;
             transform.position += Offset;
             var geometry = PolygonGeometry.Transform(transform);
-            Shape                    =  Body.CreateShape(geometry, ShapeDefinition);
+            _shape                    =  Body.CreateShape(geometry, ShapeDefinition);
         }
         
         public override void SetShape<TGeometryType>(TGeometryType geometryType)

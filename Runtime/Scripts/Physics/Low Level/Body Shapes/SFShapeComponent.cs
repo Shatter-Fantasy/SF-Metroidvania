@@ -22,7 +22,7 @@ namespace SF.PhysicsLowLevel
         IWorldSceneTransformChanged,
         PhysicsCallbacks.ITriggerCallback
     {
-        public PhysicsShape _shape;
+        protected PhysicsShape _shape;
         /// <summary>
         /// The completed physics shape data struct for the <see cref="SFShapeComponent"/>.
         /// </summary>
@@ -31,35 +31,7 @@ namespace SF.PhysicsLowLevel
         /// If a <see cref="SFShapeComponent"/> is made from multiple individual shapes and a single shape is created this is the completed merged shape.
         /// <see cref="SF.PhysicsLowLevel.SFTileMapShape"/> for an example of this.
         /// </remarks>
-        
-        public PhysicsShape Shape
-        {
-            get
-            {
-                // For Composite Shapes we just return the very first shape in the ShapesInComposite NativeList
-                if (IsCompositeShape)
-                {
-                    if (ShapesInComposite is { IsCreated: true, Length: > 0 })
-                        return ShapesInComposite[0];
-                }
-
-                // For composite shapes reaching this point the _shape value will be null or the default.
-                return _shape;
-            }
-            set
-            {
-                if (IsCompositeShape)
-                {
-#if UNITY_EDITOR
-                    Debug.LogWarning($"The physics shape of the {GetType().Name} on gameobject: {gameObject.name} is set as a composite shape. " +
-                              $"composite shapes can not have the Shape value directly set. Instead the Shape is set at the same time as ShapesInComposite is set.", this);
-#endif
-                    return;
-                }
-                
-                _shape = value; 
-            }
-        }
+        public ref PhysicsShape Shape => ref _shape;
 
         public virtual void SetShape<TGeometryType>(TGeometryType geometryType) where  TGeometryType : struct
         {
@@ -254,7 +226,7 @@ namespace SF.PhysicsLowLevel
         protected virtual void CreateBodyShapeGeometry()
         {
             // For the abstract method just creating a example shape for people to see how to do.
-            Shape = Body.CreateShape(PolygonGeometry.CreateBox(Vector2.one));
+            _shape = Body.CreateShape(PolygonGeometry.CreateBox(Vector2.one));
         }
 
         protected virtual void CreateBody()
@@ -301,7 +273,7 @@ namespace SF.PhysicsLowLevel
                 return;
             
             Shape.Destroy();
-            Shape     = default;
+            _shape     = default;
             ShapeDestroyedHandler?.Invoke();
         }
 
@@ -347,7 +319,7 @@ namespace SF.PhysicsLowLevel
         /// If debugging is enabled in editor, a set of logs will be sent to console just in case something was not set right.
         /// </summary>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        protected virtual void DebugPhysics()
+        public virtual void DebugPhysics()
         {
             DebugPhysicsExtra();
             if (!Shape.isValid)

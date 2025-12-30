@@ -32,7 +32,7 @@ namespace SF.PhysicsLowLevel
             if (MinAllowedSize > Radius)
                 Radius = MinAllowedSize;
             
-            Shape = Body.CreateShape(CapsuleGeometry.Create(StartingPoint,EndingPoint,Radius), ShapeDefinition);
+            _shape = Body.CreateShape(CapsuleGeometry.Create(StartingPoint,EndingPoint,Radius), ShapeDefinition);
         }
     }
 }

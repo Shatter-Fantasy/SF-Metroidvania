@@ -6,7 +6,7 @@ namespace SF.PhysicsLowLevel
     [ExecuteAlways]
     [AddComponentMenu("Physics 2D/LowLevel/SF Circle Shape", 23)]
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
-    public class SFCircleComponent : SFShapeComponent
+    public class SFCircleShape : SFShapeComponent
     {
         /// <summary>
         /// The geometry properties that are used to create the <see cref="SFShapeComponent.Shape"/> for the SFCircleComponent.
@@ -23,7 +23,7 @@ namespace SF.PhysicsLowLevel
             if (MinAllowedSize > CircleGeometry.radius)
                 CircleGeometry.radius = MinAllowedSize;
             
-            Shape = Body.CreateShape(CircleGeometry, ShapeDefinition);
+            _shape = Body.CreateShape(CircleGeometry, ShapeDefinition);
         }
 
         public override void SetShape<TGeometryType>(TGeometryType geometryType)

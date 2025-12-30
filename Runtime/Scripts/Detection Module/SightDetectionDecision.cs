@@ -30,8 +30,8 @@ namespace SF.StateMachine.Decisions
 
         public override void CheckDecision(ref DecisionTransition decision,StateCore currentState)
         {
-            ref PhysicsShape   shape = ref _controllerBody2D.ShapeComponent._shape;
-            PhysicsWorld world = _controllerBody2D.ShapeComponent._shape.world;
+            ref PhysicsShape   shape = ref _controllerBody2D.ShapeComponent.Shape;
+            PhysicsWorld world = _controllerBody2D.ShapeComponent.Shape.world;
             if (!shape.isValid)
                 return;
 
