@@ -67,7 +67,7 @@ namespace SF.DamageModule
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
         {
-            
+            // noop - No Operation.
         }
         
 

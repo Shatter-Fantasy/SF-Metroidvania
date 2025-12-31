@@ -32,13 +32,6 @@ namespace SF.Characters.Controllers
             }
         }
 
-        protected override void OnStart()
-        {
-            base.OnStart();
-            if(ShapeComponent != null)
-                    ShapeComponent.SetCallbackTarget(this, true);
-        }
-
         protected override void CalculateMovementState()
         {
             // For when in menu, in a conversation, and so forth.

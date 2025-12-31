@@ -7,8 +7,9 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.ItemModule
 {
-    public class PickupItem : MonoBehaviour, IInteractable<PlayerController>, 
-        PhysicsCallbacks.ITriggerCallback
+    public class PickupItem : MonoBehaviour, 
+        IInteractable<PlayerController>, 
+        ITriggerShapeCallback
     {
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
         
@@ -17,7 +18,7 @@ namespace SF.ItemModule
         private void Start()
         {
             if (TryGetComponent(out SFShapeComponent component))
-                component.SetCallbackTarget(this,true);
+                component.AddTriggerCallbackTarget(this);
         }
 
         public void Interact()
@@ -27,8 +28,6 @@ namespace SF.ItemModule
 
         public void Interact(PlayerController controller)
         {
-            
-            
             if(controller == null || Item == null)
                 return;
            
@@ -61,7 +60,17 @@ namespace SF.ItemModule
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
         {
-            
+            // noo - No Operation
+        }
+
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnTriggerBegin2D(beginEvent);
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        { 
+            // noo - No Operation
         }
     }
 }

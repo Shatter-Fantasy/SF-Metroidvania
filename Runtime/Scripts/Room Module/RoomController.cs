@@ -11,7 +11,8 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.RoomModule
 {
-    public class RoomController : MonoBehaviour, PhysicsCallbacks.ITriggerCallback
+    public class RoomController : MonoBehaviour, 
+        ITriggerShapeCallback
     {
         
         /* TODO List:
@@ -26,10 +27,6 @@ namespace SF.RoomModule
         /// </summary>
         public int RoomID;
         [NonSerialized] public List<int> RoomIdsToLoadOnEnter = new();
-        /// <summary>
-        /// The camera confined to the room.
-        /// </summary>
-        public CinemachineCamera RoomCamera;
 
         /// <summary>
         /// These are optional transition ids for when room controller needs to keep track of fast travel points or using <see cref="TransitionTypes.Local"/>.
@@ -70,7 +67,7 @@ namespace SF.RoomModule
         private void Start()
         {
             if(_physicsShapeComponent != null)
-                _physicsShapeComponent.SetCallbackTarget(this,true);
+                _physicsShapeComponent.AddTriggerCallbackTarget(this);
             
             if (RoomSystem.RoomDB == null)
             {
@@ -118,22 +115,6 @@ namespace SF.RoomModule
         
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
-            if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
-                return;
-
-            var visitorTarget = beginEvent.visitorShape.callbackTarget;
-            if (visitorTarget is not PlayerController body2D)
-            {
-                if (visitorTarget is not GameObject visitor)
-                    return;
-
-                if(!visitor.TryGetComponent(out body2D))
-                    return;
-            }
-
-            if (!body2D.CollisionInfo.CollisionActivated)
-                return;
-            
             OnRoomEnteredHandler?.Invoke();
             for (int i = 0; i < _roomEnteredExtensions.Count; i++)
             {
@@ -146,6 +127,32 @@ namespace SF.RoomModule
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
         {
             OnRoomExitHandler?.Invoke();
+        }
+
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
+                return;
+            
+            // Grab the body data.
+            var objectData = beginEvent.visitorShape.body.userData.objectValue;
+
+            // SFShapeComponents default set the GameObject they are attached to as the objectValue in userData
+            if (objectData is not GameObject visitingGameobject)
+                return;
+            
+            if (!visitingGameobject.TryGetComponent(out PlayerController body2D))
+                return;
+            
+            if (!body2D.CollisionInfo.CollisionActivated)
+                return;
+            
+            OnTriggerBegin2D(beginEvent);
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnTriggerEnd2D(endEvent);
         }
     }
 }

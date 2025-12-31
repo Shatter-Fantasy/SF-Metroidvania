@@ -75,11 +75,16 @@ namespace SF.Interactables
 
             if (result.Length < 0)
                 return;
+            
+            
 
             // This is a painful looking thing, but it is actually decent performance, so oh well.
             for (int i = 0; i < result.Length; i++)
             {
-                if (result[i].shape.callbackTarget is GameObject hitObject 
+                // Grab the body data.
+                var objectData = result[i].shape.body.userData.objectValue;
+                
+                if (objectData is GameObject hitObject 
                     && hitObject.TryGetComponent(out IInteractable interactable)
                     && interactable.InteractableMode == InteractableMode.Input)
                 {

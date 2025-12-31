@@ -6,6 +6,22 @@ using UnityEngine.LowLevelPhysics2D;
 using Unity.U2D.Physics.Extras;
 namespace SF.PhysicsLowLevel
 {
+    
+    	
+    public interface IContactShapeCallback : PhysicsCallbacks.IContactCallback
+    {
+        void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
+
+        void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent);
+    }
+    
+    public interface ITriggerShapeCallback : PhysicsCallbacks.ITriggerCallback
+    {
+        void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
+
+        void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent);
+    }
+    
     /// <summary>
     /// Base class for the <see cref="MonoBehaviour"/> component based
     /// <see cref="PhysicsShape"/> classes used in the SF Metroidvania package.
@@ -20,7 +36,8 @@ namespace SF.PhysicsLowLevel
     public abstract class SFShapeComponent : MonoBehaviour, 
         IWorldSceneDrawable, 
         IWorldSceneTransformChanged,
-        PhysicsCallbacks.ITriggerCallback
+        ITriggerShapeCallback,
+        IContactShapeCallback
     {
         protected PhysicsShape _shape;
         /// <summary>
@@ -42,7 +59,6 @@ namespace SF.PhysicsLowLevel
             {
                 case CircleGeometry circleGeometry:
                 {
-                    Debug.Log(circleGeometry.radius);
                     _shape.circleGeometry = circleGeometry;
                     break;
                 }
@@ -118,19 +134,21 @@ namespace SF.PhysicsLowLevel
         [HideInInspector] public bool IsCompositeShape;
         
         /// <summary>
-        /// Should the <see cref="Shape"/> size be scaled wiht the game objects transform.
+        /// Should the <see cref="Shape"/> size be scaled with the game objects transform.
         /// </summary>
         public bool ScaleSize = true;
         /// <summary>
         /// Should the Delaunay algorithm be used for creating meshes using <see cref="PhysicsComposer"/>.
         /// </summary>
         protected bool _useDelaunay;
-        
+
         /// <summary>
-        /// The callback target has to implement the interfaces for the type of Physics Event you want to have sent to it.
+        /// The callback targets has to implement the interfaces for the type of Physics Event you want to have sent to it.
         /// Because of this you can not set a GameObject for example as the callback target currently as of 6.3
         /// </summary>
-        public object CallbackTarget;
+        private readonly List<ITriggerShapeCallback> _triggerTargets = new();
+        private readonly List<IContactShapeCallback> _contactTargets = new();
+        
 
         public Action ShapeCreatedHandler;
         public Action ShapeDestroyedHandler;
@@ -143,7 +161,7 @@ namespace SF.PhysicsLowLevel
             CreateShape();
 
 #if UNITY_EDITOR
-            Unity.U2D.Physics.Extras.WorldSceneTransformMonitor.AddMonitor(this);
+            WorldSceneTransformMonitor.AddMonitor(this);
 #endif
             DebugPhysics();
         }
@@ -166,7 +184,7 @@ namespace SF.PhysicsLowLevel
             DestroyShape();
             
 #if UNITY_EDITOR
-            Unity.U2D.Physics.Extras.WorldSceneTransformMonitor.RemoveMonitor(this);
+            WorldSceneTransformMonitor.RemoveMonitor(this);
 #endif
         }
 
@@ -214,14 +232,12 @@ namespace SF.PhysicsLowLevel
             if (!Shape.isValid)
                 return;
             
-            // If there was no custom callback target set use this component's gameobject as the callback target.
-            // Avoid setting callback target to a GameObject. There are issues in some versions preventing callbacks from happening.
-            SetCallbackTarget(this);
+            _shape.callbackTarget = this;
             ShapeCreatedHandler?.Invoke();
         }
 
         /// <summary>
-        /// Creates the <see cref="Shape"/> geometry to use when calling the <see cref="Body.CreateShape()"/> method. 
+        /// Creates the <see cref="Shape"/> geometry to use when calling the <see cref="PhysicsBody.CreateShape(PolygonGeometry)"/> method or other CreateShape method. 
         /// </summary>
         protected virtual void CreateBodyShapeGeometry()
         {
@@ -248,9 +264,12 @@ namespace SF.PhysicsLowLevel
             if (Body.isValid)
             {
                 // Set the transform object.
-                Body.transformObject = transform;
-
-                Body.callbackTarget = gameObject;
+                Body.transformObject      = transform;
+                Body.callbackTarget       = this;
+                Body.userData = new()
+                {
+                    objectValue = gameObject
+                };
             }
         }
         protected virtual void DestroyShape()
@@ -287,33 +306,71 @@ namespace SF.PhysicsLowLevel
             }
         }
 
-        public void SetCallbackTarget(object target, bool overrideSetTarget = false)
+#region Physic Event Callbacks
+        public void AddTriggerCallbackTarget(ITriggerShapeCallback target)
         {
-            // Prevent an already set target from being overridden if we don't tell it be.
-            if (!overrideSetTarget && CallbackTarget != null)
+            _triggerTargets.Add(target);
+        }
+
+        private void OnTriggerBeginCallbacks(PhysicsEvents.TriggerBeginEvent beginEvent)
+        {
+            if(_triggerTargets == null || _triggerTargets.Count < 1)
                 return;
-                
-            if (target is GameObject)
+            
+            foreach (var target in _triggerTargets)
             {
-                Debug.LogWarning($"Warning the target being set for physic callbacks of the Shape in a {GetType()} was type GameObject. GameObject types do not implement any interfaces for PhysicEvent callbacks, so setting it as the callback target does nothing.");
+                target.OnTriggerBegin2D(beginEvent, this);
             }
-            CallbackTarget = target;
-            if (Body.isValid)
-                Body.callbackTarget = target;
-            if (_shape.isValid)
-                _shape.callbackTarget = target;
         }
         
-        public void ClearCallbackTarget()
+        private void OnTriggerEndCallbacks(PhysicsEvents.TriggerEndEvent endEvent)
         {
-            CallbackTarget = null;
-            if (Body.isValid)
-                Body.callbackTarget = null;
-            if (_shape.isValid)
-                _shape.callbackTarget = null;
+            if(_triggerTargets == null || _triggerTargets.Count < 1)
+                return;
+
+            foreach (var target in _triggerTargets)
+            {
+                target.OnTriggerEnd2D(endEvent, this);
+            }
         }
         
+        public void RemoveTriggerCallbackTarget(ITriggerShapeCallback target)
+        {
+            _triggerTargets.Remove(target);
+        }
         
+        public void AddContactCallbackTarget(IContactShapeCallback target)
+        {
+            _contactTargets.Add(target);
+        }
+
+        private void OnContactBeginCallbacks(PhysicsEvents.ContactBeginEvent beginEvent)
+        {
+            if(_contactTargets == null || _contactTargets.Count < 1)
+                return;
+
+            foreach (var target in _contactTargets)
+            {
+                target.OnContactBegin2D(beginEvent, this);
+            }
+        }
+        
+        private void OnContactEndCallbacks(PhysicsEvents.ContactEndEvent endEvent)
+        {
+            if(_contactTargets == null || _contactTargets.Count < 1)
+                return;
+
+            foreach (var target in _contactTargets)
+            {
+                target.OnContactEnd2D(endEvent, this);
+            }
+        }
+        
+        public void RemoveContactCallbackTarget(IContactShapeCallback target)
+        {
+            _contactTargets.Remove(target);
+        }
+#endregion
         
         /// <summary>
         /// If debugging is enabled in editor, a set of logs will be sent to console just in case something was not set right.
@@ -371,7 +428,7 @@ namespace SF.PhysicsLowLevel
         /// <summary>
         /// Draws a debug render to the game and scene view to allow for visual debugging.
         /// </summary>
-        void Unity.U2D.Physics.Extras.IWorldSceneDrawable.Draw()
+        void IWorldSceneDrawable.Draw()
         {
             if (Shape.world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedShapes))
             {
@@ -407,12 +464,42 @@ namespace SF.PhysicsLowLevel
 
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
-            
+            OnTriggerBeginCallbacks(beginEvent);
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
         {
-           
+            OnTriggerEndCallbacks(endEvent);
+        }
+
+        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent)
+        {
+            OnContactBeginCallbacks(beginEvent);
+        }
+
+        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent)
+        {
+            OnContactEndCallbacks(endEvent);
+        }
+
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnTriggerBegin2D(beginEvent);
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnTriggerEnd2D(endEvent);
+        }
+
+        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnContactBegin2D(beginEvent);
+        }
+
+        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnContactEnd2D(endEvent);
         }
     }
 }
