@@ -15,7 +15,8 @@ namespace SF.UIModule
         DownToUp
     }
     
-    public partial class FillBarUGUI : VisualElement
+    [UxmlElement]
+    public partial class FillBar : VisualElement
     {
         [SerializeField] protected Image _fillImage;
         [SerializeField] protected Label _valueLabel;
