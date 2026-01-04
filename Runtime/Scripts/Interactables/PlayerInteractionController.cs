@@ -4,54 +4,44 @@ using UnityEngine.InputSystem;
 
 using SF.Characters.Controllers;
 using SF.InputModule;
+using SF.PhysicsLowLevel;
 using Unity.Collections;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.Interactables
 {
-    public class PlayerInteractionController : InteractionController, PhysicsCallbacks.ITriggerCallback
+    public class PlayerInteractionController : InteractionController, ITriggerShapeCallback
     {
         private PlayerController _controller;
         
         private void Awake()
         {
             TryGetComponent(out _controller);
-            
-            if (!TryGetComponent(out _hitShape))
-                return;
-            
-            _hitShape.ShapeCreatedHandler   += OnShapeCreated;
-            _hitShape.ShapeDestroyedHandler += OnShapeDestroyed;
-        }
-
-        private void OnDestroy()
-        {
-            if (_hitShape == null)
-                return;
-            
-            _hitShape.ShapeCreatedHandler   -= OnShapeCreated;
-            _hitShape.ShapeDestroyedHandler -= OnShapeDestroyed;
+            TryGetComponent(out _hitShape);
         }
         
-        private void OnShapeCreated()
+              
+        private void OnEnable()
         {
-            Debug.Log("Creating Shape");
-           // if (_hitShape != null)
-                //_hitShape.SetCallbackTarget(gameObject);
+            SFInputManager.Controls.Player.Interact.performed += OnInteractPerformed;
+            if(_hitShape != null)
+                _hitShape.AddTriggerCallbackTarget(this);
         }
 
-        private void OnShapeDestroyed()
+        private void OnDisable()
         {
-            //if (_hitShape != null)
-               // _hitShape.ClearCallbackTarget();
+            SFInputManager.Controls.Player.Interact.performed -= OnInteractPerformed;
+            if(_hitShape != null)
+                _hitShape.RemoveTriggerCallbackTarget(this);
         }
-  
+
 
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
-            Debug.Log("Player Interaction Controller");
+            // Grab the body data.
+            var objectData = beginEvent.triggerShape.body.userData.objectValue;
             
-            if (beginEvent.visitorShape.callbackTarget is GameObject hitObject
+            if (objectData is GameObject hitObject
                 && hitObject.TryGetComponent(out IInteractable interactable)
                 && interactable.InteractableMode == InteractableMode.Collision)
             {
@@ -75,8 +65,6 @@ namespace SF.Interactables
 
             if (result.Length < 0)
                 return;
-            
-            
 
             // This is a painful looking thing, but it is actually decent performance, so oh well.
             for (int i = 0; i < result.Length; i++)
@@ -96,16 +84,15 @@ namespace SF.Interactables
                 }
             }
         }
-        
-        private void OnEnable()
+  
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
-            SFInputManager.Controls.Player.Interact.performed += OnInteractPerformed;
+            OnTriggerBegin2D(beginEvent);
         }
 
-        private void OnDisable()
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
         {
-            SFInputManager.Controls.Player.Interact.performed -= OnInteractPerformed;
+            // noop - No Operation
         }
-        
     }
 }
