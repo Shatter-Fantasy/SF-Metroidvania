@@ -45,9 +45,9 @@ namespace SF.PhysicsLowLevel
             }
             
             PolygonGeometry          =  PolygonGeometry.CreateBox(Size, CornerRadius, InscribeRadius);
-            PhysicsTransform transform = PhysicsTransform.identity;
-            transform.position += Offset;
-            var geometry = PolygonGeometry.Transform(transform);
+            PhysicsTransform physicsTransform = PhysicsTransform.identity;
+            physicsTransform.position += Offset;
+            var geometry = PolygonGeometry.Transform(physicsTransform);
             _shape                    =  Body.CreateShape(geometry, ShapeDefinition);
         }
         

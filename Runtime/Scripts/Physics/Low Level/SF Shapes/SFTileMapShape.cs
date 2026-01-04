@@ -128,6 +128,10 @@ namespace SF.PhysicsLowLevel
                     // Get the physics shape.
                     if (tileSprite.GetPhysicsShape(j, _physicsShapeVertex) > 0)
                     {
+                        // TODO: The below really should be moved into a IJob struct for calculating the vertex path position to speed up.
+                        //  We should calculate the final position of the vertexes in a job because when loading a bigger tilemap room we could have hundreds of tiles
+                        //  to calculate the rotated + grid position + tile anchor position offset.
+                        
                         // Add to something we can use.
                         for (int v = 0; v <  _physicsShapeVertex.Count; v++)
                         {
@@ -141,7 +145,6 @@ namespace SF.PhysicsLowLevel
                         
                         PhysicsTransform tileTransform = PhysicsTransform.identity;
                         
-                        Debug.Log(_tilesInBlock[i].transform);
                         // Add the layer to the composer.
                         // I use PhysicsTransform.identity to get the relative position of tiles away from the grid origin.
                         composer.AddLayer(vertexPath.AsArray(), PhysicsTransform.identity);

@@ -64,7 +64,8 @@ namespace SF.Utilities
                 tilesArray[i].GetTileData(positionArray[i],tilemap, ref tileData);
                 usedTileData.Add(tileData);
             }
-
+            
+           
             return count;
         }
 #endif
