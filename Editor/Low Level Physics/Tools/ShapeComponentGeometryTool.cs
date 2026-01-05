@@ -1,12 +1,13 @@
 using SF.PhysicsLowLevel;
 using UnityEditor;
+using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SFEditor.PhysicsLowLevel
 {
     
-    public abstract class ShapeComponentGeometryTool : IGeometryToolSettings
+    public abstract class ShapeComponentGeometryTool : IGeometryToolSettings, IDrawSelectedHandles
     {
         public Color GrabHandleColor { get; set; }
         
@@ -29,6 +30,7 @@ namespace SFEditor.PhysicsLowLevel
         public abstract bool UpdateTool();
 
         public abstract bool IsValid { get; }
+        public abstract void OnDrawHandles();
     }
 
     /// <summary>
@@ -164,119 +166,13 @@ namespace SFEditor.PhysicsLowLevel
                 _shapeComponent.UpdateShape();
             
             _world.SetElementDepth3D(shapeOrigin);
-
-            if (_shapeComponent is SFRectangleShape rectangleShape)
-            {
-                _world.DrawBox(PhysicsMath.ToPosition2D(shapeOrigin,_transformPlane),rectangleShape.Size, geometry.radius, Color.green);
-            }
-            else
-            {
-                _world.DrawBox(PhysicsMath.ToPosition2D(shapeOrigin,_transformPlane),Vector2.one, geometry.radius, Color.green);
-            } 
-        }
-        
-    }
-
-    public class RectangleGeometryTool : ShapeComponentGeometryTool<SFRectangleShape>
-    {
-        public RectangleGeometryTool(SFRectangleShape shapeComponent) : base(shapeComponent) { }
-        
-        public override void OnToolGUI(EditorWindow window)
-        {
-           // world space geometry.
-            var geometry = _shape.polygonGeometry;
-            // localGeometry = the geometry in local space
-            var localGeometry = _shapeComponent.Shape.polygonGeometry;
             
-            // Set-up handles for allowing in scene editing of the shapes properties.
-            var snap            = EditorSnapSettings.move;
-            var handleDirection = PhysicsMath.GetTranslationIgnoredAxes(_transformPlane);
-            var handleRight     = _body.rotation.GetMatrix(_transformPlane).MultiplyVector(PhysicsMath.Swizzle(Vector3.right, _transformPlane)).normalized;
-            var handleUp     = _body.rotation.GetMatrix(_transformPlane).MultiplyVector(PhysicsMath.Swizzle(Vector3.up, _transformPlane)).normalized;
-            
-            // Set up any labels - use Handles.DrawingScope with the shape's transform to ToPosition3D for better label positioning.
-            // Update the shape if handles change it
-            var shapeOrigin = PhysicsMath.ToPosition3D
-                (
-                    _body.transform.TransformPoint(geometry.centroid),
-                    _shapeComponent.transform.position, 
-                    _transformPlane
-                );
-            var handleSize = HandleUtility.GetHandleSize(shapeOrigin) * 0.1f;;
-            
-            using (new Handles.DrawingScope(Matrix4x4.TRS(shapeOrigin,Quaternion.identity, Vector3.one)))
-            {
-                Handles.color = GrabHandleColor;
-
-                // Grab the Size
-                {
-                    EditorGUI.BeginChangeCheck();
-                    var size = handleRight * _shapeComponent.Size;
-                    var newSize = Handles.Slider2D
-                        (
-                           (Vector3)geometry.centroid,
-                           handleDirection,
-                           handleRight,
-                           handleUp,
-                           handleSize,
-                           Handles.RectangleHandleCap,
-                           snap
-                        );
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        Undo.RecordObject(_shapeComponent, "Change SF Rectangle Shape Size.");
-                        _shapeComponent.Size = newSize;
-                        localGeometry        = geometry.InverseTransform(Matrix4x4.identity, _shapeComponent.ScaleSize);
-                        _shapeComponent.SetShape(localGeometry);
-                        _targetShapeChanged = true;
-                    }
-                }
-                
-                // Grab the radius
-                {
-                    EditorGUI.BeginChangeCheck();
-                    var radius    = handleRight * geometry.radius;
-                    var newRadius = Handles.Slider2D
-                        (
-                            radius,
-                            handleDirection, 
-                            handleRight, 
-                            handleUp, 
-                            handleSize, 
-                            Handles.SphereHandleCap,
-                            snap
-                        );
-                    
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        Undo.RecordObject(_shapeComponent, "Change SF Rectangle Shape Radius.");
-                        geometry.radius = newRadius.magnitude;
-                        localGeometry = geometry.InverseTransform(Matrix4x4.identity, _shapeComponent.ScaleSize);
-                        _shapeComponent.SetShape(localGeometry);
-                        _targetShapeChanged = true;
-                    }
-                    
-                    // Draw the radius label.
-                    Handles.color = LabelColor;
-                    // Make it where the user can switch between local and world space for tool labels positioning.
-                    // var labelGeometry = are we in local space ? localGeometry : geometry
-                    var labelGeometry = localGeometry;
-                    Handles.Label((geometry.radius + handleSize) * handleRight, $"Radius = {labelGeometry.radius.ToString()}");
-                }
-            }
-            
-            // Update the actual physic shape on the component.
-            if(_targetShapeChanged)
-                _shapeComponent.UpdateShape();
-            
-            _world.SetElementDepth3D(shapeOrigin);
-            
-            _world.DrawBox(PhysicsMath.ToPosition2D(shapeOrigin,_transformPlane), _shapeComponent.Size, geometry.radius, Color.green);
+            _world.DrawBox(PhysicsMath.ToPosition2D(shapeOrigin,_transformPlane),Vector2.one, geometry.radius, Color.green);
         }
 
-        private static void DrawRectangleHandle()
+        public override void OnDrawHandles()
         {
-            
+            throw new System.NotImplementedException();
         }
     }
 
@@ -288,6 +184,11 @@ namespace SFEditor.PhysicsLowLevel
         }
 
         public override void OnToolGUI(EditorWindow window)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnDrawHandles()
         {
             throw new System.NotImplementedException();
         }

@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 namespace SFEditor.PhysicsLowLevel
 {
     [EditorTool("Edit SF Shape Component", typeof(SFShapeComponent))]
-    public sealed class SFShapeSceneEditorTool : EditorTool
+    public sealed class SFShapeSceneEditorTool : EditorTool, IDrawSelectedHandles
     {
         private readonly List<SFShapeComponent> _sceneShapeComponents = new ();
         private List<ShapeComponentGeometryTool> _shapeGeometryTools = new ();
@@ -94,6 +94,13 @@ namespace SFEditor.PhysicsLowLevel
             return new PolygonShapeGeometryTool(shapeComponent);
         }
 
+        public void OnDrawHandles()
+        {
+            for (int i = 0; i < _shapeGeometryTools.Count; i++)
+            {
+                _shapeGeometryTools[i].OnDrawHandles();
+            }
+        }
     }
 
 
