@@ -153,8 +153,13 @@ namespace SF.RoomModule
                 return false;
             }
             
-            // This sets the priority of the virtual cameras for the old and new rooms while setting the new RoomConfiners.
-            CameraController.SwitchPlayerCMCamera(_roomDB[roomID].SpawnedRoomController.RoomCamera);
+            /* TODO: Replace the CameraController.SwitchPlayerCMCamera method to the method that sets the player camera with a new
+             * Containing shape. We no longer need to a camera per room. The low level physics is fast enough to calculate
+             * room bounds without any issues on even low end hardware.
+             * The old method is still being kept for when we need a specific camera set up for special rooms.             */
+            
+            // This sets the priority of the virtual cameras for the old and new rooms while setting the new Room Confiners.
+            //CameraController.SwitchPlayerCMCamera(_roomDB[roomID].SpawnedRoomController.RoomCamera);
 
             // Was able to set a valid room as the current one.
             CurrentRoom = _roomDB[roomID];
