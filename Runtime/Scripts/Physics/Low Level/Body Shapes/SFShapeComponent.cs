@@ -154,9 +154,6 @@ namespace SF.PhysicsLowLevel
         public Action ShapeDestroyedHandler;
         protected void OnEnable()
         {
-            if (!Application.isPlaying)
-                return;
-            
             PreEnabled();
             CreateShape();
 
