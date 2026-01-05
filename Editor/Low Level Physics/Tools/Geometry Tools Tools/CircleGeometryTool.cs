@@ -1,5 +1,4 @@
 using SF.PhysicsLowLevel;
-using SFEditor.PhysicsLowLevel;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -71,6 +70,27 @@ namespace SFEditor.PhysicsLowLevel
                     var labelGeometry = localGeometry;
                     Handles.Label((geometry.radius + handleSize) * handleRight, $"Radius = {labelGeometry.radius.ToString()}");
                 }
+                
+                
+                // Center.
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var newCenterValue = Handles.Slider2D(Vector3.zero, handleDirection, handleRight, handleUp, handleSize, Handles.CubeHandleCap, snap);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        Undo.RecordObject(_shapeComponent, "Change SF Circle Shape Center.");
+
+                        geometry.center += _shapeComponent.Body.rotation.InverseRotateVector(PhysicsMath.ToPosition2D(newCenterValue,_transformPlane));
+                        localGeometry = geometry.InverseTransform(Matrix4x4.identity, _shapeComponent.ScaleSize);
+                        _shapeComponent.CircleGeometry = localGeometry;
+                        _targetShapeChanged = true;
+                    }
+
+                    // Draw center label.
+                    Handles.color = GrabHandleColor;
+                    var labelGeometry = localGeometry;
+                    Handles.Label(handleUp * handleSize * 2f, $"Center = {labelGeometry.center.ToString(LabelFloatFormat)}");
+                }
             }
             
             // Update the actual physic shape on the component.
@@ -79,6 +99,11 @@ namespace SFEditor.PhysicsLowLevel
             
             _world.SetElementDepth3D(shapeOrigin);
             _world.DrawCircle(PhysicsMath.ToPosition2D(shapeOrigin,_transformPlane), geometry.radius, Color.green);
+        }
+
+        public override void OnDrawHandles()
+        {
+            
         }
     }
 }
