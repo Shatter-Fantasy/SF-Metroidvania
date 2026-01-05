@@ -56,7 +56,7 @@ namespace SF.SpawnModule
         {
             if(_controllerBody2D != null)
             {
-                _controllerBody2D.Reset();
+                // _controllerBody2D.Reset(); Might want to continue using a reset for respawning. Not sure yet.
                 _controllerBody2D.CharacterState.CharacterStatus = CharacterStatus.Alive;
             }
 

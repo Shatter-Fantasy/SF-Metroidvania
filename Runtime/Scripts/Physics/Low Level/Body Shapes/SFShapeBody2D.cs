@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.U2D.Physics.Extras;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
-using Object = System.Object;
 
 namespace SF.PhysicsLowLevel
 {
@@ -12,13 +10,12 @@ namespace SF.PhysicsLowLevel
     /// Base class for all SF Shape Body components that act as a low level equivalent to the high level Unity Collider2D.
     /// </summary>
     [ExecuteAlways]
-    [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneShape)]
+    [DefaultExecutionOrder(LowLevelPhysicsExecutionOrder.PhysicsBody)]
     public class SFShapeBody2D : MonoBehaviour, IWorldSceneDrawable, IWorldSceneTransformChanged
     {
         public PhysicsShapeDefinition ShapeDefinition;
         public PhysicsShape Shape;
-
-
+        
         public PhysicsBodyDefinition BodyDefinition = PhysicsBodyDefinition.defaultDefinition;
 
         /// <summary>
@@ -50,12 +47,7 @@ namespace SF.PhysicsLowLevel
         /// A list of objects that are currently contained inside of <see cref="Shape"/>
         /// </summary>
         public List<IPhysicsShapeContained> ContainedPhysicsShapes = new();
-
-        protected struct OwnedShapes
-        {
-            public PhysicsShape Shape;
-            public int OwnerKey;
-        }
+        
 
         protected NativeList<OwnedShapes> _ownedShapes = new NativeList<OwnedShapes>(Allocator.Persistent);
 

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.DamageModule
 {
@@ -68,7 +67,7 @@ namespace SF.DamageModule
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
         {
-            
+            // noop - No Operation.
         }
         
 

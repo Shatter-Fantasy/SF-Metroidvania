@@ -65,12 +65,6 @@ namespace SFEditor.Core.Packages
             // We check for the package name first just in case we have a local/git loaded version of the package.
             // If they are not found, load the GitHub version as fallback.
             
-            if (!PackageInfo.IsPackageRegistered(SFPackageDefaults.SFUtilitiesPackage.PackageName))
-            {
-                neededPackages.Add(SFPackageDefaults.SFUtilitiesPackage.FullPackageURL);
-                Debug.Log("SF Utilities was not installed. Setting up a package install request.");
-            }
-            
             if (!PackageInfo.IsPackageRegistered(SFPackageDefaults.SFUIElementsPackage.PackageName))
             {
                 neededPackages.Add(SFPackageDefaults.SFUIElementsPackage.FullPackageURL);

@@ -21,7 +21,7 @@ namespace SF
 
         public void Interact()
         {
-            if(InteractableMode != InteractableMode.Input && !InputManager.Controls.Player.Interact.WasPressedThisFrame())
+            if(InteractableMode != InteractableMode.Input && !SFInputManager.Controls.Player.Interact.WasPressedThisFrame())
                 return;
 
             if(_oneTimeUse && _wasUsed)

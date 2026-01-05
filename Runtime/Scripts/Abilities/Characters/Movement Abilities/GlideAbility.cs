@@ -59,17 +59,17 @@ namespace SF.AbilityModule.Characters
 
         private void OnEnable()
         {
-            InputManager.Controls.Player.Enable();
-            InputManager.Controls.Player.Glide.performed += OnInputGlide;
-            InputManager.Controls.Player.Jump.performed += OnMidGlideJump;
+            SFInputManager.Controls.Player.Enable();
+            SFInputManager.Controls.Player.Glide.performed += OnInputGlide;
+            SFInputManager.Controls.Player.Jump.performed += OnMidGlideJump;
         }
 
         private void OnDisable()
         {
-            if(InputManager.Controls == null) return;
+            if(SFInputManager.Controls == null) return;
 
-            InputManager.Controls.Player.Glide.performed -= OnInputGlide;
-            InputManager.Controls.Player.Jump.performed -= OnMidGlideJump;
+            SFInputManager.Controls.Player.Glide.performed -= OnInputGlide;
+            SFInputManager.Controls.Player.Jump.performed -= OnMidGlideJump;
             _controller2d.CollisionInfo.OnGroundedHandler-= GlideReset;
         }
     }

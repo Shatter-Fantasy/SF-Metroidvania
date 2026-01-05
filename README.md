@@ -21,3 +21,20 @@ Alpha Five also brings forward the new streamlined SpawnSystem and removes all o
 ### Future Features:
 - Interactible Enviorment - think freezing water and burning grass. This relies on the GeometryIsland API coming in Unity 6.3 first stable release out of beta.
 - Updating the Data Editor for characters, items, and adding a level data editor tab to it.
+
+## Known Issues
+These issues are known and are currently being worked on if it is not a Unity Engine side bug.
+
+### Unity Side Bug: Unity 6.4 Alpha 2 to Alpha 5 Rule Tile Crash
+Unity 6.4 Alpha currently has a bug causing random crashes in the Unity 2DExtras package RuleTile script when invoking RuleMatches because of a wip update Unity is doing
+that calls an EntityID that can return a null memory pointer cauasing crashes randomly. 
+
+### The Cinemachine Physics2D Shape is early WIP.
+As of December 1st it is being worked on so not a smooth confiner yet for Cinemachine cameras.
+
+### TileMapShape Rotated Tiles: 
+When using the TileMapShape and using a rotated tile from either a RuleTile or manually tile rotation when using the brush,
+the generated shape doesn't take it into consideration.
+
+Solution: I just need to do a rotation matrix multiplication on the tile shape by it's rotation from the TileData.
+Just haven't had time to add it in yet.

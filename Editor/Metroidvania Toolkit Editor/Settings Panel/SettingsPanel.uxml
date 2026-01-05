@@ -1,0 +1,20 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns:ui="UnityEngine.UIElements" 
+         xmlns:uie="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False"
+         >
+    <ui:TabView data-source="project://database/Packages/shatterfantasy.sf-metroidvania/Editor/Metroidvania%20Toolkit%20Editor/Settings%20Panel/GameSettings.asset?fileID=11400000&amp;guid=bfe234d417cfb4442bbddeb527611632&amp;type=2#GameSettings" data-source-path="">
+        <ui:Tab name="graphics-settings__view" label="Graphics Settings" view-data-key="Graphics Settings" data-source-path="DisplaySettings">
+            <ui:EnumField name="vsync-count__field" label="VSync Count" type="SF.Settings.VSyncCount, SF.MetroidvaniaToolkit" data-source-path="VSyncCount">
+                <Bindings>
+                    <ui:DataBinding property="value" data-source-path="DisplaySettings.VSyncCount" data-source="project://database/Packages/shatterfantasy.sf-metroidvania/Editor/Metroidvania%20Toolkit%20Editor/Settings%20Panel/GameSettings.asset?fileID=11400000&amp;guid=bfe234d417cfb4442bbddeb527611632&amp;type=2#GameSettings" binding-mode="TwoWay"/>
+                </Bindings>
+            </ui:EnumField>
+            <ui:IntegerField name="frame-limit__field" label="Frame Limit" data-source-path="VSyncCount">
+                <Bindings>
+                    <ui:DataBinding property="value" data-source-path="DisplaySettings.FrameRateLimit" data-source="project://database/Packages/shatterfantasy.sf-metroidvania/Editor/Metroidvania%20Toolkit%20Editor/Settings%20Panel/GameSettings.asset?fileID=11400000&amp;guid=bfe234d417cfb4442bbddeb527611632&amp;type=2#GameSettings" binding-mode="TwoWay"/>
+                </Bindings>
+            </ui:IntegerField>
+        </ui:Tab>
+    </ui:TabView>
+</ui:UXML>

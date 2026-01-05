@@ -1,11 +1,10 @@
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.PhysicsLowLevel
 {
     [ExecuteAlways]
-    [DefaultExecutionOrder(PhysicsLowLevelExtrasExecutionOrder.SceneBody)]
+    [DefaultExecutionOrder(LowLevelPhysicsExecutionOrder.PhysicsBody)]
     [Icon("Packages/com.unity.2d.physics.lowlevelextras/Editor/Icons/SceneBody.png")]
     public class RectangleBody2D : SFShapeBody2D
     {
@@ -36,11 +35,7 @@ namespace SF.PhysicsLowLevel
             
             // Set the owner.
             _ownerKey = Shape.SetOwner(this);
-            _ownedShapes.Add(new OwnedShapes()
-            {
-                Shape = Shape,
-                OwnerKey = _ownerKey
-            });
+            _ownedShapes.Add(new OwnedShapes(ref Shape, _ownerKey));
         }
 
         protected override void DestroyShape()

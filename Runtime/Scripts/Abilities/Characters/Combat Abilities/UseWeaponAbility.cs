@@ -34,15 +34,15 @@ namespace SF.AbilityModule.CombatModule
         
         private void OnEnable()
         {
-            InputManager.Controls.Player.Enable();
-            InputManager.Controls.Player.Attack.performed += OnAttackPerformed;
+            SFInputManager.Controls.Player.Enable();
+            SFInputManager.Controls.Player.Attack.performed += OnAttackPerformed;
         }
 
         private void OnDisable()
         {
-            if(InputManager.Instance == null) return;
+            if(SFInputManager.Instance == null) return;
 
-            InputManager.Controls.Player.Attack.performed -= OnAttackPerformed;
+            SFInputManager.Controls.Player.Attack.performed -= OnAttackPerformed;
         }
     }
 }

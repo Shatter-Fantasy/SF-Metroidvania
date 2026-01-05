@@ -1,5 +1,5 @@
 {
-  "name": "shatter-fantasy.sf-metroidvania",
+  "name": "shatterfantasy.sf-metroidvania",
   "version": "0.0.5",
   "displayName": "SF Metroidvania",
   "description": "This is the Metroidvania Toolkit developed by \nJonathan Westfall of Shatter Fantasy studio.",
@@ -13,7 +13,7 @@
   ],
   "category": "Template",
   "author": {
-    "name": "Jonathan Westfall",
+    "name": "Jonathan Westfall - Shatter Fantasy",
     "url": "https://github.com/Shatter-Fantasy/com.shatter-fantasy.metroidvania-toolkit"
   },
   "repository": {
@@ -28,7 +28,7 @@
   },
   "unity": "6000.3",
   "dependencies": {
-    "com.unity.inputsystem": "1.8.1",
+    "com.unity.inputsystem": "1.16.0",
     "com.unity.cinemachine": "3.1.4"
   },
   "hideInEditor": false
