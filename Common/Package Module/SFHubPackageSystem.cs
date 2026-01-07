@@ -65,20 +65,17 @@ namespace SFEditor.Core.Packages
             // We check for the package name first just in case we have a local/git loaded version of the package.
             // If they are not found, load the GitHub version as fallback.
             
-            if (!PackageInfo.IsPackageRegistered(SFPackageDefaults.SFUIElementsPackage.PackageName))
+            if (!PackageInfo.IsPackageRegistered(SFPackageDefaults.SFCorePackage.PackageName))
             {
-                neededPackages.Add(SFPackageDefaults.SFUIElementsPackage.FullPackageURL);
+                neededPackages.Add(SFPackageDefaults.SFCorePackage.FullPackageURL);
                 Debug.Log("SF UI Elements was not installed. Setting up a package install request.");
             }
             
-            SFInstalledPackages.Add(SFPackageDefaults.SFUtilitiesPackage);
-            SFInstalledPackages.Add(SFPackageDefaults.SFUIElementsPackage);
+            SFInstalledPackages.Add(SFPackageDefaults.SFCorePackage);
             
             // If any of the required packages are missing and in the needed package array installl them.
             if(neededPackages.Count > 0)
                 RequiredPackageSetupRequest = Client.AddAndRemove(neededPackages.ToArray());
-            
-            
         }
 
         //[MenuItem("SF/Packages/Embed Required Packages")]

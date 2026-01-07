@@ -8,7 +8,9 @@
         "GUID:5769175a692bee24cbd874f396613351",
         "GUID:1fe1b561d22898344b997fad4e45b45d",
         "GUID:3501f6086cdd0e648ac05237fdb4fbad",
-        "GUID:e8ca73d31c2608e498b77118a366f5dd"
+        "GUID:e8ca73d31c2608e498b77118a366f5dd",
+        "GUID:a7bc90a4502048749a37c4a8859616fe",
+        "GUID:3f7d48e83d211bc4da6a4c2762281d9f"
     ],
     "includePlatforms": [
         "Editor"
@@ -19,15 +21,9 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "SF_UIELEMENTS",
         "UNITY_LOW_LEVEL_EXTRAS_2D"
     ],
     "versionDefines": [
-        {
-            "name": "shatter-fantasy.sf-ui-elements",
-            "expression": "0.0.1",
-            "define": "SF_UIELEMENTS"
-        },
         {
             "name": "com.unity.2d.physics.extras",
             "expression": "0.0.1",
