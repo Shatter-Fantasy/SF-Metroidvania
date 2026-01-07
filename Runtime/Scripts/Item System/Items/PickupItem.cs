@@ -1,4 +1,5 @@
 using SF.Characters.Controllers;
+using SF.DataModule;
 using SF.Interactables;
 using SF.Managers;
 using SF.PhysicsLowLevel;

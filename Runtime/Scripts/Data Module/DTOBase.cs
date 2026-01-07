@@ -1,3 +1,4 @@
+using SF.ItemModule;
 using UnityEngine;
 
 namespace SF.DataModule
@@ -6,12 +7,12 @@ namespace SF.DataModule
     /// This is an empty wrapper class for DTO based classes.
     /// 
     /// Example of this wrapper being utilized can be seen in the abstract DataView class that takes in a generic type that inherits from DTOBase.
-    /// <seealso cref="SF.Inventory.ItemPriceDTO"/>
+    /// <seealso cref="SF.ItemModule.ItemPriceDTO"/>
     /// </summary>
+    [System.Serializable]
     public class DTOBase 
     {
         public int ID = 0;
-        public string GUID;
         public string Name;
         public string Description;
     }
