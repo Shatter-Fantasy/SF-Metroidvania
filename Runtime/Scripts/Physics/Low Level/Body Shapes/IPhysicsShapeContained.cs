@@ -14,7 +14,7 @@ namespace SF.PhysicsLowLevel
         /// <summary>
         /// The <see cref="SFShapeBody2D"/> that this <see cref="IPhysicsShapeContained"/> is being contained in.
         /// </summary>
-        public SFShapeBody2D ContainerShape2D { get; set; }
+        public SFShapeComponent ContainerShape2D { get; set; }
 
         /// <summary>
         /// Calculates a corrected position to displace an object while keeping it inside the area of a <see cref="PhysicsShape"/>.
