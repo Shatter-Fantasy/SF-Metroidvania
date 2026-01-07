@@ -1,40 +1,31 @@
 # SF-Metroidvania-Package
-
-
-> There is a work in progress dedicated documentation website being made. If you check the documentation and it gives a 404 error, that means a new build of it is being uploaded and deployed at the moment. It will be back up in less than two minutes.
-> https://shatter-fantasy.github.io/SF-Metroidvania/manual/install-instructions/install.html
-
-## Install Instructions are located in the manual page linked right above this sentence.
+There is a work in progress dedicated documentation website being made. Will update this section part way through alpha six that is currently in progress.
 
 ## Summary 
 This is the Shatter Fantasy Metroidvania Unity package that can be used to create any game needing Metroidvania like controls. 
 It is using Unity's low level physics that was added in Unity 6.3 creating a minimum required version for Unity 6.3 editors.
 
-## Current Alpha: Alpha Five
-Alpha Five and all development from now on goes to using Unity's low level physics 2D API introduced in Unity 6.3.
-This has enabled a lot of new features not easily do able before with a massive, on average, 312% increase in performance in all scenes with physics in the Immortal Chronicles project that is using this package.
+## Current Alpha: Alpha Six
+Alpha six is being dedicated to clean up post alpha five major package changes and adding some scene tools for making the physics components easier to work with.
 
-This means the use of all Collider2D and all Rigidbody2D are being removed in Alpha 5 release.
-Alpha Five also brings forward the new streamlined SpawnSystem and removes all old struct events in favor of using C# event Actions where reasonable.
-
+- SFShapeComponent scene tools
+- Improved database registering to make sure they always are loaded first simplfying the initial game loading code flow. Mainly lowers errors for not ready databases.
+- Reimplementing the UXML Schema that I purposely broke when merging SF UI Elements and SF Utilities to a dedicated single package called SF Core.
+- Some more legacy code and class clean up.
 
 ### Future Features:
-- Interactible Enviorment - think freezing water and burning grass. This relies on the GeometryIsland API coming in Unity 6.3 first stable release out of beta.
+- Interactible Enviorment - think freezing water and burning grass. This relies on the GeometryIsland API in Unity 6.3.
+- Full implementation of the Sprite Destructor to allow destructible sprites with physics. This wll be implementing the Sprite Fragmentation API added in Unity 6.3
 - Updating the Data Editor for characters, items, and adding a level data editor tab to it.
+- Create a core editor for SF tool related packages.
 
 ## Known Issues
 These issues are known and are currently being worked on if it is not a Unity Engine side bug.
 
-### Unity Side Bug: Unity 6.4 Alpha 2 to Alpha 5 Rule Tile Crash
-Unity 6.4 Alpha currently has a bug causing random crashes in the Unity 2DExtras package RuleTile script when invoking RuleMatches because of a wip update Unity is doing
-that calls an EntityID that can return a null memory pointer cauasing crashes randomly. 
+### Unity Side Bug: Unity 6.4 beta to Unity 6.5 Rule Tile Crash
+There are Tile Related crashes that are caused by EntityID related API implemented from Unity 6.4 and newer versions.
+This is related to the OnTileRefreshPreview that is called by Unity.
 
 ### The Cinemachine Physics2D Shape is early WIP.
 As of December 1st it is being worked on so not a smooth confiner yet for Cinemachine cameras.
-
-### TileMapShape Rotated Tiles: 
-When using the TileMapShape and using a rotated tile from either a RuleTile or manually tile rotation when using the brush,
-the generated shape doesn't take it into consideration.
-
-Solution: I just need to do a rotation matrix multiplication on the tile shape by it's rotation from the TileData.
-Just haven't had time to add it in yet.
+Most likely be in alpha seven.
