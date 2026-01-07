@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace SF.DataModule
 {
-    using Characters.Data;
-    
     [CreateAssetMenu(fileName = nameof(DatabaseRegistry), menuName = "SF/Data/Database Registry")]
     public class DatabaseRegistry : ScriptableObject
     {

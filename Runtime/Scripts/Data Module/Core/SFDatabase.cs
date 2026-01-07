@@ -9,6 +9,7 @@ namespace SF.DataModule
     /// </summary>
     public abstract class SFDatabase : ScriptableObject
     {
+        /*
         protected virtual void Awake()
         {
             if(!DatabaseRegistry.Contains(GetType()))
@@ -18,7 +19,7 @@ namespace SF.DataModule
         protected virtual void OnEnable()
         {
             DatabaseRegistry.RegisterDatabase(this);
-        }
+        }*/
     }
     
     /// <summary>
