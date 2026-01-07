@@ -70,7 +70,7 @@ namespace SF.StateMachine.Core
 			else
 			{
 				_controllerBody2D = controllerBody2D;
-                OnInit(controllerBody2D);
+                OnInit(_controllerBody2D);
 			}
 		}
 

@@ -16,17 +16,18 @@ namespace SF.CommandModule
     public class DialogueCommand : CommandNode, ICommand
     {
         [SerializeField] private int _conversationGUID;
-        private DialogueConversation _conversation;
+        //private DialogueConversation _conversation;
         
         protected override bool CanDoCommand()
         {
             IsAsyncCommand = false;
-            return DialogueManager.Instance.DialogueDB.GetConversation(_conversationGUID, out _conversation);
+            //return DialogueManager.Instance.DialogueDB.GetConversation(_conversationGUID, out _conversation);
+            return false;
         }
 
         protected override void DoCommand()
         {
-            DialogueManager.TriggerConversation(_conversation.GUID);
+            //DialogueManager.TriggerConversation(_conversation.GUID);
         }
 
         protected override Awaitable DoAsyncCommand() { return null; }

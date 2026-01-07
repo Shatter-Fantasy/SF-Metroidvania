@@ -1,7 +1,8 @@
 using System;
+using SF.Characters.Controllers;
 using SF.PhysicsLowLevel;
+using SF.RoomModule;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace SF.SpawnModule
 {
@@ -10,6 +11,22 @@ namespace SF.SpawnModule
     /// </summary>
     public class SpawnSystem : MonoBehaviour
     {
+        public GameObject Controller;
+        private void Start()
+        {
+            if (Controller != null)
+                OnInitialPlayerSpawn(Controller);
+        }
+
+        private void OnDestroy()
+        {
+            CurrentSpawnPosition = null;
+            SpawnedPlayer = null;
+            SpawnedPlayerController = null;
+        }
+
+        public static Transform CurrentSpawnPosition;
+        
         /// <summary>
         /// The spawned root gameobject of the player.
         /// </summary>
@@ -21,6 +38,7 @@ namespace SF.SpawnModule
         public static ControllerBody2D SpawnedPlayerController;
         
         public static event Action<GameObject> InitialPlayerSpawnHandler;
+        public static event Action PlayerRespawnHandler;
 
         /// <summary>
         /// Tell the game to start the initial spawning of the player when loading up a save file.
@@ -29,9 +47,8 @@ namespace SF.SpawnModule
         {
             if (playerPrefab == null)
                 return null;
-
-            SpawnedPlayer = Instantiate(playerPrefab);
-
+            
+            SpawnedPlayer = GameObject.Instantiate(playerPrefab,RoomSystem.CurrentRoom.SpawnedInstance.transform.position,Quaternion.identity);
             if (SpawnedPlayer == null)
                 return null;
             
@@ -41,7 +58,15 @@ namespace SF.SpawnModule
             
             InitialPlayerSpawnHandler?.Invoke(SpawnedPlayer);
             
-            return SpawnedPlayer.GetComponent<ControllerBody2D>();
+            return SpawnedPlayer.GetComponent<PlayerController>();
+        }
+
+        /// <summary>
+        /// Respawns the player and invokes the <see cref="PlayerRespawnHandler"/> event.
+        /// </summary>
+        public static void RespawnPlayer()
+        {
+            PlayerRespawnHandler?.Invoke();
         }
     }
 }

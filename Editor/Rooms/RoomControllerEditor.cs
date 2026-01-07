@@ -27,6 +27,9 @@ namespace SFEditor.Rooms
         
         public override VisualElement CreateInspectorGUI()
         {
+            if (target == null)
+                return null;
+            
             _roomController = target as RoomController;
             _roomController?.TryGetComponent(out _grid);
             _isGrid = _grid != null;

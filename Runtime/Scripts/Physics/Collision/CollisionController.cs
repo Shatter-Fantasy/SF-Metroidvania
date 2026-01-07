@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.PhysicsLowLevel
 {
 	/// <summary>
 	/// Controls the values passed into physics.2D calls to allow for custom collision detection systems.

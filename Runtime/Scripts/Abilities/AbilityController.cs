@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using SF.Characters.Controllers;
-using SF.Physics;
 using SF.PhysicsLowLevel;
 using UnityEngine;
 
@@ -16,8 +15,8 @@ namespace SF.AbilityModule
     /// For NPC, Enemies, or Ally combatants not controlled by the Players use <see cref="SF.StateMachine.Core.StateMachineBrain"/>
     /// <remarks>
     /// The AbilityController default execution order is set one past the Controller2D.
-    /// This guarantees the controller is already set up it's current physic struct in case any external force is starting to change it.
-    /// <see cref="SF.Physics.PhysicsVolume"/> 
+    /// This guarantees the controller is already set up it's current physic struct in case any external force is starting to change it
+    /// <see cref="SF.PhysicsLowLevel.PhysicsVolume"/> on spawn. Think loading a save room in an underwater PhysicsVolume.
     /// </remarks>
     /// </summary>
     [DefaultExecutionOrder(1)]
@@ -40,9 +39,8 @@ namespace SF.AbilityModule
             // Set the correct type of controller so the abilities can do different things based on if it is player, a enemy affected by gravity, or another type.
             _physicController2D = _physicController2D switch
             {
-                ControllerBody2D controllerBody2D => controllerBody2D,
                 PlayerController playerController => playerController,
-                GroundedController2D groundedController2D => groundedController2D,
+                ControllerBody2D controllerBody2D => controllerBody2D,
                 _ => _physicController2D
             };
         }

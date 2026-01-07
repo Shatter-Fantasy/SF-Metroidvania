@@ -9,11 +9,10 @@ using UnityEngine.UIElements;
 
 using SF.Characters.Data;
 using SF.DataModule;
-using SF.Inventory;
+using SF.ItemModule;
 using SFEditor.Characters.Data;
 using SFEditor.Inventory.Data;
 using SFEditor.UIElements.Utilities;
-
 
 namespace SFEditor.Data
 {

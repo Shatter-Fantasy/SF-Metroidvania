@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SF.Characters;
+using SF.DamageModule;
 using UnityEngine;
 namespace SF.Weapons
 {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.PhysicsLowLevel
 {
     /// <summary>
     /// Base class for custom Physics Controllers in a 2D simulation.
@@ -102,7 +102,6 @@ namespace SF.Physics
             
             CurrentPhysics = DefaultPhysics;
             ReferenceSpeed = CurrentPhysics.GroundSpeed;
-
             OnStart();
         }
         protected virtual void OnStart()

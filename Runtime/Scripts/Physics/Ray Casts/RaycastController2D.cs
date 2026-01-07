@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.PhysicsLowLevel
 {
     public class RaycastController2D : MonoBehaviour
     {

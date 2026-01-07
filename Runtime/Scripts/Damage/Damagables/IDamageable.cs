@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF
+namespace SF.DamageModule
 {
     public interface IDamagable 
     {

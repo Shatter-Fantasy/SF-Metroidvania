@@ -1,28 +1,22 @@
-using SF.DataManagement;
-
-using SF.Events;
-
 namespace SF.SpawnModule
 {
-    public class PlayerHealth : CharacterHealth, IDamagable, EventListener<SaveLoadEvent>
+    public class PlayerHealth : CharacterHealth
     {
 
         protected override void Kill()
         {
             base.Kill();
-
-            LivesEvent.Trigger(LivesEventTypes.DecreaseLives, 1);
-            RespawnEvent.Trigger(RespawnEventTypes.PlayerRespawn);
-            RespawnEvent.Trigger(RespawnEventTypes.GameObjectRespawn);
+            
+            SpawnSystem.RespawnPlayer();
         }
 
         public override void Respawn()
         {
-            // TODO: Make the PlayerRespawn event pass in the check points position to
-            // use it to move the player.
+            // TODO: Remove CheckPointManager and use the SpawnSystem.
             if(CheckPointManager.Instance == null)
                 return;
-
+            
+            // TODO: Remove CheckPointManager and use the SpawnSystem.
             if(CheckPointManager.Instance.CurrentCheckPoint != null)
                 transform.position = CheckPointManager.Instance.CurrentCheckPoint.transform.position;
 
@@ -37,39 +31,13 @@ namespace SF.SpawnModule
         protected override void OnEnable()
         {
             base.OnEnable();
-            this.EventStartListening<SaveLoadEvent>();
+            SpawnSystem.PlayerRespawnHandler += Respawn;
         }
 
         protected override void OnDisable()
         {
-            this.EventStopListening<SaveLoadEvent>();
-        }
-        
-        public void OnEvent(SaveLoadEvent saveLoadEvent)
-        {
-            switch (saveLoadEvent.EventType)
-            {
-                case SaveLoadEventTypes.Loading:
-                {
-                    break;
-                }
-            }
-        }
-        
-        public override void OnEvent(RespawnEvent respawnEvent)
-        {
-            switch (respawnEvent.EventType) 
-            {
-                case RespawnEventTypes.PlayerRespawn:
-                    Respawn();
-                    break;
-            }
-        }
-        
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            this.EventStopListening<SaveLoadEvent>();
+            // Might need to move this to the OnDestroy if we disable the player during respawning.
+            SpawnSystem.PlayerRespawnHandler -= Respawn;
         }
     }
 }

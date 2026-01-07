@@ -1,7 +1,10 @@
-namespace SF
+namespace SF.DamageModule
 {
+    /// <summary>
+    /// Base interface to allow anything to do damage.
+    /// </summary>
     public interface IDamage
     {
-        //void Damage(int damage);
+       // Purposely left blank.
     }
 }

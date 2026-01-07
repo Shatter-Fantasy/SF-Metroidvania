@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF
+namespace SF.DamageModule
 {
     public class Stompable : MonoBehaviour, IStompable
     {

@@ -1,4 +1,4 @@
-using SF.InventoryModule;
+using SF.ItemModule;
 using SF.SpawnModule;
 using SF.StatModule;
 

@@ -1,0 +1,22 @@
+{
+    "name": "SF.DialogueGraph",
+    "rootNamespace": "SF.Dialogue",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "shatter-fantasy.sf-dialogue-graph",
+            "expression": "0.0.1",
+            "define": "SF_DIALOGUE_GRAPH"
+        }
+    ],
+    "noEngineReferences": false
+}

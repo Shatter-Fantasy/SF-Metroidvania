@@ -1,4 +1,4 @@
-namespace SF
+namespace SF.DamageModule
 {
     public interface IStompable 
     {

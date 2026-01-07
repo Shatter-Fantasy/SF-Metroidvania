@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SF
+namespace SF.HandleModule
 {
 
     public class PositionHandle : MonoBehaviour
