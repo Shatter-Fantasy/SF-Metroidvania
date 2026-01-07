@@ -7,7 +7,6 @@ using Unity.U2D.Physics.Extras;
 namespace SF.PhysicsLowLevel
 {
     
-    	
     public interface IContactShapeCallback : PhysicsCallbacks.IContactCallback
     {
         void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
@@ -34,8 +33,10 @@ namespace SF.PhysicsLowLevel
     [ExecuteAlways]
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
     public abstract class SFShapeComponent : MonoBehaviour, 
+#if UNITY_LOW_LEVEL_EXTRAS_2D
         IWorldSceneDrawable, 
         IWorldSceneTransformChanged,
+#endif
         ITriggerShapeCallback,
         IContactShapeCallback
     {
@@ -157,7 +158,7 @@ namespace SF.PhysicsLowLevel
             PreEnabled();
             CreateShape();
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && UNITY_LOW_LEVEL_EXTRAS_2D
             WorldSceneTransformMonitor.AddMonitor(this);
 #endif
             DebugPhysics();
@@ -180,7 +181,7 @@ namespace SF.PhysicsLowLevel
             DestroyBody();
             DestroyShape();
             
-#if UNITY_EDITOR
+#if UNITY_EDITOR && UNITY_LOW_LEVEL_EXTRAS_2D
             WorldSceneTransformMonitor.RemoveMonitor(this);
 #endif
         }
@@ -422,6 +423,8 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         protected virtual void DebugPhysicsExtra(){}
+        
+#if UNITY_LOW_LEVEL_EXTRAS_2D
         /// <summary>
         /// Draws a debug render to the game and scene view to allow for visual debugging.
         /// </summary>
@@ -458,6 +461,7 @@ namespace SF.PhysicsLowLevel
             if (Body.isValid)
                 CreateShape();
         }
+#endif
 
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
