@@ -21,7 +21,7 @@ namespace SF.PhysicsLowLevel
         
         /// <summary>
         /// When creating the physics shape should the corner radius be inscribed during the
-        /// <see cref="PolygonGeometry.CreateBox"/> method call.
+        /// <see cref="PolygonGeometry.CreateBox(Vector2,float,bool)"/> method call.
         /// </summary>
         public bool InscribeRadius;
 

@@ -59,7 +59,7 @@ namespace SFEditor.PhysicsLowLevel
                         /* We times 2 because the handles technically only get from center to edge so only the half size is gotten from the handles.
                          * This is because we set the handle position to Vector3.Zero.
                          * Than we add the handle size because the starting handle size area is not taken into account for the Handle.Slider value change.
-                         * */
+                         */
                         _shapeComponent.Size = Vector3.Max(new Vector3(.1f,.1f,.1f),newSize) * 2 + new Vector3(handleSize,handleSize, 0);
                         
                         localGeometry        = geometry.InverseTransform(
