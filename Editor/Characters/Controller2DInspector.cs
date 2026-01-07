@@ -32,7 +32,7 @@ namespace SFEditor.Characters
             if (target is not ControllerBody2D controller2D)
                 return;
             
-            controller2D.ControllerBody.type = PhysicsBody.BodyType.Dynamic;
+            controller2D.ShapeComponent.Body.type = PhysicsBody.BodyType.Dynamic;
         }
     }
 }

@@ -1,6 +1,4 @@
-using System;
-using SF.Inventory;
-using SF.InventoryModule;
+using SF.ItemModule;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -37,6 +35,7 @@ namespace SF.UIModule
         {
             if (_overlayUXML == null)
                 return;
+            
             _overlayUXML.rootVisualElement.pickingMode = PickingMode.Ignore;
             
             _overlayContainer = _overlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-item__container");

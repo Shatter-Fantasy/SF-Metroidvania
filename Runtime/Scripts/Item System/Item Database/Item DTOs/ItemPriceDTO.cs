@@ -1,4 +1,4 @@
-namespace SF.Inventory
+namespace SF.ItemModule
 {
     [System.Serializable]
     public class ItemPriceDTO

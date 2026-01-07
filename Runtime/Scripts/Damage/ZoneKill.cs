@@ -1,33 +1,22 @@
 using UnityEngine;
-using SF.Physics;
+using UnityEngine.LowLevelPhysics2D;
 
-namespace SF.DamageableModule
+namespace SF.DamageModule
 {
-
-	public class ZoneKill : MonoBehaviour
+	public class ZoneKill : MonoBehaviour, PhysicsCallbacks.ITriggerCallback
     {
-		public CollisionEventTypes CollisionEvent;
-
-		public void OnTriggerEnter2D(Collider2D collider2D)
+		public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
 		{
-			if(CollisionEvent != CollisionEventTypes.OnTriggerEnter2D)
-				return;
-
-			if(collider2D.TryGetComponent(out IDamagable damageable))
+			if(((GameObject)beginEvent.visitorShape.callbackTarget)
+				.TryGetComponent(out IDamagable damageable))
 			{
 				damageable.InstantKill();
 			}
 		}
 
-		public void OnTriggerExit2D(Collider2D collider2D)
+		public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
 		{
-			if(CollisionEvent != CollisionEventTypes.OnTriggerExit2D)
-				return;
-
-			if(collider2D.TryGetComponent(out IDamagable damageable))
-			{
-				damageable.InstantKill();
-			}
+			// We only implement this because of the PhysicsCallbacks.ITriggerCallback interface.
 		}
-	}
+    }
 }

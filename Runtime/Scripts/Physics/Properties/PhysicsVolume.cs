@@ -1,8 +1,6 @@
-using SF.Characters.Controllers;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.PhysicsLowLevel
 {
     /// <summary>
     /// The type of physics volume or zone that is manipulating the surrounding characters and objects.

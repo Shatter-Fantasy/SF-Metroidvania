@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using SF.DataManagement;
 using SF.DialogueModule;
-using SF.Events;
+using SF.Settings;
 using UnityEngine;
 
 namespace SF.Managers
@@ -28,8 +28,7 @@ namespace SF.Managers
     {
         [SerializeReference]
         public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
-        
-        [SerializeField] protected int _targetFrameRate = 60;
+
         [SerializeField] private GameControlState _controlState;
         
         public GameControlState ControlState
@@ -51,10 +50,16 @@ namespace SF.Managers
 
         public static event Action GamePausedHandler;
         public static event Action GameUnpausedHandler;
+
+        /// <summary>
+        /// The data object that holds the settings players can change in game.
+        /// </summary>
+        public GameSettings GameSettings;
         
         private void Awake()
         {
-            Application.targetFrameRate = _targetFrameRate;
+            if(GameSettings != null)
+                GameSettings.DisplaySettings.ProcessSettings();
 
             if (Instance == null)
             {

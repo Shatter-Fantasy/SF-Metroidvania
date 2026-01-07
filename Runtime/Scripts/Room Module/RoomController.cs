@@ -2,20 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SF.CameraModule;
-using SF.LevelModule;
+using SF.Characters.Controllers;
 using SF.Managers;
 using SF.PhysicsLowLevel;
-using SF.SpawnModule;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.U2D.Physics.LowLevelExtras;
 
 namespace SF.RoomModule
 {
-    public class RoomController : MonoBehaviour, PhysicsCallbacks.ITriggerCallback
+    public class RoomController : MonoBehaviour, 
+        ITriggerShapeCallback
     {
+        
         /* TODO List:
             Room Auto Align: Make a method that allows taking in two transforms.
             each transform is the floor of two connected rooms. 
@@ -28,10 +27,6 @@ namespace SF.RoomModule
         /// </summary>
         public int RoomID;
         [NonSerialized] public List<int> RoomIdsToLoadOnEnter = new();
-        /// <summary>
-        /// The camera confined to the room.
-        /// </summary>
-        public CinemachineCamera RoomCamera;
 
         /// <summary>
         /// These are optional transition ids for when room controller needs to keep track of fast travel points or using <see cref="TransitionTypes.Local"/>.
@@ -51,12 +46,12 @@ namespace SF.RoomModule
         private readonly List<IRoomExtension> _roomExitedExtensions = new();
         #endregion
         
-        private SceneShape _sceneShape;
+        [SerializeReference] private SFShapeComponent _physicsShapeComponent;
         private void Awake()
         {
-            if (TryGetComponent(out _sceneShape))
+            if (TryGetComponent(out _physicsShapeComponent))
             {
-                _sceneShape.CallbackTarget = this;
+                _physicsShapeComponent.BodyDefinition.type      = PhysicsBody.BodyType.Static;
             }
              
             // This is the ignore ray cast physics layer.
@@ -68,15 +63,27 @@ namespace SF.RoomModule
             var rooms  = _roomExtensions.Where((room => room.RoomExtensionType == RoomExtensionType.OnRoomEntered));
             _roomEnteredExtensions = new ReadOnlyCollection<IRoomExtension>(rooms.ToList());
         }
-        
-        private void OnEnable()
-        {
-            LevelLoader.LevelReadyHandler += InitializeRoom;
-        }
 
-        private void OnDisable()
+        private void Start()
         {
-            LevelLoader.LevelReadyHandler -= InitializeRoom;
+            if(_physicsShapeComponent != null)
+                _physicsShapeComponent.AddTriggerCallbackTarget(this);
+            
+            if (RoomSystem.RoomDB == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning($"There is no database set in the {nameof(RoomSystem)}");
+                return;
+#endif
+            }
+            if (RoomSystem.RoomDB[RoomID] == null)
+            {
+                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
+                return;
+            }
+            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
+        
+            RoomSystem.LoadRoomManually(RoomID, gameObject);
         }
 
         private void OnDestroy()
@@ -93,13 +100,7 @@ namespace SF.RoomModule
             {
                 return;
             }
-            
-            OnRoomEnteredHandler?.Invoke();
-            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
-            {
-                _roomEnteredExtensions[i].Process();
-            }
-            
+
             // Probably should put this if and for loop in the RoomSystem itself.
             if (RoomSystem.DynamicRoomLoading)
             {
@@ -111,34 +112,47 @@ namespace SF.RoomModule
 
             RoomSystem.SetCurrentRoom(RoomID);
         }
-
-        private void InitializeRoom()
-        {
-            if (RoomSystem.RoomDB[RoomID] == null)
-            {
-                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
-                return;
-            }
-            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
-            
-            RoomSystem.LoadRoomManually(RoomID, gameObject);
-        }
         
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
-            if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
-                return;
-            
-            if (((GameObject)beginEvent.visitorShape.callbackTarget).TryGetComponent(out ControllerBody2D controller)
-                && controller.CollisionInfo.CollisionActivated)
+            OnRoomEnteredHandler?.Invoke();
+            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
             {
-                MakeCurrentRoom();
+                _roomEnteredExtensions[i].Process();
             }
+            
+            MakeCurrentRoom();
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
         {
             OnRoomExitHandler?.Invoke();
+        }
+
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
+                return;
+            
+            // Grab the body data.
+            var objectData = beginEvent.visitorShape.body.userData.objectValue;
+
+            // SFShapeComponents default set the GameObject they are attached to as the objectValue in userData
+            if (objectData is not GameObject visitingGameobject)
+                return;
+            
+            if (!visitingGameobject.TryGetComponent(out PlayerController body2D))
+                return;
+            
+            if (!body2D.CollisionInfo.CollisionActivated)
+                return;
+            
+            OnTriggerBegin2D(beginEvent);
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnTriggerEnd2D(endEvent);
         }
     }
 }

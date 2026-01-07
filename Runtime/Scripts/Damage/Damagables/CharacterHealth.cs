@@ -1,13 +1,13 @@
-using SF.Characters.Controllers;
 using SF.Characters;
 using SF.CommandModule;
-using SF.DataManagement;
-using SF.Events;
 using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.SpawnModule
 {
+    /*  TODO: Merge this with the CombatantHealth.cs
+        and remove this script from the package.    */
+    
     public class CharacterHealth : Health
     {
         [SerializeField] protected Timer _invicibilityTimer;
@@ -56,7 +56,7 @@ namespace SF.SpawnModule
         {
             if(_controllerBody2D != null)
             {
-                _controllerBody2D.Reset();
+                // _controllerBody2D.Reset(); Might want to continue using a reset for respawning. Not sure yet.
                 _controllerBody2D.CharacterState.CharacterStatus = CharacterStatus.Alive;
             }
 

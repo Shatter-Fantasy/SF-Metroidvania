@@ -1,10 +1,6 @@
-using SF.DataManagement;
-
-using SF.Events;
-
 namespace SF.SpawnModule
 {
-    public class PlayerHealth : CharacterHealth, IDamagable
+    public class PlayerHealth : CharacterHealth
     {
 
         protected override void Kill()
@@ -16,11 +12,11 @@ namespace SF.SpawnModule
 
         public override void Respawn()
         {
-            // TODO: Make the PlayerRespawn event pass in the check points position to
-            // use it to move the player.
+            // TODO: Remove CheckPointManager and use the SpawnSystem.
             if(CheckPointManager.Instance == null)
                 return;
-
+            
+            // TODO: Remove CheckPointManager and use the SpawnSystem.
             if(CheckPointManager.Instance.CurrentCheckPoint != null)
                 transform.position = CheckPointManager.Instance.CurrentCheckPoint.transform.position;
 

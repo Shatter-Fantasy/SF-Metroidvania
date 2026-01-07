@@ -2,7 +2,7 @@ using SF.Weapons;
 
 using UnityEngine;
 
-namespace SF
+namespace SF.AbilityModule.CombatModule
 {
     public class NPCBasicAttackAbility : MonoBehaviour
     {
