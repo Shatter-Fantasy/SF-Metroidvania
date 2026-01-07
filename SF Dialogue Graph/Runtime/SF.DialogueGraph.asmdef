@@ -2,8 +2,7 @@
     "name": "SF.DialogueGraph",
     "rootNamespace": "SF.Dialogue",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:ee2006c8bcda6994dabc1c6930d9306e"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
