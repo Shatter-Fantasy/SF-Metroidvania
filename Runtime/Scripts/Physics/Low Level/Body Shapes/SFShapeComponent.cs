@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+#if UNITY_LOW_LEVEL_EXTRAS_2D
+using Unity.U2D.Physics.Extras;
+#endif
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
+
 namespace SF.PhysicsLowLevel
 {
-    
     public interface IContactShapeCallback : PhysicsCallbacks.IContactCallback
     {
         void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
