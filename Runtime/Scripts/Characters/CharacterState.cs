@@ -1,4 +1,5 @@
 using System;
+using SF.Weapons;
 using UnityEngine;
 
 namespace SF.Characters
@@ -75,11 +76,28 @@ namespace SF.Characters
 				_previousMovementState = _currentMovementState;
 				_currentMovementState = value;
 				
-				OnMovementStateChanged?.Invoke();
+			
 			}
 		}
 
 		public Action OnMovementStateChanged;
+
+		[SerializeField] private AttackState _attackState;
+
+		public AttackState AttackState
+		{
+			get => _attackState;
+			set
+			{
+				if (_attackState == value)
+					return;
+				
+				AttackStateChangedHandler?.Invoke(value);
+				_attackState = value;
+			}
+		}
+		
+		public Action<AttackState> AttackStateChangedHandler;
 		
 		[SerializeField]
 		private CharacterStatus _characterStatus;
@@ -98,7 +116,7 @@ namespace SF.Characters
 				_characterStatus = value;
 			}
 		}
-
+		
 		public Action OnDeathHandler;
 		
 		[SerializeField] private StatusEffect _statusEffect;
