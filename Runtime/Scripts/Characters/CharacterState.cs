@@ -1,9 +1,10 @@
 using System;
-using SF.Weapons;
 using UnityEngine;
 
 namespace SF.Characters
 {
+	using Weapons;
+	
 	/// <summary>
 	/// The current movement state of the Character.
 	///  This is used to tell what animation to play, when physics need to apply gravity, and what movement speed value is used when a character is moved. 

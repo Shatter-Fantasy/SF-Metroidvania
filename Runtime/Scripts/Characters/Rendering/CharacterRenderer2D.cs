@@ -1,10 +1,11 @@
 using UnityEngine;
 
-using SF.Managers;
-using SF.PhysicsLowLevel;
-
 namespace SF.Characters
 {
+	using Managers;
+	using PhysicsLowLevel;
+	using Weapons;
+	
 	/// <summary>
 	/// Controls the character rendering for Sprites. This includes automatic animator set up and
 	/// also includes systems tinting the sprite for vfx.
@@ -15,7 +16,6 @@ namespace SF.Characters
 	    public bool UseAnimatorTransitions;
 		public CharacterTypes CharacterType = CharacterTypes.Player;
 		public CharacterState CharacterState => _controllerBody2D?.CharacterState;
-
 		public bool CanTurnAround = true;
 		public bool StartedFacingRight = true;
 		#region Common Components
@@ -62,6 +62,12 @@ namespace SF.Characters
 
 			// TODO: Make the attacking change the state the animation state to attacking. 
 			//_controllerBody2D.CharacterState.OnMovementStateChanged += UpdateAnimator;
+			_controllerBody2D.CharacterState.AttackStateChangedHandler += OnAttackStateChanged;
+		}
+
+		private void OnAttackStateChanged(AttackState attackState)
+		{
+			Animator.Play(AttackingStateHash,0);
 		}
 
 		private void LateUpdate()
@@ -81,23 +87,21 @@ namespace SF.Characters
 				return;
 			}
 			
-			
-			if (_controllerBody2D?.CharacterState.CurrentMovementState == MovementState.Attacking)
-			{
-				Animator.Play(AttackingStateHash,0);
+			if (_controllerBody2D?.CharacterState.AttackState != AttackState.NotAttacking)
 				return;
-			}
 			
 			if (_controllerBody2D is null)
 				return;
 			
 			/* All Controller2D have the next set of parameters*/
-			
-			if (_controllerBody2D?.CharacterState.CurrentMovementState == MovementState.Attacking)
-				Animator.SetTrigger("Attacking");
-			
-			Animator.SetFloat("XSpeed", Mathf.Abs(_controllerBody2D.Direction.x));
 
+			if (_controllerBody2D?.CharacterState.CurrentMovementState == MovementState.Attacking)
+			{
+				Animator.SetTrigger("Attacking");
+				return;
+			}
+
+			Animator.SetFloat("XSpeed", Mathf.Abs(_controllerBody2D.Direction.x));
 
 			// Grounded States
 			Animator.SetBool("IsGrounded", _controllerBody2D.CollisionInfo.IsGrounded);
@@ -167,7 +171,6 @@ namespace SF.Characters
         {
 			_forcedStateHash = Animator.StringToHash(stateName);
             _animationFadeTime = animationFadeTime;
-            //_hasForcedState = true;
         }
 		private void SpriteFlip(Vector2 direction)
 		{

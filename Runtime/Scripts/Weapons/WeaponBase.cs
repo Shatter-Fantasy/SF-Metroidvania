@@ -1,12 +1,20 @@
 using System.Collections.Generic;
-
-using SF.Characters;
-using SF.CombatModule;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.Weapons
 {
+    using Characters;
+    using CombatModule;
+    using PhysicsLowLevel;
+    
+    public enum AttackState
+    {
+        NotAttacking,
+        Attacking,
+        Charging, // Can be for spells, holding a bow pull, and ect.
+        Aiming // Aiming bow or some projectile.
+    }
+    
     public abstract class WeaponBase : MonoBehaviour, IWeapon
     {
         public int WeaponDamage = 1;

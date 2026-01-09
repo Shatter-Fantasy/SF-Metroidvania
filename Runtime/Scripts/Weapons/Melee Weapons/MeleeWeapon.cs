@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
-using SF.Characters;
-using SF.DamageModule;
+
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
+
 namespace SF.Weapons
 {
+    using Characters;
+    using DamageModule;
+    using PhysicsLowLevel;
+    
     public class MeleeWeapon : WeaponBase, IWeapon
     {
         /// <summary>
@@ -16,8 +21,8 @@ namespace SF.Weapons
         /// </summary>
         [SerializeField] protected Timer _comboTimer;
         
-        [SerializeField] private BoxCollider2D _hitBox;
-        private List<Collider2D> _hitResults = new();
+        [SerializeField] private SFShapeComponent _hitBox;
+        private readonly List<PhysicsShape> _hitResults = new();
 
         [SerializeField] private int _comboIndex = 0;
         private Vector2 _originalColliderOffset;
@@ -35,7 +40,7 @@ namespace SF.Weapons
                 
             if (_hitBox != null)
             {
-                _originalColliderOffset = _hitBox.offset;
+                _originalColliderOffset = _hitBox.transform.localPosition;
             }
         }
 
@@ -44,7 +49,7 @@ namespace SF.Weapons
             // Flip the weapons hitbox when switching direction.
             if (_hitBox != null && newDirection != Vector2.zero)
             {
-                _hitBox.offset = _originalColliderOffset * newDirection.x;
+                _hitBox.transform.localPosition = _originalColliderOffset * newDirection.x;
             }
         }
 
@@ -57,7 +62,7 @@ namespace SF.Weapons
             if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
             
-            _character2D.CharacterState.CurrentMovementState = MovementState.Attacking;
+            _character2D.CharacterState.AttackState = AttackState.Attacking;
             
             // If we have a combo enabled for the current weapon do it.
             if (ComboAttacks.Count > 1)
@@ -115,6 +120,7 @@ namespace SF.Weapons
         /// </summary>
         private void OnHitBoxDelay()
         {
+            /*
             _hitBox.Overlap(_hitBoxFilter, _hitResults);
             
             for(int i = 0; i < _hitResults.Count; i++)
@@ -124,10 +130,12 @@ namespace SF.Weapons
                     damageable.TakeDamage(WeaponDamage,_knockBackForce);
                 }
             }
+            */
         }
         
         private void OnUseComplete()
         {
+            _controllerBody2D.CharacterState.AttackState = AttackState.NotAttacking;
             _comboTimer.StopTimer();
             _hitBoxTimer.StopTimer();
             _attackTimer.StopTimer();
@@ -139,7 +147,6 @@ namespace SF.Weapons
         {
             _comboIndex = 0;
         }
-        
         
         #if UNITY_EDITOR
         /// <summary>
@@ -158,8 +165,6 @@ namespace SF.Weapons
                 ComboAttacks[i].AttackTimer = clip.length;
                 ComboAttacks[i].HitBoxDelay = targetFrameTimer;
             }
-            
-            
         }
         #endif
     }
