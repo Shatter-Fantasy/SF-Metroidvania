@@ -62,8 +62,6 @@ namespace SF.Weapons
             if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
             
-            _character2D.CharacterState.AttackState = AttackState.Attacking;
-            
             // If we have a combo enabled for the current weapon do it.
             if (ComboAttacks.Count > 1)
             {
@@ -73,6 +71,7 @@ namespace SF.Weapons
             {
                 SingleAttack();
             }
+            _character2D.CharacterState.AttackState = AttackState.Attacking;
         }
 
         private void SingleAttack()
