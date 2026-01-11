@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
+using UnityEngine.Serialization;
 
 namespace SF.Weapons
 {
@@ -19,13 +21,15 @@ namespace SF.Weapons
     {
         public int WeaponDamage = 1;
 
-        [SerializeField] protected ComboType ComboType;
+        [FormerlySerializedAs("ComboType")] 
+        [SerializeField] protected ComboType _comboType;
         public List<ComboAttack> ComboAttacks = new();
         [SerializeField] protected Vector2 _knockBackForce;
         [SerializeField] protected CharacterRenderer2D _character2D;
         [SerializeField] protected ControllerBody2D _controllerBody2D;
-        [SerializeField] protected ContactFilter2D _hitBoxFilter;
-
+        
+        [SerializeField] protected PhysicsQuery.QueryFilter _filter;
+        
         [SerializeField] protected Timer _attackTimer;
         
         public bool OnCooldown { get; protected set;}

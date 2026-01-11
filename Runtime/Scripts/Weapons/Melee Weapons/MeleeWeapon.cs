@@ -15,12 +15,14 @@ namespace SF.Weapons
         /// <summary>
         /// The delay before the hit box is enabled. This allows for matching damage with the animation visuals.
         /// </summary>
+        [Header("Timer Settings")]
         [SerializeField] protected Timer _hitBoxTimer;
         /// <summary>
         /// The timer to keep track of time between combo attacks to see if a combo should continue if not a lot of time has passed.
         /// </summary>
         [SerializeField] protected Timer _comboTimer;
         
+        [Header("Hit Box")]
         [SerializeField] private SFShapeComponent _hitBox;
         private readonly List<PhysicsShape> _hitResults = new();
 
@@ -119,17 +121,17 @@ namespace SF.Weapons
         /// </summary>
         private void OnHitBoxDelay()
         {
-            /*
-            _hitBox.Overlap(_hitBoxFilter, _hitResults);
-            
-            for(int i = 0; i < _hitResults.Count; i++)
+            var world  = _hitBox.World;
+            using var result = world.OverlapShape(_hitBox.Shape, _filter);
+
+            for (int i = 0; i < result.Length; i++)
             {
-                if(_hitResults[i].TryGetComponent(out IDamagable damageable))
+                if (result[i].shape.callbackTarget is SFShapeComponent shapeComponent 
+                    && shapeComponent.TryGetComponent(out IDamagable damageable))
                 {
                     damageable.TakeDamage(WeaponDamage,_knockBackForce);
                 }
             }
-            */
         }
         
         private void OnUseComplete()
