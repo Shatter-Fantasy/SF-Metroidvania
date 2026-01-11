@@ -42,6 +42,24 @@ namespace SF.PhysicsLowLevel
         ITriggerShapeCallback,
         IContactShapeCallback
     {
+        
+        #region Transform Cache - Temp fields
+        protected Vector2 _lastPhysicsPosition;
+        protected bool IsPositionChanged
+            => _lastPhysicsPosition != (Vector2)transform.position;
+
+        protected void CacheTransform()
+        {
+            _lastPhysicsPosition = transform.position;
+        }
+        
+        protected void ApplyTransform()
+        {
+            var physicsTransform = new PhysicsTransform(transform.position, PhysicsRotate.identity);
+            Body.SetAndWriteTransform(physicsTransform);
+        }
+        #endregion
+        
         protected PhysicsShape _shape;
         /// <summary>
         /// The completed physics shape data struct for the <see cref="SFShapeComponent"/>.
@@ -52,6 +70,8 @@ namespace SF.PhysicsLowLevel
         /// <see cref="SF.PhysicsLowLevel.SFTileMapShape"/> for an example of this.
         /// </remarks>
         public ref PhysicsShape Shape => ref _shape;
+
+        public PhysicsWorld World => _shape.world;
 
         public virtual void SetShape<TGeometryType>(TGeometryType geometryType) where  TGeometryType : struct
         {
@@ -159,6 +179,8 @@ namespace SF.PhysicsLowLevel
         {
             PreEnabled();
             CreateShape();
+            ApplyTransform();
+            CacheTransform();
 
 #if UNITY_EDITOR && UNITY_LOW_LEVEL_EXTRAS_2D
             WorldSceneTransformMonitor.AddMonitor(this);
@@ -196,7 +218,16 @@ namespace SF.PhysicsLowLevel
             CreateShape();
             DebugPhysics();
         }
-        
+
+        protected void FixedUpdate()
+        {
+            if (!IsPositionChanged)
+                return;
+            
+            ApplyTransform();
+            CacheTransform();
+        }
+
         /// <summary>
         /// Called from editor tools to update the Shape after making changes using editor tools.
         /// Also can be used to force a shape update.
@@ -459,7 +490,6 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         void IWorldSceneTransformChanged.TransformChanged()
         {
-            
             if (Body.isValid)
                 CreateShape();
         }
