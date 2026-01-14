@@ -54,9 +54,10 @@ namespace SF.Characters
 		
 		protected virtual void OnInit()
 		{
-			if (_controllerBody2D)
-				_controllerBody2D.OnDirectionChanged += OnDirectionChanged;
-
+			if (_controllerBody2D == null)
+				return;
+			
+			_controllerBody2D.OnDirectionChanged += OnDirectionChanged;
 			// TODO: Make the attacking change the state the animation state to attacking. 
 			_controllerBody2D.CharacterState.AttackStateChangedHandler += OnAttackStateChanged;
 		}

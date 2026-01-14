@@ -28,6 +28,7 @@ namespace SF.Weapons
 
         [SerializeField] private int _comboIndex = 0;
         private Vector2 _originalColliderOffset;
+        private Vector2 _facingDirection;
         
         private void Awake()
         {
@@ -42,28 +43,28 @@ namespace SF.Weapons
                 
             if (_hitBox != null)
             {
-                _originalColliderOffset = _hitBox.transform.localPosition;
+                _originalColliderOffset      = _hitBox.transform.localPosition;
             }
         }
 
         protected override void OnDirectionChange(object sender, Vector2 newDirection)
         {
-            // Flip the weapons hitbox when switching direction.
-            if (_hitBox != null && newDirection != Vector2.zero)
-            {
-                _hitBox.transform.localPosition = _originalColliderOffset * newDirection.x;
-            }
+            _facingDirection = newDirection;
         }
 
         public override void Use()
         {
+            if (_hitBox == null || !_hitBox.Shape.isValid)
+                return;
+            
             if (OnCooldown)
                 return;
-
+            
             // Stop attack while dead attack while dead.
             if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
-            
+
+            _hitBox.Body.SetAndWriteTransform(new PhysicsTransform(transform.position,PhysicsRotate.identity));
             // If we have a combo enabled for the current weapon do it.
             if (ComboAttacks.Count > 1)
             {

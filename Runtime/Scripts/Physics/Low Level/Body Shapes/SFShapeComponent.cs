@@ -44,6 +44,8 @@ namespace SF.PhysicsLowLevel
     {
         
         #region Transform Cache - Temp fields
+
+        [HideInInspector] public bool UpdateTransform;
         protected Vector2 _lastPhysicsPosition;
         protected bool IsPositionChanged
             => _lastPhysicsPosition != (Vector2)transform.position;
@@ -71,7 +73,7 @@ namespace SF.PhysicsLowLevel
         /// </remarks>
         public ref PhysicsShape Shape => ref _shape;
 
-        public PhysicsWorld World => _shape.world;
+        public PhysicsWorld World =>_shape.isValid ? _shape.world : PhysicsWorld.defaultWorld;
 
         public virtual void SetShape<TGeometryType>(TGeometryType geometryType) where  TGeometryType : struct
         {
@@ -221,9 +223,13 @@ namespace SF.PhysicsLowLevel
 
         protected void FixedUpdate()
         {
+            if(!UpdateTransform)
+                return;
+            
             if (!IsPositionChanged)
                 return;
             
+            Debug.Log(transform.position);
             ApplyTransform();
             CacheTransform();
         }
