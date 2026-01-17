@@ -55,6 +55,7 @@ namespace SFEditor.PhysicsLowLevel
         
         protected ShapeComponentGeometryTool(T shapeComponent)
         {
+            GrabHandleColor = Color.whiteSmoke;
             
             _shapeComponent = shapeComponent;
 
@@ -86,7 +87,6 @@ namespace SFEditor.PhysicsLowLevel
         }
 
 #region Scene Handle Properties.
-        public Color GrabHandleColor { get; set; } = Color.whiteSmoke;
         public Color LabelColor { get; set; } = Color.white;
         
         protected static string LabelFloatFormat => "F4";

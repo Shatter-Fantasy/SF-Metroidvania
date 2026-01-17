@@ -49,13 +49,13 @@ namespace SF.PhysicsLowLevel
             physicsTransform.position += Offset;
             var geometry = PolygonGeometry.Transform(physicsTransform);
             _shape                    =  Body.CreateShape(geometry, ShapeDefinition);
+           
         }
         
         public override void SetShape<TGeometryType>(TGeometryType geometryType)
         {  
             if (!_shape.isValid)
                 return;
-
             if (geometryType is PolygonGeometry polygonGeometry)
             {
                 PolygonGeometry          = polygonGeometry;

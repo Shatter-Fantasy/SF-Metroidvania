@@ -1,3 +1,4 @@
+using System;
 using SF.LevelModule;
 using SF.Pathfinding;
 using SF.SpawnModule;
@@ -54,24 +55,27 @@ namespace SF.StateMachine.Core
         }
 
         private async void StartPath()
-        {
-	        _targetIndex = 0;
-	        _currentTargetPos = _target.position;
+		{
+			try
+			{
+				_targetIndex      = 0;
+				_currentTargetPos = _target.position;
 			
-            _path = await PathRequetManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position, _target.position);
+				_path = await PathRequetManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position, _target.position);
             
-            _followingTarget = true;
-            
-            //_followPathAwaitable = FollowPathAsync();
-            
-            if(PathRequetManager._instance?.PathFinding?.GridPath != null)
-            {
-                _grid = PathRequetManager._instance.PathFinding.GridPath;
-                _nodeRadius = _grid.NodeRadius;
-            }
-            
-            //await _followPathAwaitable;
-        }
+				_followingTarget = true;
+				
+				if(PathRequetManager._instance?.PathFinding?.GridPath != null)
+				{
+					_grid       = PathRequetManager._instance.PathFinding.GridPath;
+					_nodeRadius = _grid.NodeRadius;
+				}
+			}
+			catch (Exception e)
+			{
+				Debug.LogAssertion($"Pathfinding ran into the following exception: {e}",gameObject);
+			}
+		}
 
         protected override void OnUpdateState()
         {
