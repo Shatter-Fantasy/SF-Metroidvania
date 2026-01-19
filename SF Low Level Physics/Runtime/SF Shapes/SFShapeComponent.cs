@@ -50,12 +50,12 @@ namespace SF.PhysicsLowLevel
         protected bool IsPositionChanged
             => _lastPhysicsPosition != (Vector2)transform.position;
 
-        protected void CacheTransform()
+        public void CacheTransform()
         {
             _lastPhysicsPosition = transform.position;
         }
         
-        protected void ApplyTransform()
+        public void ApplyTransform()
         {
             var physicsTransform = new PhysicsTransform(transform.position, PhysicsRotate.identity);
             Body.SetAndWriteTransform(physicsTransform);

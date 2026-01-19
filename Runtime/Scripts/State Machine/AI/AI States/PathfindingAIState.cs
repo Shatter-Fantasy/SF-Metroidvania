@@ -1,9 +1,10 @@
 using System;
-using SF.LevelModule;
 using SF.Pathfinding;
+using SF.PhysicsLowLevel;
 using SF.SpawnModule;
 using SF.StateMachine.Decisions;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.StateMachine.Core
 {
@@ -29,6 +30,18 @@ namespace SF.StateMachine.Core
 	    private int _targetIndex = 0;
         private Awaitable _followPathAwaitable;
         private bool _followingTarget;
+		
+		
+		/// <summary>
+		/// Should the path follower use a <see cref="PhysicsTransform"/> to update the position.
+		/// </summary>
+		[Header("Optional Low Level Physics")]
+		[SerializeField] private bool _usePhysicsTransform = true;
+		/// <summary>
+		/// The <see cref="SFShapeComponent"/> to update the <see cref="PhysicsTransform"/>
+		/// on if <see cref="_usePhysicsTransform"/> is set to true.
+		/// </summary>
+		[SerializeField] private SFShapeComponent _controlledShapeComponent;
         
         protected override void OnInit()
         {
@@ -45,8 +58,21 @@ namespace SF.StateMachine.Core
 	            if (_target != null)
 		            distance.Target = _target;
             }
-            
-            _controlledTransform = StateBrain.ControlledGameObject.transform;
+			
+			_controlledTransform = StateBrain.ControlledGameObject.transform;
+
+			if (!_usePhysicsTransform)
+				return;
+			
+			if (_controlledShapeComponent == null && _controllerBody2D != null)
+			{
+				_controlledShapeComponent = _controllerBody2D.ShapeComponent;
+			}
+
+			if (_controlledShapeComponent != null)
+			{
+				_controlledShapeComponent.Body.transformObject = _controlledTransform;
+			}
         }
 
         protected override void OnStart()
@@ -119,9 +145,20 @@ namespace SF.StateMachine.Core
 	        // Set the current waypoint as the current node position based on the current target index in the path array.
 	        if (_path != null && _targetIndex < _path.Length)
 		        _currentWayPoint = _path[_targetIndex];
-	        
-	        _controlledTransform.position= Vector2.MoveTowards(_controlledTransform.position, _currentTargetPos, _speed * Time.deltaTime);
-        }
+
+
+			_controlledTransform.position = Vector2.MoveTowards(
+					_controlledTransform.position,
+					_currentTargetPos,
+					_speed * Time.deltaTime
+				);
+			
+			if (!_usePhysicsTransform || _controlledShapeComponent == null) 
+				return;
+			
+			_controlledShapeComponent.ApplyTransform();
+			_controlledShapeComponent.CacheTransform();
+		}
         
         private async Awaitable FollowPathAsync()
         {
