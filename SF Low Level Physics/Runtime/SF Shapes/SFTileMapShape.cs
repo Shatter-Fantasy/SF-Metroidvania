@@ -170,28 +170,6 @@ namespace SF.PhysicsLowLevel
                 // This is a bad solution and needs more updates for composite shapes.
                 _shape = ShapesInComposite[0];
             }
-            
-            // Iterate the polygons.
-            /*
-            foreach (var geometry in polygons)
-            {
-                if (!geometry.isValid)
-                    continue;
-
-                var shapeGeometry = geometry.Transform(relativeTransform, false);
-                if (!shapeGeometry.isValid)
-                    continue;
-
-                var shape = Body.CreateShape(shapeGeometry, ShapeDefinition);
-                
-                if (!shape.isValid)
-                    continue;
-
-                // Add to owned shapes.
-                if(ShapesInComposite.IsCreated)
-                    ShapesInComposite.Add(shape);
-            }
-            */
             Profiler.EndSample();
         }
     }

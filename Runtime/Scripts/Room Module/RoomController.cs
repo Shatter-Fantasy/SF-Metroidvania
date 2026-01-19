@@ -2,17 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SF.Characters.Controllers;
-using SF.Managers;
-using SF.PhysicsLowLevel;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
+#if UNITY_LOW_LEVEL_EXTRAS_2D
+using Unity.U2D.Physics.Extras;
+#endif
 
 namespace SF.RoomModule
 {
+    using Characters.Controllers;
+    using Managers;
+    using PhysicsLowLevel;
+    
     public class RoomController : MonoBehaviour, 
-        ITriggerShapeCallback
+        ITriggerShapeCallback,
+#if UNITY_LOW_LEVEL_EXTRAS_2D
+        IWorldSceneDrawable, 
+        IWorldSceneTransformChanged
+#endif
     {
         
         /* TODO List:
@@ -153,6 +160,16 @@ namespace SF.RoomModule
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
         {
             OnTriggerEnd2D(endEvent);
+        }
+
+        public void Draw()
+        {
+            
+        }
+
+        public void TransformChanged()
+        {
+            
         }
     }
 }
