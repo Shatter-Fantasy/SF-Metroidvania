@@ -11,7 +11,7 @@ namespace SF.PhysicsLowLevel
     /// The base class doesn't care or understand the difference between a <see cref="Rigidbody2D"/> or a <see cref="UnityEngine.LowLevelPhysics2D.PhysicsBody"/>.
     /// They inheriting classes define which one to use.
     /// </remarks>
-    public abstract class PhysicController2D : MonoBehaviour, IForceReciever
+    public abstract class PhysicController2D : MonoBehaviour, IForceReceiver
     {
         /// <summary>
         /// Reference speed if used for passing in a value in horizontal calculating based on running or not.

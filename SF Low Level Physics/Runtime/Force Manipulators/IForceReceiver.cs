@@ -8,7 +8,7 @@ namespace SF.PhysicsLowLevel
     /// <remarks>
     ///  Example usage of this is seen in the interface <see cref="IForceManipulator"/>. 
     /// </remarks>
-    public interface IForceReciever
+    public interface IForceReceiver
     {
         public abstract void SetExternalVelocity(Vector2 velocity);
     }

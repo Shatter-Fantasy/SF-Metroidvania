@@ -24,13 +24,13 @@ namespace SF.PhysicsLowLevel
             if((ContactFilter.layerMask & (1 << other.gameObject.layer)) == 0)
                 return;
 
-            if(other.TryGetComponent(out IForceReciever forceReciever) )
+            if(other.TryGetComponent(out IForceReceiver forceReciever) )
             {
                 ExtertForce(forceReciever, Force);
             }
         }
 
-        public void ExtertForce(IForceReciever forceReciever, Vector2 force)
+        public void ExtertForce(IForceReceiver forceReciever, Vector2 force)
         {
             if(_hasOneShotAnimation && _animator != null)
             {
