@@ -5,7 +5,8 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.PhysicsLowLevel
 {
-
+    using Utilities;
+    
     [Serializable]
     public class BodyCollisionInfo : CollisionInfoBase
     {

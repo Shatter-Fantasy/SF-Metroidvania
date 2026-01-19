@@ -9,8 +9,6 @@ namespace SF.PhysicsLowLevel.Utilities
         Check out the link below for the public repo where he helped show examples on how to do this.
         https://github.com/Unity-Technologies/PhysicsExamples2D/tree/master/LowLevel/Projects/Snippets/Assets/Examples/ContactFilteringExtensions    
          */
-
-    
     
     public static class ContactExtensions
     {

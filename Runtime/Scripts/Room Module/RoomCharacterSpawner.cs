@@ -92,7 +92,7 @@ namespace SF.SpawnModule
                 if(SpawnSets[i].SpawnedCharacter == null)
                     continue;
                 
-                SpawnSets[i].SpawnedHealth.Despawn();
+                SpawnSets[i].SpawnedHealth?.Despawn();
             }
         }
 

@@ -120,14 +120,14 @@ namespace SF.Pathfinding
 
             Gizmos.DrawWireCube(transform.position, new Vector3(GridWorldSize.x, GridWorldSize.y, 0));
 
-            if(_grid != null)
+            if (_grid == null)
+                return;
+            
+            foreach(var node in _grid)
             {
-                foreach(var node in _grid)
-                {
-                    Gizmos.color = (node.IsTraversable) ? Color.white : Color.red;
+                Gizmos.color = (node.IsTraversable) ? Color.yellow : Color.red;
 
-                    Gizmos.DrawWireCube(node.WorldPosition,Vector3.one * (_nodeDiameter - 0.1f));
-                }
+                Gizmos.DrawWireCube(node.WorldPosition,Vector3.one * (_nodeDiameter - 0.1f));
             }
         }
     }
