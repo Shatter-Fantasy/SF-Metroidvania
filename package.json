@@ -1,9 +1,9 @@
 {
   "name": "shatterfantasy.sf-metroidvania",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "displayName": "SF Metroidvania",
   "description": "This is the Metroidvania Toolkit developed by \nJonathan Westfall of Shatter Fantasy studio.",
-  "documentationUrl": "https://shatter-fantasy.gitbook.io/metroidvania-system/",
+  "documentationUrl": "https://github.com/Shatter-Fantasy/SF-Metroidvania",
   "keywords": [
     "2D",
     "Metroidvania",
