@@ -26,12 +26,15 @@ namespace SF.Weapons
         [SerializeField] protected SFShapeComponent _hitBox;
         private readonly List<PhysicsShape> _hitResults = new();
         
-        protected Vector2 _originalColliderOffset;
         private Vector2 _facingDirection;
         
         protected virtual void Awake()
         {
+            _attackTimer = new Timer(AttackDefinition.AttackTimer, OnUseComplete);
+            _hitBoxTimer = new Timer(AttackDefinition.HitBoxDelay, OnHitBoxDelay);
             
+            if(_controllerBody2D != null)
+                _controllerBody2D.OnDirectionChanged += OnDirectionChange;
         }
 
         protected override void OnDirectionChange(object sender, Vector2 newDirection)
@@ -50,8 +53,11 @@ namespace SF.Weapons
             // Stop attack while dead attack while dead.
             if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
-
-            _hitBox.Body.SetAndWriteTransform(new PhysicsTransform(transform.position,PhysicsRotate.identity));
+            
+            // First hack in the entire package.
+            // Not sure why the game object transform is being written to in some cases so setting local position to 0,0 first than setting the hitbox body position
+            transform.localPosition    = Vector3.zero;
+            _hitBox.Body.position = transform.position;
             
             DoAttack();
             _character2D.CharacterState.AttackState = AttackState.Attacking;
@@ -65,6 +71,9 @@ namespace SF.Weapons
                     AttackDefinition.Name,
                     AttackDefinition.AttackAnimationClip.length);
             }
+            
+            _attackTimer = new Timer(AttackDefinition.AttackTimer, OnUseComplete);
+            _hitBoxTimer = new Timer(AttackDefinition.HitBoxDelay, OnHitBoxDelay);
 
             _ = _hitBoxTimer.StartTimerAsync();
             _ = _attackTimer.StartTimerAsync();
