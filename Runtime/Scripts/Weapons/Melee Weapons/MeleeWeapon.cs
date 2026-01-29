@@ -59,13 +59,13 @@ namespace SF.Weapons
             transform.localPosition    = Vector3.zero;
             _hitBox.Body.position = transform.position;
             
-            DoAttack();
             _character2D.CharacterState.AttackState = AttackState.Attacking;
+            DoAttack();
         }
 
         protected virtual void DoAttack()
         {
-            if (_character2D != null && !_character2D.UseAnimatorTransitions)
+            if (_character2D != null)
             {
                 _character2D.SetAnimationState(
                     AttackDefinition.Name,
