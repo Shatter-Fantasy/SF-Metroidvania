@@ -1,73 +1,43 @@
 using Unity.Burst;
 using Unity.Cinemachine;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.RoomModule
 {
-    using PhysicsLowLevel;
-    
-    [AddComponentMenu("Cinemachine/Procedural/Extensions/Cinemachine Physic2D Shape")]
+    [AddComponentMenu("Cinemachine/Procedural/Extensions/Cinemachine Rectangle Confiner 2D ")]
     [SaveDuringPlay]
     [ExecuteAlways]
     [DisallowMultipleComponent]
     [BurstCompile]
-    public class RoomPhysicsShape : MonoBehaviour
+    public class RoomPhysicsShape : CinemachineExtension
     {
-        [Header("Shape Properties")]
-        public SFShapeComponent ConfinerShapeComponent;
-        private PhysicsShape _confinerShape;
-        [Header("Camera Properties")] 
-        public CinemachineVirtualCameraBase VirtualCamera;
+        [SerializeField] private Bounds _confinerBounds;
+        [SerializeField] private Transform _confinerCenter;
+
+        private Vector3 _correctedPosition;
         
-        private void Awake()
+        protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
         {
-            // No camera so let's not waste CPU by making shapes.
-            if (VirtualCamera == null)
-                TryGetComponent(out VirtualCamera);
-        }
-        
-        protected void CreateShape()
-        {
-            // ConfinerShape is of type SFShapeComponent, my custom base class for PhysicShape/PhysicBody that act like Components for GameObjects.
-            // Low Level Physics2D equivalent to Collider2D.
-            if(ConfinerShapeComponent == null)
+            if (stage != CinemachineCore.Stage.Body)
+                return;
+
+            if (_confinerCenter == null)
                 return;
             
-                       
-            // Create the Chain Geometry for the room outline
-        
-            // Room Chain Outline.
-            {
-                var groundBody = _confinerShape.world.CreateBody();
-                var aabb       = _confinerShape.aabb;
-                using var verticesArray = new NativeList<Vector2>(Allocator.Temp)
-                {
-                    aabb.upperBound,                                   // Upper Right
-                    new Vector2(aabb.upperBound.x, aabb.lowerBound.y), // Lower Right
-                    aabb.lowerBound,                                   // Lower Left
-                    new Vector2(aabb.lowerBound.x, aabb.upperBound.y), // Upper Left
-                };
-
-                groundBody.CreateChain(
-                    new ChainGeometry(verticesArray.AsArray()),
-                    PhysicsChainDefinition.defaultDefinition);
-            }
-            
-            // Create the frustum camera shape.
-            var state = VirtualCamera.State;
-            var camPosition = VirtualCamera.transform.position;
+            var camPosition = vcam.transform.position;
             var settings = state.Lens;
             float frustumHalfHeight = CalculateFrustumHalfHeight(settings.OrthographicSize,camPosition.z,settings.FieldOfView);
             float frustumHalfWidth = frustumHalfHeight * settings.Aspect;
             Vector2          frustum          = new Vector2(frustumHalfWidth * 2, frustumHalfHeight * 2);
             
-            // Create a shape using the camera frustum for the geometry outline and physical transform.
-            PolygonGeometry  frustumGeometry  = PolygonGeometry.CreateBox(frustum);
-            
-            //var frustumBody  = _confinerShape.world.CreateBody(BodyDefinition);
-            //frustumBody.CreateShape(frustumGeometry);
+            _confinerBounds.center = _confinerCenter.transform.position;
+            Vector3 pos = vcam.transform.position;
+
+            _correctedPosition.x = Mathf.Max(_confinerBounds.min.x + frustumHalfWidth,Mathf.Min(_confinerBounds.max.x - frustumHalfWidth, pos.x) );
+            _correctedPosition.y = Mathf.Max(_confinerBounds.min.y + frustumHalfHeight,Mathf.Min(_confinerBounds.max.y - frustumHalfHeight, pos.y) );
+            _correctedPosition.z = state.RawPosition.z;
+
+            state.PositionCorrection += _correctedPosition - state.GetCorrectedPosition();
         }
         
         /// <summary>
