@@ -39,18 +39,17 @@ namespace SF.Interactables
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
             // Grab the body data.
-            var objectData = beginEvent.triggerShape.body.userData.objectValue;
+            var shapeComponent = beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>();
+
+            if (!shapeComponent.TryGetComponent(out IInteractable interactable)
+                || interactable.InteractableMode != InteractableMode.Collision) 
+                return;
             
-            if (objectData is GameObject hitObject
-                && hitObject.TryGetComponent(out IInteractable interactable)
-                && interactable.InteractableMode == InteractableMode.Collision)
-            {
-                if(interactable is IInteractable<PlayerController> interactableController
-                   && _controller is not null)
-                    interactableController.Interact(_controller);
-                else
-                    interactable.Interact();
-            }
+            if(interactable is IInteractable<PlayerController> interactableController
+               && _controller is not null)
+                interactableController.Interact(_controller);
+            else
+                interactable.Interact();
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent) { }
@@ -71,17 +70,17 @@ namespace SF.Interactables
             {
                 // Grab the body data.
                 var objectData = result[i].shape.body.userData.objectValue;
+
+                if (objectData is not GameObject hitObject
+                    || !hitObject.TryGetComponent(out IInteractable interactable)
+                    || interactable.InteractableMode != InteractableMode.Input) 
+                    continue;
                 
-                if (objectData is GameObject hitObject 
-                    && hitObject.TryGetComponent(out IInteractable interactable)
-                    && interactable.InteractableMode == InteractableMode.Input)
-                {
-                    if(interactable is IInteractable<PlayerController> interactableController
-                            && _controller is not null)
-                        interactableController.Interact(_controller);
-                    else
-                        interactable.Interact();
-                }
+                if(interactable is IInteractable<PlayerController> interactableController
+                   && _controller is not null)
+                    interactableController.Interact(_controller);
+                else
+                    interactable.Interact();
             }
         }
   
