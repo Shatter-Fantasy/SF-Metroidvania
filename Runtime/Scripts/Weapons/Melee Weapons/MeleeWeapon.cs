@@ -24,9 +24,10 @@ namespace SF.Weapons
         
         [Header("Hit Box")]
         [SerializeField] protected SFShapeComponent _hitBox;
-        private readonly List<PhysicsShape> _hitResults = new();
+        protected readonly List<PhysicsShape> _hitResults = new();
         
-        private Vector2 _facingDirection;
+        protected Vector2 _facingDirection;
+        protected Vector2 _originalHitBoxOffset;
         
         protected virtual void Awake()
         {
@@ -35,11 +36,19 @@ namespace SF.Weapons
             
             if(_controllerBody2D != null)
                 _controllerBody2D.OnDirectionChanged += OnDirectionChange;
+
+            if (_hitBox != null)
+                _originalHitBoxOffset = _hitBox.Offset;
         }
 
         protected override void OnDirectionChange(object sender, Vector2 newDirection)
         {
-            _facingDirection = newDirection;
+            if (newDirection != Vector2.zero)
+            {
+                _facingDirection = newDirection;
+                if(_hitBox != null)
+                    _hitBox.UpdateShape();
+            }
         }
 
         public override void Use()
@@ -56,8 +65,9 @@ namespace SF.Weapons
             
             // First hack in the entire package.
             // Not sure why the game object transform is being written to in some cases so setting local position to 0,0 first than setting the hitbox body position
-            transform.localPosition    = Vector3.zero;
-            _hitBox.Body.position = transform.position;
+            transform.localPosition = Vector3.zero;
+            _hitBox.Offset = new Vector2(_originalHitBoxOffset.x * _facingDirection.x, _originalHitBoxOffset.y); 
+            _hitBox.Body.position   = transform.position;
             
             _character2D.CharacterState.AttackState = AttackState.Attacking;
             DoAttack();

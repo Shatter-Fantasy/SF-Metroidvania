@@ -27,11 +27,6 @@ namespace SF.Weapons
             
             if(_controllerBody2D != null)
                 _controllerBody2D.OnDirectionChanged += OnDirectionChange;
-            
-            if (_hitBox != null)
-            {
-                _originalColliderOffset      = _hitBox.transform.localPosition;
-            }
         }
         
         protected override void DoAttack()
