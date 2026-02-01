@@ -15,11 +15,7 @@ namespace SF.RoomModule
     using PhysicsLowLevel;
     
     public class RoomController : MonoBehaviour, 
-        ITriggerShapeCallback,
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-        IWorldSceneDrawable, 
-        IWorldSceneTransformChanged
-#endif
+        ITriggerShapeCallback
     {
         
         /* TODO List:
@@ -60,9 +56,6 @@ namespace SF.RoomModule
             {
                 _physicsShapeComponent.BodyDefinition.type      = PhysicsBody.BodyType.Static;
             }
-             
-            // This is the ignore ray cast physics layer.
-            gameObject.layer = 2;
             
             // Non-allocating version when used with read only List<T>
             gameObject.GetComponents(_roomExtensions);
@@ -160,16 +153,6 @@ namespace SF.RoomModule
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
         {
             OnTriggerEnd2D(endEvent);
-        }
-
-        public void Draw()
-        {
-            
-        }
-
-        public void TransformChanged()
-        {
-            
         }
     }
 }

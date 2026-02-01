@@ -44,7 +44,6 @@ namespace SF.StateMachine.Decisions
             }
             else if(_falseState != null && _calculatedDistance > Distance)
             {
-                Debug.Log($"Going the state of: {_falseState}");
                 decision.CanTransist = true;
                 decision.StateGoingTo = _falseState;
                 return;

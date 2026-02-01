@@ -1,6 +1,5 @@
 using SF.Managers;
 using SF.PhysicsLowLevel;
-using UnityEngine;
 
 namespace SF.Characters.Controllers
 {
