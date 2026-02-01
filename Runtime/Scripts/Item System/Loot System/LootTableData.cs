@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using SF.Inventory;
-using SF.DataModule;
-using SF.ItemModule;
-
 namespace SF.LootModule
 {
+    using DataModule;
+    using ItemModule;
+    
     [CreateAssetMenu(fileName = "Loot Table Data", menuName = "SF/Loot/Loot Table Data")]
     public class LootTableData : DTOAssetBase
     {
@@ -43,11 +42,6 @@ namespace SF.LootModule
 
                 spawnedItem.GetComponent<SpriteRenderer>().sprite = item.ItemIcon;
                 spawnedItem.GetComponent<PickupItem>().Item = item;
-                
-                // We add the box collider after setting the sprite to make sure the size of the collider is set properly.
-                var col = spawnedItem.AddComponent<BoxCollider2D>();
-                col.isTrigger = true;
-                
             }
             else
             {
