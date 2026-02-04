@@ -9,7 +9,7 @@ namespace SF.RoomModule
     [ExecuteAlways]
     [DisallowMultipleComponent]
     [BurstCompile]
-    public class RoomPhysicsShape : CinemachineExtension
+    public class CinemachineRectangleConfiner2D : CinemachineExtension
     {
         [SerializeField] private Bounds _confinerBounds;
         [SerializeField] private Transform _confinerCenter;
@@ -72,6 +72,12 @@ namespace SF.RoomModule
 
             return Mathf.Abs(frustumHeight);
             
+        }
+
+        public void UpdateConfinerBounds(in Bounds newConfinerBounds)
+        {
+            // TODO: Add logic for making sure the bounds don't have invalid values like negative sizes or 0.
+            _confinerBounds = newConfinerBounds;
         }
     }
 }
