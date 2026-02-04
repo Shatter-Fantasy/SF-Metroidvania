@@ -3,9 +3,13 @@
 > Toolkit requires Unity 6.3 as a minimum version and has support for Unity 6.4 and 6.5 API already.
 
 ## SF Metroidvania Toolkit
+
+![manual-home-header.png](images/manual-home-header.png)
+
+
 This is a toolkit to help make Side Scrolling Metroidvanias easier to develop.
 The toolkit has a range of features including, but not limited to:
-1. Character controlls
+1. Character controls
 2. Custom physics using Unity's Low Level Physics 2D API for customization and better performance.
 4. Ability System
 5. Save/load System with optional encrypted files.
