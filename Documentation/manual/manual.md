@@ -4,7 +4,7 @@
 
 ## SF Metroidvania Toolkit
 
-![manual-home-header.png](images/manual-home-header.png)
+![manual-home-header.png](../resources/images/images-manual/manual-home-header.png)
 
 
 This is a toolkit to help make Side Scrolling Metroidvanias easier to develop.
