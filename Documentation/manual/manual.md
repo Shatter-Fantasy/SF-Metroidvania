@@ -1,13 +1,22 @@
-﻿# Manual Home
+> Important Notes:
+>
+> Toolkit requires Unity 6.3 as a minimum version and has support for Unity 6.4 and 6.5 API already.
 
-> The manual is being updated throughout June in preparation for the first full public alpha release.
-> There will be times when I have to change the web url for better organization. If you want bookmark the site before it is ready I would bookmark this page.
+## SF Metroidvania Toolkit
+This is a toolkit to help make Side Scrolling Metroidvanias easier to develop.
+The toolkit has a range of features including, but not limited to:
+1. Character controlls
+2. Custom physics using Unity's Low Level Physics 2D API for customization and better performance.
+4. Ability System
+5. Save/load System with optional encrypted files.
+6. Item Database
+7. Room Management
 
-> The API is still in alpha stages so some things might change like namespace or files being renamed. It is advised to use the main branch where I will only be merging the stable changes into it. 
-> You can try the alpha branches if you want, but they might have commits pushed that could change things during the alpha stages very often.
+### Low Level Physics 2D API
+The toolkit uses PhysicsShape and PhysicsBody. There is no Collider2D or Rigidbodoy2D components in any of the project.
+If you have no used the Low Level Physics 2D API. Don't worry there are custom components in the toolkit that replaces the components.
+The base class is called SFShapeComponent.
 
-
-### Pages and sections that will be added before end of June 2025.
 
 #### How to section
 This goes over how to do commonly needed things and the basics. Later more advance examples will be done.
