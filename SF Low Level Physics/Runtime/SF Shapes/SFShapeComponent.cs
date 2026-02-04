@@ -37,8 +37,8 @@ namespace SF.PhysicsLowLevel
     [BurstCompile]
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
     public abstract class SFShapeComponent : MonoBehaviour, 
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-        IWorldSceneTransformChanged,
+#if UNITY_EDITOR
+        ITransformMonitor,
 #endif
         ITriggerShapeCallback,
         IContactShapeCallback
@@ -189,8 +189,8 @@ namespace SF.PhysicsLowLevel
             ApplyTransform();
             CacheTransform();
 
-#if UNITY_EDITOR && UNITY_LOW_LEVEL_EXTRAS_2D
-            WorldSceneTransformMonitor.AddMonitor(this);
+#if UNITY_EDITOR
+            PhysicTransformCache.AddMonitor(transform,this);
 #endif
             DebugPhysics();
         }
@@ -212,8 +212,8 @@ namespace SF.PhysicsLowLevel
             DestroyBody();
             DestroyShape();
             
-#if UNITY_EDITOR && UNITY_LOW_LEVEL_EXTRAS_2D
-            WorldSceneTransformMonitor.RemoveMonitor(this);
+#if UNITY_EDITOR
+            PhysicTransformCache.RemoveMonitor(transform,this);
 #endif
         }
 
@@ -345,6 +345,8 @@ namespace SF.PhysicsLowLevel
                 Body.Destroy();
                 Body         = default;
             }
+            
+
         }
 
 #region Physic Event Callbacks
@@ -575,5 +577,12 @@ namespace SF.PhysicsLowLevel
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+#if  UNITY_EDITOR
+        public void TransformChanged()
+        {
+            UpdateShape();
+        }
+#endif
     }
 }
