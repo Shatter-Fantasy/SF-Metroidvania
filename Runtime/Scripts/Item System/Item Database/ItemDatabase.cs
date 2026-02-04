@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using SF.Characters.Data;
 using UnityEngine;
 
 namespace SF.ItemModule
 {
+    using DataModule;
+    
     [CreateAssetMenu(fileName = "Item Database", menuName = "SF/Data/Item Database")]
     public class ItemDatabase : SFDatabase<ItemDTO>
     {

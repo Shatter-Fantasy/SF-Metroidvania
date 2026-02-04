@@ -10,9 +10,11 @@ using UnityEngine.UIElements;
 using SF.Characters.Data;
 using SF.DataModule;
 using SF.ItemModule;
+using SF.UIElements.Utilities;
 using SFEditor.Characters.Data;
 using SFEditor.Inventory.Data;
 using SFEditor.UIElements.Utilities;
+using UnityEngine.Serialization;
 
 namespace SFEditor.Data
 {
@@ -24,8 +26,12 @@ namespace SFEditor.Data
         
         [Header("UI Assets")]
         [SerializeField] private StyleSheet _dataEditorStyleSheet;
-        [SerializeField] private VisualTreeAsset m_VisualTreeAsset = default;
+        [FormerlySerializedAs("m_VisualTreeAsset")] 
+        [SerializeField] private VisualTreeAsset _visualTreeAsset = default;
         
+        /// <summary>
+        /// Most of the time this is the TabView for the selected tab being shown.
+        /// </summary>
         private VisualElement _rootDataElement;
         private VisualElement _itemRoot;
         
@@ -45,11 +51,13 @@ namespace SFEditor.Data
         public void CreateGUI()
         {
             VisualElement root = rootVisualElement;
-            VisualElement veUXML = m_VisualTreeAsset.Instantiate();
+            root.AddClass("editor-root");
+            
+            VisualElement veUXML = _visualTreeAsset.Instantiate();
+            veUXML.name = "data__template-container";
             
             root.Add(veUXML);
             SFUIElementsFactory.InitializeSFStyles(root);
-            
             
             _rootDataElement = root.Q<VisualElement>("root-datasource");
             _itemRoot = root.Q<VisualElement>("item__view-root");

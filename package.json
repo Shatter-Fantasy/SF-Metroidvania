@@ -1,9 +1,9 @@
 {
   "name": "shatterfantasy.sf-metroidvania",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "displayName": "SF Metroidvania",
   "description": "This is the Metroidvania Toolkit developed by \nJonathan Westfall of Shatter Fantasy studio.",
-  "documentationUrl": "https://shatter-fantasy.gitbook.io/metroidvania-system/",
+  "documentationUrl": "https://github.com/Shatter-Fantasy/SF-Metroidvania",
   "keywords": [
     "2D",
     "Metroidvania",
@@ -29,7 +29,8 @@
   "unity": "6000.3",
   "dependencies": {
     "com.unity.inputsystem": "1.16.0",
-    "com.unity.cinemachine": "3.1.4"
+    "com.unity.cinemachine": "3.1.4",
+    "com.unity.graphtoolkit": "0.4.0-exp.2"
   },
   "hideInEditor": false
 }

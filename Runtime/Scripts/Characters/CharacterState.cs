@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace SF.Characters
 {
+	using Weapons;
+	
 	/// <summary>
 	/// The current movement state of the Character.
 	///  This is used to tell what animation to play, when physics need to apply gravity, and what movement speed value is used when a character is moved. 
@@ -75,11 +77,28 @@ namespace SF.Characters
 				_previousMovementState = _currentMovementState;
 				_currentMovementState = value;
 				
-				OnMovementStateChanged?.Invoke();
+			
 			}
 		}
 
 		public Action OnMovementStateChanged;
+
+		[SerializeField] private AttackState _attackState;
+
+		public AttackState AttackState
+		{
+			get => _attackState;
+			set
+			{
+				if (_attackState == value)
+					return;
+				
+				AttackStateChangedHandler?.Invoke(value);
+				_attackState = value;
+			}
+		}
+		
+		public Action<AttackState> AttackStateChangedHandler;
 		
 		[SerializeField]
 		private CharacterStatus _characterStatus;
@@ -98,7 +117,7 @@ namespace SF.Characters
 				_characterStatus = value;
 			}
 		}
-
+		
 		public Action OnDeathHandler;
 		
 		[SerializeField] private StatusEffect _statusEffect;

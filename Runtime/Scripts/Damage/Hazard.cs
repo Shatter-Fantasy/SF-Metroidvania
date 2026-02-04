@@ -3,6 +3,8 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.DamageModule
 {
+    using PhysicsLowLevel;
+    
     [System.Flags]
     public enum Direction : short
     {
@@ -14,55 +16,26 @@ namespace SF.DamageModule
         Down = 8,
     }
 
-    public class Hazard : MonoBehaviour, IDamage, PhysicsCallbacks.ITriggerCallback
+    public class Hazard : MonoBehaviour, 
+        IDamage, 
+        ITriggerShapeCallback
     {
-        private Collider2D _collider2D;
         private Vector2 _collisionNormal;
         public Direction DamageDirection;
         public int DamageAmount = 1;
         [SerializeField] private Vector2 _knockBackForce;
-
-        private void Awake()
+        
+        private void Start()
         {
-            _collider2D = GetComponent<Collider2D>();
-        }
-
-        private void OnCollisionEnter2D(Collision2D collision2D)
-        {
-            if(collision2D.gameObject.TryGetComponent(out IDamagable damagable))
+            if (TryGetComponent(out SFShapeComponent component))
             {
-                _collisionNormal = collision2D.GetContact(0).normal;
-                if(CheckCollisionDirection())
-                    damagable.TakeDamage(DamageAmount,_knockBackForce);
-            }
-        }
-
-        private void OnTriggerEnter2D(Collider2D col2D)
-        {
-            if(col2D.TryGetComponent(out IDamagable damagable))
-            {
-                _collisionNormal = col2D.Distance(_collider2D).normal;
-                
-                if(CheckCollisionDirection())
-                    damagable.TakeDamage(DamageAmount,_knockBackForce);
+                component.AddTriggerCallbackTarget(this);
             }
         }
         
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
-        {
-            if (((GameObject)beginEvent.visitorShape.callbackTarget).TryGetComponent(out IDamagable damagable))
-            {
-                
-                Debug.Log(damagable);
-                damagable.TakeDamage(DamageAmount,_knockBackForce);
-                // Need to figure out the low level version of Collider2D.Distance.
-                //_collisionNormal = col2D.Distance(_collider2D).normal;
-
-                _collisionNormal = beginEvent.visitorShape.Intersect(beginEvent.triggerShape).normal;
-                
-                //if(CheckCollisionDirection())
-                    //damagable.TakeDamage(DamageAmount,_knockBackForce);
-            }
+        {  
+            // noop - No Operation.
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
@@ -70,6 +43,21 @@ namespace SF.DamageModule
             // noop - No Operation.
         }
         
+        
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            var visitingComponent = beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>();
+            
+            if (!visitingComponent.TryGetComponent(out IDamagable damagable))
+                return;
+            
+            damagable.TakeDamage(DamageAmount,_knockBackForce);
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            // noop - No Operation.
+        }
 
         private bool CheckCollisionDirection()
         {

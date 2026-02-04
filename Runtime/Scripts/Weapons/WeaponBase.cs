@@ -1,23 +1,33 @@
 using System.Collections.Generic;
-
-using SF.Characters;
-using SF.CombatModule;
-using SF.PhysicsLowLevel;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
+using UnityEngine.Serialization;
 
 namespace SF.Weapons
 {
+    using Characters;
+    using CombatModule;
+    using PhysicsLowLevel;
+    
+    public enum AttackState
+    {
+        NotAttacking,
+        Attacking,
+        Charging, // Can be for spells, holding a bow pull, and ect.
+        Aiming // Aiming bow or some projectile.
+    }
+    
     public abstract class WeaponBase : MonoBehaviour, IWeapon
     {
         public int WeaponDamage = 1;
-
-        [SerializeField] protected ComboType ComboType;
-        public List<ComboAttack> ComboAttacks = new();
+        
+       
         [SerializeField] protected Vector2 _knockBackForce;
         [SerializeField] protected CharacterRenderer2D _character2D;
         [SerializeField] protected ControllerBody2D _controllerBody2D;
-        [SerializeField] protected ContactFilter2D _hitBoxFilter;
-
+        
+        [SerializeField] protected PhysicsQuery.QueryFilter _filter;
+        
         [SerializeField] protected Timer _attackTimer;
         
         public bool OnCooldown { get; protected set;}

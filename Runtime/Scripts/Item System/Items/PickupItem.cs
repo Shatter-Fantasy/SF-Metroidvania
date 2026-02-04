@@ -48,13 +48,11 @@ namespace SF.ItemModule
         {
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
                 return;
-           
-            if (beginEvent.visitorShape.callbackTarget is not PlayerController body2D)
-                return;
-                    
-            if(body2D.CollisionInfo.CollisionActivated)
+
+            if (beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>()
+                       .TryGetComponent(out PlayerController controller))
             {
-                Interact(body2D);
+                Interact(controller);
             }
         }
 

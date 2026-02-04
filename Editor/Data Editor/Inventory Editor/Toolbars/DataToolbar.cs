@@ -1,6 +1,5 @@
 using UnityEditor.UIElements;
 
-using UnityEngine;
 using UnityEngine.UIElements;
 
 using SF.UIElements.Utilities;

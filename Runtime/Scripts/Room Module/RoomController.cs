@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SF.Characters.Controllers;
-using SF.Managers;
-using SF.PhysicsLowLevel;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
+#if UNITY_LOW_LEVEL_EXTRAS_2D
+using Unity.U2D.Physics.Extras;
+#endif
 
 namespace SF.RoomModule
 {
+    using Characters.Controllers;
+    using Managers;
+    using PhysicsLowLevel;
+    
     public class RoomController : MonoBehaviour, 
         ITriggerShapeCallback
     {
@@ -53,9 +56,6 @@ namespace SF.RoomModule
             {
                 _physicsShapeComponent.BodyDefinition.type      = PhysicsBody.BodyType.Static;
             }
-             
-            // This is the ignore ray cast physics layer.
-            gameObject.layer = 2;
             
             // Non-allocating version when used with read only List<T>
             gameObject.GetComponents(_roomExtensions);
