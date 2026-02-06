@@ -1,3 +1,4 @@
+using System;
 using SF.Characters;
 using SF.CommandModule;
 using SF.PhysicsLowLevel;
@@ -31,6 +32,8 @@ namespace SF.SpawnModule
         protected ControllerBody2D _controllerBody2D;
         protected CharacterRenderer2D _character2D;
 
+        public Action CharacterDiedHandler;
+        
         protected virtual void Awake()
         {
             _controllerBody2D = GetComponent<ControllerBody2D>();
@@ -50,6 +53,7 @@ namespace SF.SpawnModule
             DamageBlink.StopInteruptBlinking();
             
             base.Kill();
+            CharacterDiedHandler?.Invoke();
         }
 
         public override void Respawn()

@@ -32,6 +32,7 @@ namespace SF.SpawnModule
             }
 
             base.Kill();
+   
         }
 
         public override void Respawn()
