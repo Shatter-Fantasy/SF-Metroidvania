@@ -15,7 +15,8 @@ namespace SF.StateMachine.Decisions
         [Header("States")]
         [SerializeField] protected StateCore _trueState;
         [SerializeField] protected StateCore _falseState;
-
+		protected StateMachineBrain _brain;
+		
         [Space]
 		[SerializeField] protected bool _canTransistToSelf = false;
 		[SerializeField] private List<StateCore> _blockingStates = new();

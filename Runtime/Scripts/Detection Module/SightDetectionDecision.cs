@@ -20,9 +20,9 @@ namespace SF.StateMachine.Decisions
         
         protected override void Init()
         {
-            if (TryGetComponent(out StateMachineBrain brain)
-                && brain.ControlledGameObject.TryGetComponent(out _controllerBody2D))
+            if (TryGetComponent(out _brain))
             {
+                _brain.ControlledGameObject.TryGetComponent(out _controllerBody2D);
                 // This is empty on purpose. The second TryGetComponent assigns the _controller2D value for this decision.
                 return;
             }
