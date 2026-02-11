@@ -10,6 +10,12 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.PhysicsLowLevel
 {
+    
+    public interface IQueryHitCallback
+    {
+        void QueryHit(SFShapeComponent shapeComponent);
+    }
+    
     public interface IContactShapeCallback : PhysicsCallbacks.IContactCallback
     {
         void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
@@ -74,7 +80,7 @@ namespace SF.PhysicsLowLevel
         /// </remarks>
         public ref PhysicsShape Shape => ref _shape;
 
-        public PhysicsWorld World =>_shape.isValid ? _shape.world : PhysicsWorld.defaultWorld;
+        public PhysicsWorld World => Body.isValid ? Body.world : PhysicsWorld.defaultWorld;
 
         public virtual void SetShape<TGeometryType>(TGeometryType geometryType) where  TGeometryType : struct
         {
@@ -144,7 +150,6 @@ namespace SF.PhysicsLowLevel
             }
         }
         
-
         /// <summary>
         /// A list of objects that are currently contained inside of <see cref="Shape"/>
         /// </summary>
@@ -178,7 +183,6 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         private readonly List<ITriggerShapeCallback> _triggerTargets = new();
         private readonly List<IContactShapeCallback> _contactTargets = new();
-        
 
         public Action ShapeCreatedHandler;
         public Action ShapeDestroyedHandler;
