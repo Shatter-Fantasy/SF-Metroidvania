@@ -33,17 +33,6 @@ namespace SF.DamageModule
             }
         }
         
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
-        {  
-            // noop - No Operation.
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
-        {
-            // noop - No Operation.
-        }
-        
-        
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
             var visitingComponent = beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>();

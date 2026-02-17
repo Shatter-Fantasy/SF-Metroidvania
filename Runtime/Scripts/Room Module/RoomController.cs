@@ -4,9 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-using Unity.U2D.Physics.Extras;
-#endif
 
 namespace SF.RoomModule
 {
@@ -113,22 +110,6 @@ namespace SF.RoomModule
             RoomSystem.SetCurrentRoom(RoomID);
         }
         
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
-        {
-            OnRoomEnteredHandler?.Invoke();
-            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
-            {
-                _roomEnteredExtensions[i].Process();
-            }
-            
-            MakeCurrentRoom();
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
-        {
-            OnRoomExitHandler?.Invoke();
-        }
-
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
@@ -147,12 +128,18 @@ namespace SF.RoomModule
             if (!body2D.CollisionInfo.CollisionActivated)
                 return;
             
-            OnTriggerBegin2D(beginEvent);
+            OnRoomEnteredHandler?.Invoke();
+            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
+            {
+                _roomEnteredExtensions[i].Process();
+            }
+            
+            MakeCurrentRoom();
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
         {
-            OnTriggerEnd2D(endEvent);
+            OnRoomExitHandler?.Invoke();
         }
     }
 }
