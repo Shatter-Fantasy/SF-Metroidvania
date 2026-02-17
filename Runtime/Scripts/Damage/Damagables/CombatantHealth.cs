@@ -12,8 +12,9 @@ namespace SF.SpawnModule
         protected override void Awake()
         {
             base.Awake();
-            _combatantData = GetComponent<CombatantData>();
+            _combatantData       = GetComponent<CombatantData>();
             _combatantStateBrain = GetComponentInChildren<StateMachineBrain>();
+            _currentHealth       = MaxHealth;
         }
         
         protected override void Kill()

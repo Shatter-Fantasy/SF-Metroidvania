@@ -24,7 +24,7 @@ namespace SF.SpawnModule
         /// </summary>
         public IDamageController DamageController;
 
-        [SerializeField] private int _currentHealth;
+        [SerializeField] protected int _currentHealth;
         [CreateProperty] public int CurrentHealth
         {
             get => _currentHealth;
