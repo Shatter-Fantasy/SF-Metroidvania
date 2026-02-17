@@ -24,6 +24,11 @@ namespace SF.AbilityModule
     {
         //The gameobject the abilities will control.
         public GameObject AbilityOwner;
+        /// <summary>
+        /// The game objects with abilities attached. It allows organizing abilities into separate
+        /// game objects to make the hierarchy a bit cleaner.
+        /// </summary>
+        public List<GameObject> AbilityObjects = new();
         public List<AbilityCore> Abilities = new List<AbilityCore>();
         
         private PhysicController2D _physicController2D;
@@ -31,6 +36,13 @@ namespace SF.AbilityModule
         private void Awake()
         {
             Abilities = GetComponents<AbilityCore>().ToList();
+            
+            for (int i = 0; i < AbilityObjects.Count; i++)
+            {
+                var abilities = AbilityObjects[i].GetComponents<AbilityCore>().ToList();
+                Abilities.AddRange(abilities);
+            }
+
             
             _physicController2D = AbilityOwner != null 
                 ? AbilityOwner.GetComponent<PhysicController2D>() 
