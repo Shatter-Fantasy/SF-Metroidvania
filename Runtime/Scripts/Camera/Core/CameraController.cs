@@ -1,10 +1,10 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-using SF.SpawnModule;
-
 namespace SF.CameraModule
 {
+    using RoomModule;
+    using SpawnModule;
     /// <summary>
     /// The manager for the active main camera in playable levels.
     /// Contains helper methods for switching active cameras.
@@ -47,11 +47,13 @@ namespace SF.CameraModule
         private static CameraController _instance;
 
         public Transform CameraTarget;
+        [SerializeField] private CinemachineRectangleConfiner2D _playerCamConfiner;
 
         public static Camera MainCamera;
         public static CinemachineBrain MainCameraBrain;
         public static CinemachineCamera ActiveRoomCamera;
         public static CinemachineCamera ActiveCutsceneCamera;
+        
 
         private void Awake()
         {
@@ -165,6 +167,11 @@ namespace SF.CameraModule
                 return;
 
             camera.Follow = target;
+        }
+
+        public static void UpdateRectangleConfiner(Bounds cameraBounds)
+        {
+            _instance._playerCamConfiner.ConfinerBounds = cameraBounds;
         }
     }
 }

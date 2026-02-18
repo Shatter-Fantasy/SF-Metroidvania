@@ -134,8 +134,6 @@ namespace SF.RoomModule
             // Don't try to Refresh a room that hasn't loaded a spawned instance yet.
             if (!IsRoomLoaded(roomID))
                 return;
-            
-            
         }
 
         /// <summary>
@@ -152,14 +150,6 @@ namespace SF.RoomModule
                 #endif
                 return false;
             }
-            
-            /* TODO: Replace the CameraController.SwitchPlayerCMCamera method to the method that sets the player camera with a new
-             * Containing shape. We no longer need to a camera per room. The low level physics is fast enough to calculate
-             * room bounds without any issues on even low end hardware.
-             * The old method is still being kept for when we need a specific camera set up for special rooms.             */
-            
-            // This sets the priority of the virtual cameras for the old and new rooms while setting the new Room Confiners.
-            //CameraController.SwitchPlayerCMCamera(_roomDB[roomID].SpawnedRoomController.RoomCamera);
 
             // Was able to set a valid room as the current one.
             CurrentRoom = _roomDB[roomID];
@@ -194,6 +184,7 @@ namespace SF.RoomModule
         /// <summary>
         /// The connected rooms that need to be loaded/deloaded when entering/existing 
         /// </summary>
+        [Header("Room Ids")]
         public List<int> ConnectedRoomsIDs = new List<int>();
 
         /// <summary>
@@ -205,11 +196,11 @@ namespace SF.RoomModule
         /// You should only get this when grabbing a Room reference directly from the RoomDB or you could risk a null value. 
         /// </summary>
         public GameObject RoomPrefab;
-
         /// <summary>
         /// This is only used during runtime. This allows for keeping track of the SpawnedInstances in the Room data itself.
         /// </summary>
         [NonSerialized] public GameObject SpawnedInstance;
         [NonSerialized] public RoomController SpawnedRoomController;
+        
     }
 }
