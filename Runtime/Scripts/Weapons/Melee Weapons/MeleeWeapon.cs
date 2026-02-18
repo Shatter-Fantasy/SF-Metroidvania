@@ -46,8 +46,6 @@ namespace SF.Weapons
             if (newDirection != Vector2.zero)
             {
                 _facingDirection = newDirection;
-                if(_hitBox != null)
-                    _hitBox.UpdateShape();
             }
         }
 
@@ -63,11 +61,19 @@ namespace SF.Weapons
             if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
             
-            // First hack in the entire package.
-            // Not sure why the game object transform is being written to in some cases so setting local position to 0,0 first than setting the hitbox body position
             transform.localPosition = Vector3.zero;
-            _hitBox.Offset = new Vector2(_originalHitBoxOffset.x * _facingDirection.x, _originalHitBoxOffset.y); 
-            _hitBox.Body.position   = transform.position;
+            
+            // Okay so this offset is added onto the offset of the original _hitBox.Offset.
+            // So 0 makes the new body position the same as the original offset. And subtracting the double of the offset just flips it horizontally....
+            var offset = new Vector2(
+                (_facingDirection.x >= 0 
+                    ? 0
+                    : -_originalHitBoxOffset.x * 2), 
+                _originalHitBoxOffset.y); 
+            
+            _hitBox.Body.position = (Vector2)transform.position + offset;
+            _hitBox.Body.enabled  = true;
+            
             
             _character2D.CharacterState.AttackState = AttackState.Attacking;
             DoAttack();
@@ -117,6 +123,9 @@ namespace SF.Weapons
             _attackTimer.StopTimer();
             UseCompleted?.Invoke();
             OnCooldown = false;
+
+            if(_hitBox.Body.isValid)
+                _hitBox.Body.enabled = false;
         }
 
        
