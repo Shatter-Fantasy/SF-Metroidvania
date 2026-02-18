@@ -42,9 +42,10 @@ namespace SF.PhysicsLowLevel
 #if UNITY_EDITOR
         ITransformMonitor,
 #endif
-        ITriggerShapeCallback,
-        IContactShapeCallback,
-        IPreSolveShapeCallback
+        ITriggerShapeCallback, PhysicsCallbacks.ITriggerCallback,
+        IContactShapeCallback, PhysicsCallbacks.IContactCallback,
+        IPreSolveShapeCallback, PhysicsCallbacks.IPreSolveCallback
+        
     {
         
         #region Transform Cache - Temp fields
