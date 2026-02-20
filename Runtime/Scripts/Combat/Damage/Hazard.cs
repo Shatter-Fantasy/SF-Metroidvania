@@ -35,7 +35,8 @@ namespace SF.DamageModule
         
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
-            var visitingComponent = beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>();
+            if(!beginEvent.TryGetCallbackComponentOnVisitor(out SFShapeComponent visitingComponent))
+                return;
             
             if (!visitingComponent.TryGetComponent(out IDamagable damagable))
                 return;

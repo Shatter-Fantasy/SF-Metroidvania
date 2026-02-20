@@ -12,8 +12,8 @@ Currently planned are more Low Level Physics 2D utilities and qol updates.
 
 ### Planned
 - Add more utlities for Low Level Physics API.
-    - Extension methods for setting PhysicsShapes.ContactFilter.categories
-    - Extension methods for setting PhysicsShapes.ContactFilter.contacts
+    - Extension methods for setting PhysicsShapes.ContactFilter.categories - Done 
+    - Extension methods for setting PhysicsShapes.ContactFilter.contacts - Done
 - Update the Save System.cs - Sooner I get this done the less chance of future alphas breaking save files in builds.
   - Remove old Checkpoint and CheckPointManager class.
 - Merge the Data Editor with the SF Metroidvania Editor window.
