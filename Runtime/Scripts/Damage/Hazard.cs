@@ -16,8 +16,7 @@ namespace SF.DamageModule
         Down = 8,
     }
 
-    public class Hazard : MonoBehaviour, 
-        IDamage, 
+    public class Hazard : MonoBehaviour,
         ITriggerShapeCallback
     {
         private Vector2 _collisionNormal;
@@ -48,6 +47,7 @@ namespace SF.DamageModule
             // noop - No Operation.
         }
 
+        // TODO: Add this to an utility class where the direction is just passed in as a parameter.
         private bool CheckCollisionDirection()
         {
             switch(DamageDirection)
