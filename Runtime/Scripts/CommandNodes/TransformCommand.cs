@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace SF.CommandModule
 {
+    using SF.Core;
     [System.Serializable]
     [CommandMenu("Transform/Move")]
     public class TransformCommand : CommandNode

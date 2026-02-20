@@ -1,4 +1,3 @@
-
 namespace SF.DamageModule
 {
     /// <summary>

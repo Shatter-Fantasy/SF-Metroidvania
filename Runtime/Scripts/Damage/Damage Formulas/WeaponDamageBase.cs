@@ -1,7 +1,6 @@
-using SF.StatModule;
-
 namespace SF.DamageModule
 {
+    using StatModule;
     /// <summary>
     /// Used to calculate the damage a weapon should do to anything it is applying damage to.
     /// </summary>

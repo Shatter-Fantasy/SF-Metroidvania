@@ -1,11 +1,10 @@
-using SF.Characters.Controllers;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using SF.InputModule;
-using SF.PhysicsLowLevel;
 
 namespace SF.AbilityModule.Characters
 {
+	using InputModule;
+	
     public class HorizontalMovementAbility : AbilityCore, IInputAbility
     {
         [SerializeField] private bool _isRunningToggleable = true;

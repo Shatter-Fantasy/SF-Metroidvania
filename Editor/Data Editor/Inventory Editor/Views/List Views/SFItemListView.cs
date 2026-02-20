@@ -1,7 +1,6 @@
 using UnityEngine.UIElements;
 
 using SFEditor.Data;
-using SF.Inventory;
 using SF.ItemModule;
 using UnityEditor;
 using UnityEngine;

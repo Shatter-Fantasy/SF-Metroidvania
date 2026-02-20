@@ -1,13 +1,13 @@
 using UnityEngine;
 
-using SF.DataModule;
-using SF.Experience;
-using SF.LootModule;
-using SF.StatModule;
-
-
 namespace SF.Characters.Data
 {
+    using DataModule;
+    using Experience;
+    using LootModule;
+    using StatModule;
+
+
     [CreateAssetMenu(fileName = "New Character Data", menuName = "SF/Data/Character Data")]
     public class CharacterDTO : DTOAssetBase
     {

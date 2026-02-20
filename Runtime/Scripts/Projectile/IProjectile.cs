@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.ProjectileModule
+namespace SF.Weapons.ProjectileModule
 {
     public interface IProjectile
     {

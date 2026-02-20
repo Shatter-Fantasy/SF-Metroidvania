@@ -1,10 +1,10 @@
-using SF.PhysicsLowLevel;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.Interactables
 {
+    using PhysicsLowLevel;
     public class InteractionController : MonoBehaviour
     {
         [SerializeField] protected PhysicsQuery.QueryFilter _interactableFilter;

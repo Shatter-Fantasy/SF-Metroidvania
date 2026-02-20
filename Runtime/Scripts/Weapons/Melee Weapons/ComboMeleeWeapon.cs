@@ -5,7 +5,6 @@ using UnityEngine;
 namespace SF.Weapons
 {
     using CombatModule;
-    
     public class ComboMeleeWeapon : MeleeWeapon
     {
         [Header("Combo Properties")]

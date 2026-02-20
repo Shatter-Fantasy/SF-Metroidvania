@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using SF.ProjectileModule;
-
-
 namespace SF.Weapons
 {
+    using ProjectileModule;
     public class ProjectileWeapon : MonoBehaviour, IWeapon
     {
         [SerializeField] private bool _isAutoFire = false;

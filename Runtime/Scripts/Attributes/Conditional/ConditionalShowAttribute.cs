@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SF
+namespace SF.Core
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class ConditionalShowAttribute : PropertyAttribute

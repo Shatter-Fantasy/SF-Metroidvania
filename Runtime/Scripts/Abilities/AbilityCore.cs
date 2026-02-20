@@ -1,11 +1,10 @@
 using UnityEngine;
 
-using SF.Characters;
-using SF.Managers;
-using SF.PhysicsLowLevel;
-
 namespace SF.AbilityModule
 {
+	using SF.Characters;
+	using Managers;
+	using PhysicsLowLevel;
 	/// <summary>
 	/// Abilities contain the data for what actions can do and how they do them.
 	/// </summary>

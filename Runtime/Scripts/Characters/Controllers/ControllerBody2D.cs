@@ -1,8 +1,9 @@
-using SF.Characters;
 using UnityEngine;
 
 namespace SF.PhysicsLowLevel
 {
+    using Characters;
+    
     /// <summary>
     /// The base class for high performance physics controller that uses Unity's Low Level Physics2D system to allow for
     /// highly customizable physics that can even destroy, edit, and manipulate physics shapes in real time.

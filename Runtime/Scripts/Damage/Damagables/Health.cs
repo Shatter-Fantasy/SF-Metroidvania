@@ -3,12 +3,10 @@ using System;
 using UnityEngine;
 using Unity.Properties;
 
-using SF.AudioModule;
-using SF.DamageModule;
-
-
 namespace SF.SpawnModule
 {
+    using AudioModule;
+    using DamageModule;
     /// <summary>
     /// Adds a health system to anything. 
     /// This does not need to be on a character. You can add this to a crate or anything that wants to be damaged. There are checks in do stuff for character specific objects if you want to.

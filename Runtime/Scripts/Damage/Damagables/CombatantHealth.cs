@@ -1,9 +1,9 @@
-using SF.Characters.Data;
-using SF.Experience;
-using SF.StateMachine.Core;
-
 namespace SF.SpawnModule
 {
+    using Characters.Data;
+    using Experience;
+    using StateMachine;
+
     public class CombatantHealth : CharacterHealth
     {
         private CombatantData _combatantData;

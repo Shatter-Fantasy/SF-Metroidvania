@@ -1,12 +1,9 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-using UnityEngine.Serialization;
 
 namespace SF.Weapons
 {
     using Characters;
-    using CombatModule;
     using PhysicsLowLevel;
     
     public enum AttackState

@@ -1,9 +1,8 @@
-using SF.DamageModule;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
-namespace SF
+namespace SF.DamageModule
 {
+    using PhysicsLowLevel;
     public class Stomp : MonoBehaviour
     {
         public float BounceVelocity = 5f;
@@ -15,6 +14,8 @@ namespace SF
             _collider2d = GetComponent<Collider2D>();
             _controller2D = GetComponent<ControllerBody2D>();
         }
+        
+        // TODO: Remove this. We don't use the old physics system anymore.
         public void OnTriggerEnter2D(Collider2D other)
         {
             if(other.TryGetComponent(out IStompable stompable))
