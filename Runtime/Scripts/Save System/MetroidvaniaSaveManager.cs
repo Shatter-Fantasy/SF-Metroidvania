@@ -2,11 +2,9 @@ namespace SF.DataManagement
 {
     using ItemModule;
     using RoomModule;
-    using SpawnModule;
 
     public class MetroidvaniaSaveManager : SaveSystem
     {
-        public static SavePoint StartingSavePoint;
         public static SavePoint CurrentSavePoint;
         
         /// <summary>

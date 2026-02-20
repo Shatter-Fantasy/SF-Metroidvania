@@ -8,6 +8,9 @@ namespace SF.DataManagement
     using SpawnModule;
     using StatModule;
     
+    /// <summary>
+    /// A <see cref="SavePoint"/> that requires being interacted with to use.
+    /// </summary>
     public class SaveStation : SavePoint, IInteractable<PlayerController>
     {
         /// <summary>
