@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace SF.StateMachine.Decisions
 {
-    using Core;
-
     /// <summary>
     /// Transitions are the classes that control the logic for when a state should change to another state.
     /// </summary>

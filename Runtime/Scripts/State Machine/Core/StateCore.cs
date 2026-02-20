@@ -3,7 +3,7 @@ using System.Linq;
 
 using UnityEngine;
 
-namespace SF.StateMachine.Core
+namespace SF.StateMachine
 {
 	using Characters;
 	using PhysicsLowLevel;

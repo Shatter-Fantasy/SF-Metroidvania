@@ -1,11 +1,11 @@
 using System;
-using SF.Characters.Controllers;
-using SF.PhysicsLowLevel;
-using SF.RoomModule;
 using UnityEngine;
 
 namespace SF.SpawnModule
 {
+    using Characters.Controllers;
+    using PhysicsLowLevel;
+    using RoomModule;
     /// <summary>
     /// The system that controls the logic for spawning the player. 
     /// </summary>

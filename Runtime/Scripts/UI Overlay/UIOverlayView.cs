@@ -1,9 +1,9 @@
-using SF.ItemModule;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SF.UIModule
 {
+    using ItemModule;
     public class UIOverlayView : MonoBehaviour
     {
         [SerializeField] private UIDocument _overlayUXML;

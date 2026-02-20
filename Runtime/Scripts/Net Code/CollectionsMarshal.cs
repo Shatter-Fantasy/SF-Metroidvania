@@ -1,7 +1,5 @@
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
-using System.Diagnostics;
 
 namespace System.Runtime.InteropServices
 {
@@ -10,8 +8,7 @@ namespace System.Runtime.InteropServices
     /* DON"T TOUCH THIS FILE OR THE WORLD WILL BE DESTROYED.*/
 
     /* This entire file brings .net 9 and CoreCLR stuff not normally in Unity into the version of .net that Unity uses.*/
-
-
+    
     /// <summary>
     /// Used internally to control behavior of insertion into a <see cref="Dictionary{TKey, TValue}"/> or <see cref="HashSet{T}"/>.
     /// </summary>

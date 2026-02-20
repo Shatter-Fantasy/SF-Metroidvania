@@ -1,10 +1,10 @@
-using SF.PhysicsLowLevel;
-using SF.StateMachine.Core;
-
 using UnityEngine;
 
 namespace SF.StateMachine
 {
+	using PhysicsLowLevel;
+	using SF.StateMachine.Core;
+
     public class PatrolAIState : StateCore
     {
         public bool StartingRight = true;

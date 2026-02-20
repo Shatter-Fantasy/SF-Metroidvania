@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.Utilities
+namespace SF.Sprite
 {
     public static class SpriteUtilities
     {

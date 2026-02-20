@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using SF.Inventory;
-using UnityEngine;
-
 namespace SF.ItemModule
 {
     /// <summary>

@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace SF.PhysicsLowLevel
 {
+	
+	//TODO: Remove. The PhysicsShape and PhysicsBody.aabb replaces this.
 	[System.Serializable]
 	public struct BoundsData
 	{

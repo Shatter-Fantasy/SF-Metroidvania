@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.Platformer.Utilities
+namespace SF.Math
 {
 #if !SF_Utilities
     /// <summary>

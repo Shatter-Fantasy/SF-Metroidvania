@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace SF
+namespace SF.Core
 {
+    // TODO: Remove. Replaced by the base class called Timer.
         public interface ITimer 
         {
             public void StartTimer() {}

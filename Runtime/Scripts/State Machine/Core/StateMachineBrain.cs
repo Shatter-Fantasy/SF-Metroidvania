@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
 
-namespace SF.StateMachine.Core
+namespace SF.StateMachine
 {
 	using PhysicsLowLevel;
 	/// <summary>
