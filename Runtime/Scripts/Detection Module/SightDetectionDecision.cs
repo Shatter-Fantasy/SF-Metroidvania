@@ -4,7 +4,6 @@ using UnityEngine.LowLevelPhysics2D;
 namespace SF.StateMachine.Decisions
 {
     using PhysicsLowLevel;
-    using Core;
     
     public enum SightShapeType
     {

@@ -7,6 +7,11 @@ namespace SF.Activatable
         public bool Activated{ get; set; }
     }
 
+    /// <summary>
+    /// Base wrapper clas for allowing <see cref="IActivatable"/> to be shown in inspector.
+    /// Implement this class to allow <see cref="Interactables.InteractableSwitch"/> or other
+    /// <see cref="Interactables"/> class to active something.
+    /// </summary>
     public abstract class ActivatableWrapper : MonoBehaviour, IActivatable
     {
         [field: SerializeField]

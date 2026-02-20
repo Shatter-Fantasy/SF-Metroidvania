@@ -8,7 +8,7 @@ namespace SF.AbilityModule
 	/// <summary>
 	/// Abilities contain the data for what actions can do and how they do them.
 	/// </summary>
-    public abstract class AbilityCore : MonoBehaviour, IAbility
+    public abstract class AbilityCore : MonoBehaviour
     {
 		[Header("Blocking States")]
 		public MovementState BlockingMovementStates;

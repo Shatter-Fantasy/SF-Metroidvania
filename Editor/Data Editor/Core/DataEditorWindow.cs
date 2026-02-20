@@ -1,23 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEditor;
 using UnityEditor.UIElements;
-
 using UnityEngine;
 using UnityEngine.UIElements;
 
-using SF.Characters.Data;
-using SF.DataModule;
-using SF.ItemModule;
-using SF.UIElements.Utilities;
-using SFEditor.Characters.Data;
-using SFEditor.Inventory.Data;
-using SFEditor.UIElements.Utilities;
-using UnityEngine.Serialization;
-
 namespace SFEditor.Data
 {
+    using SF.Characters.Data;
+    using SF.DataModule;
+    using SF.ItemModule;
+    using SF.UIElements.Utilities;
+    using SFEditor.Characters.Data;
+    using SFEditor.Inventory.Data;
+    using SFEditor.UIElements.Utilities;
+    
     public class DataEditorWindow : EditorWindow
     {
         [Header("Databases")]
@@ -26,7 +23,6 @@ namespace SFEditor.Data
         
         [Header("UI Assets")]
         [SerializeField] private StyleSheet _dataEditorStyleSheet;
-        [FormerlySerializedAs("m_VisualTreeAsset")] 
         [SerializeField] private VisualTreeAsset _visualTreeAsset = default;
         
         /// <summary>
