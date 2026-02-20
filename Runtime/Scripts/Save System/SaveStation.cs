@@ -24,13 +24,13 @@ namespace SF.DataManagement
 
         public virtual void Interact(PlayerController controller)
         {
-            if(controller.TryGetComponent<PlayerHealth>(out PlayerHealth health))
+            if(controller.TryGetComponent(out PlayerHealth health))
             {
                 health.FullHeal();
                 MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.PlayerHealth = health;
             }
             
-            if(controller.TryGetComponent<PlayerStats>(out PlayerStats stats))
+            if(controller.TryGetComponent(out PlayerStats stats))
             {
                 MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.PlayerStats = stats;
             }
