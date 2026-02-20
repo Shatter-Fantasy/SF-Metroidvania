@@ -1,6 +1,6 @@
 namespace SF.AbilityModule
 {
-    public interface IInputAbility : IAbility
+    public interface IInputAbility
     {
 
     }
