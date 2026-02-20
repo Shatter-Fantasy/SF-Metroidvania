@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SF.Weapons.ProjectileModule
 {
-    public class Projectile : MonoBehaviour, IProjectile
+    public class Projectile : MonoBehaviour
     {
         public float ProjectileSpeed = 5f;
 
