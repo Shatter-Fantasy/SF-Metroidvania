@@ -1,22 +1,25 @@
 using System;
 using System.Collections.Generic;
+using Unity.Burst;
 using Unity.Collections;
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-using Unity.U2D.Physics.Extras;
-#endif
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.PhysicsLowLevel
 {
-    public interface IContactShapeCallback : PhysicsCallbacks.IContactCallback
+    public interface IPreSolveShapeCallback
+    {
+        bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent,SFShapeComponent callingShapeComponent);
+    }
+    
+    public interface IContactShapeCallback
     {
         void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
 
         void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent);
     }
     
-    public interface ITriggerShapeCallback : PhysicsCallbacks.ITriggerCallback
+    public interface ITriggerShapeCallback
     {
         void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
 
@@ -33,14 +36,16 @@ namespace SF.PhysicsLowLevel
     /// Create a custom implicit casting to a <see cref="PhysicsShape.ShapeProxy"/> that calls one of the constructors for geometry.
     /// </remarks>
     [ExecuteAlways]
+    [BurstCompile]
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
     public abstract class SFShapeComponent : MonoBehaviour, 
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-        IWorldSceneDrawable, 
-        IWorldSceneTransformChanged,
+#if UNITY_EDITOR
+        ITransformMonitor,
 #endif
-        ITriggerShapeCallback,
-        IContactShapeCallback
+        ITriggerShapeCallback, PhysicsCallbacks.ITriggerCallback,
+        IContactShapeCallback, PhysicsCallbacks.IContactCallback,
+        IPreSolveShapeCallback, PhysicsCallbacks.IPreSolveCallback
+        
     {
         
         #region Transform Cache - Temp fields
@@ -73,7 +78,7 @@ namespace SF.PhysicsLowLevel
         /// </remarks>
         public ref PhysicsShape Shape => ref _shape;
 
-        public PhysicsWorld World =>_shape.isValid ? _shape.world : PhysicsWorld.defaultWorld;
+        public PhysicsWorld World => Body.isValid ? Body.world : PhysicsWorld.defaultWorld;
 
         public virtual void SetShape<TGeometryType>(TGeometryType geometryType) where  TGeometryType : struct
         {
@@ -162,6 +167,9 @@ namespace SF.PhysicsLowLevel
         /// Should the <see cref="Shape"/> size be scaled with the game objects transform.
         /// </summary>
         public bool ScaleSize = true;
+        
+        public Vector2 Offset = Vector2.zero; 
+        
         /// <summary>
         /// Should the Delaunay algorithm be used for creating meshes using <see cref="PhysicsComposer"/>.
         /// </summary>
@@ -173,7 +181,7 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         private readonly List<ITriggerShapeCallback> _triggerTargets = new();
         private readonly List<IContactShapeCallback> _contactTargets = new();
-        
+        private readonly List<IPreSolveShapeCallback> _preSolveTargets = new();
 
         public Action ShapeCreatedHandler;
         public Action ShapeDestroyedHandler;
@@ -184,8 +192,8 @@ namespace SF.PhysicsLowLevel
             ApplyTransform();
             CacheTransform();
 
-#if UNITY_EDITOR && UNITY_LOW_LEVEL_EXTRAS_2D
-            WorldSceneTransformMonitor.AddMonitor(this);
+#if UNITY_EDITOR
+            PhysicTransformCache.AddMonitor(transform,this);
 #endif
             DebugPhysics();
         }
@@ -207,8 +215,8 @@ namespace SF.PhysicsLowLevel
             DestroyBody();
             DestroyShape();
             
-#if UNITY_EDITOR && UNITY_LOW_LEVEL_EXTRAS_2D
-            WorldSceneTransformMonitor.RemoveMonitor(this);
+#if UNITY_EDITOR
+            PhysicTransformCache.RemoveMonitor(transform,this);
 #endif
         }
 
@@ -229,7 +237,6 @@ namespace SF.PhysicsLowLevel
             if (!IsPositionChanged)
                 return;
             
-            Debug.Log(transform.position);
             ApplyTransform();
             CacheTransform();
         }
@@ -341,6 +348,8 @@ namespace SF.PhysicsLowLevel
                 Body.Destroy();
                 Body         = default;
             }
+            
+
         }
 
 #region Physic Event Callbacks
@@ -380,6 +389,11 @@ namespace SF.PhysicsLowLevel
         {
             _contactTargets.Add(target);
         }
+        
+        public void AddPreSolveCallbackTarget(IPreSolveShapeCallback target)
+        {
+            _preSolveTargets.Add(target);
+        }
 
         private void OnContactBeginCallbacks(PhysicsEvents.ContactBeginEvent beginEvent)
         {
@@ -407,6 +421,64 @@ namespace SF.PhysicsLowLevel
         {
             _contactTargets.Remove(target);
         }
+        
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
+        {
+            OnTriggerBeginCallbacks(beginEvent);
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
+        {
+            OnTriggerEndCallbacks(endEvent);
+        }
+
+        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent)
+        {
+            OnContactBeginCallbacks(beginEvent);
+        }
+
+        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent)
+        {
+            OnContactEndCallbacks(endEvent);
+        }
+
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnTriggerBegin2D(beginEvent);
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnTriggerEnd2D(endEvent);
+        }
+
+        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnContactBegin2D(beginEvent);
+        }
+
+        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnContactEnd2D(endEvent);
+        }
+        
+        public bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent)
+        {
+            return OnPreSolve2D(preSolveEvent, this);
+        }
+
+        public bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent, SFShapeComponent callingShapeComponent)
+        {
+            if(_preSolveTargets == null || _preSolveTargets.Count < 1)
+                return true;
+
+            foreach (var target in _preSolveTargets)
+            {
+                target.OnPreSolve2D(preSolveEvent, this);
+            }
+
+            return true;
+        }
 #endregion
         
         /// <summary>
@@ -415,7 +487,12 @@ namespace SF.PhysicsLowLevel
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public virtual void DebugPhysics()
         {
+            // We allow people to do their own custom debugging for custom components even when UsingDebugMode is disabled.
             DebugPhysicsExtra();
+            
+            if (!SFPhysicsManager.UsingDebugMode)
+                return;
+            
             if (!Shape.isValid)
             {
                 if (IsCompositeShape)
@@ -459,86 +536,44 @@ namespace SF.PhysicsLowLevel
         
         /// <summary>
         /// Override this to add custom debug log checking on top of the normal checks in DebugPhysics.
+        /// <remarks>
+        /// This runs even when <see cref="SFPhysicsManager.UsingDebugMode"/> is set to false
+        /// and is only ran inside of the editor at the current moment. Runtime support coming soon.
+        /// </remarks>
         /// </summary>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         protected virtual void DebugPhysicsExtra(){}
-        
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-        /// <summary>
-        /// Draws a debug render to the game and scene view to allow for visual debugging.
-        /// </summary>
-        void IWorldSceneDrawable.Draw()
+
+        public PhysicsAABB CalculateAABB()
         {
-            if (Shape.world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedShapes))
+            return GetAABB(_shape);
+        }
+        
+        
+        public static PhysicsAABB GetAABB(in PhysicsShape physicsShape)
+        {
+            switch (physicsShape.shapeType)
             {
-                Shape.Draw();
-            }
-            
-            // Finish if we've nothing to draw.
-            if (IsCompositeShape
-                && ShapesInComposite is { IsCreated: true, Length: > 0 })
-            {
-                // Finish if we're not drawing selections.
-                if (!ShapesInComposite[0].world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedShapes))
-                    return;
-            
-                // Draw selections.
-                foreach (var shape in ShapesInComposite)
-                    shape.Draw();
+                case PhysicsShape.ShapeType.Circle :
+                    return physicsShape.circleGeometry.CalculateAABB(physicsShape.transform);
+                case PhysicsShape.ShapeType.Capsule:
+                    return physicsShape.capsuleGeometry.CalculateAABB(physicsShape.transform);
+                case PhysicsShape.ShapeType.Segment:
+                    return physicsShape.segmentGeometry.CalculateAABB(physicsShape.transform);
+                case PhysicsShape.ShapeType.Polygon:
+                    return physicsShape.polygonGeometry.CalculateAABB(physicsShape.transform);
+                case PhysicsShape.ShapeType.ChainSegment:
+                    return physicsShape.chainSegmentGeometry.CalculateAABB(physicsShape.transform);
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
-        /// <summary>
-        /// Updates the Physics shape when transform changes in the game scene.
-        /// <remarks>
-        /// This only runs if EditorApplication.isPlaying returns false.
-        /// </remarks>
-        /// </summary>
-        void IWorldSceneTransformChanged.TransformChanged()
+#if  UNITY_EDITOR
+        public void TransformChanged()
         {
-            if (Body.isValid)
-                CreateShape();
+            UpdateShape();
         }
 #endif
-
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
-        {
-            OnTriggerBeginCallbacks(beginEvent);
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
-        {
-            OnTriggerEndCallbacks(endEvent);
-        }
-
-        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent)
-        {
-            OnContactBeginCallbacks(beginEvent);
-        }
-
-        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent)
-        {
-            OnContactEndCallbacks(endEvent);
-        }
-
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
-        {
-            OnTriggerBegin2D(beginEvent);
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            OnTriggerEnd2D(endEvent);
-        }
-
-        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
-        {
-            OnContactBegin2D(beginEvent);
-        }
-
-        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            OnContactEnd2D(endEvent);
-        }
     }
 }

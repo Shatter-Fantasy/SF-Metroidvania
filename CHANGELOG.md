@@ -1,36 +1,47 @@
 # Changelog
 
-## [0.0.3] - 2023-04-27
+## Alpha Seven:
+There are more misc changes not shown below. Too many to mention during a alpha release version.
 
-### Added 
+---
 
-### AI Section
-- Added the StaeMachineBrain which controls the States of the controlling object.
-- Added the StateCore class that is the core class for all states in the StateMachine system
-- Added StateDecisionCore which is an automatic decision system to make AI change states based on certain conditions without having to manually call the state machine brain to update to a new state. 
+## Added:
 
-## [0.0.2] - 2023-04-23
+### SFPhysicsManager:
+Added a static class to manage certain properties of the SF Phsyics and Unity Low Level Physics 2D API.
+- Started addding const ints for PhysicsMask layers to help know which bit needs flipped for a layer.
+- Has debugging options for Physics Rendering
+- Has debugging options for SF Physics Validation
+    - PhysicsShape validation
+    - PhysicsBody validation
 
-### Added
+PhysicsShapes Extensions:
+- Added new ways to get Components on PhysicsShapes and PhysicsBodies.
+- Added new ways to get Components during most Physics Events.
+    - ITriggerBeginEvent
+    - IContactBeginEvent
+- Added a lot of helper methods for:
+    - PhysicsAABB
+    -
+### Camera Tools:
+- Added a CinemachineRectangleConfiner to allow keeping a camera inside a certain room bounds.
 
-#### Physics Section
-- Added the Controller2D class that calculates the physics for characters.
-- Added a MovementProperties struct that is used to help set the current movement physics of characters. 
-- Added PhysicsVolume that can be used to change the Physics of things that enter it. Ex. Character walking into water.
+---
 
-#### Input
-- Created Controls class that is the Unity Input Action Class for the Toolkit.
-- Created the InputManager class that acts like singleton static helper class for controlling player input.
+## Updated:
 
-### Changed
-
-#### Package Settings
-- Updated the Unity Registery Package Dependencies 
-    - Input System 1.5.1
-    - Cinemachine 3.0.0-pre.4
+### SFShapeComponent:
+- Improved how it calls IShapeComponent callbacks.
+- Created ways to sync the Transform and PhysicsTransform.
+    - See the ITransformMonitor interface. for the transform syncing.
+- Implemented Hit Boxes using low level physics.
 
 
-## [0.0.1] - 2023-03-31
+### AI Pathfinding
+- Now implements low level physics for obstacle detection during grid creationg for the paths.
 
-### Added
-- Initial example changelog data.
+---
+
+## Removed:
+- All usages of the Low Level 2D Extras package was removed. It is no longer needed.
+- Removed almost all legacy code or unuesed code. Some remain, but are being rewritten in upcoming alphas instead of being removed completely.

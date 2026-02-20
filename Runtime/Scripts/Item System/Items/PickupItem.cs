@@ -1,17 +1,17 @@
-using SF.Characters.Controllers;
-using SF.DataModule;
-using SF.Interactables;
-using SF.Managers;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.ItemModule
 {
+    using Characters.Controllers;
+    using Interactables;
+    using Managers;
+    using PhysicsLowLevel;
     public class PickupItem : MonoBehaviour, 
         IInteractable<PlayerController>, 
         ITriggerShapeCallback
     {
+        
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
         
         public ItemData Item;
@@ -44,29 +44,17 @@ namespace SF.ItemModule
             playerInventory.AddItem(Item.ID);
             Destroy(gameObject);
         }
-
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
+        
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
                 return;
-           
-            if (beginEvent.visitorShape.callbackTarget is not PlayerController body2D)
-                return;
-                    
-            if(body2D.CollisionInfo.CollisionActivated)
+
+            if (beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>()
+                       .TryGetComponent(out PlayerController controller))
             {
-                Interact(body2D);
+                Interact(controller);
             }
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
-        {
-            // noo - No Operation
-        }
-
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
-        {
-            OnTriggerBegin2D(beginEvent);
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)

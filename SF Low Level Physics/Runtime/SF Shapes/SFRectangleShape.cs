@@ -11,7 +11,7 @@ namespace SF.PhysicsLowLevel
     {
         [Header("Rectangle Properties")]
         public Vector2 Size = Vector2.one; 
-        public Vector2 Offset = Vector2.zero; 
+        
         /// <summary>
         /// The radius of the <see cref="SFRectangleShape"/> box corner radius.
         /// </summary>

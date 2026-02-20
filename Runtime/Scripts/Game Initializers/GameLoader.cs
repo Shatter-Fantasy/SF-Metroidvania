@@ -1,13 +1,13 @@
 using System;
-using SF.DataManagement;
-using SF.RoomModule;
-using SF.ItemModule;
-using SF.LevelModule;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SF.Managers
 {
+    using DataManagement;
+    using RoomModule;
+    using ItemModule;
+    using LevelModule;
     /// <summary>
     /// Keeps track of the prefabs, scriptable objects that need loaded for first scene (think RoomDB), and makes sure all required
     /// Managers/Databases are ready before needing to be used.

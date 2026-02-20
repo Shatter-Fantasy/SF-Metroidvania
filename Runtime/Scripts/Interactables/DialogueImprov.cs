@@ -1,9 +1,9 @@
-using SF.Characters.Controllers;
-using SF.Interactables;
 using UnityEngine;
 
 namespace SF.DialogueModule
 {
+    using Characters.Controllers;
+    using Interactables;
     public class DialogueImprov : MonoBehaviour, IInteractable<PlayerController>
     {
         public int ConversationGUID;

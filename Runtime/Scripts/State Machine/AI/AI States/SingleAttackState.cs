@@ -1,11 +1,9 @@
-using SF.Characters.Controllers;
-using SF.PhysicsLowLevel;
-using SF.StateMachine.Core;
-using SF.Weapons;
 using UnityEngine;
 
 namespace SF.StateMachine
 {
+    using PhysicsLowLevel;
+    using Weapons;
     public class SingleAttackState : StateCore
     {
 

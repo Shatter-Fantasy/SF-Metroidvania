@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SF.Pathfinding
 {
+    using SF.Core;
     [Serializable]
     public class PathNodeBase : IHeapItem<PathNodeBase>
     {

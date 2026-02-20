@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace SF
+namespace SF.ItemModule
 {
 	public enum WeaponType
 	{
