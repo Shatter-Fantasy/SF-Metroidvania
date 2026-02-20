@@ -1,3 +1,5 @@
+using SF.DataManagement;
+
 namespace SF.SpawnModule
 {
     public class PlayerHealth : CharacterHealth
@@ -12,14 +14,10 @@ namespace SF.SpawnModule
 
         public override void Respawn()
         {
-            // TODO: Remove CheckPointManager and use the SpawnSystem.
-            if(CheckPointManager.Instance == null)
+            if(MetroidvaniaSaveManager.CurrentSavePoint == null)
                 return;
             
-            // TODO: Remove CheckPointManager and use the SpawnSystem.
-            if(CheckPointManager.Instance.CurrentCheckPoint != null)
-                transform.position = CheckPointManager.Instance.CurrentCheckPoint.transform.position;
-
+            transform.position = MetroidvaniaSaveManager.CurrentSavePoint.transform.position;
             base.Respawn();
         }
 

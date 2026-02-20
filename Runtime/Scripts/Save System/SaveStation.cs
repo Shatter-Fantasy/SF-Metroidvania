@@ -8,7 +8,7 @@ namespace SF.DataManagement
     using SpawnModule;
     using StatModule;
     
-    public class SaveStation : CheckPoint, IInteractable<PlayerController>
+    public class SaveStation : SavePoint, IInteractable<PlayerController>
     {
         /// <summary>
         /// The room id that the save room is in.
