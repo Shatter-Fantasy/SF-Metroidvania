@@ -7,39 +7,42 @@ It is using Unity's low level physics that was added in Unity 6.3 creating a min
 This package uses the burst compiler combined with NativeCollections for improved perforance.
 
 ## Current Alpha: Alpha Eight
-Alpha Eight feature outline is still being worked out. 
-Currently planned are more Low Level Physics 2D utilities and qol updates.
+Alpha Eight focused on a smaller set of qol api changes, simplifying the SavePoint logic,
+and improvements to the SFRectangleShape scene editing tool. 
 
 ### Planned
-- Done: Add more utlities for Low Level Physics API.
-    - Done: Extension methods for setting PhysicsShapes.ContactFilter.categories  
-    - Done: Extension methods for setting PhysicsShapes.ContactFilter.contacts 
-- Done: Update the Save System.cs - Sooner I get this done the less chance of future alphas breaking save files in builds.
-  - Done: Remove old Checkpoint and CheckPointManager class
+- Add more utilities for Low Level Physics API.
+    - Extension methods for setting PhysicsShapes.ContactFilter.categories  
+    - Extension methods for setting PhysicsShapes.ContactFilter.contacts 
+- Update the Save System.cs - Sooner I get this done the less chance of future alphas breaking save files in builds.
+  - Remove old Checkpoint and CheckPointManager class
+-  Improve the SFRectangleShape scene tool.
+  - Will improve the other SFShapeComponent's scene tools in a future alpha.
 
-### Wanting to implement 
-Goals for this alpha, but not guaranteed.
-- CinemachineRectangleConfiner Scene tools that would eliminate the need for an SFShapeComponent.
-  - This would improve the set up for confining cameras in rooms.
-  - Remove some of the current limiations.
-- Add more SFShapeComponent Scene tools for editing the shapes properties.
+## Future Features:
 
-#### Wanted Room Features
+### Major Core Features
+- Interactable Environment - think freezing water and burning grass. This relies on the GeometryIsland API in Unity 6.3.
+- Full implementation of the Sprite Destructor to allow destructible sprites with physics. This wll be implementing the Sprite Fragmentation API added in Unity 6.3
+- Updating the Data Editor for characters, items, and adding a level data editor tab to it.
+- Create a core editor for SF tool related packages.
+
+#### Future Data Editor Feature
+Full implementation of the SF Data Editor with better UI Toolkit binding via serializable objects.
+- Merge the Data Editor with the SF Metroidvania Editor window to create just the SF Metroidvania Editor window.
+- Create a way to define regions in the database.
+- Create ways to make data sections easier to be made.
+
+#### Future Room Features
+This might end up being a full on Room Editor tool to even help change spawned characters, items, and more.
 - Rework how rooms are loaded from the database. 
   - Relies on implementing the SF Database Registration class that was already started. 
 - Find a way to set up room transitions and connected loading rooms easier.
   - Make the rooms no care what their position in the prefab is set to.
   - Create a room anchor point to define the position rooms are able to be connected to each other.
 
-#### Have to implement in the future. Sooner the better.
-
-Full implementation of the SF Data Editor with better UI Toolkit binding via serializable objects.
-    - Merge the Data Editor with the SF Metroidvania Editor window.
-    -  
-
-
-## Future Features:
-- Interactible Enviorment - think freezing water and burning grass. This relies on the GeometryIsland API in Unity 6.3.
-- Full implementation of the Sprite Destructor to allow destructible sprites with physics. This wll be implementing the Sprite Fragmentation API added in Unity 6.3
-- Updating the Data Editor for characters, items, and adding a level data editor tab to it.
-- Create a core editor for SF tool related packages.
+### Future Scene Tool Improvements
+- CinemachineRectangleConfiner Scene tools that would eliminate the need for an SFShapeComponent.
+    - This would improve the set-up for confining cameras in rooms.
+    - Remove some of the current limitations.
+- Add more SFShapeComponent Scene tools for editing the shapes properties.
