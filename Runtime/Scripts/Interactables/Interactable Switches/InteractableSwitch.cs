@@ -9,7 +9,6 @@ namespace SF.Interactables
 
     public class InteractableSwitch : MonoBehaviour, IInteractable
     {
-
         public List<ActivatableWrapper> Activatables = new List<ActivatableWrapper>();
 
         [SerializeField] private bool _oneTimeUse = false;
