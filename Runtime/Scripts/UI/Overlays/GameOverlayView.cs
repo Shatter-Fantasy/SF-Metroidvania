@@ -4,17 +4,15 @@ using UnityEngine.UIElements;
 namespace SF.UIModule
 {
     using ItemModule;
-    public class UIOverlayView : MonoBehaviour
+    public class GameOverlayView : UIOverlayView
     {
-        [SerializeField] private UIDocument _overlayUXML;
-        [SerializeField] private ItemDatabase _itemDatabase;
-        
-        [Header("Debugging")] public ItemDTO PickedUpTime;
-        
-        private VisualElement _overlayContainer;
-        private Label _itemPickUpLabel;
-        
         [SerializeField] private Timer _popTimer;
+        
+        [Header("Item Settings")]
+        [SerializeField] private ItemDatabase _itemDatabase;
+        [Header("Debugging")] public ItemDTO PickedUpTime;
+
+        private Label _itemPickUpLabel;
         
         private void Awake()
         {
@@ -39,7 +37,7 @@ namespace SF.UIModule
             _overlayUXML.rootVisualElement.pickingMode = PickingMode.Ignore;
             
             _overlayContainer = _overlayUXML.rootVisualElement.Q<VisualElement>(name: "overlay-item__container");
-            _itemPickUpLabel = _overlayUXML.rootVisualElement.Q<Label>(name: "overlay-item__label");
+            _itemPickUpLabel  = _overlayUXML.rootVisualElement.Q<Label>(name: "overlay-item__label");
         }
         
         private void OnPickUpItem(int itemID)
@@ -50,14 +48,14 @@ namespace SF.UIModule
             var itemDTO = _itemDatabase[itemID];
             if (itemDTO == null)
             {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 Debug.Log($"There was no Item with the id: {itemID} inside of the item database.");
-                #endif
+#endif
                 return;
             }
 
-            PickedUpTime = itemDTO;
-            _itemPickUpLabel.text = itemDTO?.Name;
+            PickedUpTime                       = itemDTO;
+            _itemPickUpLabel.text              = itemDTO?.Name;
             _overlayContainer.style.visibility = Visibility.Visible;
 
             _ = _popTimer.StartTimerAsync();
