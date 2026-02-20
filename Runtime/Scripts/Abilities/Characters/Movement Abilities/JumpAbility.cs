@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using SF.InputModule;
-using SF.AudioModule;
+
 
 namespace SF.AbilityModule.Characters
 {
+    using InputModule;
+    
     public class JumpAbility : AbilityCore, IInputAbility
     {
         [Header("Jumping Physics")]

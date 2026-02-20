@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using SF.Characters.Controllers;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.AbilityModule
 {
-    // Setting the default execution order past Controller2D.
-    // This guarantees the controller is already set up it's current physic struct in case any 
+    using SF.Characters.Controllers;
+    using PhysicsLowLevel;
     
     /// <summary>
     /// This is the <see cref="PlayerController"/> specific controller for abilities that only players use.

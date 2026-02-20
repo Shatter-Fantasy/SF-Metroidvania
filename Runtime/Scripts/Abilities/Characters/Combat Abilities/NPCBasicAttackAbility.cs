@@ -1,9 +1,8 @@
-using SF.Weapons;
-
 using UnityEngine;
 
-namespace SF.AbilityModule.CombatModule
+namespace SF.AbilityModule
 {
+    using Weapons;
     public class NPCBasicAttackAbility : MonoBehaviour
     {
         [SerializeField] private WeaponBase _weaponBase;

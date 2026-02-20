@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using SF.Characters;
-using SF.Characters.Controllers;
-using SF.PhysicsLowLevel;
-using SF.StateMachine.Decisions;
 
 using UnityEngine;
 
 namespace SF.StateMachine.Core
 {
+	using Characters;
+	using PhysicsLowLevel;
+	using Decisions;
 	public class DecisionTransition
 	{
 		public bool CanTransist;
