@@ -11,12 +11,11 @@ Alpha Eight feature outline is still being worked out.
 Currently planned are more Low Level Physics 2D utilities and qol updates.
 
 ### Planned
-- Add more utlities for Low Level Physics API.
-    - Extension methods for setting PhysicsShapes.ContactFilter.categories - Done 
-    - Extension methods for setting PhysicsShapes.ContactFilter.contacts - Done
-- Update the Save System.cs - Sooner I get this done the less chance of future alphas breaking save files in builds.
-  - Remove old Checkpoint and CheckPointManager class.
-- Merge the Data Editor with the SF Metroidvania Editor window.
+- Done: Add more utlities for Low Level Physics API.
+    - Done: Extension methods for setting PhysicsShapes.ContactFilter.categories  
+    - Done: Extension methods for setting PhysicsShapes.ContactFilter.contacts 
+- Done: Update the Save System.cs - Sooner I get this done the less chance of future alphas breaking save files in builds.
+  - Done: Remove old Checkpoint and CheckPointManager class
 
 ### Wanting to implement 
 Goals for this alpha, but not guaranteed.
@@ -27,10 +26,16 @@ Goals for this alpha, but not guaranteed.
 
 #### Wanted Room Features
 - Rework how rooms are loaded from the database. 
+  - Relies on implementing the SF Database Registration class that was already started. 
 - Find a way to set up room transitions and connected loading rooms easier.
   - Make the rooms no care what their position in the prefab is set to.
   - Create a room anchor point to define the position rooms are able to be connected to each other.
 
+#### Have to implement in the future. Sooner the better.
+
+Full implementation of the SF Data Editor with better UI Toolkit binding via serializable objects.
+    - Merge the Data Editor with the SF Metroidvania Editor window.
+    -  
 
 
 ## Future Features:
