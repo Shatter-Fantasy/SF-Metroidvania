@@ -7,6 +7,7 @@ namespace SF.DamageModule
     {
 		public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
 		{
+			// TODO: PhysicsLowLevel events need implemented.
 			if(((GameObject)beginEvent.visitorShape.callbackTarget)
 				.TryGetComponent(out IDamagable damageable))
 			{
