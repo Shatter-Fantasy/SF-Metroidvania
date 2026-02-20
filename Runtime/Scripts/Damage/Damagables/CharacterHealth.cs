@@ -1,11 +1,12 @@
 using System;
-using SF.Characters;
-using SF.CommandModule;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.SpawnModule
 {
+    using Characters;
+    using CommandModule;
+    using PhysicsLowLevel;
+    
     /*  TODO: Merge this with the CombatantHealth.cs
         and remove this script from the package.    */
     

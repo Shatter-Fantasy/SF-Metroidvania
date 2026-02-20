@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-
 namespace SF.AbilityModule.Characters
 {
     using InputModule;

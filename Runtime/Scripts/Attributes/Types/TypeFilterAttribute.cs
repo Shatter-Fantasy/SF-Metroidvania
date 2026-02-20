@@ -1,10 +1,7 @@
 using System;
-
-using Systems;
-
 using UnityEngine;
 
-namespace SF
+namespace SF.Core
 {
     public class TypeFilterAttribute : PropertyAttribute
     {

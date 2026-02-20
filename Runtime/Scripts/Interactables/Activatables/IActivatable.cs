@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF
+namespace SF.Activatable
 {
     public interface IActivatable
     {

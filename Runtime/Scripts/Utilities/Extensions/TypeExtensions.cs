@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Systems
+namespace SF.Core
 {
     public static class TypeExtensions 
     {

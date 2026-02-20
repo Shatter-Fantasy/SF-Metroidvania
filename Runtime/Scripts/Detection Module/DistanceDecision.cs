@@ -1,11 +1,11 @@
-using SF.SpawnModule;
-using SF.StateMachine.Core;
-
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace SF.StateMachine.Decisions
 {
+    using SpawnModule;
+    using SF.StateMachine.Core;
+    
     public class DistanceDecision : StateDecisionCore
     {
         [FormerlySerializedAs("_distance")]

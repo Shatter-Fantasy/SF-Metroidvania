@@ -1,9 +1,10 @@
-using SF.CameraModule;
 using Unity.Cinemachine;
 using UnityEngine;
 
 namespace SF.CommandModule
 {
+    using CameraModule;
+    
     public enum CinemachineCommandTypes : ushort
     {
         SwitchPlayerCamera = 0,
