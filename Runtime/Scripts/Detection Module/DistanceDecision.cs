@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 namespace SF.StateMachine.Decisions
 {
     using SpawnModule;
-    using SF.StateMachine.Core;
+    using StateMachine;
     
     public class DistanceDecision : StateDecisionCore
     {

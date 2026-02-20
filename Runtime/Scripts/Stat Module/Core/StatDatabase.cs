@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace SF.StatModule
 {
-    using SF.Inventory.StatModule;
     /// <summary>
     /// The default set stat for different type of objects that will be using any stat sets.
     /// </summary>

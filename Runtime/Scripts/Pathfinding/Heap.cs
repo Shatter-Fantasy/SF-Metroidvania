@@ -1,6 +1,6 @@
 using System;
 
-namespace SF.Core
+namespace SF
 {
     public interface IHeapItem<TItemData> : IComparable<TItemData>
     {

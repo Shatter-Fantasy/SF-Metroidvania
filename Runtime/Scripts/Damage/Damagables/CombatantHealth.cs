@@ -2,7 +2,7 @@ namespace SF.SpawnModule
 {
     using Characters.Data;
     using Experience;
-    using SF.StateMachine.Core;
+    using StateMachine;
 
     public class CombatantHealth : CharacterHealth
     {

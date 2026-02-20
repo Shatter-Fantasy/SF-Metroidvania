@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace SF.StateMachine
 {
-    using StateMachine.Core;
     using SpawnModule;
     public class ChaseAIState : StateCore
     {

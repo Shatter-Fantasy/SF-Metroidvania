@@ -3,7 +3,6 @@ using UnityEngine;
 namespace SF.StateMachine
 {
 	using PhysicsLowLevel;
-	using SF.StateMachine.Core;
 
     public class PatrolAIState : StateCore
     {

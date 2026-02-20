@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SF.Weapons
 {
     using CombatModule;
-    
     public class ComboMeleeWeapon : MeleeWeapon
     {
         [Header("Combo Properties")]

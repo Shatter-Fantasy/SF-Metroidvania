@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SF.Interactables
 {
+    using Activatable;
     using Characters.Controllers;
     using InputModule;
 
