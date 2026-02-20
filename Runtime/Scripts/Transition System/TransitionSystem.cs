@@ -1,10 +1,6 @@
-using SF.Characters.Controllers;
-using SF.Managers;
-using SF.RoomModule;
-using UnityEngine;
-
 namespace SF.Transitions
 {
+    using RoomModule;
     /// <summary> Includes telling the <see cref="RoomSystem"/> to load/deload the rooms involved in the transition.
     /// </summary>
     public static class TransitionSystem

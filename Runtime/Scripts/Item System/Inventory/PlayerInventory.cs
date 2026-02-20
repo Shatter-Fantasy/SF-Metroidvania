@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SF.DataManagement;
-using SF.Managers;
 
 namespace SF.ItemModule
 {
+    using DataManagement;
+    using Managers;
     [Serializable]
     public class PlayerInventory : ItemContainer
     {

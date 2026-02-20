@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using SF.Characters.Controllers;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.AbilityModule
 {
-    // Setting the default execution order past Controller2D.
-    // This guarantees the controller is already set up it's current physic struct in case any 
+    using SF.Characters.Controllers;
+    using PhysicsLowLevel;
     
     /// <summary>
     /// This is the <see cref="PlayerController"/> specific controller for abilities that only players use.
@@ -24,6 +22,11 @@ namespace SF.AbilityModule
     {
         //The gameobject the abilities will control.
         public GameObject AbilityOwner;
+        /// <summary>
+        /// The game objects with abilities attached. It allows organizing abilities into separate
+        /// game objects to make the hierarchy a bit cleaner.
+        /// </summary>
+        public List<GameObject> AbilityObjects = new();
         public List<AbilityCore> Abilities = new List<AbilityCore>();
         
         private PhysicController2D _physicController2D;
@@ -31,6 +34,13 @@ namespace SF.AbilityModule
         private void Awake()
         {
             Abilities = GetComponents<AbilityCore>().ToList();
+            
+            for (int i = 0; i < AbilityObjects.Count; i++)
+            {
+                var abilities = AbilityObjects[i].GetComponents<AbilityCore>().ToList();
+                Abilities.AddRange(abilities);
+            }
+
             
             _physicController2D = AbilityOwner != null 
                 ? AbilityOwner.GetComponent<PhysicController2D>() 

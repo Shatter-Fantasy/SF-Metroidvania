@@ -1,13 +1,11 @@
-using SF.DamageModule;
-using SF.SpawnModule;
-
 using UnityEngine;
-
-using SF.Experience;
 using Unity.Properties;
 
 namespace SF.StatModule
 {
+    using DamageModule;
+    using SpawnModule;
+
     /// <summary>
     /// Links the character stats from the database to an actual gameobject. Also controls stat events for external components relying on character data. Example linking HP stat to a health controller script.
     /// </summary>

@@ -1,16 +1,14 @@
 using System.Collections.Generic;
-
-using SF.Characters.Controllers;
-using SF.InputModule;
-using SF.Interactables;
-
 using UnityEngine;
 
-namespace SF
+namespace SF.Interactables
 {
+    using Activatable;
+    using Characters.Controllers;
+    using InputModule;
+
     public class InteractableSwitch : MonoBehaviour, IInteractable
     {
-
         public List<ActivatableWrapper> Activatables = new List<ActivatableWrapper>();
 
         [SerializeField] private bool _oneTimeUse = false;

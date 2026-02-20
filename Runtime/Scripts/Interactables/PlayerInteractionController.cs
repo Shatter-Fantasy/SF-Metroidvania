@@ -1,15 +1,14 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-using SF.Characters.Controllers;
-using SF.InputModule;
-using SF.PhysicsLowLevel;
 using Unity.Collections;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.Interactables
 {
+    using Characters.Controllers;
+    using InputModule;
+    using PhysicsLowLevel;
+    
     public class PlayerInteractionController : InteractionController, ITriggerShapeCallback
     {
         private PlayerController _controller;
@@ -34,27 +33,7 @@ namespace SF.Interactables
             if(_hitShape != null)
                 _hitShape.RemoveTriggerCallbackTarget(this);
         }
-
-
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
-        {
-            // Grab the body data.
-            var objectData = beginEvent.triggerShape.body.userData.objectValue;
-            
-            if (objectData is GameObject hitObject
-                && hitObject.TryGetComponent(out IInteractable interactable)
-                && interactable.InteractableMode == InteractableMode.Collision)
-            {
-                if(interactable is IInteractable<PlayerController> interactableController
-                   && _controller is not null)
-                    interactableController.Interact(_controller);
-                else
-                    interactable.Interact();
-            }
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent) { }
-
+        
         protected void OnInteractPerformed(InputAction.CallbackContext ctx)
         {
             if(!_hitShape.Shape.isValid) return;
@@ -71,23 +50,34 @@ namespace SF.Interactables
             {
                 // Grab the body data.
                 var objectData = result[i].shape.body.userData.objectValue;
+
+                if (objectData is not GameObject hitObject
+                    || !hitObject.TryGetComponent(out IInteractable interactable)
+                    || interactable.InteractableMode != InteractableMode.Input) 
+                    continue;
                 
-                if (objectData is GameObject hitObject 
-                    && hitObject.TryGetComponent(out IInteractable interactable)
-                    && interactable.InteractableMode == InteractableMode.Input)
-                {
-                    if(interactable is IInteractable<PlayerController> interactableController
-                            && _controller is not null)
-                        interactableController.Interact(_controller);
-                    else
-                        interactable.Interact();
-                }
+                if(interactable is IInteractable<PlayerController> interactableController
+                   && _controller is not null)
+                    interactableController.Interact(_controller);
+                else
+                    interactable.Interact();
             }
         }
   
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
-            OnTriggerBegin2D(beginEvent);
+            // Grab the body data.
+            var shapeComponent = beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>();
+
+            if (!shapeComponent.TryGetComponent(out IInteractable interactable)
+                || interactable.InteractableMode != InteractableMode.Collision) 
+                return;
+            
+            if(interactable is IInteractable<PlayerController> interactableController
+               && _controller is not null)
+                interactableController.Interact(_controller);
+            else
+                interactable.Interact();
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)

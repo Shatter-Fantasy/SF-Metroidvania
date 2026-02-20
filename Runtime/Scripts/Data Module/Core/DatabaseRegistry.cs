@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace SF.DataModule
 {
+    // TODO: Implement this as the default injection point for all runtime related databases.
+    //  This will be useful for making sure all databases are loaded before doing any runtime logic.
+    
     [CreateAssetMenu(fileName = nameof(DatabaseRegistry), menuName = "SF/Data/Database Registry")]
     public class DatabaseRegistry : ScriptableObject
     {

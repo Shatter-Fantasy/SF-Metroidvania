@@ -110,9 +110,18 @@ namespace SF.RoomModule
         public Room this[int index]
         {
             // We have to make sure we first have a value at that index.
-            get => !Contains(index) 
-                        ? null 
-                        : Rooms[index];
+            get
+            {
+                if (Rooms.Count < index)
+                {
+                    // If we try to return an index that is bigger than the size of the room collection return null for safety.
+                    return null;
+                }
+                
+                return !Contains(index)
+                    ? null
+                    : Rooms[index];
+            }
 
             set => throw new NotImplementedException();
         }

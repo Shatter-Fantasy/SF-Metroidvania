@@ -12,6 +12,7 @@ namespace SFEditor.Rooms
     [CustomEditor(typeof(RoomController), true)]
     public class RoomControllerEditor : Editor
     {
+        /*
         /// <summary>
         /// Is the RoomController component on the same gameobject as a grid component for things like Tilemaps or custom grid layouts.
         /// </summary>
@@ -117,5 +118,6 @@ namespace SFEditor.Rooms
                 }
             }
         }
+        */
     }
 }

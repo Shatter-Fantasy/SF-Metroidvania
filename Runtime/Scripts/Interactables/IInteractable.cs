@@ -1,7 +1,6 @@
-using SF.Characters.Controllers;
-
 namespace SF.Interactables
 {
+	using Characters.Controllers;
 	public enum InteractableMode
 	{
 		Collision,

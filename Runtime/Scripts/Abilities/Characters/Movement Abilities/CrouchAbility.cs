@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using SF.InputModule;
-
 namespace SF.AbilityModule.Characters
 {
+    using InputModule;
+    
     public class CrouchAbility : AbilityCore, IInputAbility
     {
         [SerializeField] private Vector2 _colliderResized = new Vector2(.5f,1.5f);
