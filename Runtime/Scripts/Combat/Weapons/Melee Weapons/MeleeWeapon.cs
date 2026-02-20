@@ -11,7 +11,7 @@ namespace SF.Weapons
     using DamageModule;
     using PhysicsLowLevel;
     
-    public class MeleeWeapon : WeaponBase, IWeapon
+    public class MeleeWeapon : WeaponBase
     {
         public AttackDefinition AttackDefinition;
         
