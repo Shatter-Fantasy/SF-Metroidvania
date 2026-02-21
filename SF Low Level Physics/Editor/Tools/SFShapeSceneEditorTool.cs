@@ -20,13 +20,6 @@ namespace SFEditor.PhysicsLowLevel
         // Use SceneShapeEditorTool as a reference for figuring this out.
         public override void OnActivated()
         {
-           // TODO: Create the Geometry Tool Overlay that inherits from Overlay class.
-           /*
-           _overlay = new SFShapeGeometryOverlay();
-           SceneView.AddOverlayToActiveView(_overlay);
-           */
-           
-           
            // Create a new list of selected SFShapeComponent targets to be edited.
            _shapeGeometryTools = new List<ShapeComponentGeometryTool>(capacity: 1);
            
@@ -48,6 +41,11 @@ namespace SFEditor.PhysicsLowLevel
                    }
                }
            }
+        }
+
+        public override void OnWillBeDeactivated()
+        {
+            _shapeGeometryTools.Clear();
         }
 
         /// <summary>

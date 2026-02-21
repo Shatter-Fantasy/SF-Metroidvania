@@ -2,10 +2,11 @@ namespace SF.DataManagement
 {
     using ItemModule;
     using RoomModule;
-    using SpawnModule;
 
     public class MetroidvaniaSaveManager : SaveSystem
     {
+        public static SavePoint CurrentSavePoint;
+        
         /// <summary>
         /// The starting room for new games or when no save files were find.
         /// </summary>
@@ -44,7 +45,7 @@ namespace SF.DataManagement
                 RoomSystem.SetInitialRoom(StartingRoom);
             }
             
-            CheckPointManager.ChangeCheckPoint(CurrentSaveFileData.CurrentSaveStation as CheckPoint);
+            CurrentSavePoint = CurrentSaveFileData.CurrentSaveStation;
         }
     }
 }
