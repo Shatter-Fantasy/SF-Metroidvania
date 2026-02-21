@@ -1,9 +1,8 @@
 using UnityEngine;
-using SF.DataModule;
-using SF.ItemModule;
 
-namespace SF.Inventory
+namespace SF.ItemModule
 {
+    using DataModule;
     /// <summary>
     /// The scriptable object data asset that makes keeps track of an item inside the item databases.
     /// </summary>

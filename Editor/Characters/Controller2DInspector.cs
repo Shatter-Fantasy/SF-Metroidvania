@@ -1,16 +1,14 @@
-using SF.Characters.Controllers;
-using SF.Platformer.Utilities;
-
+using SF.PhysicsLowLevel;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 using UnityEngine.UIElements;
 
 
 namespace SFEditor.Characters
 {
-    [CustomEditor(typeof(RigidbodyController2D), true)]
+    [CustomEditor(typeof(ControllerBody2D), true)]
     public class Controller2DInspector : Editor
     {
         public override VisualElement CreateInspectorGUI()
@@ -31,14 +29,10 @@ namespace SFEditor.Characters
 
         private void SetupControllerComponents()
         {
-            if (target is not RigidbodyController2D controller2D)
+            if (target is not ControllerBody2D controller2D)
                 return;
             
-            Rigidbody2D rgb = controller2D.GetComponent<Rigidbody2D>();
-            if(rgb != null)
-            {
-                rgb.bodyType = RigidbodyType2D.Dynamic;
-            }
+            controller2D.ShapeComponent.Body.type = PhysicsBody.BodyType.Dynamic;
         }
     }
 }

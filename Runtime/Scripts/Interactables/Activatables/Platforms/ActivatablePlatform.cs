@@ -1,13 +1,11 @@
-using SF.InputModule;
-using SF.Interactables;
-
 using UnityEngine;
 
-namespace SF
+namespace SF.Activatable
 {
-    [RequireComponent(typeof(PositionHandle))]
+    using HandleModule;
     
-    public class ActivatablePlatform : ActivatableWrapper, IActivatable
+    [RequireComponent(typeof(PositionHandle))]
+    public class ActivatablePlatform : ActivatableWrapper
     {
         [SerializeField] private float _speed = 5;
 

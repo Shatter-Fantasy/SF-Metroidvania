@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using SF.Characters.Controllers;
-using SF.Physics;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.AbilityModule
 {
-    // Setting the default execution order past Controller2D.
-    // This guarantees the controller is already set up it's current physic struct in case any 
+    using SF.Characters.Controllers;
+    using PhysicsLowLevel;
     
     /// <summary>
     /// This is the <see cref="PlayerController"/> specific controller for abilities that only players use.
@@ -16,8 +13,8 @@ namespace SF.AbilityModule
     /// For NPC, Enemies, or Ally combatants not controlled by the Players use <see cref="SF.StateMachine.Core.StateMachineBrain"/>
     /// <remarks>
     /// The AbilityController default execution order is set one past the Controller2D.
-    /// This guarantees the controller is already set up it's current physic struct in case any external force is starting to change it.
-    /// <see cref="SF.Physics.PhysicsVolume"/> 
+    /// This guarantees the controller is already set up it's current physic struct in case any external force is starting to change it
+    /// <see cref="SF.PhysicsLowLevel.PhysicsVolume"/> on spawn. Think loading a save room in an underwater PhysicsVolume.
     /// </remarks>
     /// </summary>
     [DefaultExecutionOrder(1)]
@@ -25,6 +22,11 @@ namespace SF.AbilityModule
     {
         //The gameobject the abilities will control.
         public GameObject AbilityOwner;
+        /// <summary>
+        /// The game objects with abilities attached. It allows organizing abilities into separate
+        /// game objects to make the hierarchy a bit cleaner.
+        /// </summary>
+        public List<GameObject> AbilityObjects = new();
         public List<AbilityCore> Abilities = new List<AbilityCore>();
         
         private PhysicController2D _physicController2D;
@@ -33,6 +35,13 @@ namespace SF.AbilityModule
         {
             Abilities = GetComponents<AbilityCore>().ToList();
             
+            for (int i = 0; i < AbilityObjects.Count; i++)
+            {
+                var abilities = AbilityObjects[i].GetComponents<AbilityCore>().ToList();
+                Abilities.AddRange(abilities);
+            }
+
+            
             _physicController2D = AbilityOwner != null 
                 ? AbilityOwner.GetComponent<PhysicController2D>() 
                 : GetComponent<PhysicController2D>();
@@ -40,9 +49,8 @@ namespace SF.AbilityModule
             // Set the correct type of controller so the abilities can do different things based on if it is player, a enemy affected by gravity, or another type.
             _physicController2D = _physicController2D switch
             {
-                ControllerBody2D controllerBody2D => controllerBody2D,
                 PlayerController playerController => playerController,
-                GroundedController2D groundedController2D => groundedController2D,
+                ControllerBody2D controllerBody2D => controllerBody2D,
                 _ => _physicController2D
             };
         }

@@ -1,12 +1,10 @@
 using System;
-using SF.CameraModule;
-using SF.RoomModule;
-using SF.SpawnModule;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SF.LevelModule
 {
+    using RoomModule;
     /// <summary>
     /// Loads the required game objects for used in managers and core systems in playable levels.
     /// </summary>
@@ -37,9 +35,13 @@ namespace SF.LevelModule
             SceneManager.sceneLoaded += OnLevelLoaded;
         }
 
+        private void Start()
+        {
+            RoomSystem.SetInitialRoom(_levelData.StartingRoomID);
+        }
+
         private void OnDestroy()
         {
-            // This has to be done in awake. OnEnable/Start is called after the first sceneLoaded call.
             SceneManager.sceneLoaded -= OnLevelLoaded;
         }
         
@@ -66,30 +68,20 @@ namespace SF.LevelModule
             PlayableGameSceneInitialization();
         }
         
+        /// <summary>
+        /// Initialize the level related game data.
+        /// </summary>
+        /// <remarks>
+        /// Do not spawn any game objects in scene here. Spawning game objects before the <see cref="SceneManager.sceneLoaded"/>
+        /// is finished will cause newly spawned objects to not show in the hierarchy view.  
+        /// </remarks>
         private void PlayableGameSceneInitialization()
         {
-            /* Keep in mind the OnSceneLoaded callback that will call this function will be called after
-                awake has run on the gameobject in the scene already as it is loaded.
+            if (_levelData != null)
+            {
+                LevelPlayData.Instance = _levelData;
+            }
 
-                Example: The RoomControllers that exist in the scene already, if the rooms were not dynamically loaded,
-                will have already set their spawned instances and the linked room in the room database initialized. */
-            
-            /*  Step One: Make sure the room is laoded first.
-                Load the starting room and grab the spawn point in it.
-                Most of the time this is a save station, 
-                but in a new game this will be a specific room with an intro cutscene.
-             
-                Step Two: Spawn the player.
-                Make sure the starting spawn point is set before this.
-                Spawn the player at the spawn point.
-                
-                Step Three: Set the camera target.
-                Might want to update the camera manager.
-                Could get away with one virtual camera now that we have the low level physics.
-             */
-            RoomSystem.SetInitialRoom(_levelData.StartingRoomID);
-            SpawnSystem.OnInitialPlayerSpawn(_levelData.PlayerPrefab);
-            
             LevelReadyHandler?.Invoke();
         }
     }

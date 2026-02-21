@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using SF.DataManagement;
-using SF.DialogueModule;
-using SF.Events;
 using UnityEngine;
 
 namespace SF.Managers
 {
+    using DataManagement;
+    using DialogueModule;
+    using Settings;
 	/// <summary>
 	/// The current state that is controlling the games input and actions. 
 	/// </summary>
@@ -24,12 +24,11 @@ namespace SF.Managers
 	/// </summary>
 
     [DefaultExecutionOrder(-5)]
-    public class GameManager : MonoBehaviour, EventListener<ApplicationEvent>, EventListener<GameEvent>
+    public class GameManager : MonoBehaviour
     {
         [SerializeReference]
         public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
-        
-        [SerializeField] protected int _targetFrameRate = 60;
+
         [SerializeField] private GameControlState _controlState;
         
         public GameControlState ControlState
@@ -48,9 +47,19 @@ namespace SF.Managers
         public static GameManager Instance;
 
         public Action<GameControlState> OnGameControlStateChanged;
+
+        public static event Action GamePausedHandler;
+        public static event Action GameUnpausedHandler;
+
+        /// <summary>
+        /// The data object that holds the settings players can change in game.
+        /// </summary>
+        public GameSettings GameSettings;
+        
         private void Awake()
         {
-            Application.targetFrameRate = _targetFrameRate;
+            if(GameSettings != null)
+                GameSettings.DisplaySettings.ProcessSettings();
 
             if (Instance == null)
             {
@@ -60,86 +69,62 @@ namespace SF.Managers
             else
                 Destroy(gameObject); // We want to destroy the child object managers so they are not doubles as well.
         }
+        
+        protected void OnEnable()
+        {
+            DialogueManager.DialogueStartedHandler += OnDialogueStarted;
+            DialogueManager.DialogueEndedHandler += OnDialogueEnded;
+        }
 
-        protected void OnExitGame()
+        protected void OnDisable ()
+        {
+            DialogueManager.DialogueStartedHandler -= OnDialogueStarted;
+            DialogueManager.DialogueEndedHandler -= OnDialogueEnded;
+        }
+
+        /// <summary>
+        /// Exits the game and closes all related computer processes.
+        /// </summary>
+        public static void ExitGame()
         {
             // Will need to do checks later for preventing shutdowns during saving and loading.
             Application.Quit();
         }
 
-        protected void OnPausedToggle()
+        public static void OnPausedToggle()
         {
-            if(_controlState == GameControlState.Player)
+            if(Instance._controlState == GameControlState.Player)
                 Pause();
             else // So we are already paused or in another menu.
                 Unpause();
         }
 
-        protected void Pause()
+        protected static void Pause()
         {
-            _controlState = GameControlState.Menu;
-            GameMenuEvent.Trigger(GameMenuEventTypes.OpenGameMenu);
+            Instance.ControlState = GameControlState.Menu;
+            GamePausedHandler?.Invoke();
         }
 
-        protected void Unpause()
+        protected static void Unpause()
         {
-            _controlState = GameControlState.Player;
-            GameMenuEvent.Trigger(GameMenuEventTypes.CloseGameMenu);
-        }
-
-        public void OnEvent(ApplicationEvent eventType)
-        {
-            switch(eventType.EventType)
-            {
-                case ApplicationEventTypes.ExitApplication:
-                    {
-                        OnExitGame();
-                        break;
-                    }
-            }
-        }
-
-        public void OnEvent(GameEvent eventType)
-        {
-            switch(eventType.EventType)
-            {
-                case GameEventTypes.PauseToggle:
-                    {
-                        OnPausedToggle();
-                        break;
-                    }
-            }
+            Instance.ControlState = GameControlState.Player;
+            GameUnpausedHandler?.Invoke();
         }
         
-        /*
-        public void OnEvent(DialogueEvent eventType)
+        private void OnDialogueStarted()
         {
-            switch (eventType.EventType)
-            {
-                case DialogueEventTypes.DialogueOpen:
-                {
-                    ControlState = GameControlState.Dialogue;
-                    break;
-                }
-                case DialogueEventTypes.DialogueClose:
-                {
-                    ControlState = GameControlState.Player;
-                    break;
-                }
-            }
+            /* TODO: Switch statement for type of dialogue.
+            * Allow for background dialogue that don't freeze the player control. */
+            
+            ControlState = GameControlState.Dialogue;
         }
-        */
         
-        protected void OnEnable()
-		{
-            this.EventStartListening<ApplicationEvent>();
-            this.EventStartListening<GameEvent>();
-		}
-
-        protected void OnDisable ()
-		{
-            this.EventStopListening<ApplicationEvent>();
-            this.EventStopListening<GameEvent>();
+        private void OnDialogueEnded()
+        {
+            /* TODO: Switch statement for type of dialogue.
+             * Allow for background dialogue that don't freeze the player control. */
+            
+            ControlState = GameControlState.Player;
         }
     }
 }

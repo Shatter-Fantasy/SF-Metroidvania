@@ -1,11 +1,10 @@
-using SF.Characters.Controllers;
-using SF.PhysicsLowLevel;
-using SF.StateMachine.Core;
-
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.StateMachine.Decisions
 {
+    using PhysicsLowLevel;
+    
     public enum SightShapeType
     {
         Box, Line, Arc
@@ -13,34 +12,44 @@ namespace SF.StateMachine.Decisions
     public class SightDetectionDecision : StateDecisionCore
     {
         [SerializeField] private float _sightDistance = 4;
-        [SerializeField] private ContactFilter2D _detectionFilter;
+        [SerializeField] private PhysicsQuery.CastRayInput _rayInput;
+        [SerializeField] private PhysicsQuery.QueryFilter _queryFilter;
         
         private ControllerBody2D _controllerBody2D;
         
         protected override void Init()
         {
-            if (TryGetComponent(out StateMachineBrain brain)
-                && brain.ControlledGameObject.TryGetComponent(out _controllerBody2D))
+            if (TryGetComponent(out _brain))
             {
+                _brain.ControlledGameObject.TryGetComponent(out _controllerBody2D);
                 // This is empty on purpose. The second TryGetComponent assigns the _controller2D value for this decision.
                 return;
             }
         }
 
-        public override void CheckDecision(ref DecisionTransition decision, StateCore currentState)
+        public override void CheckDecision(ref DecisionTransition decision,StateCore currentState)
         {
-            /*
-            if(Physics2D.Raycast(transform.position, _rigidbodyController2D.Direction, _detectionFilter,_filteredHits,_sightDistance) > 0)
+            ref PhysicsShape   shape = ref _controllerBody2D.ShapeComponent.Shape;
+            PhysicsWorld world = _controllerBody2D.ShapeComponent.Shape.world;
+            if (!shape.isValid)
+                return;
+
+            // shape.transform = PhysicsTransform type not Transform type.
+            _rayInput.origin      = shape.transform.position;
+            _rayInput.translation = _controllerBody2D.Direction * _sightDistance;
+            
+            using var castResults = world.CastRay(_rayInput,_queryFilter);
+
+            if (castResults.Length > 0)
             {
-                decision.CanTransist = true;
+                decision.CanTransist  = true;
                 decision.StateGoingTo = _trueState;
             }
             else
             {
-                decision.CanTransist = true;
+                decision.CanTransist  = true;
                 decision.StateGoingTo = _falseState;
             }
-            */
         }
     }
 }

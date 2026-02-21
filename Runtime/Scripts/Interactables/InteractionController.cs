@@ -1,26 +1,19 @@
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.Interactables
 {
+    using PhysicsLowLevel;
+    /// <summary>
+    /// Base class for allowing stuff to interact with other objects.
+    /// This can be implemented to allow NPC and enemies to interact with objects.
+    /// </summary>
     public class InteractionController : MonoBehaviour
     {
-        [SerializeField] protected ContactFilter2D _interactableFilter;
-        protected BoxCollider2D _boxCollider2D;
-
-        [SerializeField] protected Collider2D[] _hitColliders = new Collider2D[5];
-        
-        private void Awake()
-        {
-            _boxCollider2D = GetComponent<BoxCollider2D>();
-        }
-
-        protected virtual void OnTriggerEnter2D(Collider2D collision)
-        {
-            if(collision.TryGetComponent(out IInteractable interactable) 
-                && interactable.InteractableMode == InteractableMode.Collision)
-            {
-                interactable.Interact();
-            }
-        }
+        [SerializeField] protected PhysicsQuery.QueryFilter _interactableFilter;
+        [SerializeField] protected SFShapeComponent _hitShape;
+        [SerializeField] protected PhysicsQuery.CastShapeInput _castInput;
+        protected NativeArray<PhysicsShape> _hitShapes;
     }
 }

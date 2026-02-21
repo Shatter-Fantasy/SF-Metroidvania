@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using SF.InputModule;
-using SF.Physics;
-
 namespace SF.AbilityModule.Characters
 {
+    using InputModule;
+    using PhysicsLowLevel;
+    
     public class ClimbAbility : AbilityCore, IInputAbility
     {
         protected ClimbableSurface ClimableSurface => _controller2d.CollisionInfo.ClimbableSurface;
@@ -102,20 +102,20 @@ namespace SF.AbilityModule.Characters
 
         private void OnEnable()
         {
-            InputManager.Controls.Player.Enable();
+            SFInputManager.Controls.Player.Enable();
 
-            InputManager.Controls.Player.Interact.performed += OnClimb;
-            InputManager.Controls.Player.Move.performed += OnClimbMove;
-            InputManager.Controls.Player.Move.canceled += OnClimbMoveCancelled;
+            SFInputManager.Controls.Player.Interact.performed += OnClimb;
+            SFInputManager.Controls.Player.Move.performed += OnClimbMove;
+            SFInputManager.Controls.Player.Move.canceled += OnClimbMoveCancelled;
         }
 
         private void OnDisable()
         {
-            if(InputManager.Controls == null) return;
+            if(SFInputManager.Controls == null) return;
 
-            InputManager.Controls.Player.Interact.performed -= OnClimb;
-            InputManager.Controls.Player.Move.performed -= OnClimbMove;
-            InputManager.Controls.Player.Move.canceled -= OnClimbMoveCancelled;
+            SFInputManager.Controls.Player.Interact.performed -= OnClimb;
+            SFInputManager.Controls.Player.Move.performed -= OnClimbMove;
+            SFInputManager.Controls.Player.Move.canceled -= OnClimbMoveCancelled;
         }
     }
 }

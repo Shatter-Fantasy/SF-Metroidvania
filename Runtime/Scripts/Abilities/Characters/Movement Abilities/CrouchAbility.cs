@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using SF.InputModule;
-
 namespace SF.AbilityModule.Characters
 {
+    using InputModule;
+    
     public class CrouchAbility : AbilityCore, IInputAbility
     {
         [SerializeField] private Vector2 _colliderResized = new Vector2(.5f,1.5f);
@@ -76,18 +76,18 @@ namespace SF.AbilityModule.Characters
 
         private void OnEnable()
         {
-            InputManager.Controls.Player.Enable();
-            InputManager.Controls.Player.Crouch.performed += OnInputCrouch;
-            InputManager.Controls.Player.Move.performed += OnInputStopCrouching;
-            InputManager.Controls.Player.Jump.performed += OnInputStopCrouching;
+            SFInputManager.Controls.Player.Enable();
+            SFInputManager.Controls.Player.Crouch.performed += OnInputCrouch;
+            SFInputManager.Controls.Player.Move.performed += OnInputStopCrouching;
+            SFInputManager.Controls.Player.Jump.performed += OnInputStopCrouching;
         }
 
         private void OnDisable()
         {
-            if(InputManager.Controls == null) return;
-            InputManager.Controls.Player.Crouch.performed -= OnInputCrouch;
-            InputManager.Controls.Player.Move.performed -= OnInputStopCrouching;
-            InputManager.Controls.Player.Jump.performed -= OnInputStopCrouching;
+            if(SFInputManager.Controls == null) return;
+            SFInputManager.Controls.Player.Crouch.performed -= OnInputCrouch;
+            SFInputManager.Controls.Player.Move.performed -= OnInputStopCrouching;
+            SFInputManager.Controls.Player.Jump.performed -= OnInputStopCrouching;
         }
     }
 }

@@ -1,6 +1,3 @@
-using SF.Characters.Controllers;
-using SF.Physics;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.LevelModule
@@ -16,46 +13,7 @@ namespace SF.LevelModule
         /// This is the player prefab asset that should be spawned in playable scenes.
         /// After this is spawned you use the <see cref="SpawnedPlayerController"/> value.
         /// </summary>
-        [SerializeField] private ControllerBody2D _playerPrefab;
-
-        private ControllerBody2D _spawnedPlayerController;
-        
-        /// <summary>
-        /// The spawned <see cref="PlayerController"/> inside the current loaded scene.
-        /// </summary>
-        /// <remarks>
-        /// This is only assigned right before the Awake/OnEnable calls of the first playable character scene is loaded.
-        /// First set of menus do will not be able to use this.
-        /// </remarks>
-        public ControllerBody2D SpawnedPlayerController
-        {
-            get
-            {
-                if (_spawnedPlayerController == null)
-                {
-                    // If none is already assigned make sure we don't have one in the scene for debugging purposes.
-                    // TODO: We should check and make sure this is finding objects in all active scenes not just the game loader scene.
-                    var playerInScene = FindFirstObjectByType<ControllerBody2D>();
-
-                    if (playerInScene != null)
-                    {
-                        _spawnedPlayerController = playerInScene;
-                    }
-                    // If there was none in the scene it is safe to spawn an instance of the _playerPrefab if it was set.
-                    else if (playerInScene == null && _playerPrefab != null)
-                    {
-                        _spawnedPlayerController = Instantiate(_playerPrefab);
-                    }
-                } // End of outermost if statement.
-
-                return _spawnedPlayerController;
-            }
-            set
-            {
-                if (value != null)
-                    _spawnedPlayerController = value;
-            }
-        }
+        [field:SerializeField] public GameObject PlayerPrefab { get; private set; }
         
         [SerializeField] private GameObject _hudPrefab;
         public GameObject SpawnedHUD { get; private set; }
@@ -93,20 +51,5 @@ namespace SF.LevelModule
             if (Instance == null)
                 Instance = this;
         }
-
-#if UNITY_EDITOR
-        /* Only do OnValidate in editor.
-            The idea is in editor when we set the LevelPlayData to the field we assign the
-            static instance of it that is used during Runtime. */
-        
-        
-        [SerializeField] private LevelPlayData _playDataObj;
-        
-        private void OnValidate()
-        {
-            if(_playDataObj != null)
-                _instance = _playDataObj;
-        }
-#endif
     }
 }

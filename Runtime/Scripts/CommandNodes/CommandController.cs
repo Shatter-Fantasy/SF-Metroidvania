@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-
-using SF.Characters;
-using SF.Characters.Controllers;
-using SF.Managers;
 using UnityEngine;
 
 namespace SF.CommandModule
 {
+    using Characters;
+    using Managers;
+    using PhysicsLowLevel;
+    
     public enum CommandType
     {
         Cutscene,
@@ -33,7 +33,7 @@ namespace SF.CommandModule
                 if(cmd is CharacterCommandNode characterCommand)
                 {
                     characterCommand.Character2D = GetComponent<CharacterRenderer2D>();
-                    characterCommand.RigidbodyController2D = GetComponent<RigidbodyController2D>();
+                    characterCommand.ControllerBody2D = GetComponent<ControllerBody2D>();
                 }    
             }
         }

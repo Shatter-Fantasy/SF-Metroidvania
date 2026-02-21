@@ -12,6 +12,7 @@ namespace SFEditor.Rooms
     [CustomEditor(typeof(RoomController), true)]
     public class RoomControllerEditor : Editor
     {
+        /*
         /// <summary>
         /// Is the RoomController component on the same gameobject as a grid component for things like Tilemaps or custom grid layouts.
         /// </summary>
@@ -27,6 +28,9 @@ namespace SFEditor.Rooms
         
         public override VisualElement CreateInspectorGUI()
         {
+            if (target == null)
+                return null;
+            
             _roomController = target as RoomController;
             _roomController?.TryGetComponent(out _grid);
             _isGrid = _grid != null;
@@ -114,5 +118,6 @@ namespace SFEditor.Rooms
                 }
             }
         }
+        */
     }
 }

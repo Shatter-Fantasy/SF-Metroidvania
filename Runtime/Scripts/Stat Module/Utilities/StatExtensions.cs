@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-using SF.Inventory.StatModule;
-
 namespace SF.StatModule
 {
     public static class StatExtensions

@@ -1,17 +1,14 @@
 using UnityEngine;
 
-using SF.Characters;
-using SF.Characters.Controllers;
-using SF.Managers;
-using SF.Physics;
-using SF.PhysicsLowLevel;
-
 namespace SF.AbilityModule
 {
+	using SF.Characters;
+	using Managers;
+	using PhysicsLowLevel;
 	/// <summary>
 	/// Abilities contain the data for what actions can do and how they do them.
 	/// </summary>
-    public abstract class AbilityCore : MonoBehaviour, IAbility
+    public abstract class AbilityCore : MonoBehaviour
     {
 		[Header("Blocking States")]
 		public MovementState BlockingMovementStates;

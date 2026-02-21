@@ -1,23 +1,21 @@
-using SF.LevelModule;
-using SF.Managers;
-
 namespace SF.Characters.Controllers
 {
+    using Managers;
+    using PhysicsLowLevel;
     /// <summary>
     /// A physics controller for the playable character that help implement gravity, slope mechanics, collision for platforms,
-    /// and updates the <see cref="MovementState"/> while using the <see cref="SF.Physics.CollisionController"/> for custom collision callbacks.
+    /// and updates the <see cref="MovementState"/>.
     ///
     /// This player specific controller also implements logic for the game when  paused, character state is moved to a dialogue,
     /// and helps set up the instance object for other classes to know what is the player.
     /// <remarks>
     /// This sets up the PlayerController instance in the game manager during the awake call.
     /// In the start call for objects being loaded at the same time, other objects can now get a reference to
-    /// the <see cref="PlayerController"/> after it is set in <see cref="PlayerRigPlayerController/>.
+    /// the <see cref="PlayerController"/>.
     /// </remarks> 
     /// </summary>
-	public class PlayerController : GroundedController2D
+	public class PlayerController : ControllerBody2D
     {
-        
         protected override void OnAwake()
         {
             base.OnAwake();
@@ -31,13 +29,13 @@ namespace SF.Characters.Controllers
                     CollisionInfo.CollisionActivated = true;
             }
         }
-        
+
         protected override void CalculateMovementState()
         {
             // For when in menu, in a conversation, and so forth.
             if (GameManager.Instance?.ControlState != GameControlState.Player)
             {
-                if (IsGrounded)
+                if (CollisionInfo.IsGrounded)
                 {
                     CharacterState.CurrentMovementState = MovementState.Idle;
                     // Freeze the controller only after grounded so if we are stopped in midair we still hit the ground.

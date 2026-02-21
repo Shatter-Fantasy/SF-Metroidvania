@@ -1,15 +1,32 @@
 using System;
-using SF.PhysicsLowLevel;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace SF.SpawnModule
 {
+    using Characters.Controllers;
+    using PhysicsLowLevel;
+    using RoomModule;
     /// <summary>
     /// The system that controls the logic for spawning the player. 
     /// </summary>
     public class SpawnSystem : MonoBehaviour
     {
+        public GameObject Controller;
+        private void Start()
+        {
+            if (Controller != null)
+                OnInitialPlayerSpawn(Controller);
+        }
+
+        private void OnDestroy()
+        {
+            CurrentSpawnPosition = null;
+            SpawnedPlayer = null;
+            SpawnedPlayerController = null;
+        }
+
+        public static Transform CurrentSpawnPosition;
+        
         /// <summary>
         /// The spawned root gameobject of the player.
         /// </summary>
@@ -21,6 +38,7 @@ namespace SF.SpawnModule
         public static ControllerBody2D SpawnedPlayerController;
         
         public static event Action<GameObject> InitialPlayerSpawnHandler;
+        public static event Action PlayerRespawnHandler;
 
         /// <summary>
         /// Tell the game to start the initial spawning of the player when loading up a save file.
@@ -29,9 +47,8 @@ namespace SF.SpawnModule
         {
             if (playerPrefab == null)
                 return null;
-
-            SpawnedPlayer = Instantiate(playerPrefab);
-
+            
+            SpawnedPlayer = GameObject.Instantiate(playerPrefab,RoomSystem.CurrentRoom.SpawnedInstance.transform.position,Quaternion.identity);
             if (SpawnedPlayer == null)
                 return null;
             
@@ -41,7 +58,15 @@ namespace SF.SpawnModule
             
             InitialPlayerSpawnHandler?.Invoke(SpawnedPlayer);
             
-            return SpawnedPlayer.GetComponent<ControllerBody2D>();
+            return SpawnedPlayer.GetComponent<PlayerController>();
+        }
+
+        /// <summary>
+        /// Respawns the player and invokes the <see cref="PlayerRespawnHandler"/> event.
+        /// </summary>
+        public static void RespawnPlayer()
+        {
+            PlayerRespawnHandler?.Invoke();
         }
     }
 }

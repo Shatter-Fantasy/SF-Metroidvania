@@ -1,14 +1,17 @@
-using SF.Characters.Controllers;
-using SF.Interactables;
-using SF.RoomModule;
-using SF.SpawnModule;
-using SF.StatModule;
 using UnityEngine;
 
 namespace SF.DataManagement
 {
+    using Characters.Controllers;
+    using Interactables;
+    using RoomModule;
+    using SpawnModule;
+    using StatModule;
     
-    public class SaveStation : CheckPoint, IInteractable<PlayerController>
+    /// <summary>
+    /// A <see cref="SavePoint"/> that requires being interacted with to use.
+    /// </summary>
+    public class SaveStation : SavePoint, IInteractable<PlayerController>
     {
         /// <summary>
         /// The room id that the save room is in.
@@ -24,17 +27,17 @@ namespace SF.DataManagement
 
         public virtual void Interact(PlayerController controller)
         {
-            if(controller.TryGetComponent<PlayerHealth>(out PlayerHealth health))
+            if(controller.TryGetComponent(out PlayerHealth health))
             {
                 health.FullHeal();
                 MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.PlayerHealth = health;
             }
             
-            if(controller.TryGetComponent<PlayerStats>(out PlayerStats stats))
+            if(controller.TryGetComponent(out PlayerStats stats))
             {
                 MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.PlayerStats = stats;
             }
-
+            
             MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.SavedRoomID = RoomSystem.CurrentRoom.RoomID;
             SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;
             MetroidvaniaSaveManager.SaveGame();

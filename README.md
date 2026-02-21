@@ -1,91 +1,47 @@
 # SF-Metroidvania-Package
-
-
-> There is a work in progress dedicated documentation website being made. If you check the documentation and it gives a 404 error, that means a new build of it is being uploaded and deployed at the moment. It will be back up in less than two minutes.
-> I am spending this week to update and test stuff for the manual and api documentation deployment, so it will be updating multiple times a day.
-> After I am finished with the bulk of it I will move the stuff in the read me below to the actual documentation site to have all information in one spot.
-> https://shatter-fantasy.github.io/SF-Metroidvania/manual/install-instructions/install.html
-
-## Install Instructions are located at the bottom of the read me in detail.
+There is a work in progress dedicated documentation website being made. Will update this section part way through alpha six that is currently in progress.
 
 ## Summary 
 This is the Shatter Fantasy Metroidvania Unity package that can be used to create any game needing Metroidvania like controls. 
-At the moment it is for 2D only physics, but we will be adding 3D hysics support when Unity 6.3 comes out. 
-This is because there is a major rework from the ground up of Unity's 2D physics coming that allow making custom 3D world like interactions with 2D physics colliders.
+It is using Unity's low level physics that was added in Unity 6.3 creating a minimum required version for Unity 6.3 editors.
+This package uses the burst compiler combined with NativeCollections for improved perforance.
 
+## Current Alpha: Alpha Eight
+Alpha Eight focused on a smaller set of qol api changes, simplifying the SavePoint logic,
+and improvements to the SFRectangleShape scene editing tool.
 
-## Current Alpha: Alpha One
-Currently the first alpha is being worked on a seperate branch from the main branch. 
-Look into the alpha-one branch if you want to try out the package. 
+- Add more utilities for Low Level Physics API.
+    - Extension methods for setting PhysicsShapes.ContactFilter.categories  
+    - Extension methods for setting PhysicsShapes.ContactFilter.contacts 
+- Update the Save System.cs - Sooner I get this done the less chance of future alphas breaking save files in builds.
+  - Remove old Checkpoint and CheckPointManager class
+-  Improve the SFRectangleShape scene tool.
+  - Will improve the other SFShapeComponent's scene tools in a future alpha.
 
+## Future Features:
 
-### Already Completed Upcoming Features:
-Please note there is more than the typed below, but instead of creating a wall of text for people to read, I am currently working on a manual with videos to show how to do stuff.
+### Major Core Features
+- Interactable Environment - think freezing water and burning grass. This relies on the GeometryIsland API in Unity 6.3.
+- Full implementation of the Sprite Destructor to allow destructible sprites with physics. This wll be implementing the Sprite Fragmentation API added in Unity 6.3
+- Updating the Data Editor for characters, items, and adding a level data editor tab to it.
+- Create a core editor for SF tool related packages.
 
-#### Physics
+#### Future Data Editor Feature
+Full implementation of the SF Data Editor with better UI Toolkit binding via serializable objects.
+- Merge the Data Editor with the SF Metroidvania Editor window to create just the SF Metroidvania Editor window.
+- Create a way to define regions in the database.
+- Create ways to make data sections easier to be made.
 
-##### General Physics
-- Collision Controller that can be used both in and outside the CharaterControllers to implement custom Collision events and callbacks.
-##### Character Controller
-- Custom Character Controller that works for grounded, flying, and swimming characters.
-- The custom controller also supports playable, enemy, and NPC characters without any extra changes needed.
-- Quite of a bit of improvements brought to the custom collision detection calculations in the Controller for physics.
-  - Note the Playable character has a special component called PlayerController2D that helps auto set up some input stuff.
+#### Future Room Features
+This might end up being a full on Room Editor tool to even help change spawned characters, items, and more.
+- Rework how rooms are loaded from the database. 
+  - Relies on implementing the SF Database Registration class that was already started. 
+- Find a way to set up room transitions and connected loading rooms easier.
+  - Make the rooms no care what their position in the prefab is set to.
+  - Create a room anchor point to define the position rooms are able to be connected to each other.
 
-##### Global Interaction Controllers
-- Interaction Controllers allow anything to interact with anything that has a component that inherit from IInteractable.
-  - There is a Player only PlayerController to link up input systems for interactions.
-- Interaction controllers can interact with switches, NPC to start a dialogue, or other things that might need a custom interaction event.
-
-#### Gloabl Event System - Does not require any references in the scene between objects to work.
-- Global Event Manager allows listening and reacting to events called from any gameobject without a reference.
-- Can create custom events that pass in any value and sends it to things listening.
-- Can create custom validation for events before and after telling listeners the event is invoked to make sure any event data being sent is not of an incorrentformat or null.
-- There are several events already premade for things like respawning, pausing game, changing game control from player to menus/in dialogue, and a lot more.
-
-### Currently In Progress Features
-- AIState for giving characters the ability to do detection systems like seeing while patrolling an area in games.
-- AIState for NPC characters to patroll an area back and forth.
-- Options menu system for volume control and some graphic setting event listeners.
-   - Fullscreen, windowed, borderless window
-   - Background music, master, sound effect, and ambient sound volume settings.
-
-## Demo Videos
-There will be demo videos as soon as I finished the options menu events.
-
-## WIP API Documentation.
-Please note the documentation is very early wip. The manual link at the top left is not ready yet. So clicking it does nothing. We are working on videos currently for the manual. 
-Currently somethings are not in the final location for namespaces. In the root SF namespace you will see some classes, structs, or interfaces needing moved to their proper namespaces.
-
-[WIP API Documentation](https://shatter-fantasy.github.io/SF-Metroidvania/api/SF.Characters.Controllers.Controller2D.html)
-
-## Install Instructions
-This package was built with the idea of using Unity's built in package manager to help make installing and choosing which version of the package you want to use easier.
-Here is the official Unity documentation page if you want to do a full read through instead of reading the short answer below.
-
-[Unity Custom Git Package Documentation](https://docs.unity3d.com/6000.0/Documentation/Manual/upm-git.html#extended)
-
-1. Open up Unity's package manager editor window and click the button with a plus sign at the top left of the package manager window. It should have a small dropdown arrow icon by the button with a plus sign on it.
-
-![install-instructions-1](https://github.com/user-attachments/assets/de316cc8-5498-4496-b702-221b6f2b73f7)
-
-   
-2. Choose install package from git url and paste in the following.
-Note the current Metroidvania package is being worked on in the alpha-one branch. I would advise following the optional steps below to grab it.
-https://github.com/Shatter-Fantasy/SF-Metroidvania.git
-
-Optional for choosing a specific version of the SF Platformer package to install.
-Unity supports git revision syntax allowing you to add options at the end of the Git url to customize your package download.
-All options are added onto the git url after the pound symbol # is added to the end.
-
-The options are as followed:
-1. Specific branch  - #name-of-branch
-2. Specific version for package release. Note the letter v before the numbers - #v0.0.1 would give you the first alpha release while for pre-alphas you would type #pre-alpha.9
-3. A specific commit if you want to try out a commit with a feature that hasn't been published in a release yet - #git-commit-hash
-Example for the specific commit hash #76c6efb35ac8d4226a22f974939f300231a3637f. This is the hash for the commit added right before pre-alpha 9 release.
-
-Full example for wanting to get the SF Package that is a release version
-https://github.com/Shatter-Fantasy/SF-Metroidvania.git.git#v0.0.1
-
-Full example for wanting to get the SF Package that is being worked on in the alpha-one branch
-https://github.com/crowhound/SF-Platformer.git#alpha-one
+### Future Scene Tool Improvements
+- CinemachineRectangleConfiner Scene tools that would eliminate the need for an SFShapeComponent.
+    - This would improve the set-up for confining cameras in rooms.
+    - Remove some of the current limitations.
+- Add more SFShapeComponent Scene tools for editing the shapes properties.

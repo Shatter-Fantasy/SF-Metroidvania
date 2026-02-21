@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using SF.InputModule;
-using SF.Physics;
-
 namespace SF.AbilityModule.Characters
 {
+    using InputModule;
+    using PhysicsLowLevel;
+    
     /// <summary>
     /// Grants the ability for a player to Glide with a set input command.
     /// Controller by an <see cref="AbilityController"/>.
@@ -59,17 +59,17 @@ namespace SF.AbilityModule.Characters
 
         private void OnEnable()
         {
-            InputManager.Controls.Player.Enable();
-            InputManager.Controls.Player.Glide.performed += OnInputGlide;
-            InputManager.Controls.Player.Jump.performed += OnMidGlideJump;
+            SFInputManager.Controls.Player.Enable();
+            SFInputManager.Controls.Player.Glide.performed += OnInputGlide;
+            SFInputManager.Controls.Player.Jump.performed += OnMidGlideJump;
         }
 
         private void OnDisable()
         {
-            if(InputManager.Controls == null) return;
+            if(SFInputManager.Controls == null) return;
 
-            InputManager.Controls.Player.Glide.performed -= OnInputGlide;
-            InputManager.Controls.Player.Jump.performed -= OnMidGlideJump;
+            SFInputManager.Controls.Player.Glide.performed -= OnInputGlide;
+            SFInputManager.Controls.Player.Jump.performed -= OnMidGlideJump;
             _controller2d.CollisionInfo.OnGroundedHandler-= GlideReset;
         }
     }

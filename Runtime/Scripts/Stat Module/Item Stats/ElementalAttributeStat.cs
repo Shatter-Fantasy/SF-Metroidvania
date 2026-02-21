@@ -1,18 +1,20 @@
-using UnityEngine;
-using SF.StatModule;
-
-namespace SF.Inventory.StatModule
+namespace SF.StatModule
 {
-    public enum ElementalType
+    [System.Flags]
+    public enum ElementalType : uint
     {
-        Fire,
-        Ice,
-        Water,
-        Lightning,
-        Light,
-        Dark,
-        Wind,
-        Earth
+        None = 0,
+        Fire = 1,
+        Ice = 2,
+        Water = 4,
+        Lightning = 8,
+        Light = 16,
+        Dark = 32,
+        Wind = 64,
+        Earth = 128,
+        // We use combination values to set the fusion of elemental types.
+        Plasma = 9, // Fire + Lightning
+        Lava = 129, // Earth + Fire.
     }
     /// <summary>
     /// Elemntal types are used in elemntal resistances, damage modifiers, and elemental affinity bonuses.
