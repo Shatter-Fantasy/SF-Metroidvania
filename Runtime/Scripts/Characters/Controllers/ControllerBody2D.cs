@@ -210,7 +210,7 @@ namespace SF.PhysicsLowLevel
 
             if (!TryGetComponent(out ShapeComponent))
             {
-                ShapeComponent = gameObject.AddComponent<SFShapeComponent>();
+                ShapeComponent = gameObject.AddComponent<SFCapsuleShape>();
             }
         }
         
