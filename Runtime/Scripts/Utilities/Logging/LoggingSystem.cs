@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace SF
+namespace SF.LoggingModule
 {
 	public static class LoggingSystem 
 	{

@@ -1,8 +1,8 @@
-using SF.RoomModule;
 using UnityEngine;
 
 namespace SF.Managers
 {
+    using RoomModule;
     public enum GameLoadingMode
     {
         NewGame, LoadGame, Continue

@@ -1,13 +1,12 @@
 using System.Collections.Generic;
-
-using SF.Characters;
-using SF.Characters.Controllers;
-using SF.Managers;
-using SF.PhysicsLowLevel;
 using UnityEngine;
 
 namespace SF.CommandModule
 {
+    using Characters;
+    using Managers;
+    using PhysicsLowLevel;
+    
     public enum CommandType
     {
         Cutscene,

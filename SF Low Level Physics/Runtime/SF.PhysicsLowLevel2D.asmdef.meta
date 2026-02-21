@@ -1,11 +1,6 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Documentation/docfx.json.meta
-guid: 196244cef18612b4a952b06324ca6d1d
-TextScriptImporter:
-========
 guid: 9891c26878d4c8e4b8a7a59815c27c7b
 AssemblyDefinitionImporter:
->>>>>>>> alphas/alpha-seven:SF Low Level Physics/Runtime/SF.PhysicsLowLevel2D.asmdef.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

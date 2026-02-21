@@ -1,10 +1,11 @@
-using SF.AbilityModule;
-using SF.Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SF.InputModule
 {
+	using AbilityModule;
+	using Managers;
+	
     public class SFInputManager : MonoBehaviour
     {
 	    

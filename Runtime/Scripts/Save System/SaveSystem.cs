@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#if !UNITY_EDITOR
 using System.Security.Cryptography;
-
+#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-
 using UnityEngine;
 
-namespace SF
+namespace SF.Activatable
 {
     public class AnimationActivatable : ActivatableWrapper, IActivatable
     {

@@ -1,5 +1,4 @@
 using UnityEngine;
-using SF.DialogueModule;
 
 namespace SF.CommandModule
 {

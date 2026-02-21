@@ -1,9 +1,9 @@
-using SF.LootModule;
-using SF.Experience;
 using UnityEngine;
 
 namespace SF.Characters.Data
 {
+    using LootModule;
+    using Experience;
     public class CombatantData : CharacterData
     {
         public LootTableData EnemyLootTable;

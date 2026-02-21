@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:SF Low Level Physics/Editor/Tools/Geometry Tools Tools.meta
+guid: 907bcd4c2f44e8346bd5d7d99f7ddd4a
+========
 guid: fde7d503f8780f545a5707b9d5f09c01
+>>>>>>>> main:SF Low Level Physics/Editor.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

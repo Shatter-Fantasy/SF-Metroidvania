@@ -1,13 +1,7 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Editor/Metroidvania Toolkit Editor/Settings Panel/GameSettings.asset.meta
-guid: bfe234d417cfb4442bbddeb527611632
-NativeFormatImporter:
-========
 guid: 20aaadccde91e004fa7ab8895ff5e666
 AssemblyDefinitionImporter:
->>>>>>>> alphas/alpha-seven:SF Low Level Physics/Editor/SFEditor.PhysicsLowLevel2D.asmdef.meta
   externalObjects: {}
-  mainObjectFileID: 11400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 

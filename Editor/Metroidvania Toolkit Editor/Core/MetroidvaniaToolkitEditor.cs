@@ -8,11 +8,11 @@ public class MetroidvaniaToolkitEditor : EditorWindow
     private VisualTreeAsset m_VisualTreeAsset = default;
 
     private VisualElement _root;
-    [MenuItem("Window/UI Toolkit/Metroidvania Toolkit Editor")]
+    [MenuItem("SF/Metroidvania Toolkit Editor")]
     public static void ShowExample()
     {
         MetroidvaniaToolkitEditor wnd = GetWindow<MetroidvaniaToolkitEditor>();
-        wnd.titleContent = new GUIContent("Metroidvania Toolkit Editor");
+        wnd.titleContent = new GUIContent("SF Metroidvania Toolkit Editor");
     }
 
     public void CreateGUI()

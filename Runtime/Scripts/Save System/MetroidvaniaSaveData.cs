@@ -1,9 +1,9 @@
-using SF.ItemModule;
-using SF.SpawnModule;
-using SF.StatModule;
-
 namespace SF.DataManagement
 {
+    using ItemModule;
+    using SpawnModule;
+    using StatModule;
+
     [System.Serializable]
     public class MetroidvaniaSaveData : SaveDataBlock
     {

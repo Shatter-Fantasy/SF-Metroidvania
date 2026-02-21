@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using SF.DataManagement;
-using SF.DialogueModule;
-using SF.Settings;
 using UnityEngine;
 
 namespace SF.Managers
 {
+    using DataManagement;
+    using DialogueModule;
+    using Settings;
 	/// <summary>
 	/// The current state that is controlling the games input and actions. 
 	/// </summary>
@@ -101,13 +101,13 @@ namespace SF.Managers
 
         protected static void Pause()
         {
-            Instance._controlState = GameControlState.Menu;
+            Instance.ControlState = GameControlState.Menu;
             GamePausedHandler?.Invoke();
         }
 
         protected static void Unpause()
         {
-            Instance._controlState = GameControlState.Player;
+            Instance.ControlState = GameControlState.Player;
             GameUnpausedHandler?.Invoke();
         }
         
@@ -116,7 +116,7 @@ namespace SF.Managers
             /* TODO: Switch statement for type of dialogue.
             * Allow for background dialogue that don't freeze the player control. */
             
-            _controlState = GameControlState.Dialogue;
+            ControlState = GameControlState.Dialogue;
         }
         
         private void OnDialogueEnded()
@@ -124,7 +124,7 @@ namespace SF.Managers
             /* TODO: Switch statement for type of dialogue.
              * Allow for background dialogue that don't freeze the player control. */
             
-            _controlState = GameControlState.Player;
+            ControlState = GameControlState.Player;
         }
     }
 }

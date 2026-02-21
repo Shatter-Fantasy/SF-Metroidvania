@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:SF Low Level Physics/Editor/Tools.meta
+guid: 016fdd4546863354191e18c316f30964
+========
 guid: 237d9f53c8002814faf04e0c4ffd4c14
+>>>>>>>> main:SF Low Level Physics/Runtime/Low Level Managers.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

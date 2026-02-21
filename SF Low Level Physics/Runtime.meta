@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Editor/Icons.meta
-guid: 045b6142e1c88f748b0940ce8504d659
+<<<<<<<< HEAD:SF Low Level Physics/Editor.meta
+guid: fde7d503f8780f545a5707b9d5f09c01
 ========
 guid: a355cfcf43f217646a1621cfa56ce754
->>>>>>>> alphas/alpha-seven:SF Low Level Physics/Runtime.meta
+>>>>>>>> main:SF Low Level Physics/Runtime.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -144,10 +144,10 @@ namespace SF.PhysicsLowLevel
                         }
                         
                         PhysicsTransform tileTransform = PhysicsTransform.identity;
-                        
+                        tileTransform.position += Offset;
                         // Add the layer to the composer.
                         // I use PhysicsTransform.identity to get the relative position of tiles away from the grid origin.
-                        composer.AddLayer(vertexPath.AsArray(), PhysicsTransform.identity);
+                        composer.AddLayer(vertexPath.AsArray(), tileTransform);
                     }
 
                     vertexPath.Clear();
