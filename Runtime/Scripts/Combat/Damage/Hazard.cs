@@ -20,6 +20,7 @@ namespace SF.DamageModule
         ITriggerShapeCallback,
         IContactShapeCallback
     {
+        private Collider2D _collider2D;
         private Vector2 _collisionNormal;
         public Direction DamageDirection;
         public int DamageAmount = 1;
@@ -35,13 +36,24 @@ namespace SF.DamageModule
         
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
-            var visitingComponent = beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>();
+            if(!beginEvent.TryGetCallbackComponentOnVisitor(out SFShapeComponent visitingComponent))
+                return;
             
             if (!visitingComponent.TryGetComponent(out IDamagable damagable))
                 return;
             
             damagable.TakeDamage(DamageAmount,_knockBackForce);
         }
+        
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
+        {
+            if (((GameObject)beginEvent.visitorShape.callbackTarget).TryGetComponent(out IDamagable damagable))
+            {
+                
+                Debug.Log(damagable);
+                damagable.TakeDamage(DamageAmount,_knockBackForce);
+                // Need to figure out the low level version of Collider2D.Distance.
+                //_collisionNormal = col2D.Distance(_collider2D).normal;
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
         {
