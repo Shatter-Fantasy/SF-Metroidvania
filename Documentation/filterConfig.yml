@@ -1,7 +1,11 @@
 apiRules:
 - include: 
-    uidRegex: ^SF
+    uidRegex: ^SF*
     type: Namespace
 - exclude:
     uidRegex: .*
     type: Namespace
+- exclude:
+    uidRegex: ^SF.InputModule
+    type: Namespace
+    
