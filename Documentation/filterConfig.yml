@@ -8,3 +8,12 @@ apiRules:
 - exclude:
     uidRegex: ^SF.InputModule.Controls.*
     type: Type
+- exclude:
+    uidRegex: ^SF.InputModule.Controls.*
+    type: Class
+- exclude:
+    uidRegex: ^SF.InputModule.Controls
+    type: Class
+- exclude:
+    uidRegex: ^SF.InputModule.Controls.*
+    type: Struct
