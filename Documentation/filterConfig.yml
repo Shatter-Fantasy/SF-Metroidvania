@@ -5,3 +5,6 @@ apiRules:
 - exclude:
     uidRegex: .*
     type: Namespace
+- exclude:
+    uidRegex: ^SF.InputModule.Controls.*
+    type: Type
