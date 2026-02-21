@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - alpha-release-pages
-
+      - documentation/manual-first-pass
+  workflow_dispatch:
 jobs:
   # Build the documentation
   build:
