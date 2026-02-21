@@ -11,7 +11,7 @@ namespace SF.RoomModule
     [BurstCompile]
     public class CinemachineRectangleConfiner2D : CinemachineExtension
     {
-        [SerializeField] private Bounds _confinerBounds;
+        public Bounds ConfinerBounds;
         [SerializeField] private Transform _confinerCenter;
 
         private Vector3 _correctedPosition;
@@ -28,13 +28,12 @@ namespace SF.RoomModule
             var settings = state.Lens;
             float frustumHalfHeight = CalculateFrustumHalfHeight(settings.OrthographicSize,camPosition.z,settings.FieldOfView);
             float frustumHalfWidth = frustumHalfHeight * settings.Aspect;
-            Vector2          frustum          = new Vector2(frustumHalfWidth * 2, frustumHalfHeight * 2);
             
-            _confinerBounds.center = _confinerCenter.transform.position;
+            //ConfinerBounds.center = _confinerCenter.transform.position;
             Vector3 pos = vcam.transform.position;
 
-            _correctedPosition.x = Mathf.Max(_confinerBounds.min.x + frustumHalfWidth,Mathf.Min(_confinerBounds.max.x - frustumHalfWidth, pos.x) );
-            _correctedPosition.y = Mathf.Max(_confinerBounds.min.y + frustumHalfHeight,Mathf.Min(_confinerBounds.max.y - frustumHalfHeight, pos.y) );
+            _correctedPosition.x = Mathf.Max(ConfinerBounds.min.x + frustumHalfWidth,Mathf.Min(ConfinerBounds.max.x - frustumHalfWidth, pos.x) );
+            _correctedPosition.y = Mathf.Max(ConfinerBounds.min.y + frustumHalfHeight,Mathf.Min(ConfinerBounds.max.y - frustumHalfHeight, pos.y) );
             _correctedPosition.z = state.RawPosition.z;
 
             state.PositionCorrection += _correctedPosition - state.GetCorrectedPosition();
@@ -77,7 +76,7 @@ namespace SF.RoomModule
         public void UpdateConfinerBounds(in Bounds newConfinerBounds)
         {
             // TODO: Add logic for making sure the bounds don't have invalid values like negative sizes or 0.
-            _confinerBounds = newConfinerBounds;
+            ConfinerBounds = newConfinerBounds;
         }
     }
 }

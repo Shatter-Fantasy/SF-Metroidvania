@@ -2,22 +2,24 @@ using System;
 using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-using Unity.U2D.Physics.Extras;
-#endif
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.PhysicsLowLevel
 {
-    public interface IContactShapeCallback : PhysicsCallbacks.IContactCallback
+    public interface IPreSolveShapeCallback
+    {
+        bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent,SFShapeComponent callingShapeComponent);
+    }
+    
+    public interface IContactShapeCallback
     {
         void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
 
         void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent);
     }
     
-    public interface ITriggerShapeCallback : PhysicsCallbacks.ITriggerCallback
+    public interface ITriggerShapeCallback
     {
         void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
 
@@ -40,8 +42,10 @@ namespace SF.PhysicsLowLevel
 #if UNITY_EDITOR
         ITransformMonitor,
 #endif
-        ITriggerShapeCallback,
-        IContactShapeCallback
+        ITriggerShapeCallback, PhysicsCallbacks.ITriggerCallback,
+        IContactShapeCallback, PhysicsCallbacks.IContactCallback,
+        IPreSolveShapeCallback, PhysicsCallbacks.IPreSolveCallback
+        
     {
         
         #region Transform Cache - Temp fields
@@ -74,7 +78,7 @@ namespace SF.PhysicsLowLevel
         /// </remarks>
         public ref PhysicsShape Shape => ref _shape;
 
-        public PhysicsWorld World =>_shape.isValid ? _shape.world : PhysicsWorld.defaultWorld;
+        public PhysicsWorld World => Body.isValid ? Body.world : PhysicsWorld.defaultWorld;
 
         public virtual void SetShape<TGeometryType>(TGeometryType geometryType) where  TGeometryType : struct
         {
@@ -144,7 +148,6 @@ namespace SF.PhysicsLowLevel
             }
         }
         
-
         /// <summary>
         /// A list of objects that are currently contained inside of <see cref="Shape"/>
         /// </summary>
@@ -178,7 +181,7 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         private readonly List<ITriggerShapeCallback> _triggerTargets = new();
         private readonly List<IContactShapeCallback> _contactTargets = new();
-        
+        private readonly List<IPreSolveShapeCallback> _preSolveTargets = new();
 
         public Action ShapeCreatedHandler;
         public Action ShapeDestroyedHandler;
@@ -386,6 +389,11 @@ namespace SF.PhysicsLowLevel
         {
             _contactTargets.Add(target);
         }
+        
+        public void AddPreSolveCallbackTarget(IPreSolveShapeCallback target)
+        {
+            _preSolveTargets.Add(target);
+        }
 
         private void OnContactBeginCallbacks(PhysicsEvents.ContactBeginEvent beginEvent)
         {
@@ -453,6 +461,24 @@ namespace SF.PhysicsLowLevel
         {
             OnContactEnd2D(endEvent);
         }
+        
+        public bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent)
+        {
+            return OnPreSolve2D(preSolveEvent, this);
+        }
+
+        public bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent, SFShapeComponent callingShapeComponent)
+        {
+            if(_preSolveTargets == null || _preSolveTargets.Count < 1)
+                return true;
+
+            foreach (var target in _preSolveTargets)
+            {
+                target.OnPreSolve2D(preSolveEvent, this);
+            }
+
+            return true;
+        }
 #endregion
         
         /// <summary>
@@ -517,41 +543,6 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         protected virtual void DebugPhysicsExtra(){}
-        
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-        /// <summary>
-        /// Draws a debug render to the game and scene view to allow for visual debugging.
-        /// </summary>
-        void IWorldSceneDrawable.Draw()
-        {
-            
-            
-            // Finish if we've nothing to draw.
-            if (IsCompositeShape
-                && ShapesInComposite is { IsCreated: true, Length: > 0 })
-            {
-                // Finish if we're not drawing selections.
-                if (!ShapesInComposite[0].world.drawOptions.HasFlag(PhysicsWorld.DrawOptions.SelectedShapes))
-                    return;
-            
-                // Draw selections.
-                foreach (var shape in ShapesInComposite)
-                    shape.Draw();
-            }
-        }
-
-        /// <summary>
-        /// Updates the Physics shape when transform changes in the game scene.
-        /// <remarks>
-        /// This only runs if EditorApplication.isPlaying returns false.
-        /// </remarks>
-        /// </summary>
-        void IWorldSceneTransformChanged.TransformChanged()
-        {
-            if (Body.isValid)
-                CreateShape();
-        }
-#endif
 
         public PhysicsAABB CalculateAABB()
         {

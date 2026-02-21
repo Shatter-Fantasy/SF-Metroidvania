@@ -4,15 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
-#if UNITY_LOW_LEVEL_EXTRAS_2D
-using Unity.U2D.Physics.Extras;
-#endif
 
 namespace SF.RoomModule
 {
+    using CameraModule;
     using Characters.Controllers;
     using Managers;
     using PhysicsLowLevel;
+
     
     public class RoomController : MonoBehaviour, 
         ITriggerShapeCallback
@@ -23,19 +22,14 @@ namespace SF.RoomModule
             each transform is the floor of two connected rooms. 
             We can round the x/y values of the transform to make sure they align perfect.
             We might have to make one room round using ceiling and one round using floor depending on the values.         */
-        
+        [SerializeField] private Bounds _roomCameraBounds;
         
         /// <summary>
         /// The id for the room's spawned instance the RoomController is controlling.
         /// </summary>
         public int RoomID;
         [NonSerialized] public List<int> RoomIdsToLoadOnEnter = new();
-
-        /// <summary>
-        /// These are optional transition ids for when room controller needs to keep track of fast travel points or using <see cref="TransitionTypes.Local"/>.
-        /// </summary>
-        public List<RoomTransition> RoomTransitions = new List<RoomTransition>();
-
+        
         public Action OnRoomEnteredHandler;
         public Action OnRoomExitHandler;
 
@@ -113,22 +107,6 @@ namespace SF.RoomModule
             RoomSystem.SetCurrentRoom(RoomID);
         }
         
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
-        {
-            OnRoomEnteredHandler?.Invoke();
-            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
-            {
-                _roomEnteredExtensions[i].Process();
-            }
-            
-            MakeCurrentRoom();
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
-        {
-            OnRoomExitHandler?.Invoke();
-        }
-
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
             if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
@@ -147,12 +125,21 @@ namespace SF.RoomModule
             if (!body2D.CollisionInfo.CollisionActivated)
                 return;
             
-            OnTriggerBegin2D(beginEvent);
+            OnRoomEnteredHandler?.Invoke();
+            for (int i = 0; i < _roomEnteredExtensions.Count; i++)
+            {
+                _roomEnteredExtensions[i].Process();
+            }
+
+            PhysicsAABB aabb   = callingShapeComponent.Body.GetAABB();
+            _roomCameraBounds = new Bounds(aabb.center,aabb.extents * 2);
+            CameraController.UpdateRectangleConfiner(_roomCameraBounds);
+            MakeCurrentRoom();
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
         {
-            OnTriggerEnd2D(endEvent);
+            OnRoomExitHandler?.Invoke();
         }
     }
 }

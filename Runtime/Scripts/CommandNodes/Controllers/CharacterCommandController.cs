@@ -1,9 +1,8 @@
-using SF.Characters;
-using SF.Characters.Controllers;
-using SF.PhysicsLowLevel;
-
 namespace SF.CommandModule
 {
+    using Characters;
+    using PhysicsLowLevel;
+    
     public class CharacterCommandController : CommandController
     {
         private ControllerBody2D _controller2d;

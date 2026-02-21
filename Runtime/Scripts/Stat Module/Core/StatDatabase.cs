@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using SF.Inventory.StatModule;
 
 namespace SF.StatModule
 {

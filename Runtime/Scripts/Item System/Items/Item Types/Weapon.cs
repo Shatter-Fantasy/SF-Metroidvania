@@ -1,6 +1,3 @@
-using SF.Inventory;
-using UnityEngine;
-
 namespace SF.ItemModule
 {
 	[System.Serializable]

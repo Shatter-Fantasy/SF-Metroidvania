@@ -1,6 +1,3 @@
-using SF.Characters.Data;
-using SF.RoomModule;
-using SF.StatModule;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -9,6 +6,9 @@ using UnityEngine;
 
 namespace SF.SpawnModule
 {
+    using Characters.Data;
+    using RoomModule;
+    using StatModule;
     [System.Serializable]
     public struct SpawnSet
     {

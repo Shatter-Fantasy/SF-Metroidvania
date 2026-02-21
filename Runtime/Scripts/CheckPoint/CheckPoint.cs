@@ -1,8 +1,8 @@
-using SF.DataManagement;
 using UnityEngine;
 
 namespace SF.SpawnModule
 {
+	using DataManagement;
     /// <summary>
     /// Sets the attached game object as a checkpoint for the loaded level and can be used to invoke a <see cref="CheckPointEventTypes.ChangeCheckPoint"/> event when an allowable object triggers an OnTriggerEnter2D callback on the attached object.
     /// </summary>

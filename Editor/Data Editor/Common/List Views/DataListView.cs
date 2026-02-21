@@ -1,13 +1,12 @@
-using UnityEngine.UIElements;
-
-using SF.DataModule;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
-using SF.Characters.Data;
+using UnityEngine.UIElements;
 
 namespace SFEditor.Data
 {
+    
+    using SF.DataModule;
     /// <summary>
     /// The generic class for all DataList views to show data of type DTObase classes and allow them to be selected and edited in editor windows.
     /// </summary>
