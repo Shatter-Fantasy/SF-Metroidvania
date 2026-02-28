@@ -51,6 +51,11 @@ namespace SF.RoomModule
         /// Calling SetCurrentRoom does checks to make sure the value being set to the CurrentRoom is valid.
         /// </remarks>
         public static Room CurrentRoom { get; private set; }
+        public static int CurrentRoomID => CurrentRoom?.RoomID ?? 0;
+        
+        public static Vector3 CurrentRoomPosition => CurrentRoom != null 
+            ? CurrentRoom.SpawnedRoomController.transform.position 
+            : Vector3.zero;
         
         /// <summary>
         /// Loads a connected room by its id. This is called in the room before it aka the connected room leading to other rooms.
@@ -143,9 +148,9 @@ namespace SF.RoomModule
             // Make sure the room we are trying to set as the current room is already loaded
             if (!IsRoomLoaded(roomID))
             {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 Debug.LogWarning($"No room matching RoomID: {roomID} is currently loaded in.");
-                #endif
+#endif
                 return false;
             }
 

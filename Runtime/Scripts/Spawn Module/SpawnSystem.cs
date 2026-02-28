@@ -48,7 +48,7 @@ namespace SF.SpawnModule
             if (playerPrefab == null)
                 return null;
             
-            SpawnedPlayer = GameObject.Instantiate(playerPrefab,RoomSystem.CurrentRoom.SpawnedInstance.transform.position,Quaternion.identity);
+            SpawnedPlayer = GameObject.Instantiate(playerPrefab,RoomSystem.CurrentRoomPosition,Quaternion.identity);
             if (SpawnedPlayer == null)
                 return null;
             
