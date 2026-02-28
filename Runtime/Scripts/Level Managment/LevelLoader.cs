@@ -4,9 +4,10 @@ using UnityEngine.SceneManagement;
 
 namespace SF.LevelModule
 {
-    using RoomModule;
     /// <summary>
     /// Loads the required game objects for used in managers and core systems in playable levels.
+    /// This is needed to be in each playable scene and make sure this does not persist between scenes,
+    /// so start can run per at least once per scene.
     /// </summary>
     [DefaultExecutionOrder(-4)]
     public class LevelLoader : MonoBehaviour
@@ -28,10 +29,20 @@ namespace SF.LevelModule
         /// </summary>
         public static event Action LevelReadyHandler;
 
+        public static event Action LevelStartedHandler;
+
         private void Awake()
         {
             // This has to be done in awake. OnEnable/Start is called after the first sceneLoaded call.
             SceneManager.sceneLoaded += OnLevelLoaded;
+        }
+
+        /// <summary>
+        /// This runs after <see cref="OnLevelLoaded"/> is Invoked.
+        /// </summary>
+        private void Start()
+        {
+            LevelStartedHandler?.Invoke();
         }
 
         private void OnDestroy()
@@ -48,7 +59,6 @@ namespace SF.LevelModule
         /// <exception cref="NotImplementedException"></exception>
         private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
-            LevelLoadingHandler?.Invoke();
             // We will be doing stuff here later so the NewGameSceneInitialization is staying in a separate function for now 
             for (int i = 0; i < _gameStartingSceneIndexes.Length; i++)
             {
@@ -58,8 +68,6 @@ namespace SF.LevelModule
                     return;
                 }
             }
-
-            PlayableGameSceneInitialization();
         }
         
         /// <summary>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SF.LevelModule;
 using UnityEngine;
 
 namespace SF.RoomModule
@@ -17,11 +18,16 @@ namespace SF.RoomModule
         /// This is also called when a new list is assigned into the Rooms value.
         /// </summary>
         public Action OnRoomsValueChanged;
-
-        public override void OnRegisterDatabase()
+        
+        private void InitializeRoomsForLoadedScene()
         {
-            RoomSystem.RoomDB = this;
             RoomSystem.SetInitialRoom(StartingRoomID);
+        }
+        
+        public override void OnRegisterDatabase()
+        {   
+            RoomSystem.RoomDB               =  this;
+            LevelLoader.LevelStartedHandler += InitializeRoomsForLoadedScene;
         }
 
         public override void OnDeregisterDatabase()
@@ -29,7 +35,11 @@ namespace SF.RoomModule
             // Only reset the RoomSystemDB if the RoomDB being registered was the same one.
             if (RoomSystem.RoomDB == this)
                 RoomSystem.RoomDB = null;
+
+            LevelLoader.LevelStartedHandler -= InitializeRoomsForLoadedScene;
         }
+        
+        
         
 #region  ILISt Implementation
         public IEnumerator<Room> GetEnumerator()
