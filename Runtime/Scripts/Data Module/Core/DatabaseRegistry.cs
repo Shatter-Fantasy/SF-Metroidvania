@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SF.DataModule
 {
-    // TODO: Implement this as the default injection point for all runtime related databases.
-    //  This will be useful for making sure all databases are loaded before doing any runtime logic.
-    
     [CreateAssetMenu(fileName = nameof(DatabaseRegistry), menuName = "SF/Data/Database Registry")]
     public class DatabaseRegistry : ScriptableObject
     {
+        /// <summary>
+        /// A list of databases needing to be preloaded when the runtime player first starts up.
+        /// Any database set in here will have the 
+        /// </summary>
+        public List<SFDatabase> PreloadedDatabase = new List<SFDatabase>();
         public Dictionary<Type, SFDatabase> RegisteredDatabases = new();
 
         private static DatabaseRegistry _registry;
@@ -24,7 +27,7 @@ namespace SF.DataModule
                 return _registry;
             }
             /* No setter because when grabbing the registry for the first time it will auto set an instance.
-             * if none was already set during an Awake cvall for a scriptable object of type DatabaseRegistry */
+             * if none was already set during an Awake call for a scriptable object of type DatabaseRegistry */
         }
 
         private void Awake()
@@ -35,7 +38,22 @@ namespace SF.DataModule
 
             _registry = this;
         }
+
+        private void OnEnable()
+        {
+            for (int i = 0; i < PreloadedDatabase.Count; i++)
+            {
+                RegisterDatabase(PreloadedDatabase[i]);
+            }
+        }
         
+        private void OnDestroy()
+        {
+            for (int i = 0; i < PreloadedDatabase.Count; i++)
+            {
+                DeregisterDatabase(PreloadedDatabase[i]);
+            }
+        }
         
         public static bool Contains(Type databaseType)
         {
@@ -60,7 +78,7 @@ namespace SF.DataModule
             }
         }
         
-        public static void UnregisterDatabase<TDatabase>() where TDatabase : SFDatabase
+        public static void DeregisterDatabase<TDatabase>(TDatabase database) where TDatabase : SFDatabase
         {
             // We use the Registry property with the getter just in
             // case we need to create an instance before even attempting to do unregistering.
@@ -71,5 +89,30 @@ namespace SF.DataModule
 #endif
             }
         }
+        
+        
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("SF/Data/Register Preloaded Databases")]
+        public static void PreloadDatabases()
+        {
+            var databaseRegistry = DatabaseRegistry.Registry;
+
+            if (databaseRegistry == null)
+            {
+                Debug.Log("There was not DatabaseRegistry set as the active registry.");
+                return;
+            }
+
+            // Add the config asset to the build
+            var preloadedAssets = UnityEditor.PlayerSettings.GetPreloadedAssets().ToList();
+            
+            // Don't set it if it already is in the PreloadedAssets list.
+            if (preloadedAssets.Contains(databaseRegistry))
+                return;
+            
+            preloadedAssets.Add(databaseRegistry);
+            UnityEditor.PlayerSettings.SetPreloadedAssets(preloadedAssets.ToArray());
+        }
+#endif
     }
 }

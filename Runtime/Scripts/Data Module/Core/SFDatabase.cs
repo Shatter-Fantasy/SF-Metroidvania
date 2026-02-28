@@ -9,17 +9,15 @@ namespace SF.DataModule
     /// </summary>
     public abstract class SFDatabase : ScriptableObject
     {
-        /*
-        protected virtual void Awake()
-        {
-            if(!DatabaseRegistry.Contains(GetType()))
-                DatabaseRegistry.RegisterDatabase(this);
-        }
         
-        protected virtual void OnEnable()
-        {
-            DatabaseRegistry.RegisterDatabase(this);
-        }*/
+        /// <summary>
+        /// SFDatabases are registered by the <see cref="DatabaseRegistry"/> which is loaded during the player start up
+        /// as part of the preloaded assets set in the project's PlayerSettings via SetPreloadedAssets.
+        /// So there OnEnable runs when the runtime player starts and is guaranteed to run before anything scene related.
+        /// </summary>
+        public virtual void OnRegisterDatabase() { }
+
+        public virtual void OnDeregisterDatabase(){ }
     }
     
     /// <summary>

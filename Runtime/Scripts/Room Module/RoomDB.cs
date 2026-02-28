@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace SF.RoomModule
 {
+    using DataModule;
     [CreateAssetMenu(fileName = "Room DB", menuName = "SF/Data/Rooms/Room Database")]
-    public class RoomDB : ScriptableObject , IList<Room>
+    public class RoomDB : SFDatabase , IList<Room>
     {
         public List<Room> Rooms = new();
         
@@ -16,6 +17,18 @@ namespace SF.RoomModule
         /// </summary>
         public Action OnRoomsValueChanged;
 
+        public override void OnRegisterDatabase()
+        {
+            
+            //throw new NotImplementedException();
+        }
+
+        public override void OnDeregisterDatabase()
+        {
+            //throw new NotImplementedException();
+        }
+        
+#region  ILISt Implementation
         public IEnumerator<Room> GetEnumerator()
         {
             throw new NotImplementedException();
@@ -125,5 +138,8 @@ namespace SF.RoomModule
 
             set => throw new NotImplementedException();
         }
+#endregion
+
+
     }
 }
