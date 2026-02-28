@@ -70,8 +70,12 @@ namespace SF.DataModule
         {
             // We use the Registry property with the getter just in
             // case we need to create an instance before registering a database.
-            if (!Registry.RegisteredDatabases.TryAdd(database.GetType(),database))
+            if (Registry.RegisteredDatabases.TryAdd(database.GetType(),database))
             { 
+                database.OnRegisterDatabase();
+            }
+            else
+            {
 #if UNITY_EDITOR
                 Debug.LogWarning($"When registering a database of type: {database.GetType()}, there was one already registered. Only one of each type can be registered at once.");
 #endif
@@ -82,8 +86,12 @@ namespace SF.DataModule
         {
             // We use the Registry property with the getter just in
             // case we need to create an instance before even attempting to do unregistering.
-            if (!Registry.RegisteredDatabases.Remove(typeof(TDatabase)))
-            { 
+            if (Registry.RegisteredDatabases.Remove(typeof(TDatabase)))
+            {
+                database.OnDeregisterDatabase();
+            }
+            else
+            {
 #if UNITY_EDITOR
                 Debug.LogWarning($"When unregistering a database of type: {typeof(TDatabase)}, there was no registered database of that type.");
 #endif

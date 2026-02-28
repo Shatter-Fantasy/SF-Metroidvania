@@ -7,7 +7,7 @@ namespace SF.Managers
     using DataManagement;
     using RoomModule;
     using ItemModule;
-    using LevelModule;
+    
     /// <summary>
     /// Keeps track of the prefabs, scriptable objects that need loaded for first scene (think RoomDB), and makes sure all required
     /// Managers/Databases are ready before needing to be used.
@@ -19,12 +19,6 @@ namespace SF.Managers
 
         public static GameLoader Instance;
         public static bool WasGameInitialized = false;
-        /* Since Scriptable Objects don't have their lifecycle events done until they are referenced in scene,
-         we set them up via the GameLoader Scriptable Object with a RuntimeInitializeOnLoadMethod
-         which set the values of the GameManager on first scene load. */
-        [Header("Required Databases DB ")]
-        [SerializeField] private RoomDB _roomDB;
-        
 
         public ItemDatabase ItemDatabase;
         
@@ -60,9 +54,6 @@ namespace SF.Managers
             Thus, we should also check if WasGameInitialized was set to true already in a different GameLoader InitializeGame call.*/
             if (WasGameInitialized)
                 return;
-            
-            if (_roomDB != null)
-                RoomSystem.RoomDB = _roomDB;
             
             GameInitializedHandler?.Invoke();
             WasGameInitialized = true;
