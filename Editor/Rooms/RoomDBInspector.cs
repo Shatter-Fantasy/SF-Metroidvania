@@ -19,9 +19,7 @@ namespace SFEditor.Rooms
             _roomDB = target as RoomDB;
             _root = new VisualElement() {name = "room-db--root"};
             InspectorElement.FillDefaultInspector(_root,serializedObject,this);
-
-
-            _root.AddChild(new Button(SetRoomDBInstance){ text = "Set Instance" });
+            
             _root.AddChild(new Button(SetRoomIDs){ text = "Set Room Prefab IDs" });
             
             _root.RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
@@ -50,15 +48,6 @@ namespace SFEditor.Rooms
             {
                 _roomDB[roomIndex].RoomID = roomIndex;
             }
-        }
-
-        private void SetRoomDBInstance()
-        {
-            RoomDB roomDB = target as RoomDB;
-            if (roomDB == null)
-                return;
-            
-            RoomSystem.RoomDB = roomDB;
         }
         
         private void SetRoomIDs()
