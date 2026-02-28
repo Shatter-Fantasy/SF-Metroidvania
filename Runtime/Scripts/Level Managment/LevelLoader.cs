@@ -17,8 +17,7 @@ namespace SF.LevelModule
         /// </summary>
         [Header("Level Initialization")] [SerializeField]
         private int[] _gameStartingSceneIndexes = new int[1];
-
-        [SerializeField] private LevelPlayData _levelData;
+        
         /// <summary>
         /// Is called when a level starts to load up. 
         /// </summary>
@@ -33,11 +32,6 @@ namespace SF.LevelModule
         {
             // This has to be done in awake. OnEnable/Start is called after the first sceneLoaded call.
             SceneManager.sceneLoaded += OnLevelLoaded;
-        }
-
-        private void Start()
-        {
-            RoomSystem.SetInitialRoom(_levelData.StartingRoomID);
         }
 
         private void OnDestroy()
@@ -77,11 +71,6 @@ namespace SF.LevelModule
         /// </remarks>
         private void PlayableGameSceneInitialization()
         {
-            if (_levelData != null)
-            {
-                LevelPlayData.Instance = _levelData;
-            }
-
             LevelReadyHandler?.Invoke();
         }
     }

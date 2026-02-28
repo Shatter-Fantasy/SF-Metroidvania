@@ -25,10 +25,6 @@ namespace SF.Managers
         [Header("Required Databases DB ")]
         [SerializeField] private RoomDB _roomDB;
         
-        /// <summary>
-        /// This data object that keeps track of references needed to be loaded in playable levels before anything else.
-        /// </summary>
-        [SerializeField] private LevelPlayData _levelPlayData;
 
         public ItemDatabase ItemDatabase;
         
@@ -67,9 +63,6 @@ namespace SF.Managers
             
             if (_roomDB != null)
                 RoomSystem.RoomDB = _roomDB;
-            
-            if (_levelPlayData != null)
-                LevelPlayData.Instance = _levelPlayData;
             
             GameInitializedHandler?.Invoke();
             WasGameInitialized = true;

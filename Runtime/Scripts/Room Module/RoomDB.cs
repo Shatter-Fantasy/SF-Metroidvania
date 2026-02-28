@@ -9,6 +9,7 @@ namespace SF.RoomModule
     [CreateAssetMenu(fileName = "Room DB", menuName = "SF/Data/Rooms/Room Database")]
     public class RoomDB : SFDatabase , IList<Room>
     {
+        public int StartingRoomID;
         public List<Room> Rooms = new();
         
         /// <summary>
@@ -19,13 +20,15 @@ namespace SF.RoomModule
 
         public override void OnRegisterDatabase()
         {
-            
-            //throw new NotImplementedException();
+            RoomSystem.RoomDB = this;
+            RoomSystem.SetInitialRoom(StartingRoomID);
         }
 
         public override void OnDeregisterDatabase()
         {
-            //throw new NotImplementedException();
+            // Only reset the RoomSystemDB if the RoomDB being registered was the same one.
+            if (RoomSystem.RoomDB == this)
+                RoomSystem.RoomDB = null;
         }
         
 #region  ILISt Implementation
