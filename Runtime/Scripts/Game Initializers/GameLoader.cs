@@ -73,19 +73,22 @@ namespace SF.Managers
         /// </summary>
         public void NewGame()
         {
+            MetroidvaniaSaveManager.StartingRoom = RoomSystem.RoomDB != null 
+                ? RoomSystem.RoomDB.StartingRoomID 
+                : 0;
+            
             if (GameLoaderData == null)
                 return;
 
             GameLoaderData.SettingUpNewGame = true;
-            MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
             SceneManager.LoadScene(GameLoaderData.NewGameSceneIndex);
         }
 
         public void LoadGame()
         {
-            // Set the starting room first.
-            if(GameLoaderData != null)
-                MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
+            MetroidvaniaSaveManager.StartingRoom = RoomSystem.RoomDB != null 
+                ? RoomSystem.RoomDB.StartingRoomID 
+                : 0;
         }
         
         /// <summary>

@@ -7,10 +7,15 @@ using UnityEngine;
 namespace SF.RoomModule
 {
     using DataModule;
+    using static Managers.GameDefaultExecutionOrders;
+    
+    [DefaultExecutionOrder(DatabaseExecutionOrder)]
     [CreateAssetMenu(fileName = "Room DB", menuName = "SF/Data/Rooms/Room Database")]
     public class RoomDB : SFDatabase , IList<Room>
     {
         public int StartingRoomID;
+        public bool DynamicRoomLoading = true;
+        
         public List<Room> Rooms = new();
         
         /// <summary>
@@ -27,6 +32,7 @@ namespace SF.RoomModule
         public override void OnRegisterDatabase()
         {   
             RoomSystem.RoomDB               =  this;
+            RoomSystem.DynamicRoomLoading   =  DynamicRoomLoading;
             LevelLoader.LevelStartedHandler += InitializeRoomsForLoadedScene;
         }
 
@@ -38,9 +44,6 @@ namespace SF.RoomModule
 
             LevelLoader.LevelStartedHandler -= InitializeRoomsForLoadedScene;
         }
-        
-        
-        
 #region  ILISt Implementation
         public IEnumerator<Room> GetEnumerator()
         {

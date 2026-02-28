@@ -7,6 +7,9 @@ namespace SF.Managers
     {
         NewGame, LoadGame, Continue
     }
+
+
+    
     
     [CreateAssetMenu(fileName = "SF GameLoader SO", menuName = "SF/Managers/GameLoader SO")]
     public class GameLoaderSO : ScriptableObject
@@ -23,15 +26,14 @@ namespace SF.Managers
         /// </remarks>
         /// </summary>
         public bool SettingUpNewGame = false;
-
-        [Header("Room Data")]
-        public int StartingRoomID = 0;
-
-        public bool DynamicRoomLoading = false;
-
-        public void OnEnable()
-        {
-            RoomSystem.DynamicRoomLoading = DynamicRoomLoading;
-        }
+    }
+    
+    /// <summary>
+    /// Declares the default order for important game features other than physics.
+    /// for Physics DefaultExecutionOrder see <see cref="PhysicsLowLevel.LowLevelPhysicsExecutionOrder"/>
+    /// </summary>
+    public static class GameDefaultExecutionOrders
+    {
+        public const int DatabaseExecutionOrder = -10;
     }
 }
