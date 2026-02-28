@@ -48,12 +48,12 @@ namespace SF.CameraModule
 
         public Transform CameraTarget;
         [SerializeField] private CinemachineRectangleConfiner2D _playerCamConfiner;
+        [SerializeField] private CinemachineCamera _startingPlayerCamera;
 
         public static Camera MainCamera;
         public static CinemachineBrain MainCameraBrain;
-        public static CinemachineCamera ActiveRoomCamera;
+        public static CinemachineCamera PlayerCamera;
         public static CinemachineCamera ActiveCutsceneCamera;
-        
 
         private void Awake()
         {
@@ -67,6 +67,9 @@ namespace SF.CameraModule
             MainCamera = GetComponent<Camera>();
             if (MainCamera != null)
                 MainCamera.TryGetComponent(out MainCameraBrain);
+
+            if (_startingPlayerCamera != null)
+                PlayerCamera = _startingPlayerCamera;
            
             SpawnSystem.InitialPlayerSpawnHandler += SetInitialCameraTarget;
         }
@@ -78,7 +81,7 @@ namespace SF.CameraModule
             CameraTarget = null;
             MainCamera = null;
             MainCameraBrain = null;
-            ActiveRoomCamera = null;
+            PlayerCamera = null;
             ActiveCutsceneCamera = null;
             
             SpawnSystem.InitialPlayerSpawnHandler -= SetInitialCameraTarget;
@@ -93,13 +96,13 @@ namespace SF.CameraModule
             _instance.CameraTarget = SpawnSystem.SpawnedPlayer.transform;
             
             if(MainCameraBrain != null 
-               && MainCameraBrain.ActiveVirtualCamera as CinemachineCamera != null
+               && PlayerCamera != null
                && _instance.CameraTarget != null)
-                SwitchPlayerCMCamera(MainCameraBrain.ActiveVirtualCamera as CinemachineCamera);
+                SwitchPlayerCMCamera(PlayerCamera);
         }
         
         /// <summary>
-        /// Switches between the current <see cref="ActiveRoomCamera"/> and makes a new room camera the <see cref="ActiveRoomCamera"/>.
+        /// Switches between the current <see cref="PlayerCamera"/> and makes a new room camera the <see cref="PlayerCamera"/>.
         /// </summary>
         /// <param name="cmCamera"></param>
         /// <param name="priority"></param>
@@ -112,27 +115,27 @@ namespace SF.CameraModule
             if (cmCamera.TryGetComponent(out CinemachinePositionComposer positionComposer))
                 positionComposer.CameraDistance = CameraDistance;
 
-            if (ActiveRoomCamera != null)
+            if (PlayerCamera != null)
             {
                 // Reset the previous/old virtual camera priority.
                 // At this point Instance.ActiveRoomCamera is still the old camera.
                 // We also clear the old camera follow to prevent it from following the player while not the active camera.
-                ActiveRoomCamera.Follow = null;
-                ActiveRoomCamera.Priority = DeactivatedPriority;
+                PlayerCamera.Follow = null;
+                PlayerCamera.Priority = DeactivatedPriority;
             }
             
-            ActiveRoomCamera = cmCamera;        
+            PlayerCamera = cmCamera;        
             
             // From here Instance.ActiveRoomCamera is the new camera.
             if(Instance.CameraTarget != null)
-                ActiveRoomCamera.transform.position = Instance.CameraTarget.position;
+                PlayerCamera.transform.position = Instance.CameraTarget.position;
             
-            ActiveRoomCamera.Priority = ActivePriority;
+            PlayerCamera.Priority = ActivePriority;
             
             // We don't add setting the ActiveRoomCamera.Follow in the null check above for when we need to do cutscenes and not have a follow target
-            ActiveRoomCamera.Follow = Instance.CameraTarget;  
-            ActiveRoomCamera.Target.TrackingTarget = Instance.CameraTarget;  
-            ActiveRoomCamera.Target.LookAtTarget = Instance.CameraTarget;  
+            PlayerCamera.Follow = Instance.CameraTarget;  
+            PlayerCamera.Target.TrackingTarget = Instance.CameraTarget;  
+            PlayerCamera.Target.LookAtTarget = Instance.CameraTarget;  
         }
         public static void ActivateCutsceneCMCamera(CinemachineCamera cmCamera)
         {
