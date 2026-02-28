@@ -2,9 +2,10 @@ using System.Collections.Generic;
 
 namespace SF.StatModule
 {
-
+    using DataModule;
+    
     [System.Serializable]
-    public class StatList
+    public class StatList : DTOBase
     {
         public AttributesStats AttributesStats;
 
@@ -19,8 +20,13 @@ namespace SF.StatModule
         public ElementalStatList ElementalResistances;
         public ElementalStatList ElementalAffinities;
     }
-
-    public abstract class StatDataList<T> where T : StatData
+    
+    /// <summary>
+    /// Wrapper for <see cref="StatDataList[T]"/> to make it easier to serialize in Databases.
+    /// </summary>
+    public abstract class StatDataListBase : DTOBase{}
+    
+    public abstract class StatDataList<T> : StatDataListBase where T : StatData
     {
         public List<StatMediator<T>> StatMediators = new List<StatMediator<T>>();
     }

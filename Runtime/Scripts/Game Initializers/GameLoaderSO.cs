@@ -2,14 +2,10 @@ using UnityEngine;
 
 namespace SF.Managers
 {
-    using RoomModule;
     public enum GameLoadingMode
     {
         NewGame, LoadGame, Continue
     }
-
-
-    
     
     [CreateAssetMenu(fileName = "SF GameLoader SO", menuName = "SF/Managers/GameLoader SO")]
     public class GameLoaderSO : ScriptableObject
