@@ -31,7 +31,6 @@
     "com.unity.burst": "1.8.28",
     "com.unity.cinemachine": "3.1.5",
     "com.unity.collections": "2.6.2",
-    "com.unity.graphtoolkit": "0.4.0-exp.2",
     "com.unity.inputsystem": "1.18.0"
   },
   "hideInEditor": false,
