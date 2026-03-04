@@ -54,7 +54,6 @@ namespace SFEditor.DataModule
                 startingData = _database.DataEntries.ElementAt(0);
 
             int startingIndex = _database.GetDataIndexInDB(startingData);
-            Debug.Log(_database);
             _dataDropdownMenu       = new PopupField<TDataType>(_database.DataEntries,startingData,FormatSelectedValueCallback,FormatListItemCallback);
             _dataDropdownMenu.index = startingIndex;
         }

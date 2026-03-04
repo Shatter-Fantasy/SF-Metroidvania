@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -9,19 +8,19 @@ namespace SFEditor.ItemModule
     using DataModule;
     using SF.DataModule;
     using SF.ItemModule;
-    [CustomPropertyDrawer(typeof(ItemData))]
+    [CustomPropertyDrawer(typeof(ItemDTO))]
     public class ItemDataDrawer : PropertyDrawer
     {
         private ItemDatabase _itemDB;
         private ItemData _itemData;
-
+        private ItemDTO _itemDTO;
         private SerializedProperty _property;
         
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             _itemDB   = DatabaseRegistry.GetDatabase<ItemDatabase>();
             _property = property;
-            _itemData = _property.boxedValue as ItemData;
+            _itemDTO  = _property.boxedValue as ItemDTO;
             
             if (_itemDB == null)
                 return new Label("There was no ItemDatabase set, so can not pull up the list of items in a dropdown menu.");
@@ -33,7 +32,8 @@ namespace SFEditor.ItemModule
             {
                 name = $"{property.name}_root"
             };
-            DataAssetDropdownMenu<ItemDTO> itemDropDown = new DataAssetDropdownMenu<ItemDTO>(_itemDB,OnListItem,OnSelectedValue,_itemData.ID);
+            DataAssetDropdownMenu<ItemDTO> itemDropDown = new DataAssetDropdownMenu<ItemDTO>(_itemDB,OnListItem,OnSelectedValue,
+                _itemDTO != null ? _itemDTO.ID : 0);
 
             root.Add(new PropertyField(copyProp));
             root.Add(itemDropDown);
@@ -44,11 +44,9 @@ namespace SFEditor.ItemModule
 
         private string OnSelectedValue(ItemDTO dataEntry)
         {
-            var item          = dataEntry;
-            Debug.Log($"OnSelected Type: {item.GetType()},  DataEntry Type: {dataEntry.GetType()}");
             if (dataEntry != null)
             {
-                _property.managedReferenceValue =  item;
+                _property.objectReferenceValue =  dataEntry;
                 _property.serializedObject.ApplyModifiedProperties();
                 _property.serializedObject.Update();
             }

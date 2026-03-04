@@ -3,7 +3,6 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.ItemModule
 {
-    
     using Characters.Controllers;
     using Interactables;
     using Managers;
@@ -14,10 +13,6 @@ namespace SF.ItemModule
     {
         
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
-        
-        [SerializeReference]
-        public ItemData Item = new ItemData();
-
         [SerializeReference] public ItemDTO ItemDTO;
         
         private void Start()
@@ -33,7 +28,7 @@ namespace SF.ItemModule
 
         public void Interact(PlayerController controller)
         {
-            if(controller == null || Item == null)
+            if(controller == null || ItemDTO == null)
                 return;
            
             // Make sure we added an instantiated inventory to the player first.
@@ -69,10 +64,5 @@ namespace SF.ItemModule
             // noo - No Operation
         }
 
-    }
-            
-    public class ItemDataAttribute : PropertyAttribute
-    {
-        public ItemData ItemData = new ItemData();
     }
 }
