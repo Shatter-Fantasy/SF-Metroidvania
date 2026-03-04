@@ -34,7 +34,7 @@ namespace SF.RoomModule
         {   
             RoomSystem.RoomDB               =  this;
             RoomSystem.DynamicRoomLoading   =  DynamicRoomLoading;
-            LevelLoader.LevelStartedHandler += InitializeRoomsForLoadedScene;
+            LevelLoader.LevelReadyHandler += InitializeRoomsForLoadedScene;
         }
 
         public override void OnDeregisterDatabase()
@@ -43,7 +43,7 @@ namespace SF.RoomModule
             if (RoomSystem.RoomDB == this)
                 RoomSystem.RoomDB = null;
 
-            LevelLoader.LevelStartedHandler -= InitializeRoomsForLoadedScene;
+            LevelLoader.LevelReadyHandler -= InitializeRoomsForLoadedScene;
         }
 #region  ILISt Implementation
         public IEnumerator<Room> GetEnumerator()

@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace SF.LevelModule
 {
+    
     /// <summary>
     /// Loads the required game objects for used in managers and core systems in playable levels.
     /// This is needed to be in each playable scene and make sure this does not persist between scenes,
@@ -44,15 +45,18 @@ namespace SF.LevelModule
         {
             LevelStartedHandler?.Invoke();
         }
-
+        
         private void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnLevelLoaded;
         }
-        
+  
         /// <summary>
         /// Loads all the required game objects used by managers and the core systems in a level so they can be used.
         /// Called by the SceneManager when any scene is loaded.
+        ///<remarks>
+        /// This is called after the first OnEnable call of the scene, but before the first Start call of the frame.
+        ///</remarks>
         /// </summary>
         /// <param name="scene"></param>
         /// <param name="loadSceneMode"></param>
@@ -68,15 +72,16 @@ namespace SF.LevelModule
                     return;
                 }
             }
+
+            PlayableGameSceneInitialization();
         }
         
         /// <summary>
         /// Initialize the level related game data.
-        /// </summary>
         /// <remarks>
-        /// Do not spawn any game objects in scene here. Spawning game objects before the <see cref="SceneManager.sceneLoaded"/>
-        /// is finished will cause newly spawned objects to not show in the hierarchy view.  
+        /// For some reason if you are trying to load in the editor for testing any game object spawned here is invisible in the new hierarchy in 6.3
         /// </remarks>
+        /// </summary>
         private void PlayableGameSceneInitialization()
         {
             LevelReadyHandler?.Invoke();
