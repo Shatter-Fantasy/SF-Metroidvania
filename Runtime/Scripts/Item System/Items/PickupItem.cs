@@ -3,6 +3,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.ItemModule
 {
+    
     using Characters.Controllers;
     using Interactables;
     using Managers;
@@ -14,7 +15,8 @@ namespace SF.ItemModule
         
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
         
-        public ItemData Item;
+        [SerializeReference]
+        public ItemData Item = new ItemData();
 
         private void Start()
         {
@@ -61,5 +63,11 @@ namespace SF.ItemModule
         { 
             // noo - No Operation
         }
+
+    }
+            
+    public class ItemDataAttribute : PropertyAttribute
+    {
+        public ItemData ItemData = new ItemData();
     }
 }
