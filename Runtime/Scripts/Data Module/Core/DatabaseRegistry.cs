@@ -19,15 +19,8 @@ namespace SF.DataModule
 
         public static DatabaseRegistry Registry
         {
-            get
-            {
-                if (_registry == null)
-                    _registry = CreateInstance<DatabaseRegistry>();
-
-                return _registry;
-            }
-            /* No setter because when grabbing the registry for the first time it will auto set an instance.
-             * if none was already set during an Awake call for a scriptable object of type DatabaseRegistry */
+            get => _registry;
+            set => _registry = value;
         }
 
         private void Awake()
@@ -62,6 +55,9 @@ namespace SF.DataModule
 
         public static TDatabase GetDatabase<TDatabase>() where TDatabase : SFDatabase
         {
+            if (_registry == null)
+                return null;
+            
             _registry.RegisteredDatabases.TryGetValue(typeof(TDatabase), out var database);
             return (TDatabase)database;
         }
@@ -100,7 +96,8 @@ namespace SF.DataModule
         
         
 #if UNITY_EDITOR
-        [UnityEditor.MenuItem("SF/Data/Register Preloaded Databases")]
+        
+        [ContextMenu("SF/Data/Register Preloaded Databases")]
         public static void PreloadDatabases()
         {
             var databaseRegistry = DatabaseRegistry.Registry;
