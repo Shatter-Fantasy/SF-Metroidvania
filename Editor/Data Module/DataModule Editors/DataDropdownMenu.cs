@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SFEditor.DataModule
@@ -10,24 +12,24 @@ namespace SFEditor.DataModule
     public partial class DataAssetDropdownMenu<TDataType> : VisualElement where TDataType : DTOAssetBase
     {
         [NonSerialized] private List<Type> _optionsTypes;
-        [NonSerialized] private List<TDataType> _dataEntries = new List<TDataType>();
         [NonSerialized] private PopupField<TDataType> _dataDropdownMenu;
 
         public Func<TDataType, string> FormatListItemCallback;
         public Func<TDataType, string> FormatSelectedValueCallback;
             
         private SFAssetDatabase<TDataType> _database;
-        private int _startingValueIndex;
+        private int _startingValueDataID;
         
         public DataAssetDropdownMenu(){ }
         public DataAssetDropdownMenu(SFAssetDatabase<TDataType> database, 
             Func<TDataType, string> onListItem, 
             Func<TDataType, string> onSelectedValue,
-            int startingValueIndex = 0)
+            int startingValueDataID = 0)
         {
 
             FormatListItemCallback      = onListItem;
             FormatSelectedValueCallback = onSelectedValue;
+            _startingValueDataID         = startingValueDataID;
             
             if (database == null)
                 return;
@@ -45,13 +47,16 @@ namespace SFEditor.DataModule
         
         private void DropDownInit()
         {
-            _database.GetDataByID(_startingValueIndex, out var startingData);
-
-            if (startingData == null)
-                startingData = _database[0];
+            _database.GetDataByID(_startingValueDataID, out var startingData);
+                
             
+            if (startingData == null)
+                startingData = _database.DataEntries.ElementAt(0);
+
+            int startingIndex = _database.GetDataIndexInDB(startingData);
+            Debug.Log(_database);
             _dataDropdownMenu       = new PopupField<TDataType>(_database.DataEntries,startingData,FormatSelectedValueCallback,FormatListItemCallback);
-            _dataDropdownMenu.index = 0;
+            _dataDropdownMenu.index = startingIndex;
         }
     }
 }

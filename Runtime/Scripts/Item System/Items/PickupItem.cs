@@ -18,6 +18,8 @@ namespace SF.ItemModule
         [SerializeReference]
         public ItemData Item = new ItemData();
 
+        [SerializeReference] public ItemDTO ItemDTO;
+        
         private void Start()
         {
             if (TryGetComponent(out SFShapeComponent component))
@@ -43,7 +45,10 @@ namespace SF.ItemModule
 
         private void PickUpItem(PlayerInventory playerInventory)
         {         
-            playerInventory.AddItem(Item.ID);
+            if(ItemDTO != null)
+                playerInventory.AddItem(ItemDTO.ID);
+            
+            //playerInventory.AddItem(Item.ID);
             Destroy(gameObject);
         }
         

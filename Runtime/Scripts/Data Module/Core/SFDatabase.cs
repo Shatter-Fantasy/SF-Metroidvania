@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,14 +52,22 @@ namespace SF.DataModule
         
         public bool GetDataByID(int characterId, out T data)
         {
-            data = DataEntries.Find((T data) => data.ID == characterId);
-
+            var dataFound = DataEntries.Find((T data) => data.ID == characterId);
+            data = dataFound;
             return data != null;
         }
 
-        public T this[int index]
+        public int GetDataIndexInDB(T dtoAsset)
         {
-            get { return DataEntries[index]; }
+            return DataEntries.IndexOf(dtoAsset);
+        }
+
+        public T this[int itemId]
+        {
+            get
+            {
+                return DataEntries.Find( data => data.ID == itemId);
+            }
         }
     }
     
@@ -88,7 +97,10 @@ namespace SF.DataModule
         
         public TDTOBase this[int index]
         {
-            get { return DataEntries[index]; }
+            get
+            {
+                return DataEntries[index];
+            }
         }
     }
 

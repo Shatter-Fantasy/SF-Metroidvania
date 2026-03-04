@@ -7,7 +7,7 @@ namespace SF.DataModule
     /// </summary>
     public class DTOBase
     {
-        
+        public int ID = 0;
     }
     
     /// <summary>
@@ -15,6 +15,8 @@ namespace SF.DataModule
     /// </summary>
     public class DTOAssetBase : ScriptableObject
     {
+        public DTOBase BaseData;
+        
         // TODO: Replace the below with either ItemData or Item
         public int ID = 0;
         public string Name;
