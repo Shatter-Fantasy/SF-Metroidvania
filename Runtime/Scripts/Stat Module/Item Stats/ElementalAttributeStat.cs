@@ -1,10 +1,6 @@
-using System;
-using UnityEngine;
-using SF.StatModule;
-
-namespace SF.Inventory.StatModule
+namespace SF.StatModule
 {
-    [Flags]
+    [System.Flags]
     public enum ElementalType : uint
     {
         None = 0,

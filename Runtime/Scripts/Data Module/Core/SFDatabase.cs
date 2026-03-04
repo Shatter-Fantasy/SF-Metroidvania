@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,24 +10,22 @@ namespace SF.DataModule
     /// </summary>
     public abstract class SFDatabase : ScriptableObject
     {
-        /*
-        protected virtual void Awake()
-        {
-            if(!DatabaseRegistry.Contains(GetType()))
-                DatabaseRegistry.RegisterDatabase(this);
-        }
         
-        protected virtual void OnEnable()
-        {
-            DatabaseRegistry.RegisterDatabase(this);
-        }*/
+        /// <summary>
+        /// SFDatabases are registered by the <see cref="DatabaseRegistry"/> which is loaded during the player start up
+        /// as part of the preloaded assets set in the project's PlayerSettings via SetPreloadedAssets.
+        /// So there OnEnable runs when the runtime player starts and is guaranteed to run before anything scene related.
+        /// </summary>
+        public virtual void OnRegisterDatabase() { }
+
+        public virtual void OnDeregisterDatabase(){ }
     }
     
     /// <summary>
-    /// A generic database class for storing data about DTOBase classes or sub classes.
+    /// A generic database class for storing data about DTOAssetBase Scriptable objects.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class SFDatabase<T> : SFDatabase where T : DTOAssetBase
+    public abstract class SFAssetDatabase<T> : SFDatabase where T : DTOAssetBase
     {
         [SerializeReference] public List<T> DataEntries = new List<T>();
 
@@ -53,14 +52,56 @@ namespace SF.DataModule
         
         public bool GetDataByID(int characterId, out T data)
         {
-            data = DataEntries.Find((T data) => data.ID == characterId);
-
+            var dataFound = DataEntries.Find((T data) => data.ID == characterId);
+            data = dataFound;
             return data != null;
         }
 
-        public T this[int index]
+        public int GetDataIndexInDB(T dtoAsset)
         {
-            get { return DataEntries[index]; }
+            return DataEntries.IndexOf(dtoAsset);
+        }
+
+        public T this[int itemId]
+        {
+            get
+            {
+                return DataEntries.Find( data => data.ID == itemId);
+            }
         }
     }
+    
+    /// <summary>
+    /// A generic database class for storing data about DTOBase classes or sub classes.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public abstract class SFDatabase<TDTOBase> : SFDatabase where TDTOBase : DTOBase
+    {
+        [SerializeReference] public List<TDTOBase> DataEntries = new List<TDTOBase>();
+
+        public virtual void AddData(TDTOBase dataEntry)
+        {
+            if(dataEntry == null)
+                return;
+
+            DataEntries.Add(dataEntry);
+        }
+
+        public void RemoveData(TDTOBase dataEntry)
+        {
+            if(dataEntry == null)
+                return;
+
+            DataEntries.Remove(dataEntry);
+        }
+        
+        public TDTOBase this[int index]
+        {
+            get
+            {
+                return DataEntries[index];
+            }
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-namespace SF.StateMachine.Core
+namespace SF.StateMachine
 {
 	public interface IState
     {

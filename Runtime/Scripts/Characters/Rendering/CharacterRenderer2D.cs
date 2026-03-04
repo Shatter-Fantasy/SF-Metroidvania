@@ -19,22 +19,28 @@ namespace SF.Characters
 		public bool CanTurnAround = true;
 		public bool StartedFacingRight = true;
 		#region Common Components
-		private SpriteRenderer _spriteRend;
+		protected SpriteRenderer _spriteRend;
 		public Animator Animator;
 		/// <summary>
 		/// The runtime animator for <see cref="Animator"/>.
 		/// This is used to update animation clips at runtime for forced states.
 		/// </summary>
-		private RuntimeAnimatorController _runtimeAnimator;
-		private ControllerBody2D _controllerBody2D;
+		protected RuntimeAnimatorController _runtimeAnimator;
+		protected ControllerBody2D _controllerBody2D;
 		#endregion
 		
-		private int MovementAnimationHash => Animator.StringToHash(CharacterState?.CurrentMovementState.ToString());
-		[SerializeField] private int _forcedStateHash = 0;
-		[SerializeField] private int _lastAnimationHash;
+		protected int MovementAnimationHash => Animator.StringToHash(CharacterState?.CurrentMovementState.ToString());
+		[SerializeField] protected int _forcedStateHash = 0;
+		[SerializeField] protected int _lastAnimationHash;
 		
-		private static readonly int DeathAnimationHash = Animator.StringToHash(nameof(CharacterStatus.Dead));
+		protected static readonly int XSpeedAnimationHash = Animator.StringToHash("XSpeed");
+		protected static readonly int IsGroundedAnimationHash = Animator.StringToHash("IsGrounded");
+		protected static readonly int IsJumpingAnimationHash = Animator.StringToHash("IsJumping");
+		protected static readonly int IsFallingAnimationHash = Animator.StringToHash("IsFalling");
+		protected static readonly int DeathAnimationHash = Animator.StringToHash(nameof(CharacterStatus.Dead));
 		//[SerializeField] private bool _hasForcedState;
+		
+		
 
 		public AnimatorControllerParameter[] AnimatorParameters;
 		#region Lifecycle Functions  
@@ -46,7 +52,7 @@ namespace SF.Characters
 			Init();
 		}
 		#endregion
-		private void Init()
+		protected void Init()
 		{
 			AnimatorParameters = Animator.parameters;
 			OnInit();
@@ -62,19 +68,19 @@ namespace SF.Characters
 			_controllerBody2D.CharacterState.AttackStateChangedHandler += OnAttackStateChanged;
 		}
 
-		private void OnAttackStateChanged(AttackState attackState)
+		protected void OnAttackStateChanged(AttackState attackState)
 		{
 			//Plays the Attack Substate 
 			Animator.Play(_forcedStateHash,0);
 		}
 
-		private void LateUpdate()
+		protected void LateUpdate()
 		{
 			if (UseAnimatorTransitions)
 				UpdateAnimatorParameters();
 		}
 
-		private void UpdateAnimatorParameters()
+		protected virtual void UpdateAnimatorParameters()
 		{
 			if (_controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
@@ -89,16 +95,14 @@ namespace SF.Characters
 				return;
 			
 			/* All Controller2D have the next set of parameters*/
-			Animator.SetFloat("XSpeed", Mathf.Abs(_controllerBody2D.Direction.x));
+			Animator.SetFloat(XSpeedAnimationHash, Mathf.Abs(_controllerBody2D.Direction.x));
 
 			// Grounded States
-			Animator.SetBool("IsGrounded", _controllerBody2D.CollisionInfo.IsGrounded);
-			Animator.SetBool("IsCrouching", _controllerBody2D.IsCrouching);
+			Animator.SetBool(IsGroundedAnimationHash, _controllerBody2D.CollisionInfo.IsGrounded);
 			
 			// Jump/Air States
-			Animator.SetBool("IsJumping", _controllerBody2D.IsJumping);
-			Animator.SetBool("IsFalling", _controllerBody2D.IsFalling);
-			Animator.SetBool("IsGliding", _controllerBody2D.IsGliding);
+			Animator.SetBool(IsJumpingAnimationHash, _controllerBody2D.IsJumping);
+			Animator.SetBool(IsFallingAnimationHash, _controllerBody2D.IsFalling);
 		}
         
         // The 0.3f is the default fade time for Unity's crossfade api.
@@ -106,7 +110,7 @@ namespace SF.Characters
         {
 			_forcedStateHash = Animator.StringToHash(stateName);
         }
-		private void SpriteFlip(Vector2 direction)
+		protected void SpriteFlip(Vector2 direction)
 		{
 			if(!CanTurnAround || _spriteRend == null)
 				return;
@@ -116,7 +120,7 @@ namespace SF.Characters
 				: (!(direction.x < 0));
         }
 
-		private void OnDirectionChanged(object sender, Vector2 direction)
+		protected void OnDirectionChanged(object sender, Vector2 direction)
 		{
 			if(direction.x == 0 || GameManager.Instance.ControlState != GameControlState.Player)
 				return;

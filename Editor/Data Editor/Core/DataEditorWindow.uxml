@@ -7,28 +7,28 @@
     <ui:Template name="ItemPriceView" src="project://database/Packages/shatterfantasy.sf-metroidvania/Editor/Data%20Editor/Inventory%20Editor/Data%20Sections/ItemPriceView.uxml?fileID=9197481963319205126&amp;guid=b7bb0fc86e7ec4d45a8590f0b2816dde&amp;type=3#ItemPriceView" />
     <Style src="project://database/Packages/shatterfantasy.sf-metroidvania/Editor/Data%20Editor/Core/DataEditorWindow.uss?fileID=7433441132597879392&amp;guid=7bf347311f8e91242abf04e790cfbf7e&amp;type=3#DataEditorWindow" />
     <ui:TabView name="root-datasource">
+        <ui:Tab name="item__view-root" label="Items"
+                data-source-type="SF.Inventory.ItemDTO, SF.MetroidvaniaToolkit">
+                <ui:TwoPaneSplitView class="unity-two-pane-split-view">
+                    <sfitem:SFItemListView />
+                    <ui:ScrollView class="data__pane-view">
+                        <ui:Instance template="DTOGeneral" name="dto-general__section"/>
+                        <ui:Instance template="ItemPriceView" name="item-price__section" />
+                    </ui:ScrollView>
+                </ui:TwoPaneSplitView>
+        </ui:Tab>
         <ui:Tab label="Characters">
-            <ui:VisualElement data-source="project://database/Assets/Data/Character/Bloom%20Bug.asset?fileID=11400000&amp;guid=c2828686cc3a0d44283a670a1b61ce0c&amp;type=2#Bloom Bug" data-source-type="SF.Characters.Data.CharacterDTO, SF.MetroidvaniaToolkit">
+            <ui:VisualElement data-source="project://database/Assets/Data/Character/Bloom%20Bug.asset?fileID=11400000&amp;guid=c2828686cc3a0d44283a670a1b61ce0c&amp;type=2#Bloom Bug" 
+                              data-source-type="SF.Characters.Data.CharacterDTO, SF.MetroidvaniaToolkit">
                 <ui:TwoPaneSplitView class="unity-two-pane-split-view">
                     <sfeditor:CharacterListView />
-                    <ui:VisualElement>
+                    <ui:ScrollView class="data__pane-view">
                         <ui:Instance template="DTOGeneral" name="dto-general__section" />
                         <ui:Instance template="CharacterGeneral" name="character-general__section" />
                         <ui:Instance template="StatsList" name="stats-list__section" />
                         <ui:Instance template="ExperienceList" name="experience__section" />
                         <ui:Instance template="LootTableDrops" name="loot-table-drops__section" />
-                    </ui:VisualElement>
-                </ui:TwoPaneSplitView>
-            </ui:VisualElement>
-        </ui:Tab>
-        <ui:Tab name="item__view-root" label="Items">
-            <ui:VisualElement data-source-type="SF.Inventory.ItemDTO, SF.MetroidvaniaToolkit">
-                <ui:TwoPaneSplitView class="unity-two-pane-split-view">
-                    <sfitem:SFItemListView />
-                    <ui:VisualElement>
-                        <ui:Instance template="DTOGeneral" name="dto-general__section" />
-                        <ui:Instance template="ItemPriceView" name="item-price__section" />
-                    </ui:VisualElement>
+                    </ui:ScrollView>
                 </ui:TwoPaneSplitView>
             </ui:VisualElement>
         </ui:Tab>

@@ -1,9 +1,7 @@
-using SF.Managers;
-using SF.PhysicsLowLevel;
-using UnityEngine;
-
 namespace SF.Characters.Controllers
 {
+    using Managers;
+    using PhysicsLowLevel;
     /// <summary>
     /// A physics controller for the playable character that help implement gravity, slope mechanics, collision for platforms,
     /// and updates the <see cref="MovementState"/>.

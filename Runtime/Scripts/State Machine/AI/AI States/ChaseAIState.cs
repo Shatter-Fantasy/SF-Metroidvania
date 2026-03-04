@@ -1,14 +1,8 @@
-using SF.Characters.Controllers;
-using SF.LevelModule;
-using SF.Managers;
-using SF.PhysicsLowLevel;
-using SF.SpawnModule;
 using UnityEngine;
-
-using SF.StateMachine.Core;
 
 namespace SF.StateMachine
 {
+    using SpawnModule;
     public class ChaseAIState : StateCore
     {
         [SerializeField] private bool _chasePlayer;

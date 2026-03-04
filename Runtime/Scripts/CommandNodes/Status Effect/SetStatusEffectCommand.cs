@@ -1,8 +1,8 @@
 using UnityEngine;
-using SF.Characters;
 
 namespace SF.CommandModule
 {
+    using Characters;
     [System.Serializable]
     public class SetStatusEffectCommand : CharacterCommandNode
     {

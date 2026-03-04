@@ -1,11 +1,34 @@
+/* editor-root is the very top of the controllable UI Elements tree we can edit for the editor window */
+:root {
+    flex-grow:1;
+}
+
+/* The  is making sure both panes in the split panel section go all the way down.*/
+TabViewContentContainer, Tab{
+    flex-grow:1;
+}
+
+SFItemListView{
+    flex-grow:1;
+    height: 100%;
+    min-height: 100%;
+}
+.editor-root 
+{
+    width: 100%;
+    height: 100%;
+}
+
+#root-datasource{
+    width: 100%;
+    height: 100%;
+}
 .section__header{
     font-size:20px;
     margin-top:15px;
 }
 
 .data__section--container{
-    margin: 5px;
-    margin-top: 15px;
     padding: 5px;
 
     border-color:rgb(64,64,64);
@@ -19,4 +42,18 @@
 .data-section__header-label{
     font-size:25px;
     margin:10px;
+}
+
+/*The right pane view of the two split panel view for data list where the data sections are contained for editing.*/
+.data__pane-view
+{
+    height: 100%;
+    min-height: 300px;
+
+    overflow: scroll;
+    padding: 5px;
+}
+
+.data__pane-view > *{
+    padding: 5px;
 }

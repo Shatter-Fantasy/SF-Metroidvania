@@ -1,5 +1,4 @@
 using System;
-using SF.Characters.Controllers;
 using UnityEngine;
 
 namespace SF.PhysicsLowLevel

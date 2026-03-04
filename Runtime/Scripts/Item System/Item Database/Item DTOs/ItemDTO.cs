@@ -1,8 +1,8 @@
 using UnityEngine;
-using SF.DataModule;
 
 namespace SF.ItemModule
 {
+    using DataModule;
     /// <summary>
     /// The scriptable object data asset that makes keeps track of an item inside the item databases.
     /// </summary>
@@ -14,6 +14,10 @@ namespace SF.ItemModule
         public ItemSubType ItemSubType;
         public ItemPriceDTO PriceData;
 
+        public ItemDTO()
+        {
+            Name = "New Item";
+        }
         public ItemDTO(string name = "New Item", string description = "I am a new Item")
         {
             Name = name;

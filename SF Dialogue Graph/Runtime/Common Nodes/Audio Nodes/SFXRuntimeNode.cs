@@ -1,4 +1,3 @@
-using SF.DialogueModule;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -8,7 +7,7 @@ namespace SF.DialogueModule.Nodes
     /// A runtime node used to play and control sfx.
     /// </summary>
     [System.Serializable]
-    public class SFXRuntimeNode : RuntimeNode, IRuntimeNode
+    public class SFXRuntimeNode : RuntimeNode
     {
         /// <summary>
         /// The <see cref="AudioResource"/> to play.This can be an audio clip, <see cref="AudioRandomContainer"/>,
@@ -21,7 +20,7 @@ namespace SF.DialogueModule.Nodes
         /// </summary>
         public AudioSource AudioSource;
 
-        public void ProcessNode()
+        public override void ProcessNode()
         {
             // TODO: This should be hooked up to whatever audio manager we want to use.
             // Most likely FMOD.

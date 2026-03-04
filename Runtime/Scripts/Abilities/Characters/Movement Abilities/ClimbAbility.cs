@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using SF.InputModule;
-using SF.PhysicsLowLevel;
-
 namespace SF.AbilityModule.Characters
 {
+    using InputModule;
+    using PhysicsLowLevel;
+    
     public class ClimbAbility : AbilityCore, IInputAbility
     {
         protected ClimbableSurface ClimableSurface => _controller2d.CollisionInfo.ClimbableSurface;

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace SF.RoomModule
 {
     /// <summary>

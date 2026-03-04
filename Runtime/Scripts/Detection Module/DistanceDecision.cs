@@ -1,11 +1,11 @@
-using SF.SpawnModule;
-using SF.StateMachine.Core;
-
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace SF.StateMachine.Decisions
 {
+    using SpawnModule;
+    using StateMachine;
+    
     public class DistanceDecision : StateDecisionCore
     {
         [FormerlySerializedAs("_distance")]
@@ -44,7 +44,6 @@ namespace SF.StateMachine.Decisions
             }
             else if(_falseState != null && _calculatedDistance > Distance)
             {
-                Debug.Log($"Going the state of: {_falseState}");
                 decision.CanTransist = true;
                 decision.StateGoingTo = _falseState;
                 return;
