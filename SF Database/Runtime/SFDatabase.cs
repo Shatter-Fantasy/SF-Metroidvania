@@ -1,4 +1,4 @@
-using System;
+#if !SF_DATABASES
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -103,5 +103,5 @@ namespace SF.DataModule
             }
         }
     }
-
 }
+#endif

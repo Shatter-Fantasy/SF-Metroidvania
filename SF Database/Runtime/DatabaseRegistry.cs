@@ -1,3 +1,4 @@
+#if !SF_DATABASES
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,3 +122,4 @@ namespace SF.DataModule
 #endif
     }
 }
+#endif
