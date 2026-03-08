@@ -139,7 +139,7 @@ namespace SF.DialogueModule
 
         public virtual void StartConversation()
         {
-
+            Debug.Log("Is this working");
         }
         public static void StopConversation()
         {

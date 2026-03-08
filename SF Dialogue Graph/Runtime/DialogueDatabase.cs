@@ -3,16 +3,30 @@ using UnityEngine;
 
 namespace SF.DialogueModule
 {
+    using SF.DataModule;
     [CreateAssetMenu(fileName = "Dialogue Database", menuName = "SF/Dialogue/Dialogue Database")]
-    public class DialogueDatabase : ScriptableObject
+    public class DialogueDatabase : SFAssetDatabase<DialogueConversation>
     {
-        public List<DialogueConversation> Conversations = new();
-        
         public bool GetConversation(int guid, out DialogueConversation conversation)
         {
-            conversation = Conversations.Find(x => x.GUID == guid);
+            conversation = DataEntries.Find(x => x.GUID == guid);
 
             return conversation != null;
+        }
+
+        public override void AddData(DialogueConversation dataEntry)
+        {
+            base.AddData(dataEntry);
+        }
+
+        public override void OnRegisterDatabase()
+        {   
+            // Not implemented Yet
+        }
+
+        public override void OnDeregisterDatabase()
+        {
+            // Not implemented Yet
         }
     }
 }

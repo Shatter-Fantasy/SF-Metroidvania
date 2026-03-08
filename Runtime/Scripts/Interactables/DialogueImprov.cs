@@ -1,10 +1,15 @@
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.DialogueModule
 {
     using Characters.Controllers;
     using Interactables;
-    public class DialogueImprov : MonoBehaviour, IInteractable<PlayerController>
+    using SF.PhysicsLowLevel;
+    
+    public class DialogueImprov : MonoBehaviour, 
+        IInteractable<PlayerController>,
+        ITriggerShapeCallback
     {
         public int ConversationGUID;
         [field:SerializeField] public InteractableMode InteractableMode { get; set; }
@@ -15,12 +20,14 @@ namespace SF.DialogueModule
             DialogueManager.TriggerConversation(ConversationGUID);
         }
 
-        private void OnCollisionExit2D(Collision2D other)
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
-            if (other.collider.CompareTag("Player"))
-            {
-                DialogueManager.StopConversation();
-            }
+            DialogueManager.TriggerConversation(ConversationGUID);
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            DialogueManager.StopConversation();
         }
     }
 }
