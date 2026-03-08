@@ -1,15 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using SF.DialogueModule;
-using SF.DialogueModule.Nodes;
-using SFEditor.DialogueModule;
 using Unity.GraphToolkit.Editor;
 using UnityEditor;
 using UnityEngine;
 
 namespace SFEditor.Dialogue.Graphs
 {
+	using SF.DialogueModule;
+	using SF.DialogueModule.Nodes;
+	using SFEditor.DialogueModule;
 	[Serializable]
 	public abstract class SFGraphBase : Graph
 	{

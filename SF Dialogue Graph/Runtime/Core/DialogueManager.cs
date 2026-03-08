@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SF.DialogueModule.Nodes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SF.DialogueModule
 {
+    using SF.DialogueModule.Nodes;
     /// <summary>
     /// The in scene manager that controls the way DialogueConversations are run and set up.
     /// </summary>
