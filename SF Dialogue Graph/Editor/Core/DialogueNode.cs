@@ -2,7 +2,7 @@ using Unity.GraphToolkit.Editor;
 
 namespace SFEditor.Dialogue.Graphs
 {
-    interface IDialogueNode : INode
+    public interface IDialogueNode : INode
     {
         public string ExecutionPortName { get; }
     }

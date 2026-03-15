@@ -38,8 +38,8 @@ namespace SF.DataManagement
                 MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.PlayerStats = stats;
             }
             
-            MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.SavedRoomID = RoomSystem.CurrentRoom.RoomID;
-            SaveSystem.CurrentSaveFileData.CurrentSaveStation = this;
+            MetroidvaniaSaveManager.CurrentMetroidvaniaSaveData.SavedRoomID = RoomSystem.CurrentRoomID;
+            SaveSystem.CurrentSaveFileData.CurrentSaveStation               = this;
             MetroidvaniaSaveManager.SaveGame();
         }
     }

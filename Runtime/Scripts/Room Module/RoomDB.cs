@@ -1,13 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace SF.RoomModule
 {
+    using LevelModule;
+    using DataModule;
+    using static Managers.GameDefaultExecutionOrders;
+    
+    [DefaultExecutionOrder(DatabaseExecutionOrder)]
     [CreateAssetMenu(fileName = "Room DB", menuName = "SF/Data/Rooms/Room Database")]
-    public class RoomDB : ScriptableObject , IList<Room>
+    public class RoomDB : SFDatabase , IList<Room>
     {
+        public int StartingRoomID;
+        public bool DynamicRoomLoading = true;
+        
         public List<Room> Rooms = new();
         
         /// <summary>
@@ -15,7 +24,28 @@ namespace SF.RoomModule
         /// This is also called when a new list is assigned into the Rooms value.
         /// </summary>
         public Action OnRoomsValueChanged;
+        
+        private void InitializeRoomsForLoadedScene()
+        {
+            RoomSystem.SetInitialRoom(StartingRoomID);
+        }
+        
+        public override void OnRegisterDatabase()
+        {   
+            RoomSystem.RoomDB               =  this;
+            RoomSystem.DynamicRoomLoading   =  DynamicRoomLoading;
+            LevelLoader.LevelReadyHandler += InitializeRoomsForLoadedScene;
+        }
 
+        public override void OnDeregisterDatabase()
+        {
+            // Only reset the RoomSystemDB if the RoomDB being registered was the same one.
+            if (RoomSystem.RoomDB == this)
+                RoomSystem.RoomDB = null;
+
+            LevelLoader.LevelReadyHandler -= InitializeRoomsForLoadedScene;
+        }
+#region  ILISt Implementation
         public IEnumerator<Room> GetEnumerator()
         {
             throw new NotImplementedException();
@@ -125,5 +155,8 @@ namespace SF.RoomModule
 
             set => throw new NotImplementedException();
         }
+#endregion
+
+
     }
 }

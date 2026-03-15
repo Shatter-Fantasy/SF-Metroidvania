@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using SF.DialogueModule;
-using UnityEngine.Serialization;
 
 namespace SF.DialogueModule.Nodes
 {
-	
+	using SF.DialogueModule;
 	/// <summary>
 	/// The runtime representation of a dialogue graph.
 	/// </summary>

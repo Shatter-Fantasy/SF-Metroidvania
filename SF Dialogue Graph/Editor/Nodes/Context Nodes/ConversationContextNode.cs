@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
-using SF.DialogueModule;
-using SF.DialogueModule.Nodes;
-using SFEditor.Nodes;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
 
 namespace SFEditor.Dialogue.Graphs
 {
-	
+	using SFEditor.Nodes;
+	using SF.DialogueModule;
+	using SF.DialogueModule.Nodes;
 	[Serializable]
 	[UseWithGraph(typeof(DialogueGraph))]
-	public class ConversationContextNode : ContextNode, IDialogueNode, IContextNodeConvertor
+	public class ConversationContextNode : ContextNode, 
+		IDialogueNode, 
+		IContextNodeConvertor
 	{
 		public string ExecutionPortName { get; } = "Dialogue Entry";
 		
@@ -32,9 +33,9 @@ namespace SFEditor.Dialogue.Graphs
 	    
 		protected override void OnDefinePorts(IPortDefinitionContext context)
 		{
-			context.AddInputPort<string>("Input Node");
+			context.AddInputPort<string>("Input Node").Build();
 		    
-			context.AddOutputPort<string>(ExecutionPortName);
+			context.AddOutputPort<string>(ExecutionPortName).Build();
 		}
 
 		public IRuntimeNode ConvertToRuntimeNode()
@@ -59,7 +60,7 @@ namespace SFEditor.Dialogue.Graphs
 			if (dialogueConversation != null)
 			{
 				GetNodeOptionByName(ConversationTitleName)
-					.TryGetValue(out dialogueConversation.Name);
+					.TryGetValue(out dialogueConversation.ConversationName);
 			}
 			
 #if UNITY_6000_4_OR_NEWER

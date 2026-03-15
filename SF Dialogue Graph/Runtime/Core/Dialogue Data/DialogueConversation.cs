@@ -1,23 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SF.DialogueModule.Nodes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SF.DialogueModule
 {
+    using DataModule;
+    using DialogueModule.Nodes;
     
     /// <summary>
     /// Data container for an entire conversation of a dialogue sequence.
     /// Including dialogue entries, actor data, and event details related to the dialogue.
     /// </summary>
     [CreateAssetMenu(menuName = "SF/Dialogue/Dialogue Conversation", fileName = "SF Conversation")]
-    public class DialogueConversation : ScriptableObject
+    public class DialogueConversation : DTOAssetBase
     {
         /// <summary>
         /// The name of this conversation.
         /// </summary>
-        public string Name;
+        [FormerlySerializedAs("Name")] public string ConversationName;
         /// <summary>
         /// The unique identifier for a <see cref="DialogueConversation"/>.
         /// </summary>

@@ -5,29 +5,56 @@ using UnityEngine;
 
 namespace SFEditor.Dialogue.Graphs
 {
-	[Icon("AssetIconPath")]
+	using SF.DialogueModule;
+	using SF.DialogueModule.Nodes;
+	using SFEditor.DialogueModule;
+	[Serializable]
+	public abstract class SFGraphBase : Graph
+	{
+		/// <summary>
+		/// If the graph has changed we need to update it during the next graph importer.
+		/// </summary>
+		public bool HasGraphChanged;
+
+		public bool HasInitialized = false; 
+		public override void OnGraphChanged(GraphLogger graphLogger)
+		{
+			HasGraphChanged = true;
+		}
+	}
+	
+	[Icon(AssetIconPath)]
     [Graph(AssetExtension)] [Serializable]
-    public class DialogueGraph : Graph
+    public class DialogueGraph : SFGraphBase
     {
 	    public const string AssetIconPath = "Assets/Editor Default Resources/SF Dialogue Graph/Icons/Dialogue Graph Icon.png";
-	    public const string AssetExtension = "diagr";
-	    
-	    /// <summary>
-	    /// If the graph has changed we need to update it during the next graph importer.
-	    /// </summary>
-	    public bool HasGraphChanged;
-	    
+	    public const string AssetExtension = "sfgr";
+
+		public DialogueConversation LinkedConversationAsset;
+		public DialogueDatabase Database;
+		
+		/// <summary>
+		/// A helper class the editor and runtime graph nodes.
+		/// </summary>
+		public DialogueNodeProcessor NodeProcessor;
+		
 	    [MenuItem("Assets/Create/SF/DialogueGraph/Dialogue Graph", false)]
 	    static void CreateAssetFile()
 	    {
 		    GraphDatabase.PromptInProjectBrowserToCreateNewAsset<DialogueGraph>();
-		    
 	    }
+		
+		public void ProcessGraphNodes()
+		{
+			NodeProcessor = new DialogueNodeProcessor(this);
 
-	    public override void OnGraphChanged(GraphLogger graphLogger)
-	    {
-		    HasGraphChanged = true;
-	    }
+			if (LinkedConversationAsset != null)
+			{
+				// Bad we need to fix this. Only create graph at runtime.
+				LinkedConversationAsset.RuntimeGraph
+					= new DialogueRuntimeGraph(LinkedConversationAsset, NodeProcessor.RuntimeNodes);
+			}
+		}
     }
 
     [Serializable]
