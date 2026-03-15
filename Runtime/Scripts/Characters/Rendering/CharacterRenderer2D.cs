@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace SF.Characters
@@ -71,7 +72,8 @@ namespace SF.Characters
 		protected void OnAttackStateChanged(AttackState attackState)
 		{
 			//Plays the Attack Substate 
-			Animator.Play(_forcedStateHash,0);
+			if(Animator.HasState(0,_forcedStateHash))
+				Animator.Play(_forcedStateHash,0);
 		}
 
 		protected void LateUpdate()
@@ -95,14 +97,14 @@ namespace SF.Characters
 				return;
 			
 			/* All Controller2D have the next set of parameters*/
-			Animator.SetFloat(XSpeedAnimationHash, Mathf.Abs(_controllerBody2D.Direction.x));
+			Animator.TrySetFloat(XSpeedAnimationHash, Mathf.Abs(_controllerBody2D.Direction.x));
 
 			// Grounded States
-			Animator.SetBool(IsGroundedAnimationHash, _controllerBody2D.CollisionInfo.IsGrounded);
+			Animator.TrySetBool(IsGroundedAnimationHash, _controllerBody2D.CollisionInfo.IsGrounded);
 			
 			// Jump/Air States
-			Animator.SetBool(IsJumpingAnimationHash, _controllerBody2D.IsJumping);
-			Animator.SetBool(IsFallingAnimationHash, _controllerBody2D.IsFalling);
+			Animator.TrySetBool(IsJumpingAnimationHash, _controllerBody2D.IsJumping);
+			Animator.TrySetBool(IsFallingAnimationHash, _controllerBody2D.IsFalling);
 		}
         
         // The 0.3f is the default fade time for Unity's crossfade api.
@@ -136,6 +138,40 @@ namespace SF.Characters
 			foreach (AnimatorControllerParameter param in anim.parameters)
 			{
 				if (param.name == paramName) return true;
+			}
+			return false;
+		}
+		
+		public static bool TrySetBool(this Animator animator, int animationHash, bool animationValue)
+		{
+			// param.type is a enum and 4 = enum of bool
+			var parameters = animator.parameters
+								.Where(param => (int)param.type == 4); 
+			
+			foreach (AnimatorControllerParameter param in parameters)
+			{
+				if (param.nameHash == animationHash)
+				{
+					animator.SetBool(animationHash,animationValue);
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		public static bool TrySetFloat(this Animator animator, int animationHash, float animationValue)
+		{
+			// param.type is an enum and 1 = enum of Float
+			var parameters = animator.parameters.
+										Where(param => (int)param.type == 1); 
+			
+			foreach (AnimatorControllerParameter param in parameters)
+			{
+				if (param.nameHash == animationHash)
+				{
+					animator.SetFloat(animationHash,animationValue);
+					return true;
+				}
 			}
 			return false;
 		}
