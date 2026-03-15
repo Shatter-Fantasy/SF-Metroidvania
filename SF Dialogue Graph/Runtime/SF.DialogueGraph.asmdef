@@ -12,11 +12,18 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "SF_DIALOGUE_GRAPH"
+    ],
     "versionDefines": [
         {
             "name": "shatter-fantasy.sf-dialogue-graph",
             "expression": "0.0.1",
+            "define": "SF_DIALOGUE_GRAPH"
+        },
+        {
+            "name": "Unity",
+            "expression": "6000.4.0",
             "define": "SF_DIALOGUE_GRAPH"
         }
     ],
