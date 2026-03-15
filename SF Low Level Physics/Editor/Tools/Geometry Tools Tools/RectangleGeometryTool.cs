@@ -72,39 +72,6 @@ namespace SFEditor.PhysicsLowLevel
                     }
                 }
                 
-                /*
-                // Grab the radius
-                {
-                    EditorGUI.BeginChangeCheck();
-                    var radius    = handleRight * geometry.radius;
-                    var newRadius = Handles.Slider2D
-                        (
-                            radius,
-                            handleDirection, 
-                            handleRight, 
-                            handleUp, 
-                            handleSize, 
-                            Handles.SphereHandleCap,
-                            snap
-                        );
-                    
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        Undo.RecordObject(_shapeComponent, "Change SF Rectangle Shape Radius.");
-                        geometry.radius = newRadius.magnitude;
-                        localGeometry = geometry.InverseTransform(Matrix4x4.identity, _shapeComponent.ScaleSize);
-                        _shapeComponent.SetShape(localGeometry);
-                        _targetShapeChanged = true;
-                    }
-                    
-                    // Draw the radius label.
-                    Handles.color = LabelColor;
-                    // Make it where the user can switch between local and world space for tool labels positioning.
-                    // var labelGeometry = are we in local space ? localGeometry : geometry
-                    var labelGeometry = localGeometry;
-                    Handles.Label((geometry.radius + handleSize * 2f) * handleRight, $"Radius = {labelGeometry.radius.ToString()}");
-                }*/
-                
                 // Center.
                 {
                     EditorGUI.BeginChangeCheck();
