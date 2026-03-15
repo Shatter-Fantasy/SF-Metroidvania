@@ -20,6 +20,7 @@ namespace SFEditor.DialogueModule
         
         internal static bool IsPathToGraphAsset(string assetPath) => string.Equals(Path.GetExtension(assetPath), DialogueGraph.AssetExtension);
         internal const string AssetExtensionWithPeriod = "." + DialogueGraph.AssetExtension;
+        internal const string AssetLabel = "Dialogue";
         
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets,
             string[] movedFromAssetPaths)
@@ -83,6 +84,7 @@ namespace SFEditor.DialogueModule
             DialogueConversation _dialogueConversation = ScriptableObject.CreateInstance<DialogueConversation>();
             _dialogueConversation.GUID = Guid.NewGuid().GetHashCode();
             AssetDatabase.CreateAsset(_dialogueConversation,stringBuilder.ToString());
+            AssetDatabase.SetLabels(_dialogueConversation,new string[] {AssetLabel});
             dialogueGraph.LinkedConversationAsset = _dialogueConversation;
             
             if (DatabaseRegistry.TryGetDatabase(out DialogueDatabase dialogueDatabase))

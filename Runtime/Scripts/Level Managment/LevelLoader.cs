@@ -20,10 +20,6 @@ namespace SF.LevelModule
         [Header("Level Initialization")] [SerializeField]
         private int[] _gameStartingSceneIndexes = new int[1];
         
-        /// <summary>
-        /// Is called when a level starts to load up. 
-        /// </summary>
-        public static event Action LevelLoadingHandler;
         
         /// <summary>
         /// This is called when the first playable is ready to give the player control.

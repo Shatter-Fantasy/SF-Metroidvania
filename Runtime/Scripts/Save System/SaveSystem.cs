@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-#if !UNITY_EDITOR
 using System.Security.Cryptography;
-#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +10,7 @@ namespace SF.DataManagement
 {
     public class SaveSystem
     {
+        public static bool UseEncryptedSaves;
         protected static SaveSystem _instance;
         public static SaveSystem Instance
         {
@@ -115,46 +114,56 @@ namespace SF.DataManagement
 
             // Create a FileStream for writing data to.
             DataStream = new FileStream(SaveFileNameBase, FileMode.Create);
-#if UNITY_EDITOR
-            StreamWriter streamWriter = new StreamWriter(DataStream);
-#else
-            // Create an AES instance
-            // The i stands for input
-            Aes iAes = Aes.Create();
 
-            // Save the generated IV aka the initialization Vector = IV
-            // This tells the AES where to start as it encrypts data.
-            byte[] inputIV = iAes.IV;
-            
-            // Just save the inputIV at the start of the fil before encrypting it.
-            // It doesn't need to be private.
-            DataStream.Write(inputIV,0,inputIV.Length);
+            if (!UseEncryptedSaves)
+            {
+                StreamWriter streamWriter = new StreamWriter(DataStream);
 
-            // Create a wrapper for the CryptoStream file to encrypt the FileStream
-            CryptoStream cryptoStream = new CryptoStream(
-                DataStream,
-                iAes.CreateEncryptor(SavedKey, iAes.IV),
-                CryptoStreamMode.Write
-            );
+                // Serialize the SaveFileData object into JSON and save string.
+                string jsonString = JsonUtility.ToJson(CurrentSaveFileData);
 
-            // Create StreamWriter, wrapping CryptoStream.
-            StreamWriter streamWriter = new StreamWriter(cryptoStream);
-#endif
-            
-            
-            // Serialize the SaveFileData object into JSON and save string.
-            string jsonString = JsonUtility.ToJson(CurrentSaveFileData);
-            
-            //Write to the innermost stream which is the encryption one.
-            streamWriter.WriteLine(jsonString);
+                //Write to the innermost stream which is the encryption one.
+                streamWriter.WriteLine(jsonString);
 
-            //Close the streams in reverse order as they were made.
-            streamWriter.Close();
+                //Close the streams in reverse order as they were made.
+                streamWriter.Close();
+            }
+            else
+            {
+                // Create an AES instance
+                // The i stands for input
+                Aes iAes = Aes.Create();
+
+                // Save the generated IV aka the initialization Vector = IV
+                // This tells the AES where to start as it encrypts data.
+                byte[] inputIV = iAes.IV;
             
-#if UNITY_EDITOR
-#else
-            cryptoStream.Close();
-#endif
+                // Just save the inputIV at the start of the fil before encrypting it.
+                // It doesn't need to be private.
+                DataStream.Write(inputIV,0,inputIV.Length);
+
+                // Create a wrapper for the CryptoStream file to encrypt the FileStream
+                CryptoStream cryptoStream = new CryptoStream(
+                        DataStream,
+                        iAes.CreateEncryptor(SavedKey, iAes.IV),
+                        CryptoStreamMode.Write
+                    );
+
+                // Create StreamWriter, wrapping CryptoStream.
+                StreamWriter streamWriter = new StreamWriter(cryptoStream);
+                
+                // Serialize the SaveFileData object into JSON and save string.
+                string jsonString = JsonUtility.ToJson(CurrentSaveFileData);
+            
+                //Write to the innermost stream which is the encryption one.
+                streamWriter.WriteLine(jsonString);
+
+                //Close the streams in reverse order as they were made.
+                streamWriter.Close();
+                
+                cryptoStream.Close();
+            }
+            
             DataStream.Close();
         }
 
@@ -165,47 +174,60 @@ namespace SF.DataManagement
             {
                 return;
             }
+            
+            if (!UseEncryptedSaves)
+            {
+                DataStream = new FileStream(SaveFileNameBase, FileMode.Open);
+                StreamReader streamReader = new StreamReader(DataStream);
+                
+                // Read the entire file
+                string text = streamReader.ReadToEnd();
+                // Close the stream after done using it
+                streamReader.Close();
+
+                SaveFile[0] = JsonUtility.FromJson<SaveFileData>(text);
+                //Deserialize the data from here and load it into Unity Object.
+                CurrentSaveFileData = SaveFile[0];
+                // Finally initialize the Unity game data and load the scene and player.
+                SetGameData();
+            }
+            else
+            {
+                // Create new AES instance.
+                // The o stands for output
+                Aes oAes = Aes.Create();
+
+                // Crete an array of correct size
+                byte[] outputIV = new byte[oAes.IV.Length];
 
 
-#if UNITY_EDITOR
-            DataStream = new FileStream(SaveFileNameBase, FileMode.Open);
-            StreamReader streamReader = new StreamReader(DataStream);
-#else
-            // Create new AES instance.
-            // The o stands for output
-            Aes oAes = Aes.Create();
+                // Create a FileStream
+                DataStream = new FileStream(SaveFileNameBase, FileMode.Open);
 
-            // Crete an array of correct size
-            byte[] outputIV = new byte[oAes.IV.Length];
+                // Read the AES IV from the file
+                DataStream.Read(outputIV, 0, outputIV.Length);
 
+                // Create a wrapper for the CryptoStream file to decrypt the FileStream
+                CryptoStream cryptoStream = new CryptoStream(
+                        DataStream,
+                        oAes.CreateDecryptor(SavedKey, outputIV),
+                        CryptoStreamMode.Read
+                    );
 
-            // Create a FileStream
-            DataStream = new FileStream(SaveFileNameBase, FileMode.Open);
+                // Create a StreamReader to wrap the cryptoStream
+                StreamReader streamReader = new StreamReader(cryptoStream);
+                
+                // Read the entire file
+                string text = streamReader.ReadToEnd();
+                // Close the stream after done using it
+                streamReader.Close();
 
-            // Read the AES IV from the file
-            DataStream.Read(outputIV, 0, outputIV.Length);
-
-            // Create a wrapper for the CryptoStream file to decrypt the FileStream
-            CryptoStream cryptoStream = new CryptoStream(
-                DataStream,
-                oAes.CreateDecryptor(SavedKey, outputIV),
-                CryptoStreamMode.Read
-            );
-
-            // Create a StreamReader to wrap the cryptoStream
-            StreamReader streamReader = new StreamReader(cryptoStream);
-#endif
-
-            // Read the entire file
-            string text = streamReader.ReadToEnd();
-            // Close the stream after done using it
-            streamReader.Close();
-
-            SaveFile[0] = JsonUtility.FromJson<SaveFileData>(text);
-            //Deserialize the data from here and load it into Unity Object.
-            CurrentSaveFileData = SaveFile[0];
-            // Finally initialize the Unity game data and load the scene and player.
-            SetGameData();
+                SaveFile[0] = JsonUtility.FromJson<SaveFileData>(text);
+                //Deserialize the data from here and load it into Unity Object.
+                CurrentSaveFileData = SaveFile[0];
+                // Finally initialize the Unity game data and load the scene and player.
+                SetGameData();
+            }
         }
 
         /// <summary>
@@ -221,9 +243,7 @@ namespace SF.DataManagement
             }
             // Set the spawning checkpoint which the SaveStation C# class ia a subclass of.
             // Checkpoint manager will have an execution order after the script that calls load game.
-
             
-       
             BeforeLoadSaveDataHandler?.Invoke();
             LoadSaveDataHandler?.Invoke();
         }
