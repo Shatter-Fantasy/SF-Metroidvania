@@ -77,8 +77,8 @@ namespace SFEditor.DialogueModule
             stringBuilder.Replace($"{dialogueGraph.Name}.{DialogueGraph.AssetExtension}", "");
             stringBuilder.Append($"{dialogueGraph.Name} Conversation.asset");
 #else
-				stringBuilder.Replace($"{graph.name}.{DialogueGraph.AssetExtension}", "");
-			    stringBuilder.Append($"{graph.name} Conversation.asset");
+				stringBuilder.Replace($"{dialogueGraph.name}.{DialogueGraph.AssetExtension}", "");
+			    stringBuilder.Append($"{dialogueGraph.name} Conversation.asset");
 #endif   
             
             DialogueConversation _dialogueConversation = ScriptableObject.CreateInstance<DialogueConversation>();
