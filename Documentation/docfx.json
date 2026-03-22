@@ -52,6 +52,16 @@
           "*.md"
         ],
         "dest": "manual/install-instructions"
+      },
+      {
+        "src": "manual/physics-core-2d-root",
+        "files": [
+          "toc.yml",
+          "/**/toc.yml",
+          "*.md",
+          "/**/.md"
+        ],
+        "dest": "manual/physics-core-2d-root"
       }
     ],
     "resource": [
