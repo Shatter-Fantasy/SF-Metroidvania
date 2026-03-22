@@ -1,4 +1,5 @@
-﻿- name: Physics Core 2D
+﻿items:
+- name: Physics Core 2D
   href: physics-core-2d-root.md
   items:
     - name: Controller Body 2D
