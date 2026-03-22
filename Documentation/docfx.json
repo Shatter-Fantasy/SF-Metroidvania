@@ -54,14 +54,14 @@
         "dest": "manual/install-instructions"
       },
       {
-        "src": "manual/physics-core-2d",
+        "src": "manual/physics-overview",
         "files": [
           "toc.yml",
           "/**/toc.yml",
           "*.md",
           "/**/.md"
         ],
-        "dest": "manual/physics-core-2d"
+        "dest": "manual/physics-overview"
       }
     ],
     "resource": [

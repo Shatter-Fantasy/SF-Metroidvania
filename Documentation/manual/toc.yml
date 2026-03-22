@@ -7,5 +7,5 @@
       href: install-instructions/package-dependencies.md
     - name: Install Instructions
       href: install-instructions/install.md
-- name: Physics Core 2D
-  href: physics-core-2d/toc.yml
+- name: Physics Overview
+  href: physics-overview/toc.yml
