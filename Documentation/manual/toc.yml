@@ -9,6 +9,6 @@
       href: install-instructions/install.md
 
 - name: Low Level Physics
-- items:
+  items:
     - name: Character Controller
     - href: character-controller.md
