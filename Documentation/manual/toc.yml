@@ -7,9 +7,5 @@
       href: install-instructions/package-dependencies.md
     - name: Install Instructions
       href: install-instructions/install.md
-
 - name: Physics Core 2D
-  href: physics-core-2d/physics-core-2d-root.md
-  items:
-    - name: Controller Body 2D
-      href: controller-body-2d.md
+  href: physics-core-2d/
