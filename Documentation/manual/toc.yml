@@ -7,3 +7,6 @@
       href: install-instructions/package-dependencies.md
     - name: Install Instructions
       href: install-instructions/install.md
+- items:
+    - name: Character Controller
+    - href: character-controller.md
