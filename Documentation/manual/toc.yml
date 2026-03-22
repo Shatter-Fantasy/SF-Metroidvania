@@ -8,7 +8,8 @@
     - name: Install Instructions
       href: install-instructions/install.md
 
-- name: Low Level Physics
+- name: Physics Core 2D
+  href: physics-core-2d/physics-core-2d-root.md
   items:
-    - name: Character Controller
-      href: character-controller.md
+    - name: Controller Body 2D
+      href: controller-body-2d.md
