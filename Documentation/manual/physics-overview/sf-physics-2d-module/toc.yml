@@ -1,5 +1,4 @@
-﻿items:
-- name: SF Physics 2D Module
+﻿- name: SF Physics 2D Module
   href: sf-physics-2d-module.md
   items:
     - name: Controller Body 2D
