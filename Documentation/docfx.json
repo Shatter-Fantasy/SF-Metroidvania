@@ -56,12 +56,29 @@
       {
         "src": "manual/physics-overview",
         "files": [
-          "toc.yml",
           "/**/toc.yml",
           "*.md",
           "/**/.md"
         ],
         "dest": "manual/physics-overview"
+      },
+      {
+        "src": "manual/physics-overview/physics-core-2d",
+        "files": [
+          "toc.yml",
+          "*.md",
+          "/**/.md"
+        ],
+        "dest": "manual/physics-overview/physics-core-2d"
+      },
+      {
+        "src": "manual/physics-overview/sf-physics-2d-module",
+        "files": [
+          "toc.yml",
+          "*.md",
+          "/**/.md"
+        ],
+        "dest": "manual/physics-overview/sf-physics-2d-module"
       }
     ],
     "resource": [
