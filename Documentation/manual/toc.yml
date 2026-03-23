@@ -12,7 +12,7 @@
     - name: Unity Physics Core 2D
       href: physics-overview/physics-core-2d/toc.yml
     - name: SF Physics 2D Module
-      href: sf-physics-2d-module.md
+      href: physics-overview/sf-physics-2d-module/sf-physics-2d-module.md
       items:
         - name: Controller Body 2D
-          href: sf-physics-2d-module/controller-body-2d/controller-body-2d.md
+          href: physics-overview/sf-physics-2d-module/controller-body-2d/controller-body-2d.md
