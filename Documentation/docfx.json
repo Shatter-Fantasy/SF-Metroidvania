@@ -21,7 +21,66 @@
       "_enableSearch": true,
       "pdf": true
     },
-    "content": ["**/*.md", "toc.yml"],
+    "content": [
+      {
+        "files": [
+          "toc.yml",
+          "index.md"
+        ]
+      },
+      {
+        "src": "api",
+        "files": [
+          "*.yml"
+        ],
+        "dest": "api"
+      },
+      {
+        "src": "manual",
+        "files": [
+          "manual/**.md",
+          "manual/**.toc.yml",
+          "toc.yml",
+          "*.md"
+        ],
+        "dest": "manual"
+      },
+      {
+        "src": "manual/install-instructions",
+        "files": [
+          "toc.yml",
+          "*.md"
+        ],
+        "dest": "manual/install-instructions"
+      },
+      {
+        "src": "manual/physics-overview",
+        "files": [
+          "/**/toc.yml",
+          "*.md",
+          "/**/.md"
+        ],
+        "dest": "manual/physics-overview"
+      },
+      {
+        "src": "manual/physics-overview/physics-core-2d",
+        "files": [
+          "toc.yml",
+          "*.md",
+          "/**/.md"
+        ],
+        "dest": "manual/physics-overview/physics-core-2d"
+      },
+      {
+        "src": "manual/physics-overview/sf-physics-2d-module",
+        "files": [
+          "toc.yml",
+          "*.md",
+          "/**/.md"
+        ],
+        "dest": "manual/physics-overview/sf-physics-2d-module"
+      }
+    ],
     "resource": [
       {
         "files": [
