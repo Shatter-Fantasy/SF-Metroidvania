@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SF.StateMachine
 {
 	using Characters;
-	using PhysicsLowLevel;
+	using U2D.Physics;
 	using Decisions;
 	public class DecisionTransition
 	{

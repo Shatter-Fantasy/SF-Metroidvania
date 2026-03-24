@@ -4,7 +4,9 @@
     "references": [
         "Unity.GraphToolkit.Editor",
         "Unity.GraphToolkit.Common.Editor",
-        "SF.DialogueGraph"
+        "SF.DialogueGraph",
+        "SF.Databases",
+        "SF.Metroidvania.Databases"
     ],
     "includePlatforms": [
         "Editor"
@@ -14,7 +16,15 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
+    "defineConstraints": [
+        "SF_DIALOGUE_GRAPH"
+    ],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "6000.4.0",
+            "define": "SF_DIALOGUE_GRAPH"
+        }
+    ],
     "noEngineReferences": false
 }

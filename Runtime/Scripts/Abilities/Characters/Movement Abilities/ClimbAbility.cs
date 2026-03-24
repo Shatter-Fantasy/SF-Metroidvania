@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 namespace SF.AbilityModule.Characters
 {
     using InputModule;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     public class ClimbAbility : AbilityCore, IInputAbility
     {
@@ -90,13 +90,13 @@ namespace SF.AbilityModule.Characters
             _controller2d.IsGliding = false;
             _controller2d.IsJumping = false;
             _controller2d.SetVerticalVelocity(0);
-            _controller2d.ResizeCollider(ColliderBoxSize);
+            _controller2d.ResizePhysicsShape(ColliderBoxSize);
         }
 
         private void OnClimbEnd()
         {
             _controller2d.IsClimbing = false;
-            _controller2d.ResetColliderSize();
+            _controller2d.ResetPhysicsShapeSize();
             _controller2d.CollisionInfo.WasClimbing = false;
         }
 

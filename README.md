@@ -8,8 +8,9 @@ This package uses the burst compiler combined with NativeCollections for improve
 
 ## Current Alpha: Alpha Eight
 Alpha Eight focused on a smaller set of qol api changes, simplifying the SavePoint logic,
-and improvements to the SFRectangleShape scene editing tool.
+and improvements to the SFRectangleShape scene editing tool. 
 
+### Planned
 - Add more utilities for Low Level Physics API.
     - Extension methods for setting PhysicsShapes.ContactFilter.categories  
     - Extension methods for setting PhysicsShapes.ContactFilter.contacts 

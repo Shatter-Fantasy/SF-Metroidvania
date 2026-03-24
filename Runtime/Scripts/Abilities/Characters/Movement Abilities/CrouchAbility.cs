@@ -23,12 +23,12 @@ namespace SF.AbilityModule.Characters
             // If statement acts like a toggle for crouching.
             if (_controller2d.IsCrouching)
             {
-                _controller2d.ResizeCollider(_colliderResized);
+                _controller2d.ResizePhysicsShape(_colliderResized);
                 _isPerformingAbility = true;
             }
             else
             {
-                _controller2d.ResetColliderSize();
+                _controller2d.ResetPhysicsShapeSize();
                 _isPerformingAbility = false;
             }
         }
@@ -48,13 +48,13 @@ namespace SF.AbilityModule.Characters
                 return;
             
             _controller2d.IsCrouching = false;
-            _controller2d.ResetColliderSize();
+            _controller2d.ResetPhysicsShapeSize();
         }
 
         protected override void OnAbilityInterruption()
         {
             _controller2d.IsCrouching = false;
-            _controller2d.ResetColliderSize();
+            _controller2d.ResetPhysicsShapeSize();
         }
         
         protected override bool CheckAbilityRequirements()

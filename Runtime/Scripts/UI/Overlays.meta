@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:SF Low Level Physics/Editor.meta
+guid: fde7d503f8780f545a5707b9d5f09c01
+========
 guid: 867d2c308e8077a468b158fbdfa22d44
+>>>>>>>> alphas/alpha-nine:Runtime/Scripts/UI/Overlays.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -3,7 +3,7 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     using Utilities;
     

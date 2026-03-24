@@ -7,7 +7,7 @@ namespace SF.Interactables
 {
     using Characters.Controllers;
     using InputModule;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     public class PlayerInteractionController : InteractionController, ITriggerShapeCallback
     {

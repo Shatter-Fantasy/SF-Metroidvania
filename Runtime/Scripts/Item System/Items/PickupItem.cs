@@ -6,16 +6,15 @@ namespace SF.ItemModule
     using Characters.Controllers;
     using Interactables;
     using Managers;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     public class PickupItem : MonoBehaviour, 
         IInteractable<PlayerController>, 
         ITriggerShapeCallback
     {
         
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
+        [SerializeReference] public ItemDTO ItemDTO;
         
-        public ItemData Item;
-
         private void Start()
         {
             if (TryGetComponent(out SFShapeComponent component))
@@ -29,7 +28,7 @@ namespace SF.ItemModule
 
         public void Interact(PlayerController controller)
         {
-            if(controller == null || Item == null)
+            if(controller == null || ItemDTO == null)
                 return;
            
             // Make sure we added an instantiated inventory to the player first.
@@ -41,7 +40,10 @@ namespace SF.ItemModule
 
         private void PickUpItem(PlayerInventory playerInventory)
         {         
-            playerInventory.AddItem(Item.ID);
+            if(ItemDTO != null)
+                playerInventory.AddItem(ItemDTO.ID);
+            
+            //playerInventory.AddItem(Item.ID);
             Destroy(gameObject);
         }
         
@@ -61,5 +63,6 @@ namespace SF.ItemModule
         { 
             // noo - No Operation
         }
+
     }
 }

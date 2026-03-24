@@ -3,7 +3,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.DamageModule
 {
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     [System.Flags]
     public enum Direction : short
@@ -20,7 +20,6 @@ namespace SF.DamageModule
         ITriggerShapeCallback,
         IContactShapeCallback
     {
-        private Collider2D _collider2D;
         private Vector2 _collisionNormal;
         public Direction DamageDirection;
         public int DamageAmount = 1;
@@ -44,16 +43,6 @@ namespace SF.DamageModule
             
             damagable.TakeDamage(DamageAmount,_knockBackForce);
         }
-        
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
-        {
-            if (((GameObject)beginEvent.visitorShape.callbackTarget).TryGetComponent(out IDamagable damagable))
-            {
-                
-                Debug.Log(damagable);
-                damagable.TakeDamage(DamageAmount,_knockBackForce);
-                // Need to figure out the low level version of Collider2D.Distance.
-                //_collisionNormal = col2D.Distance(_collider2D).normal;
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
         {

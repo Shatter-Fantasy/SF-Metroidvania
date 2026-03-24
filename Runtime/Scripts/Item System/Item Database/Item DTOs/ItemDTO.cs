@@ -14,6 +14,10 @@ namespace SF.ItemModule
         public ItemSubType ItemSubType;
         public ItemPriceDTO PriceData;
 
+        public ItemDTO()
+        {
+            Name = "New Item";
+        }
         public ItemDTO(string name = "New Item", string description = "I am a new Item")
         {
             Name = name;

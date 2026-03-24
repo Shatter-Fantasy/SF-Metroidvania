@@ -6,7 +6,7 @@ namespace SF.Characters.Data
     using StatModule;
     
     [CreateAssetMenu(fileName = "Character Database", menuName = "SF/Data/Character Editor Database")]
-    public class CharacterDatabase : SFDatabase<CharacterDTO>
+    public class CharacterDatabase : SFAssetDatabase<CharacterDTO>
     {
         /// <summary>
         /// The database with the default stat types and declarations in it.

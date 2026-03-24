@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 namespace SF.AbilityModule.Characters
 {
     using InputModule;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     /// <summary>
     /// Grants the ability for a player to Glide with a set input command.

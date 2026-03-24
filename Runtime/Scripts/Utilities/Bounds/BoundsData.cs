@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
 	
 	//TODO: Remove. The PhysicsShape and PhysicsBody.aabb replaces this.

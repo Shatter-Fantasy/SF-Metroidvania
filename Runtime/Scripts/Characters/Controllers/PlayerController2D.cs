@@ -1,7 +1,7 @@
 namespace SF.Characters.Controllers
 {
     using Managers;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     /// <summary>
     /// A physics controller for the playable character that help implement gravity, slope mechanics, collision for platforms,
     /// and updates the <see cref="MovementState"/>.
@@ -22,8 +22,6 @@ namespace SF.Characters.Controllers
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
-                //if(LevelPlayData.Instance.spawnedPlayerController == null)
-                  //  LevelPlayData.Instance.spawnedPlayerController = this;
 
                 if (!GameLoader.Instance.GameLoaderData.SettingUpNewGame)
                     CollisionInfo.CollisionActivated = true;

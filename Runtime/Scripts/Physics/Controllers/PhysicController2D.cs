@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// Base class for custom Physics Controllers in a 2D simulation.
@@ -113,20 +113,9 @@ namespace SF.PhysicsLowLevel
                 _directionLastFrame.x = _direction.x;
             
             OnPreFixedUpdate();
-
-            /*
-            // Set all bools for what sides there was a collision on last frame.
-            CollisionInfo.WasCollidingRight = CollisionInfo.IsCollidingRight;
-            CollisionInfo.WasCollidingLeft = CollisionInfo.IsCollidingLeft;
-            CollisionInfo.WasCollidingAbove = CollisionInfo.IsCollidingAbove;
-            CollisionInfo.WasCollidingBelow = CollisionInfo.IsGrounded;
-          
-            CollisionInfo.CheckCollisions();
-            */
             
             CalculateHorizontal();
             CalculateVertical();
-            
             
             Move();
         }
