@@ -5,11 +5,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
-<<<<<<<< HEAD:SF Low Level Physics/Runtime/SF Shapes/SFShapeComponent.cs
-namespace SF.PhysicsLowLevel
-========
 namespace SF.U2D.Physics
->>>>>>>> alphas/alpha-nine:SF Physics Core 2D/Runtime/SF Shapes/SFShapeComponent.cs
 {
     public interface IPreSolveShapeCallback
     {

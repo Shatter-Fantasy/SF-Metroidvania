@@ -11,7 +11,6 @@ namespace SF.RoomModule
     using Characters.Controllers;
     using Managers;
     using U2D.Physics;
-
     
     public class RoomController : MonoBehaviour, 
         ITriggerShapeCallback
