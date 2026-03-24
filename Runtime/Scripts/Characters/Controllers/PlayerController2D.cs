@@ -22,8 +22,6 @@ namespace SF.Characters.Controllers
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
-                //if(LevelPlayData.Instance.spawnedPlayerController == null)
-                  //  LevelPlayData.Instance.spawnedPlayerController = this;
 
                 if (!GameLoader.Instance.GameLoaderData.SettingUpNewGame)
                     CollisionInfo.CollisionActivated = true;
