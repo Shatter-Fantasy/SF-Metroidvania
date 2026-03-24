@@ -1,13 +1,14 @@
 using System.Collections.Generic;
-using SF.Utilities;
+
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 using UnityEngine.Profiling;
 using UnityEngine.Tilemaps;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
+    using SF.Utilities;
     [RequireComponent(typeof(Tilemap))]
     public class SFTileMapShape : SFShapeComponent
     {

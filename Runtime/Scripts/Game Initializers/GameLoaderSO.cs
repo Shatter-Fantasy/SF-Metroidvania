@@ -26,7 +26,7 @@ namespace SF.Managers
     
     /// <summary>
     /// Declares the default order for important game features other than physics.
-    /// for Physics DefaultExecutionOrder see <see cref="PhysicsLowLevel.LowLevelPhysicsExecutionOrder"/>
+    /// for Physics DefaultExecutionOrder see <see cref="Physics.LowLevelPhysicsExecutionOrder"/>
     /// </summary>
     public static class GameDefaultExecutionOrders
     {

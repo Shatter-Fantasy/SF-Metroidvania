@@ -6,7 +6,7 @@ namespace SF.ItemModule
     using Characters.Controllers;
     using Interactables;
     using Managers;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     public class PickupItem : MonoBehaviour, 
         IInteractable<PlayerController>, 
         ITriggerShapeCallback

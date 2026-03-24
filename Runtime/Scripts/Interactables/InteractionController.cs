@@ -4,7 +4,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.Interactables
 {
-    using PhysicsLowLevel;
+    using U2D.Physics;
     /// <summary>
     /// Base class for allowing stuff to interact with other objects.
     /// This can be implemented to allow NPC and enemies to interact with objects.

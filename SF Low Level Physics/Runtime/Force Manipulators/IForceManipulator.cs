@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// Implement this to customize force and velocity interactions with an object that implements <see cref="IForceReceiver"/>.

@@ -9,7 +9,7 @@ namespace SF.Weapons
     using Characters;
     using CombatModule;
     using DamageModule;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     public class MeleeWeapon : WeaponBase
     {

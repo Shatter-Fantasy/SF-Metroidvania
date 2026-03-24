@@ -1,10 +1,10 @@
-using SF.PhysicsLowLevel;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SFEditor.PhysicsLowLevel
+namespace SFEditor.U2D.Physics
 {
+    using SF.U2D.Physics;
     public class CircleShapeGeometryTool : ShapeComponentGeometryTool<SFCircleShape>
     {
         public CircleShapeGeometryTool(SFCircleShape shapeComponent) : base(shapeComponent)

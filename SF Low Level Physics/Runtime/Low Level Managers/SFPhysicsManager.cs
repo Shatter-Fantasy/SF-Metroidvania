@@ -1,4 +1,4 @@
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// Keeps track of data and settings for custom SF Low Level Physics 2D

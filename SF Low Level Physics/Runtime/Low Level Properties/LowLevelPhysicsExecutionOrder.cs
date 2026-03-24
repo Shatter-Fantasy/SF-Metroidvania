@@ -1,4 +1,4 @@
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// Useful Execution orders for low level physics.

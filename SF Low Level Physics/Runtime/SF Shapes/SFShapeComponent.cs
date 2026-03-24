@@ -5,7 +5,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     public interface IPreSolveShapeCallback
     {
@@ -74,7 +74,7 @@ namespace SF.PhysicsLowLevel
         /// <remarks>
         /// Keyword here is completed because you can use <see cref="PhysicsComposer"/> to merge shapes and vertexes into a single shape.
         /// If a <see cref="SFShapeComponent"/> is made from multiple individual shapes and a single shape is created this is the completed merged shape.
-        /// <see cref="SF.PhysicsLowLevel.SFTileMapShape"/> for an example of this.
+        /// <see cref="SF.U2D.Physics.SFTileMapShape"/> for an example of this.
         /// </remarks>
         public ref PhysicsShape Shape => ref _shape;
 

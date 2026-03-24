@@ -2,7 +2,7 @@ using Unity.Burst;
 using Unity.Collections;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     [BurstCompile]
     public static class PhysicsQueriesExtensions

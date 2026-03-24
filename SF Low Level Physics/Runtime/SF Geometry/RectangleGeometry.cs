@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// <para>

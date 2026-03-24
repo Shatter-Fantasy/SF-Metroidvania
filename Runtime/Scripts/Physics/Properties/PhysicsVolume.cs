@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// The type of physics volume or zone that is manipulating the surrounding characters and objects.

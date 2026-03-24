@@ -1,11 +1,11 @@
-using SF.PhysicsLowLevel;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SFEditor.PhysicsLowLevel
+namespace SFEditor.U2D.Physics
 {
+    using SF.U2D.Physics;
     public class RectangleGeometryTool : ShapeComponentGeometryTool<SFRectangleShape>, IDrawSelectedHandles
     {
         public RectangleGeometryTool(SFRectangleShape shapeComponent) : base(shapeComponent) { }

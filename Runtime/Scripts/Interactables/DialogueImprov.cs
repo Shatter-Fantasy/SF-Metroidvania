@@ -5,7 +5,7 @@ namespace SF.DialogueModule
 {
     using Characters.Controllers;
     using Interactables;
-    using SF.PhysicsLowLevel;
+    using U2D.Physics;
     
     public class DialogueImprov : MonoBehaviour, 
         IInteractable<PlayerController>,

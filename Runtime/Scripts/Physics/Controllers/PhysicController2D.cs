@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// Base class for custom Physics Controllers in a 2D simulation.

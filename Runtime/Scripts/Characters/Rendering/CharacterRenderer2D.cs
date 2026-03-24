@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SF.Characters
 {
 	using Managers;
-	using PhysicsLowLevel;
+	using U2D.Physics;
 	using Weapons;
 	
 	/// <summary>

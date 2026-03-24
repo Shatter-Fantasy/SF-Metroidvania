@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SF.PhysicsLowLevel.Utilities
+namespace SF.U2D.Physics.Utilities
 {
     /*  Special thanks to MelvMay, the creator of Unity's low level 2D physics system. He personally created these method during the Unity 6.3 beta to help give examples.
         Check out the link below for the public repo where he helped show examples on how to do this.

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     [ExecuteAlways]
     [AddComponentMenu("Physics 2D/LowLevel/SF Capsule Shape", 23)]

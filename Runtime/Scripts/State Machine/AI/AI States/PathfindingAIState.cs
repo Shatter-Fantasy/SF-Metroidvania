@@ -5,7 +5,7 @@ using UnityEngine.LowLevelPhysics2D;
 namespace SF.StateMachine
 {
 	using Pathfinding;
-	using PhysicsLowLevel;
+	using U2D.Physics;
 	using SpawnModule;
 	using StateMachine.Decisions;
     public class PathfindingAIState : StateCore

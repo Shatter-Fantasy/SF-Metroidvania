@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// Used to tell how custom shapes should be contained inside a <see cref="PhysicsShape"/> that acts like a container.
