@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEditor.Toolbars;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SFEditor
 {

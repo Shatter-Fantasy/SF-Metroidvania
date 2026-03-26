@@ -1,6 +1,6 @@
 using Unity.Burst;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.U2D.Physics
 {

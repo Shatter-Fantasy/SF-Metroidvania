@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.U2D.Physics
 {
@@ -33,7 +33,7 @@ namespace SF.U2D.Physics
             var normal = shapeContext == contact.shapeB ? manifold.normal : -manifold.normal;
         
             // Filter the normal.
-            var normalAngle = PhysicsMath.ToDegrees(new PhysicsRotate(normal).angle);
+            var normalAngle = PhysicsMath.ToDegrees(new PhysicsRotate(normal).radians);
             return normalAngle is > 85f and < 95f;
         }
         
@@ -47,7 +47,7 @@ namespace SF.U2D.Physics
             var normal = shapeContext == contact.shapeB ? manifold.normal : -manifold.normal;
         
             // Filter the normal.
-            var normalAngle = PhysicsMath.ToDegrees(new PhysicsRotate(normal).angle);
+            var normalAngle = PhysicsMath.ToDegrees(new PhysicsRotate(normal).radians);
             return normalAngle > lowRange && normalAngle < highRange;
         }
         

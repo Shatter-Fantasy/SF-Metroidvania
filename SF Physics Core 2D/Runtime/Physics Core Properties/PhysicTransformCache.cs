@@ -22,7 +22,7 @@ namespace SF.U2D.Physics
 
     /// <summary>
     /// Keeps track of when <see cref="UnityEngine.Transform"/> needs to inform an active <see cref="SFShapeComponent.Body"/>
-    /// to update it's <see cref="UnityEngine.LowLevelPhysics2D.PhysicsTransform"/>
+    /// to update it's <see cref="Unity.U2D.Physics;.PhysicsTransform"/>
     /// <remarks>
     /// In Unity 6.5 the PhysicsWorld.RegisterTransformChange was introduced and
     /// this entire class is no longer needed in Unity 6.5 and newer.

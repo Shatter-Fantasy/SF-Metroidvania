@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.U2D.Physics
 {
@@ -31,7 +31,7 @@ namespace SF.U2D.Physics
         public bool InscribeRadius;
 
         /// <summary>
-        /// The backing <see cref="UnityEngine.LowLevelPhysics2D.PolygonGeometry"/> that supports the RectangleGeometry.
+        /// The backing <see cref="Unity.U2D.Physics;.PolygonGeometry"/> that supports the RectangleGeometry.
         /// </summary>
         [NonSerialized] public PolygonGeometry Polygon;
 #endregion

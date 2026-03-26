@@ -10,7 +10,7 @@ namespace SF.U2D.Physics
     /// </summary>
     /// <remarks>
     /// Depending on if you are using the low or high level physics you will either use <see cref="Rigidbody2D"/> and <see cref="Collider2D"/>,
-    /// or you will use <see cref="UnityEngine.LowLevelPhysics2D.PhysicsShape"/> and <see cref="UnityEngine.LowLevelPhysics2D.PhysicsBody"/>
+    /// or you will use <see cref="Unity.U2D.Physics;.PhysicsShape"/> and <see cref="Unity.U2D.Physics;.PhysicsBody"/>
     ///	These are collisions from Collision based callbacks that interact with a non-trigger collider.
     /// Used for platforms, walls, and physical objects that can stop the player.
     /// </remarks>

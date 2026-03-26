@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SFEditor.U2D.Physics
 {

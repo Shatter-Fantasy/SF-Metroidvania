@@ -8,7 +8,7 @@ namespace SF.U2D.Physics
     /// Inherit from this to create a custom velocity and physics interaction solution for any type of game object.
     /// </summary>
     /// <remarks>
-    /// The base class doesn't care or understand the difference between a <see cref="Rigidbody2D"/> or a <see cref="UnityEngine.LowLevelPhysics2D.PhysicsBody"/>.
+    /// The base class doesn't care or understand the difference between a <see cref="Rigidbody2D"/> or a <see cref="Unity.U2D.Physics;.PhysicsBody"/>.
     /// They inheriting classes define which one to use.
     /// </remarks>
     public abstract class PhysicController2D : MonoBehaviour, IForceReceiver

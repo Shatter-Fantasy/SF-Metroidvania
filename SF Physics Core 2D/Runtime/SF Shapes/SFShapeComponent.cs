@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.U2D.Physics;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+
 
 namespace SF.U2D.Physics
 {
@@ -39,9 +40,10 @@ namespace SF.U2D.Physics
     [BurstCompile]
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
     public abstract class SFShapeComponent : MonoBehaviour, 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
         ITransformMonitor,
 #endif
+
         ITriggerShapeCallback, PhysicsCallbacks.ITriggerCallback,
         IContactShapeCallback, PhysicsCallbacks.IContactCallback,
         IPreSolveShapeCallback, PhysicsCallbacks.IPreSolveCallback
@@ -192,7 +194,7 @@ namespace SF.U2D.Physics
             ApplyTransform();
             CacheTransform();
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
             PhysicTransformCache.AddMonitor(transform,this);
 #endif
             DebugPhysics();
@@ -215,7 +217,7 @@ namespace SF.U2D.Physics
             DestroyBody();
             DestroyShape();
             
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
             PhysicTransformCache.RemoveMonitor(transform,this);
 #endif
         }
