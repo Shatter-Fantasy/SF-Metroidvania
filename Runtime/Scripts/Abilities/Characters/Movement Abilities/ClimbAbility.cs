@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using SF.InputModule;
-using SF.Physics;
-
 namespace SF.AbilityModule.Characters
 {
+    using InputModule;
+    using U2D.Physics;
+    
     public class ClimbAbility : AbilityCore, IInputAbility
     {
         protected ClimbableSurface ClimableSurface => _controller2d.CollisionInfo.ClimbableSurface;
@@ -90,32 +90,32 @@ namespace SF.AbilityModule.Characters
             _controller2d.IsGliding = false;
             _controller2d.IsJumping = false;
             _controller2d.SetVerticalVelocity(0);
-            _controller2d.ResizeCollider(ColliderBoxSize);
+            _controller2d.ResizePhysicsShape(ColliderBoxSize);
         }
 
         private void OnClimbEnd()
         {
             _controller2d.IsClimbing = false;
-            _controller2d.ResetColliderSize();
+            _controller2d.ResetPhysicsShapeSize();
             _controller2d.CollisionInfo.WasClimbing = false;
         }
 
         private void OnEnable()
         {
-            InputManager.Controls.Player.Enable();
+            SFInputManager.Controls.Player.Enable();
 
-            InputManager.Controls.Player.Interact.performed += OnClimb;
-            InputManager.Controls.Player.Move.performed += OnClimbMove;
-            InputManager.Controls.Player.Move.canceled += OnClimbMoveCancelled;
+            SFInputManager.Controls.Player.Interact.performed += OnClimb;
+            SFInputManager.Controls.Player.Move.performed += OnClimbMove;
+            SFInputManager.Controls.Player.Move.canceled += OnClimbMoveCancelled;
         }
 
         private void OnDisable()
         {
-            if(InputManager.Controls == null) return;
+            if(SFInputManager.Controls == null) return;
 
-            InputManager.Controls.Player.Interact.performed -= OnClimb;
-            InputManager.Controls.Player.Move.performed -= OnClimbMove;
-            InputManager.Controls.Player.Move.canceled -= OnClimbMoveCancelled;
+            SFInputManager.Controls.Player.Interact.performed -= OnClimb;
+            SFInputManager.Controls.Player.Move.performed -= OnClimbMove;
+            SFInputManager.Controls.Player.Move.canceled -= OnClimbMoveCancelled;
         }
     }
 }

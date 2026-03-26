@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="Packages/shatterfantasy.sf-dialogue-graph/Assets/Dialogue UI Toolkit/Dialogue.uss?fileID=7433441132597879392&amp;guid=79607fbc43a543640ad0ecd804c9fc51&amp;type=3#Dialogue" />
+    <ui:VisualElement name="dialogue__view">
+        <ui:VisualElement name="dialogue-speaker__container" style="background-image: none;">
+            <ui:Label name="dialogue-speaker__label" text="Office Employee" class="overlay__label" />
+        </ui:VisualElement>
+        <ui:VisualElement name="dialogue-speech__container" class="overlay-content__container dialogue-speech__container">
+            <ui:Label name="overlay-dialogue__label" text="I think Sergey&apos;s rat got some fur in this cofee." class="overlay__label" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

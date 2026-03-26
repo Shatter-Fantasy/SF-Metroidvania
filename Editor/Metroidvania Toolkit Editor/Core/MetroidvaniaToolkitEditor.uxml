@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
+>
+    <ui:Template name="SettingsPanel" src="project://database/Packages/shatterfantasy.sf-metroidvania/Editor/Metroidvania%20Toolkit%20Editor/Settings%20Panel/SettingsPanel.uxml"/> 
+    <Style src="project://database/Packages/shatterfantasy.sf-metroidvania/Editor/Metroidvania%20Toolkit%20Editor/Core/MetroidvaniaToolkitEditor.uss?fileID=7433441132597879392&amp;guid=32597c453a3f2b74da8385f8ec3e4ba2&amp;type=3#MetroidvaniaToolkitEditor" />
+    <ui:TabView name="options-menu__view" class="ic__sub-view">
+        <ui:Tab name="settings-menu__view" label="Game Settings" view-data-key="Settings">
+            <ui:Instance template="SettingsPanel"/> 
+        </ui:Tab>
+        <ui:Tab name="room-menu__view" label="Room Settings" view-data-key="Room">
+            <ui:Label text="Room System"/>
+        </ui:Tab>
+    </ui:TabView>
+</ui:UXML>

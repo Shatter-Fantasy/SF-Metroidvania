@@ -1,11 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using SF.InputModule;
-using SF.AudioModule;
-
 namespace SF.AbilityModule.Characters
 {
+    using InputModule;
+    using AudioModule;
     public class JumpAbility : AbilityCore, IInputAbility
     {
         [Header("Jumping Physics")]
@@ -75,8 +74,8 @@ namespace SF.AbilityModule.Characters
 
         private void OnEnable()
 		{
-			InputManager.Controls.Player.Enable();
-			InputManager.Controls.Player.Jump.performed += OnInputJump;
+			SFInputManager.Controls.Player.Enable();
+			SFInputManager.Controls.Player.Jump.performed += OnInputJump;
             
             // Have to check for null because you can have OnEnable run sometimes before initialization from the ability controller.
             if (_controller2d != null)
@@ -87,9 +86,9 @@ namespace SF.AbilityModule.Characters
 
         private void OnDisable()
 		{
-			if(InputManager.Controls == null) return;
+			if(SFInputManager.Controls == null) return;
 
-			InputManager.Controls.Player.Jump.performed -= OnInputJump;
+			SFInputManager.Controls.Player.Jump.performed -= OnInputJump;
             
             if(_controller2d != null)
                 _controller2d.CollisionInfo.OnGroundedHandler -= ResetJumps;

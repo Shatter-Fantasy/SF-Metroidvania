@@ -69,20 +69,10 @@ namespace SFEditor.Core.Packages
     public class SFPackageDefaults
     {
         #region Required Packages
-        public static readonly SFPackageData SFUtilitiesPackage = new SFPackageData(SFUtilitiesPackageName,SFUtilitiesBasePackageURL, "SF Utilities");
-        public static readonly SFPackageData SFUIElementsPackage = new SFPackageData(SFUIElementsPackageName,SFUIElementsBasePackageURL,"SF UI Elements");
+        public static readonly SFPackageData SFCorePackage = new SFPackageData(SFCorePackageName,SFCoreBasePackageURL, "SF Core");
         
-        public const string SFUtilitiesPackageName = "shatter-fantasy.sf-utilities";
-        public const string SFUtilitiesBasePackageURL = "https://github.com/Shatter-Fantasy/SF-Utilities.git";
-        
-        public const string SFUIElementsPackageName = "shatter-fantasy.sf-ui-elements";
-        public const string SFUIElementsBasePackageURL = "https://github.com/Shatter-Fantasy/SF-UI-Elements.git";
-
+        public const string SFCorePackageName = "shatterfantasy.sf-core";
+        public const string SFCoreBasePackageURL = "https://github.com/crowhound/SF-Core.git";
         #endregion
-        
-        /*
-            public const string SFSpriteToolsBasePackageURL = "https://github.com/crowhound/SF-Sprite-Tools.git";
-            public const string SFSpriteToolsPackageName = "com.shatter-fantasy.sf-sprite-tools";
-        */
     }
 }

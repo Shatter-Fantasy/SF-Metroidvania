@@ -1,11 +1,11 @@
 using UnityEngine.InputSystem;
 
-using SF.AbilityModule;
-using SF.InputModule;
-using SF.Weapons;
 
-namespace SF.Abilities.CombatModule
+namespace SF.AbilityModule
 {
+    using InputModule;
+    using Weapons;
+    
     public class UseWeaponAbility : AbilityCore, IInputAbility
     {
 
@@ -35,15 +35,15 @@ namespace SF.Abilities.CombatModule
         
         private void OnEnable()
         {
-            InputManager.Controls.Player.Enable();
-            InputManager.Controls.Player.Attack.performed += OnAttackPerformed;
+            SFInputManager.Controls.Player.Enable();
+            SFInputManager.Controls.Player.Attack.performed += OnAttackPerformed;
         }
 
         private void OnDisable()
         {
-            if(InputManager.Instance == null) return;
+            if(SFInputManager.Instance == null) return;
 
-            InputManager.Controls.Player.Attack.performed -= OnAttackPerformed;
+            SFInputManager.Controls.Player.Attack.performed -= OnAttackPerformed;
         }
     }
 }

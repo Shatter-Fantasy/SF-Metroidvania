@@ -1,10 +1,24 @@
-
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.U2D.Physics
 {
+    /// <summary>
+    /// An interface to define a set of properties for different types of <see cref="PhysicController2D"/>
+    /// </summary>
+    public interface IPhysicsControllerProperties 
+    { 
+        // no-op
+    }
+
     [System.Serializable]
-    public struct MovementProperties
+    public struct FlyingPhysicsProperties : IPhysicsControllerProperties
+    {
+        
+    }
+
+    // TODO: Rename this struct to GroundedPhysicsProperties
+    [System.Serializable]
+    public struct MovementProperties : IPhysicsControllerProperties
     {
         public float GroundSpeed;
         public float GroundRunningSpeed;

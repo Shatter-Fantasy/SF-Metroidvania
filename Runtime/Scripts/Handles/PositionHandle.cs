@@ -1,7 +1,9 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
-namespace SF
+namespace SF.HandleModule
 {
 
     public class PositionHandle : MonoBehaviour

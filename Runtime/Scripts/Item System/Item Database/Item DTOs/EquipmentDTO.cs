@@ -1,7 +1,6 @@
-using SF.ItemModule;
 using UnityEngine;
 
-namespace SF.Inventory
+namespace SF.ItemModule
 {
     public enum EquipmentType
     {
@@ -11,7 +10,6 @@ namespace SF.Inventory
     [CreateAssetMenu(fileName = "New Equipment", menuName = "SF/Inventory/Equipment")]
     public class EquipmentDTO : ItemDTO
     {
-        public Weapon WeaponData;
         public EquipmentType EquipmentType;
     }
 }

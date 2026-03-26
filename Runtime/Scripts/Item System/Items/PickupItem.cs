@@ -1,18 +1,26 @@
-using SF.Characters.Controllers;
-using SF.Interactables;
-using SF.InventoryModule;
-
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace SF.ItemModule
 {
-    public class PickupItem : MonoBehaviour, IInteractable<PlayerController>
+    using Characters.Controllers;
+    using Interactables;
+    using Managers;
+    using U2D.Physics;
+    public class PickupItem : MonoBehaviour, 
+        IInteractable<PlayerController>, 
+        ITriggerShapeCallback
     {
+        
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
+        [SerializeReference] public ItemDTO ItemDTO;
         
-        public ItemData Item;
+        private void Start()
+        {
+            if (TryGetComponent(out SFShapeComponent component))
+                component.AddTriggerCallbackTarget(this);
+        }
 
-        
         public void Interact()
         {
             
@@ -20,7 +28,7 @@ namespace SF.ItemModule
 
         public void Interact(PlayerController controller)
         {
-            if(controller == null || Item == null)
+            if(controller == null || ItemDTO == null)
                 return;
            
             // Make sure we added an instantiated inventory to the player first.
@@ -32,9 +40,29 @@ namespace SF.ItemModule
 
         private void PickUpItem(PlayerInventory playerInventory)
         {         
-            playerInventory.AddItem(Item.ID);
-            ItemEvent.Trigger(ItemEventTypes.PickUp, itemID: Item.ID);
+            if(ItemDTO != null)
+                playerInventory.AddItem(ItemDTO.ID);
+            
+            //playerInventory.AddItem(Item.ID);
             Destroy(gameObject);
         }
+        
+        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            if (GameManager.Instance.ControlState == GameControlState.Cutscenes)
+                return;
+
+            if (beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>()
+                       .TryGetComponent(out PlayerController controller))
+            {
+                Interact(controller);
+            }
+        }
+
+        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        { 
+            // noo - No Operation
+        }
+
     }
 }

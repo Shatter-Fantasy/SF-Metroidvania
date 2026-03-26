@@ -1,8 +1,7 @@
 using System;
-using SF.Characters.Controllers;
 using UnityEngine;
 
-namespace SF.Physics
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// Keeps track of the current frames collision information.

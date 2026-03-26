@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
-using SF.Inventory;
-using SF.ItemModule;
-using SF.Managers;
+using SF.DataModule;
 using UnityEngine;
 
-namespace SF.InventoryModule
+namespace SF.ItemModule
 {
+    using Managers;
     public class ItemContainer : MonoBehaviour
     {
         [SerializeReference]
@@ -14,7 +12,8 @@ namespace SF.InventoryModule
 
         public virtual void AddItem(int itemID)
         {
-            var item = GameLoader.Instance?.ItemDatabase[itemID];
+            
+            var item = DatabaseRegistry.GetDatabase<ItemDatabase>()[itemID];
             
             if (item != null)
             {

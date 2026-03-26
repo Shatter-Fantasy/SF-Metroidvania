@@ -1,4 +1,4 @@
-namespace SF
+namespace SF.Core
 {
     public enum MovementFollowType
     {

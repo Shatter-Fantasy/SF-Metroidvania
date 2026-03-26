@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF
+namespace SF.HandleModule
 {
     [System.Serializable]
     public class HandleData

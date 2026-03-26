@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-using SF.Pathfinding;
 using UnityEngine;
 
-namespace SF
+namespace SF.Pathfinding
 {
     public class GridBase : MonoBehaviour
     {
@@ -28,7 +27,6 @@ namespace SF
             GenerateGrid();
         }
 
-
         private void GenerateGrid()
         {
             _grid = new PathNodeBase[_gridSizeX, _gridSizeY];
@@ -43,6 +41,7 @@ namespace SF
                         Vector2.right * (x * _nodeDiameter + NodeRadius) +
                         Vector2.up * (y * _nodeDiameter + NodeRadius);
 
+                    // TODO: Update this to low level physics overlap checking.
                     bool traversable = !(Physics2D.OverlapCircle(worldPoint, NodeRadius, UnwalkableMask));
                     
                     _grid[x, y] = new PathNodeBase(traversable,worldPoint, new Vector2(x,y));
@@ -121,14 +120,14 @@ namespace SF
 
             Gizmos.DrawWireCube(transform.position, new Vector3(GridWorldSize.x, GridWorldSize.y, 0));
 
-            if(_grid != null)
+            if (_grid == null)
+                return;
+            
+            foreach(var node in _grid)
             {
-                foreach(var node in _grid)
-                {
-                    Gizmos.color = (node.IsTraversable) ? Color.white : Color.red;
+                Gizmos.color = (node.IsTraversable) ? Color.yellow : Color.red;
 
-                    Gizmos.DrawWireCube(node.WorldPosition,Vector3.one * (_nodeDiameter - 0.1f));
-                }
+                Gizmos.DrawWireCube(node.WorldPosition,Vector3.one * (_nodeDiameter - 0.1f));
             }
         }
     }

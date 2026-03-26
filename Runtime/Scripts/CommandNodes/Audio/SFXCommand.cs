@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace SF.CommandModule
 {
     [System.Serializable]

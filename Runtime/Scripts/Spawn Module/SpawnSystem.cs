@@ -1,15 +1,22 @@
 using System;
-using SF.PhysicsLowLevel;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace SF.SpawnModule
 {
+    using Characters.Controllers;
+    using LevelModule;
+    using U2D.Physics;
+    using RoomModule;
     /// <summary>
     /// The system that controls the logic for spawning the player. 
     /// </summary>
     public class SpawnSystem : MonoBehaviour
     {
+        public GameObject Controller;
+
+#region Static Fields/Events
+        public static Transform CurrentSpawnPosition;
+        
         /// <summary>
         /// The spawned root gameobject of the player.
         /// </summary>
@@ -21,6 +28,39 @@ namespace SF.SpawnModule
         public static ControllerBody2D SpawnedPlayerController;
         
         public static event Action<GameObject> InitialPlayerSpawnHandler;
+        public static event Action PlayerRespawnHandler;
+#endregion
+
+#region Unity Lifecycle
+        private void OnEnable()
+        {
+            LevelLoader.LevelStartedHandler += InitialPlayerSpawn;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.LevelStartedHandler -= InitialPlayerSpawn;
+        }
+        
+        private void OnDestroy()
+        {
+            CurrentSpawnPosition    = null;
+            SpawnedPlayer           = null;
+            SpawnedPlayerController = null;
+        }
+#endregion
+
+        
+        
+        /// <summary>
+        /// The non-static method call for telling the player to do an initial spawn.
+        /// This is called from the <see cref="LevelLoader.LevelReadyHandler"/> event.
+        /// </summary>
+        private void InitialPlayerSpawn()
+        {
+            if (Controller != null)
+                OnInitialPlayerSpawn(Controller);
+        }
 
         /// <summary>
         /// Tell the game to start the initial spawning of the player when loading up a save file.
@@ -29,9 +69,8 @@ namespace SF.SpawnModule
         {
             if (playerPrefab == null)
                 return null;
-
-            SpawnedPlayer = Instantiate(playerPrefab);
-
+            
+            SpawnedPlayer = GameObject.Instantiate(playerPrefab,RoomSystem.CurrentRoomPosition,Quaternion.identity);
             if (SpawnedPlayer == null)
                 return null;
             
@@ -41,7 +80,15 @@ namespace SF.SpawnModule
             
             InitialPlayerSpawnHandler?.Invoke(SpawnedPlayer);
             
-            return SpawnedPlayer.GetComponent<ControllerBody2D>();
+            return SpawnedPlayer.GetComponent<PlayerController>();
+        }
+
+        /// <summary>
+        /// Respawns the player and invokes the <see cref="PlayerRespawnHandler"/> event.
+        /// </summary>
+        public static void RespawnPlayer()
+        {
+            PlayerRespawnHandler?.Invoke();
         }
     }
 }

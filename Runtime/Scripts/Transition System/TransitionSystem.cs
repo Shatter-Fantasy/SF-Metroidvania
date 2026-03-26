@@ -1,10 +1,6 @@
-using SF.Characters.Controllers;
-using SF.Managers;
-using SF.RoomModule;
-using UnityEngine;
-
 namespace SF.Transitions
 {
+    using RoomModule;
     /// <summary> Includes telling the <see cref="RoomSystem"/> to load/deload the rooms involved in the transition.
     /// </summary>
     public static class TransitionSystem
@@ -19,12 +15,11 @@ namespace SF.Transitions
             /*
             // We make sure the room we are in when starting the transition has already been set as the current room.
             // This helps down the line for some safety and valid checking when getting the current rooms virtual camera to lower its priority. 
-            RoomSystem.SetCurrentRoom(roomTransition.RoomID);
+            RoomSystem.SetCurrentRoom(roomTransition.LeavingRoomID);
             
             // Are we doing a simple enter/exit a building like shop or a tavern?
             if (roomTransition.TransitionType == TransitionTypes.Local)
             {
-                
                 var newRoom = RoomSystem.LoadRoom(roomTransition.EnteringRoomID);
 
                 if (newRoom == null || newRoom.SpawnedInstance == null)
@@ -48,13 +43,11 @@ namespace SF.Transitions
                 // The below x.RoomTransition.CurrentRoomTransitionID is the entering room transition we are trying to find to move to.
                 // The RoomTransition.EnteringTransitionID is the current room we are moving away from.
                 var newRoomTransition = newRoomController.RoomTransitions.Find(
-                    x => x.CurrentRoomTransitionID == roomTransition.EnteringTransitionID);
-
-                if (newRoomTransition.TransitionType == TransitionTypes.FastTravel && GameManager.PlayerSceneObject != null)
-                {
-                    GameManager.PlayerSceneObject.transform.position = newRoomTransition.transform.position;
-                }
-                
+                    x => x.EnteringRoomID == roomTransition.LeavingRoomID);
+            }
+            else if (newRoomTransition.TransitionType == TransitionTypes.FastTravel && GameManager.PlayerSceneObject != null)
+            {
+                GameManager.PlayerSceneObject.transform.position = newRoomTransition.transform.position;
             }
             */
         }
