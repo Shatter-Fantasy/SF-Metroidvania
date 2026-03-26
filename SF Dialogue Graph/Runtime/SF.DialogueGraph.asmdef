@@ -23,7 +23,7 @@
         },
         {
             "name": "Unity",
-            "expression": "6000.4.0",
+            "expression": "6000.4.0b11",
             "define": "SF_DIALOGUE_GRAPH"
         }
     ],
