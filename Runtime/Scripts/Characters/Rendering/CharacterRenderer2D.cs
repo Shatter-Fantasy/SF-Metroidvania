@@ -71,6 +71,9 @@ namespace SF.Characters
 
 		protected void OnAttackStateChanged(AttackState attackState)
 		{
+			if (attackState != AttackState.Attacking)
+				return;
+			
 			//Plays the Attack Substate 
 			if(Animator.HasState(0,_forcedStateHash))
 				Animator.Play(_forcedStateHash,0);
@@ -108,7 +111,7 @@ namespace SF.Characters
 		}
         
         // The 0.3f is the default fade time for Unity's crossfade api.
-        public void SetAnimationState(string stateName, float animationFadeTime = 0.01f)
+        public void SetAnimationState(string stateName,float animationFadeTime = 0.01f,  bool isSubstate = false)
         {
 			_forcedStateHash = Animator.StringToHash(stateName);
         }
@@ -133,6 +136,7 @@ namespace SF.Characters
 	
 	public static class AnimationUtilities
 	{
+		
 		public static bool HasParameter(this Animator anim, string paramName)
 		{
 			foreach (AnimatorControllerParameter param in anim.parameters)
