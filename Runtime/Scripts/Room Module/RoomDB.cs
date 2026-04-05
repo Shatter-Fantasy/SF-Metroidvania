@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using SF.RoomModule.RegionModule;
 using UnityEngine;
 
 namespace SF.RoomModule
@@ -27,7 +27,10 @@ namespace SF.RoomModule
         
         private void InitializeRoomsForLoadedScene()
         {
-            RoomSystem.SetInitialRoom(StartingRoomID);
+            if(RegionSystem.LoadedRegionDataAsset != null)
+                RoomSystem.SetInitialRoom(RoomSystem.InProgressTransitionRoomID);
+            else
+                RoomSystem.SetInitialRoom(StartingRoomID);
         }
         
         public override void OnRegisterDatabase()
@@ -45,7 +48,7 @@ namespace SF.RoomModule
 
             LevelLoader.LevelReadyHandler -= InitializeRoomsForLoadedScene;
         }
-#region  ILISt Implementation
+#region  ILiSt Implementation
         public IEnumerator<Room> GetEnumerator()
         {
             throw new NotImplementedException();
