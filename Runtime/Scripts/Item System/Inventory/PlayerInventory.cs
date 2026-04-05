@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SF.DataModule;
 
 namespace SF.ItemModule
 {
@@ -27,7 +28,7 @@ namespace SF.ItemModule
         
         public override void AddItem(int itemID)
         {
-            var item = GameLoader.Instance?.ItemDatabase[itemID];
+            var item = DatabaseRegistry.GetDatabase<ItemDatabase>()[itemID];
             ItemData itemData = new ItemData();
 
             if (item is WeaponDTO equipmentDTO)
