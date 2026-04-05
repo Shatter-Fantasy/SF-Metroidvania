@@ -20,6 +20,7 @@ namespace SF.RoomModule
     public static class RoomSystem
     {
         public static bool DynamicRoomLoading = false;
+        public static int InProgressTransitionRoomID;
         
         /// <summary>
         /// List of the loaded Rooms data.
@@ -52,10 +53,12 @@ namespace SF.RoomModule
         /// </remarks>
         public static Room CurrentRoom { get; private set; }
         public static int CurrentRoomID => CurrentRoom?.RoomID ?? 0;
-        
-        public static Vector3 CurrentRoomPosition => CurrentRoom != null 
-            ? CurrentRoom.SpawnedRoomController.transform.position 
-            : Vector3.zero;
+
+        public static Vector3 CurrentRoomPosition => 
+            CurrentRoom == null || CurrentRoom.SpawnedRoomController == null
+                ? Vector3.zero
+                : CurrentRoom.SpawnedRoomController.transform.position;
+           
         
         /// <summary>
         /// Loads a connected room by its id. This is called in the room before it aka the connected room leading to other rooms.
