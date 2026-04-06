@@ -18,13 +18,13 @@ namespace SF.RoomModule.RegionModule
             if (regionDataAsset == null)
             {
                 LoggingSystem.LogMessage("There was no regionDataAsset passed in the LoadRegionAsync method when trying to load a region.",null);
-                RoomSystem.InProgressTransitionRoomID = 0;
+                RoomSystem.StartingRoomId = 0;
                 SceneManager.LoadSceneAsync(1);
                 return;
             }
 
             LoadedRegionDataAsset                 = regionDataAsset;
-            RoomSystem.InProgressTransitionRoomID = roomToLoad;
+            RoomSystem.StartingRoomId = roomToLoad;
             SceneManager.LoadSceneAsync(regionDataAsset.SceneIndex);
         }
     }

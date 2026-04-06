@@ -62,19 +62,19 @@ namespace SF.RoomModule
             if(_physicsShapeComponent != null)
                 _physicsShapeComponent.AddTriggerCallbackTarget(this);
             
-            if (RoomSystem.RoomDB == null)
+            if (RoomSystem.LoadedRegion == null)
             {
 #if UNITY_EDITOR
-                Debug.LogWarning($"There is no database set in the {nameof(RoomSystem)}");
+                Debug.LogWarning($"There is no region data set in the {nameof(RoomSystem)}");
                 return;
 #endif
             }
-            if (RoomSystem.RoomDB[RoomID] == null)
+            if (RoomSystem.LoadedRegion[RoomID] == null)
             {
                 Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
                 return;
             }
-            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
+            RoomIdsToLoadOnEnter = RoomSystem.LoadedRegion[RoomID].ConnectedRoomsIDs;
         
             RoomSystem.LoadRoomManually(RoomID, gameObject);
         }

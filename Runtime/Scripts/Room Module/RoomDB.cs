@@ -12,31 +12,22 @@ namespace SF.RoomModule
     
     [DefaultExecutionOrder(DatabaseExecutionOrder)]
     [CreateAssetMenu(fileName = "Room DB", menuName = "SF/Data/Rooms/Room Database")]
-    public class RoomDB : SFDatabase , IList<Room>
+    public class RoomDB : SFDatabase //, IList<Room>
     {
-        public int StartingRoomID;
-        public bool DynamicRoomLoading = true;
-        
+        // Rooms is moved into the RegionDataAsset so each region can have it's own set of rooms.
         public List<Room> Rooms = new();
-        
-        /// <summary>
-        /// Will be called when the Rooms list value gets changed such as add/remove.
-        /// This is also called when a new list is assigned into the Rooms value.
-        /// </summary>
-        public Action OnRoomsValueChanged;
-        
+        /*
         private void InitializeRoomsForLoadedScene()
         {
             if(RegionSystem.LoadedRegionDataAsset != null)
-                RoomSystem.SetInitialRoom(RoomSystem.InProgressTransitionRoomID);
+                RoomSystem.SetInitialRoom(RoomSystem.StartingRoomId);
             else
-                RoomSystem.SetInitialRoom(StartingRoomID);
+                RoomSystem.SetInitialRoom(0);
         }
         
         public override void OnRegisterDatabase()
         {   
             RoomSystem.RoomDB               =  this;
-            RoomSystem.DynamicRoomLoading   =  DynamicRoomLoading;
             LevelLoader.LevelReadyHandler += InitializeRoomsForLoadedScene;
         }
 
@@ -62,13 +53,11 @@ namespace SF.RoomModule
         public void Add(Room newRoom)
         {
             Rooms.Add(newRoom);
-            OnRoomsValueChanged();
         }
 
         public void Clear()
         {
             Rooms.Clear();
-            OnRoomsValueChanged();
         }
         
         public bool Contains(Room item)
@@ -99,7 +88,6 @@ namespace SF.RoomModule
             if (Rooms.Contains(room))
             {
                 Rooms.Remove(room);
-                OnRoomsValueChanged();
                 return true;
             }
 
@@ -159,7 +147,6 @@ namespace SF.RoomModule
             set => throw new NotImplementedException();
         }
 #endregion
-
-
+        */
     }
 }

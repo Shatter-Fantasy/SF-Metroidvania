@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using SF.LoggingModule;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace SF.RoomModule
 {
+    using RegionModule;
     /// <summary>
-    /// Used to allow interactions between the in game systems and the RoomDatabase. <see cref="RoomDB"/>.
+    /// Used to allow interactions between the in game systems and the rooms in the current loaded region. <see cref="RegionSystem.LoadedRegionDataAsset"/>.
     /// Also includes helper functions for interacting with room management like room loading/unloading and keeping track of what rooms are already loaded.
     ///
     ///
@@ -19,30 +21,15 @@ namespace SF.RoomModule
     /// </summary>
     public static class RoomSystem
     {
-        public static bool DynamicRoomLoading = false;
-        public static int InProgressTransitionRoomID;
+        public static int StartingRoomId;
+        public static bool DynamicRoomLoading = true;
         
         /// <summary>
         /// List of the loaded Rooms data.
         /// </summary>
         private static readonly List<int> LoadedRoomsIDs = new();
-        private static RoomDB _roomDB;
-        /// <summary>
-        /// The RoomDatabase to be loaded into the game logic.
-        /// This can be used to switch out RoomDatabases that have seperate set of rooms like debug room sets, certain game release room set, and next update room sets.
-        /// </summary>
-        public static RoomDB RoomDB
-        {
-            get { return _roomDB; }
-
-            set
-            {
-                if (value == null)
-                    return;
-
-                _roomDB = value;
-            }
-        }
+        public static RegionDataAsset LoadedRegion => RegionSystem.LoadedRegionDataAsset;
+        
 
         /// <summary>
         /// The current room the player is moving in.
@@ -67,14 +54,14 @@ namespace SF.RoomModule
         /// <param name="roomID"></param>
         public static Room LoadRoom(int roomID)
         {
-            if (RoomDB[roomID]?.RoomPrefab == null)
+            if (LoadedRegion[roomID]?.RoomPrefab == null)
                 return null;
             
             // If the room is already loaded just refresh it object instances without spawning new ones.
             if (IsRoomLoaded(roomID))
             {
                 RefreshRoom(roomID);
-                return _roomDB[roomID];
+                return LoadedRegion[roomID];
             }
             
             // We can choose to skip the spawning of the instance. This is done for debugging reasons and to catch errors.
@@ -83,12 +70,18 @@ namespace SF.RoomModule
                 // If no room instance with the passed in roomID is currently loaded spawn and load an instance. 
                 // Also set it as the current SpawnedInstance in the RoomDB. This allows us to check if a room is already loaded later by checking 
                 // if the SpawnedInstance is null or not. We should check the _loadedRoomsIDs first for performance reasons. 
-                _roomDB[roomID].SpawnedInstance = Object.Instantiate(RoomDB[roomID].RoomPrefab);
-                _roomDB[roomID].SpawnedRoomController = _roomDB[roomID].SpawnedInstance?.GetComponent<RoomController>();
+                LoadedRegion[roomID].SpawnedInstance       = Object.Instantiate(LoadedRegion[roomID].RoomPrefab);
+                LoadedRegion[roomID].SpawnedRoomController = LoadedRegion[roomID].SpawnedInstance?.GetComponent<RoomController>();
+                LoadedRoomsIDs.Add(roomID);
+            }
+            else
+            {
+                LoadedRegion[roomID].SpawnedInstance       = Object.Instantiate(LoadedRegion[roomID].RoomPrefab);
+                LoadedRegion[roomID].SpawnedRoomController = LoadedRegion[roomID].SpawnedInstance?.GetComponent<RoomController>();
                 LoadedRoomsIDs.Add(roomID);
             }
 
-            return _roomDB[roomID];
+            return LoadedRegion[roomID];
         }
 
         /// <summary>
@@ -98,17 +91,17 @@ namespace SF.RoomModule
         {
             // Don't duplicate the loaded room if it was already loaded.
             if (IsRoomLoaded(roomID))
-                return _roomDB[roomID];
+                return LoadedRegion[roomID];
             
             LoadedRoomsIDs.Add(roomID);
 
             if (spawnedInstance != null)
             {
-                _roomDB[roomID].SpawnedInstance = spawnedInstance;
-                _roomDB[roomID].SpawnedRoomController = spawnedInstance.GetComponent<RoomController>();
+                LoadedRegion[roomID].SpawnedInstance = spawnedInstance;
+                LoadedRegion[roomID].SpawnedRoomController = spawnedInstance.GetComponent<RoomController>();
             }
 
-            return _roomDB[roomID];
+            return LoadedRegion[roomID];
         }
         /// <summary>
         /// Checks to see if the passed in room id belongs to one of the already loaded rooms.
@@ -117,11 +110,17 @@ namespace SF.RoomModule
         /// <returns></returns>
         public static bool IsRoomLoaded(int roomID)
         {
+            if (LoadedRegion == null || LoadedRegion.Rooms.Count < 1)
+            {
+                LoggingSystem.LogMessage("When checking if a room was loaded the LoadedRegion was either null or had no rooms in it's list.", LoadedRegion);
+                return false;
+            }
+            
             for (int i = 0; i < LoadedRoomsIDs.Count; i++)
             {
                 // We check the _loadedRoomsIDs first for performance reasons and
                 // as a safety check just in case somehow a spawned instance hasn't been cleaned up fully yet.
-                if (LoadedRoomsIDs[i] == roomID && _roomDB[roomID].SpawnedInstance != null)
+                if (LoadedRoomsIDs[i] == roomID && LoadedRegion[roomID].SpawnedInstance != null)
                 {
                     return true;
                 }
@@ -158,7 +157,7 @@ namespace SF.RoomModule
             }
 
             // Was able to set a valid room as the current one.
-            CurrentRoom = _roomDB[roomID];
+            CurrentRoom = LoadedRegion[roomID];
             return true;
         }
 
@@ -168,7 +167,7 @@ namespace SF.RoomModule
         public static void SetInitialRoom(int roomID)
         {
             LoadRoom(roomID); 
-            _roomDB[roomID]?.SpawnedRoomController?.MakeCurrentRoom();
+            LoadedRegion[roomID]?.SpawnedRoomController?.MakeCurrentRoom();
         }
         public static void CleanUpRoom(int roomId)
         {
@@ -176,7 +175,8 @@ namespace SF.RoomModule
             if (!IsRoomLoaded(roomId))
                 return;
             
-            _roomDB[roomId].SpawnedInstance = null;
+            
+            LoadedRegion[roomId].SpawnedInstance = null;
             LoadedRoomsIDs.Remove(roomId);
         }
     }
@@ -186,7 +186,6 @@ namespace SF.RoomModule
     {
         public string Name;
         public int RoomID;
-        public Regions Region;
         /// <summary>
         /// The connected rooms that need to be loaded/deloaded when entering/existing 
         /// </summary>
@@ -207,6 +206,5 @@ namespace SF.RoomModule
         /// </summary>
         [NonSerialized] public GameObject SpawnedInstance;
         [NonSerialized] public RoomController SpawnedRoomController;
-        
     }
 }

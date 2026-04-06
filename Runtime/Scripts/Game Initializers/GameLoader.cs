@@ -1,12 +1,11 @@
 using System;
+using SF.DataManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SF.Managers
 {
-    using DataManagement;
     using RoomModule;
-    using ItemModule;
     
     public enum GameLoadingMode
     {
@@ -89,19 +88,13 @@ namespace SF.Managers
         /// </summary>
         public void NewGame()
         {
-            MetroidvaniaSaveManager.StartingRoom = RoomSystem.RoomDB != null
-                ? RoomSystem.RoomDB.StartingRoomID
-                : 0;
-
-            SettingUpNewGame = true;
-            SceneManager.LoadScene(NewGameSceneIndex);
+            MetroidvaniaSaveManager.NewGame();
         }
 
         public void LoadGame()
         {
-            MetroidvaniaSaveManager.StartingRoom = RoomSystem.RoomDB != null 
-                ? RoomSystem.RoomDB.StartingRoomID 
-                : 0;
+            // TODO: Implement the file loading and get the last saved rooms room id and region.
+            RoomSystem.StartingRoomId = 0;
         }
         
         /// <summary>

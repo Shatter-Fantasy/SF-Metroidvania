@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 
 namespace SF.LevelModule
 {
-    
     /// <summary>
     /// Loads the required game objects for used in managers and core systems in playable levels.
     /// This is needed to be in each playable scene and make sure this does not persist between scenes,
@@ -20,7 +19,6 @@ namespace SF.LevelModule
         [Header("Level Initialization")] [SerializeField]
         private int[] _gameStartingSceneIndexes = new int[1];
         
-        
         /// <summary>
         /// This is called when the first playable is ready to give the player control.
         /// </summary>
@@ -33,25 +31,13 @@ namespace SF.LevelModule
             // This has to be done in awake. OnEnable/Start is called after the first sceneLoaded call.
             SceneManager.sceneLoaded += OnLevelLoaded;
         }
-
-        /// <summary>
-        /// This runs after <see cref="OnLevelLoaded"/> is Invoked.
-        /// </summary>
-        private void Start()
-        {
-            LevelStartedHandler?.Invoke();
-        }
         
-        private void OnDestroy()
-        {
-            SceneManager.sceneLoaded -= OnLevelLoaded;
-        }
-  
         /// <summary>
         /// Loads all the required game objects used by managers and the core systems in a level so they can be used.
         /// Called by the SceneManager when any scene is loaded.
         ///<remarks>
         /// This is called after the first OnEnable call of the scene, but before the first Start call of the frame.
+        /// This is only called in editor if the Enter Play Mode option says reload scene.
         ///</remarks>
         /// </summary>
         /// <param name="scene"></param>
@@ -81,6 +67,19 @@ namespace SF.LevelModule
         private void PlayableGameSceneInitialization()
         {
             LevelReadyHandler?.Invoke();
+        }
+        
+        /// <summary>
+        /// This runs after <see cref="OnLevelLoaded"/> is Invoked.
+        /// </summary>
+        private void Start()
+        {
+            LevelStartedHandler?.Invoke();
+        }
+        
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnLevelLoaded;
         }
     }
 }
