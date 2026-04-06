@@ -13,6 +13,17 @@ namespace SF.RoomModule.RegionModule
         public static RegionDataAsset LoadedRegionDataAsset;
         public static RegionDatabase RegionDatabase;
 
+        public static void LoadInitialRegionData()
+        {
+            if (RegionDatabase == null ||RegionDatabase.DataEntries == null || RegionDatabase.DataEntries.Count < 1)
+                return;
+            
+            if (RegionDatabase.DataEntries[0].Rooms.Count > 1)
+            {
+                LoadedRegionDataAsset = RegionDatabase.DataEntries[0];
+                RoomSystem.SetInitialRoom(RoomSystem.StartingRoomId);
+            }
+        }
         public static void LoadRegionAsync(RegionDataAsset regionDataAsset, int roomToLoad = 0)
         {
             if (regionDataAsset == null)

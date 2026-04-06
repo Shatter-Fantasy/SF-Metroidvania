@@ -1,4 +1,6 @@
 using System;
+using SF.RoomModule;
+using SF.RoomModule.RegionModule;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -66,6 +68,8 @@ namespace SF.LevelModule
         /// </summary>
         private void PlayableGameSceneInitialization()
         {
+            RegionSystem.LoadInitialRegionData();
+            
             LevelReadyHandler?.Invoke();
         }
         
