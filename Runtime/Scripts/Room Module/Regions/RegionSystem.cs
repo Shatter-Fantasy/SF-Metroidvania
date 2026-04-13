@@ -1,3 +1,4 @@
+using SF.SpawnModule;
 using UnityEngine.SceneManagement;
 
 namespace SF.RoomModule.RegionModule
@@ -30,7 +31,7 @@ namespace SF.RoomModule.RegionModule
             if (LoadedRegionDataAsset.Rooms.Count > 1)
                 RoomSystem.SetInitialRoom(RoomSystem.StartingRoomId);
         }
-        public static void LoadRegionAsync(in RegionTransitionConnection regionTransitionConnection)
+        public static void LoadRegionAsync(RegionTransitionConnection regionTransitionConnection)
         {
             
             if (regionTransitionConnection.RegionToTransitionTo == null)
@@ -45,7 +46,13 @@ namespace SF.RoomModule.RegionModule
             // Remove all instanced room controllers in the previous region.
             PreviousRegionDataAsset?.CleanUpRegion();
             LoadedRegionDataAsset     = regionTransitionConnection.RegionToTransitionTo;
-            RoomSystem.StartingRoomId = regionTransitionConnection.RoomID;
+            var transitionData = LoadedRegionDataAsset.RegionTransitionDataSet
+                                                          .Find(transitionData =>
+                                                                  transitionData.TransitionID ==
+                                                                  regionTransitionConnection.TransitionIDToGoTo);
+            SpawnSystem.CurrentSpawnPosition = transitionData.LocalSpawnPositionInCurrentRoom;
+            RoomSystem.StartingRoomId        = transitionData.RoomID;
+            
             SceneManager.LoadSceneAsync(regionTransitionConnection.RegionToTransitionTo.SceneIndex);
         }
         

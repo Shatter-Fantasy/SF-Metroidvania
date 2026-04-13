@@ -15,7 +15,7 @@ namespace SF.SpawnModule
         public GameObject Controller;
 
 #region Static Fields/Events
-        public static Transform CurrentSpawnPosition;
+        public static Vector3 CurrentSpawnPosition;
         
         /// <summary>
         /// The spawned root gameobject of the player.
@@ -45,7 +45,7 @@ namespace SF.SpawnModule
         
         private void OnDestroy()
         {
-            CurrentSpawnPosition    = null;
+            CurrentSpawnPosition    = Vector3.zero;
             SpawnedPlayer           = null;
             SpawnedPlayerController = null;
         }
@@ -71,7 +71,8 @@ namespace SF.SpawnModule
             if (playerPrefab == null)
                 return null;
             
-            SpawnedPlayer = GameObject.Instantiate(playerPrefab,RoomSystem.CurrentRoomPosition,Quaternion.identity);
+            // RoomSystem.CurrentRoomPosition + CurrentSpawnPosition is a cheap way to get a local position of the child object from the room center poisition.
+            SpawnedPlayer = GameObject.Instantiate(playerPrefab,RoomSystem.CurrentRoomPosition + CurrentSpawnPosition,Quaternion.identity);
             if (SpawnedPlayer == null)
                 return null;
             
