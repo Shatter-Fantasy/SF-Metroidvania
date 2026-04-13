@@ -76,7 +76,7 @@ namespace SF.RoomModule
             }
             RoomIdsToLoadOnEnter = RoomSystem.LoadedRegion[RoomID].ConnectedRoomsIDs;
         
-            RoomSystem.LoadRoomManually(RoomID, gameObject);
+            RoomSystem.LoadRoom(RoomID, loadDynamically: false, spawnedInstance: gameObject);
         }
 
         private void OnDestroy()
@@ -93,16 +93,8 @@ namespace SF.RoomModule
             {
                 return;
             }
-
-            // Probably should put this if and for loop in the RoomSystem itself.
-            if (RoomSystem.DynamicRoomLoading)
-            {
-                foreach (var roomID in RoomIdsToLoadOnEnter)
-                {
-                    RoomSystem.LoadRoom(roomID);
-                }
-            }
-
+            
+            RoomSystem.LoadRoom(RoomID);
             RoomSystem.SetCurrentRoom(RoomID);
         }
         

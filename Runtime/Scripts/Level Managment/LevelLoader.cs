@@ -69,7 +69,6 @@ namespace SF.LevelModule
         private void PlayableGameSceneInitialization()
         {
             RegionSystem.LoadInitialRegionData();
-            
             LevelReadyHandler?.Invoke();
         }
         

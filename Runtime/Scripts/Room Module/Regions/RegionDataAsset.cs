@@ -5,6 +5,24 @@ namespace SF.RoomModule.RegionModule
 {
     using SF.DataModule;
 
+    [System.Serializable]
+    public struct RegionTransitionConnection
+    {
+        public RegionDataAsset RegionToTransitionTo;
+        /// <summary>
+        /// The <see cref="Room.RoomID"/>  of the room to spawn in when the new region is loaded.
+        /// </summary>
+        public int RoomID;
+
+        public RegionTransitionConnection(int regionID = 0, int roomID = 0 )
+        {
+            RegionToTransitionTo = RegionSystem.RegionDatabase != null 
+                ? RegionSystem.RegionDatabase[regionID] 
+                : null;
+
+            RoomID = roomID;
+        }
+    }
     [CreateAssetMenu(menuName = "SF/Regions/Region Data", fileName = "Region Data")]
     public class RegionDataAsset : DTOAssetBase
     {
@@ -14,11 +32,18 @@ namespace SF.RoomModule.RegionModule
         public int SceneIndex;
 
         public List<Room> Rooms = new();
-
-        /// <summary>
-        /// The ids of the rooms that act like transitions to and from a region.
-        /// </summary>
-        //public List<int> TransitionRoomIDs = new List<int>();
+        public List<RegionTransitionConnection> RegionConnections = new();
+        
+        public void CleanUpRegion()
+        {
+            for (int i = 0; i < Rooms.Count; i++)
+            {
+                if(Rooms[i] == null)
+                    continue;
+                Rooms[i].SpawnedRoomController = null;
+                RoomSystem.CleanUpRoom(Rooms[i].RoomID);
+            }
+        }
         
         public bool Contains(int roomID)
         {

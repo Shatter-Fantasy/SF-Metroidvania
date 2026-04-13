@@ -15,7 +15,7 @@ namespace SF.DataManagement
 
         public static void NewGame()
         {
-            RegionSystem.LoadRegionAsync(RegionSystem.RegionDatabase[0]);
+            RegionSystem.LoadRegionAsync(new RegionTransitionConnection(0,0));
         }
         
         public static void SaveGame()
