@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.U2D.Physics;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -39,36 +40,12 @@ namespace SF.U2D.Physics
     [ExecuteAlways]
     [BurstCompile]
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
-    public abstract class SFShapeComponent : MonoBehaviour, 
-#if UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
-        ITransformMonitor,
-#endif
-
+    public abstract class SFShapeComponent : MonoBehaviour,  PhysicsCallbacks.ITransformChangedCallback,
         ITriggerShapeCallback, PhysicsCallbacks.ITriggerCallback,
         IContactShapeCallback, PhysicsCallbacks.IContactCallback,
         IPreSolveShapeCallback, PhysicsCallbacks.IPreSolveCallback
-        
     {
-        
-        #region Transform Cache - Temp fields
 
-        [HideInInspector] public bool UpdateTransform;
-        protected Vector2 _lastPhysicsPosition;
-        protected bool IsPositionChanged
-            => _lastPhysicsPosition != (Vector2)transform.position;
-
-        public void CacheTransform()
-        {
-            _lastPhysicsPosition = transform.position;
-        }
-        
-        public void ApplyTransform()
-        {
-            var physicsTransform = new PhysicsTransform(transform.position, PhysicsRotate.identity);
-            Body.SetAndWriteTransform(physicsTransform);
-        }
-        #endregion
-        
         protected PhysicsShape _shape;
         /// <summary>
         /// The completed physics shape data struct for the <see cref="SFShapeComponent"/>.
@@ -191,12 +168,7 @@ namespace SF.U2D.Physics
         {
             PreEnabled();
             CreateShape();
-            ApplyTransform();
-            CacheTransform();
-
-#if UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
-            PhysicTransformCache.AddMonitor(transform,this);
-#endif
+            
             DebugPhysics();
         }
 
@@ -216,10 +188,6 @@ namespace SF.U2D.Physics
             PreDisable();
             DestroyBody();
             DestroyShape();
-            
-#if UNITY_EDITOR && !UNITY_6000_5_OR_NEWER
-            PhysicTransformCache.RemoveMonitor(transform,this);
-#endif
         }
 
         protected virtual void OnValidate()
@@ -230,18 +198,7 @@ namespace SF.U2D.Physics
             CreateShape();
             DebugPhysics();
         }
-
-        protected void FixedUpdate()
-        {
-            if(!UpdateTransform)
-                return;
-            
-            if (!IsPositionChanged)
-                return;
-            
-            ApplyTransform();
-            CacheTransform();
-        }
+        
 
         /// <summary>
         /// Called from editor tools to update the Shape after making changes using editor tools.
@@ -316,8 +273,14 @@ namespace SF.U2D.Physics
                 {
                     objectValue = gameObject
                 };
+                
+              
             }
+            if(PhysicsWorld.isValid)
+                PhysicsWorld.RegisterTransformChange(transform,this);
         }
+
+
         protected virtual void DestroyShape()
         {
             if (IsCompositeShape 
@@ -351,7 +314,8 @@ namespace SF.U2D.Physics
                 Body         = default;
             }
             
-
+            if(PhysicsWorld.isValid)
+                PhysicsWorld.UnregisterTransformChange(transform,this);
         }
 
 #region Physic Event Callbacks
@@ -482,6 +446,14 @@ namespace SF.U2D.Physics
             return true;
         }
 #endregion
+#region Transform Callbacks
+        
+        public void OnTransformChanged(PhysicsEvents.TransformChangeEvent transformChangeEvent)
+        {
+            var physicsTransform = new PhysicsTransform(transform.position, PhysicsRotate.identity);
+            Body.SetAndWriteTransform(physicsTransform);
+        } 
+#endregion
         
         /// <summary>
         /// If debugging is enabled in editor, a set of logs will be sent to console just in case something was not set right.
@@ -576,6 +548,25 @@ namespace SF.U2D.Physics
         {
             UpdateShape();
         }
+
+        [ContextMenu("Check Selected Shape Filters")]
+        public static void CheckShapeFilters()
+        {
+            var gameObjects = Selection.gameObjects;
+            if (gameObjects.Length < 2)
+                return;
+
+            if (gameObjects[0].TryGetComponent(out SFShapeComponent shapeOne)
+                && gameObjects[1].TryGetComponent(out SFShapeComponent shapeTwo))
+            {
+                if (!shapeOne._shape.isValid || !shapeTwo._shape.isValid)
+                {
+                    Debug.Log(" One of the shapes was not valid.");
+                    return;
+                }
+            }
+        }
 #endif
+
     }
 }
