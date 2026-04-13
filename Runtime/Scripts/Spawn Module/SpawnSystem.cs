@@ -34,12 +34,13 @@ namespace SF.SpawnModule
 #region Unity Lifecycle
         private void OnEnable()
         {
-            LevelLoader.LevelStartedHandler += InitialPlayerSpawn;
+            LevelLoader.LevelReadyHandler -= InitialPlayerSpawn;
+            LevelLoader.LevelReadyHandler += InitialPlayerSpawn;
         }
 
         private void OnDisable()
         {
-            LevelLoader.LevelStartedHandler -= InitialPlayerSpawn;
+            LevelLoader.LevelReadyHandler -= InitialPlayerSpawn;
         }
         
         private void OnDestroy()
