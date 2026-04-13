@@ -155,9 +155,6 @@ namespace SF.StateMachine
 			
 			if (!_usePhysicsTransform || _controlledShapeComponent == null) 
 				return;
-			
-			_controlledShapeComponent.ApplyTransform();
-			_controlledShapeComponent.CacheTransform();
 		}
         
         private async Awaitable FollowPathAsync()
