@@ -53,17 +53,19 @@ namespace SF.Characters.Controllers
             {
                 _calculatedVelocity.x = Mathf.MoveTowards(_calculatedVelocity.x, 0, CurrentPhysics.GroundDeacceleration);
             }
-			
+            
             // If we are moving left and not hitting a slope, but an obstacle, stop moving left.
             if (CollisionInfo.IsCollidingLeft && Direction.x < 0 && CollisionInfo.IsCollidingLeft)
             {
-                _calculatedVelocity.x = 0;
+                if (!CollisionInfo.OnSlope)
+                    _calculatedVelocity.x = 0;
             }
 			
             // If we are moving Right and not hitting a slope, but an obstacle, stop moving Right.
             if (CollisionInfo.IsCollidingRight && Direction.x > 0 && CollisionInfo.IsCollidingRight)
             {
-                _calculatedVelocity.x = 0;
+                if (!CollisionInfo.OnSlope)
+                    _calculatedVelocity.x = 0;
             }
         }
 

@@ -64,20 +64,47 @@ namespace SF.U2D.Physics
         
         protected CharacterRenderer2D _character;
         
+        
+
+        protected override void OnAwake()
+        {
+            CollisionInfo = new BodyCollisionInfo
+            {
+                ControllerBody2D = this
+            };
+
+            if (!TryGetComponent(out ShapeComponent))
+            {
+                ShapeComponent = gameObject.AddComponent<SFCapsuleShape>();
+            }
+        }
+        
+        protected override void FixedUpdate()
+        {
+            if (_direction.x != 0)
+                _directionLastFrame.x = _direction.x;
+            
+            if (!ShapeComponent.Shape.isValid)
+                return;
+
+            OnPreFixedUpdate();
+            
+            // We now use the PhysicsEvent.PostSimulate callback for checking collisions post movement
+            // We should make sure this is not skipping first frame of collision though.
+            CollisionInfo.CheckCollisions();
+            
+            CalculateHorizontal();
+            CalculateVertical();
+            CalculateSlope();
+            Move();
+        }
+
+        
         protected override void Move()
         {
             if (ShapeComponent == null 
                 || !ShapeComponent.Shape.isValid)
                 return;
-            
-            /* Slope Calculations
-            if(_onSlope)
-            {
-                _calculatedVelocity *= _slopeMultiplier;
-                // TODO: Make the ability to walk up slopes.
-                // TODO: Use the new PhysicsShape math for testing the projection on the plane instead.
-                //_calculatedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity, _slopeNormal);
-            } */
 
             if (IsFrozen && CollisionInfo.IsGrounded)
                 _calculatedVelocity.x = 0;
@@ -127,6 +154,7 @@ namespace SF.U2D.Physics
             {
                 _calculatedVelocity.x = 0;
             }
+            
         }
 
         protected override void CalculateVertical()
@@ -136,9 +164,8 @@ namespace SF.U2D.Physics
             {
                 _calculatedVelocity.y = Direction.y * CurrentPhysics.ClimbSpeed.y;
             }
-            
-            //if(!CollisionInfo.IsGrounded  && !IsClimbing && !_onSlope)
-            if(!CollisionInfo.IsGrounded && !IsClimbing)
+
+            if(!CollisionInfo.IsGrounded && !IsClimbing )
             {
                 // This is related to the formula of: square root of ( -2 (gravity * height) )
                 // https://en.wikipedia.org/wiki/Equations_for_a_falling_body#Example
@@ -149,7 +176,60 @@ namespace SF.U2D.Physics
                     CurrentPhysics.MaxUpForce);
             }
         }
+        
+        protected virtual void CalculateSlope()
+        {
+            if (!CollisionInfo.OnSlope)
+                return;
+            
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity,CollisionInfo.SlopeNormalAngle);
+            
+            // Checking left side for slope
+            if (CollisionInfo.IsCollidingLeft 
+                && Direction.x < 0 
+                && CollisionInfo.SlopeNormalAngle.x < 0)
+            {
+                if (CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit)
+                {
+                    _calculatedVelocity = new Vector2(-projectedVelocity.x, projectedVelocity.y);
+                }
+                else
+                    _calculatedVelocity.x = 0;
+            }
+            else if(CollisionInfo.IsCollidingRight 
+                && Direction.x > 0 
+                && CollisionInfo.SlopeNormalAngle.x > 0)
+            {
+                if (CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit)
+                {
+                    _calculatedVelocity = new Vector2(projectedVelocity.x, projectedVelocity.y);
+                }
+                else
+                    _calculatedVelocity.x = 0;
+            }
 
+            if(CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit)
+            {
+                if(_calculatedVelocity.x == 0)
+                    _calculatedVelocity.y = 0;
+                else
+                {
+                    _calculatedVelocity.y = projectedVelocity.y;
+                }
+            }
+            
+            //_calculatedVelocity *= _slopeMultiplier;
+            if (CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit
+                && !IsJumping)
+            {
+                if(_calculatedVelocity.y == 0)
+                    _calculatedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity, CollisionInfo.SlopeNormalAngle);
+                else
+                    _calculatedVelocity.y = 0;
+            }
+            
+        }
+        
         protected override void CalculateMovementState()
         {
             if(CharacterState.CharacterStatus == CharacterStatus.Dead)
@@ -200,39 +280,6 @@ namespace SF.U2D.Physics
         }
 
 
-        protected override void OnAwake()
-        {
-            CollisionInfo = new BodyCollisionInfo
-            {
-                ControllerBody2D = this
-            };
-
-            if (!TryGetComponent(out ShapeComponent))
-            {
-                ShapeComponent = gameObject.AddComponent<SFCapsuleShape>();
-            }
-        }
-        
-        protected override void FixedUpdate()
-        {
-            if (_direction.x != 0)
-                _directionLastFrame.x = _direction.x;
-            
-            if (!ShapeComponent.Shape.isValid)
-                return;
-
-            OnPreFixedUpdate();
-            
-            // We now use the PhysicsEvent.PostSimulate callback for checking collisions post movement
-            // We should make sure this is not skipping first frame of collision though.
-            CollisionInfo.CheckCollisions();
-            
-            CalculateHorizontal();
-            CalculateVertical();
-            
-            Move();
-        }
-        
         public void ResizePhysicsShape(Vector2 newSize)
         {
             /* Implement for Alpha 9
