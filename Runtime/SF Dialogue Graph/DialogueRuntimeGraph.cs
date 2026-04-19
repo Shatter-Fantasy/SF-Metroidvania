@@ -139,6 +139,10 @@ namespace SF.DialogueModule.Nodes
 		    
 		    // All nodes in the dialogue are processed, so the conversation has ended.
 		    DialogueManager.StopConversation();
+			for (int i = 0; i < CompletedStageExtensions.Count; i++)
+			{
+				CompletedStageExtensions[i].ControlFlow();
+			}
 	    }
     }
 }
