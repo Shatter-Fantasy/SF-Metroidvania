@@ -20,6 +20,12 @@ namespace SF.U2D.Physics
         public float SlopeAngle;
         public Vector2 SlopeNormalAngle;
         /// <summary>
+        /// Were we on a slope the previous frame. Used for doing downward velocity when walking down slopes.
+        /// </summary>
+        [NonSerialized] public bool WasOnSlope;
+        [NonSerialized] public float PreviousSlopeAngle;
+        [NonSerialized] public Vector2 PreviousSlopeNormalAngle;
+        /// <summary>
         /// The smallest angle to be standing on for a body to be considered standing on a slope.
         /// </summary>
         public float MinimumSlopeAngle = 15f;
@@ -53,6 +59,10 @@ namespace SF.U2D.Physics
         
         public override void GroundCollisionChecks()
         {
+            WasOnSlope               = OnSlope;
+            PreviousSlopeAngle       = SlopeAngle;
+            PreviousSlopeNormalAngle = SlopeNormalAngle;
+            
             if (_contacts.Length == 0)
             {
                 IsGrounded = false;

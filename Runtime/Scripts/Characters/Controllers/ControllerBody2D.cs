@@ -179,22 +179,35 @@ namespace SF.U2D.Physics
         
         protected virtual void CalculateSlope()
         {
-            if (!CollisionInfo.OnSlope)
+            if (!CollisionInfo.OnSlope && !CollisionInfo.WasOnSlope)
                 return;
-            
+
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity,CollisionInfo.SlopeNormalAngle);
+     
             
             // Checking left side for slope
-            if (CollisionInfo.IsCollidingLeft 
-                && Direction.x < 0 
-                && CollisionInfo.SlopeNormalAngle.x < 0)
+            if (CollisionInfo.IsCollidingLeft)
             {
-                if (CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit)
+                // Walking up the slope on the left
+                if (Direction.x < 0)
                 {
-                    _calculatedVelocity = new Vector2(-projectedVelocity.x, projectedVelocity.y);
+                    if (CollisionInfo.SlopeNormalAngle.x < 0 && CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit)
+                    {
+                        _calculatedVelocity = new Vector2(-projectedVelocity.x, projectedVelocity.y);
+                    }
+                    else
+                        _calculatedVelocity.x = 0;
+                } // Walking down the slope colliding on the left
+                else if (Direction.x > 0)
+                {
+                     if (CollisionInfo.WasOnSlope && !CollisionInfo.OnSlope &&
+                        CollisionInfo.PreviousSlopeNormalAngle.x > 0)
+                    {
+                        projectedVelocity =
+                            Vector3.ProjectOnPlane(_calculatedVelocity, CollisionInfo.PreviousSlopeNormalAngle);
+                        _calculatedVelocity = new Vector2(projectedVelocity.x, projectedVelocity.y);
+                    }
                 }
-                else
-                    _calculatedVelocity.x = 0;
             }
             else if(CollisionInfo.IsCollidingRight 
                 && Direction.x > 0 
