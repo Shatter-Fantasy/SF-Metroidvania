@@ -65,8 +65,12 @@ namespace SF.DialogueModule
             }
 
             Instance = this;
-
             Extensions = GetComponents<DialogueExtensionBase>().ToList();
+        }
+
+        private void OnEnable()
+        {
+            
         }
 
         public static void TriggerConversation(DialogueConversation conversation, Component callingComponent = null)
@@ -123,7 +127,7 @@ namespace SF.DialogueModule
             DialogueTextChangedHandler?.Invoke(_currentEntry);
         }
         
-        private void AdvanceConversation(InputAction.CallbackContext ctx)
+        private void OnAdvanceConversation(InputAction.CallbackContext ctx)
         {
             if (!InConversation)
                 return;

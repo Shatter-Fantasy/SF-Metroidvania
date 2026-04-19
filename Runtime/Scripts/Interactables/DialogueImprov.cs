@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Unity.U2D.Physics;
 
@@ -11,10 +12,19 @@ namespace SF.DialogueModule
         IInteractable<PlayerController>,
         ITriggerShapeCallback
     {
+        [Header("Set either the guid or the conversation asset.")]
         public int ConversationGUID;
+        [field:SerializeField] private DialogueConversation _dialogueConversation;
+        
+        [field:Space()]
         [field:SerializeField] public InteractableMode InteractableMode { get; set; }
 
+        [field:SerializeField] private SFShapeComponent _shapeComponent;
         
+        private void Awake()
+        {
+            _shapeComponent?.AddTriggerCallbackTarget(this);
+        }
 
         public void Interact() {  }
         public void Interact(PlayerController controller)
