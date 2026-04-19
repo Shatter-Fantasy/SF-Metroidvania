@@ -14,6 +14,9 @@ namespace SF.DialogueModule
         
         private void Start()
         {
+            if (_dialogueOverlayUXML == null)
+                return;
+            
             _dialogueView = _dialogueOverlayUXML.rootVisualElement.Q<VisualElement>(name: "dialogue__view");
             _dialogueLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "overlay-dialogue__label");
             _speakerLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "dialogue-speaker__label");
