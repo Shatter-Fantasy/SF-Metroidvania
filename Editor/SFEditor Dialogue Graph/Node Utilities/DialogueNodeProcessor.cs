@@ -25,12 +25,17 @@ namespace SFEditor.DialogueModule
         private StartDialogueNode _startDialogueNode;
 #endregion
 
-        public DialogueNodeProcessor(DialogueGraph dialogueGraph)
+        public DialogueNodeProcessor(DialogueGraph dialogueGraph, bool processNodesInstantly = true)
         {
             _dialogueGraph        = dialogueGraph;
-            
-            if(_dialogueGraph != null)
+
+            if (_dialogueGraph != null)
+            {
                 _dialogueConversation = _dialogueGraph.LinkedConversationAsset;
+                
+                if (processNodesInstantly)
+                    StartNodeProcessing();
+            }
         }
 
         public void StartNodeProcessing()
@@ -54,6 +59,7 @@ namespace SFEditor.DialogueModule
             if (_dialogueConversation == null)
                 return;
             
+            /* Might not need this anymore. We can just use the if (nodeModel is IContextNodeConvertor contextNodeConvertor) below now
             // Node check.
             switch (nodeModel)
             {
@@ -76,22 +82,13 @@ namespace SFEditor.DialogueModule
 							    
                             if(convertedNode == null)
                                 continue;
-							    
-                            // The below should be a switch statement after testing is done.
-                            if (convertedNode is ConversationEntryRuntimeNode entryNode)
-                            {
-                                RuntimeNodes.Add(entryNode);
-                            }
-                            else
-                            {
-                                RuntimeNodes.Add(convertedNode);
-                            }
+                            
+                            RuntimeNodes.Add(convertedNode);
                         }
                     }
                 }
                     break;
-            }
-
+            }*/
 		   
             if (nodeModel is IContextNodeConvertor contextNodeConvertor)
             {

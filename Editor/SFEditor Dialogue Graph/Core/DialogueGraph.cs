@@ -44,6 +44,9 @@ namespace SFEditor.Dialogue.Graphs
 		    GraphDatabase.PromptInProjectBrowserToCreateNewAsset<DialogueGraph>();
 	    }
 		
+		/// <summary>
+		/// Processes the <see cref="DialogueGraph"/> for the editor assets and creates the list of runtime nodes from it.
+		/// </summary>
 		public void ProcessGraphNodes()
 		{
 			NodeProcessor = new DialogueNodeProcessor(this);

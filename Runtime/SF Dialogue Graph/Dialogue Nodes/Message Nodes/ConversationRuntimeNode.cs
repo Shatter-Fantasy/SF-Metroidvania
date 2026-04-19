@@ -26,20 +26,30 @@ namespace SF.DialogueModule.Nodes
 
         public override void TraverseNode(in List<RuntimeNode> branchNodes)
         {
+            
             foreach (var node in RuntimeNodes)
             {
                 node.Conversation = Conversation;
                 node.TraverseNode(branchNodes);
             }
             
+            branchNodes.Add(this);
+            
             ExecutionNode?.TraverseNode(branchNodes);
         }
 
-        public override void ProcessNode()
+        public override async void ProcessNode()
         {
+            bool isPaused = false;
             foreach (var node in RuntimeNodes)
             {
                 node.ProcessNode();
+                DialogueManager.Instance.RuntimeGraph.IsPaused = node.ShouldPauseGraphProcessing;
+                
+                while (DialogueManager.Instance.RuntimeGraph.IsPaused)
+                {
+                    await Awaitable.NextFrameAsync();
+                }
             }
         
             ExecutionNode?.ProcessNode();

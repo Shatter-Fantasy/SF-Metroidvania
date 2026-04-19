@@ -37,7 +37,7 @@ namespace SF.DialogueModule.Nodes
 	    /// <summary>
 	    /// Is the graph processing paused and waiting for a node to complete something.
 	    /// </summary>
-	    public bool IsPaused;
+	    public bool IsPaused = false;
 	    
 	    [NonSerialized] public DialogueConversation ClonedConversation;
 	    [NonSerialized] public DialogueConversation OriginalConversation;
@@ -69,7 +69,6 @@ namespace SF.DialogueModule.Nodes
 		    ClonedConversation = conversation.Clone(conversation);
 		    OriginalConversation = conversation;
 		    ClonedConversation.RuntimeGraph = this;
-		    
 		    Nodes = nodes;
 	    }
 	    
@@ -130,7 +129,6 @@ namespace SF.DialogueModule.Nodes
 		    for (int i = 0; i < BranchNodes.Count; i++)
 		    {
 			    BranchNodes[i].ProcessNode();
-
 			    IsPaused = BranchNodes[i].ShouldPauseGraphProcessing;
 			    
 			    while (IsPaused)

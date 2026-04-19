@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SF.InputModule;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -55,6 +56,8 @@ namespace SF.DialogueModule
         /// </summary>
         public static event Action<DialogueEntry> DialogueTextChangedHandler;  
         #endregion
+
+        private Controls _controls;
         
         private void Awake()
         {
@@ -70,7 +73,19 @@ namespace SF.DialogueModule
 
         private void OnEnable()
         {
+            if (SFInputManager.Controls == null)
+                return;
             
+            _controls           =  SFInputManager.Controls;
+            _controls.UI.Submit.performed += OnAdvanceConversation;
+        }
+        
+        private void OnDisable()
+        {
+            if (SFInputManager.Controls == null)
+                return;
+            
+            _controls.UI.Submit.performed -= OnAdvanceConversation;
         }
 
         public static void TriggerConversation(DialogueConversation conversation, Component callingComponent = null)
@@ -101,7 +116,7 @@ namespace SF.DialogueModule
                 // Than start a new conversation and open the dialogue panel if it.
                 if(_instance.DialogueDB.GetConversation(guid, out _instance._dialogueConversation))
                 {
-                    _instance.StartConversation();
+                    _instance.StartConversation(_instance._dialogueConversation);
                     // Let other objects know a dialogue is starting - DialogueUIManager uses this to know to open the dialogue UI.
                     DialogueStartedHandler?.Invoke();
                 }
@@ -141,9 +156,9 @@ namespace SF.DialogueModule
             //}
         }
 
-        public virtual void StartConversation()
+        public virtual void StartConversation(DialogueConversation newConversation)
         {
-            Debug.Log("Is this working");
+            RecentConversation = newConversation;
         }
         public static void StopConversation()
         {

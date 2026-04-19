@@ -36,10 +36,13 @@ namespace SF.DialogueModule.Nodes
 		   return new ConversationEntryRuntimeNode(dialogueEntry.Text,dialogueEntry.SpeakerName);
 	    }
 
+		/// <summary>
+		/// Checks to see what all nodes needs processed for the current branch of dialogue.
+		/// </summary>
+		/// <param name="branchNodes"></param>
 	    public override void TraverseNode(in List<RuntimeNode> branchNodes)
 	    {
 		    _dialogueEntry = new DialogueEntry(Text,SpeakerName);
-		    branchNodes.Add(this);
 	    }
 
 	    public override void ProcessNode()

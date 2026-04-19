@@ -47,6 +47,7 @@ namespace SF.DialogueModule
         private void OnDialogueStarted()
         {
             _dialogueView.style.visibility = Visibility.Visible;
+            _dialogueView.enabledSelf      = true;
             if (_currentEntry != null)
             {
                 _dialogueLabel.text = _currentEntry.Text;
