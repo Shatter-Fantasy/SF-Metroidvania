@@ -20,16 +20,12 @@ namespace SF.RoomModule
         {
             if (stage != CinemachineCore.Stage.Body)
                 return;
-
-            if (_confinerCenter == null)
-                return;
             
             var camPosition = vcam.transform.position;
             var settings = state.Lens;
             float frustumHalfHeight = CalculateFrustumHalfHeight(settings.OrthographicSize,camPosition.z,settings.FieldOfView);
             float frustumHalfWidth = frustumHalfHeight * settings.Aspect;
             
-            //ConfinerBounds.center = _confinerCenter.transform.position;
             Vector3 pos = vcam.transform.position;
 
             _correctedPosition.x = Mathf.Max(ConfinerBounds.min.x + frustumHalfWidth,Mathf.Min(ConfinerBounds.max.x - frustumHalfWidth, pos.x) );
