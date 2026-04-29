@@ -21,7 +21,7 @@ namespace SF.RoomModule
         /// <summary>
         /// The id of the room we are transitioning away from and exiting aka the current room we are in when starting a transition. <see cref="Room.RoomID"/>
         /// </summary>
-        [FormerlySerializedAs("RoomID")] public int LeavingRoomID;
+        [FormerlySerializedAs("RoomIDInLoadingRegion")] public int LeavingRoomID;
         /// <summary>
         /// What form of transition logic needs to be run for the relavent transition.
         /// </summary>

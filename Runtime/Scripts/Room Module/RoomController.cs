@@ -71,7 +71,7 @@ namespace SF.RoomModule
             }
             if (RoomSystem.LoadedRegion[RoomID] == null)
             {
-                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
+                Debug.LogWarning($"A room with the RoomIDInLoadingRegion of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
                 return;
             }
             RoomIdsToLoadOnEnter = RoomSystem.LoadedRegion[RoomID].ConnectedRoomsIDs;

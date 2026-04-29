@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using SF.LoggingModule;
+
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace SF.RoomModule
 {
+    using SF.LoggingModule;
     using RegionModule;
     /// <summary>
     /// Used to allow interactions between the in game systems and the rooms in the current loaded region. <see cref="RegionSystem.LoadedRegionDataAsset"/>.
@@ -94,7 +95,7 @@ namespace SF.RoomModule
         }
 
         /// <summary>
-        /// Only use this to manually add a RoomID into the loaded room ids list when the room will already exist in the scene at the start. 
+        /// Only use this to manually add a RoomIDInLoadingRegion into the loaded room ids list when the room will already exist in the scene at the start. 
         /// </summary>
         private static Room LoadRoomManually(int roomID, GameObject spawnedInstance = null)
         {
@@ -149,7 +150,7 @@ namespace SF.RoomModule
             if (!IsRoomLoaded(roomID))
             {
 #if UNITY_EDITOR
-                Debug.LogWarning($"No room matching RoomID: {roomID} is currently loaded in.");
+                Debug.LogWarning($"No room matching RoomIDInLoadingRegion: {roomID} is currently loaded in.");
 #endif
                 return false;
             }

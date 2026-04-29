@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SF.RoomModule.RegionModule
 {
@@ -42,13 +43,13 @@ namespace SF.RoomModule.RegionModule
             /// <summary>
             /// The <see cref="Room.RoomID"/>  of the room to spawn in when the new region is loaded.
             /// </summary>
-            public int RoomID;
+            [FormerlySerializedAs("RoomID")] public int RoomIDInLoadingRegion;
 
             /// <summary>
             /// The spawn position for the player when entering into the region.
             /// <remarks>
-            /// Unlike the RoomID which needs the value for the room in the newly loading region.
-            /// This value is for the spawn position of this <see cref="RegionDataAsset"/> when entering from the <see cref="RoomID"/>
+            /// Unlike the RoomIDInLoadingRegion which needs the value for the room in the newly loading region.
+            /// This value is for the spawn position of this <see cref="RegionDataAsset"/> when entering from the <see cref="RoomIDInLoadingRegion"/>
             /// and coming into this <see cref="RegionDataAsset"/> region.
             /// </remarks>
             /// </summary>
@@ -133,7 +134,7 @@ namespace SF.RoomModule.RegionModule
         }
 
         /// <summary>
-        /// We search via the RoomID first. If the RoomID doesn;t exist than
+        /// We search via the RoomIDInLoadingRegion first. If the RoomIDInLoadingRegion doesn;t exist than
         /// </summary>
         /// <param name="index"></param>
         /// <exception cref="NotImplementedException"></exception>

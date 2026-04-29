@@ -1,10 +1,10 @@
-using SF.SpawnModule;
 using UnityEngine.SceneManagement;
 
 namespace SF.RoomModule.RegionModule
 {
     using SF.LevelModule;
     using SF.LoggingModule;
+    using SF.SpawnModule;
     public static class RegionSystem
     {
         /// <summary>
@@ -51,7 +51,7 @@ namespace SF.RoomModule.RegionModule
                                                                   transitionData.TransitionID ==
                                                                   regionTransitionConnection.TransitionIDToGoTo);
             SpawnSystem.CurrentSpawnPosition = transitionData.LocalSpawnPositionInCurrentRoom;
-            RoomSystem.StartingRoomId        = transitionData.RoomID;
+            RoomSystem.StartingRoomId        = transitionData.RoomIDInLoadingRegion;
             
             SceneManager.LoadSceneAsync(regionTransitionConnection.RegionToTransitionTo.SceneIndex);
         }

@@ -62,13 +62,13 @@ namespace SF.RoomModule
         
         public bool Contains(Room item)
         {
-            Room room = Rooms.Find(roomInDB => roomInDB.RoomID == item?.RoomID);
+            Room room = Rooms.Find(roomInDB => roomInDB.RoomIDInLoadingRegion == item?.RoomIDInLoadingRegion);
             return room != null;
         }
         
         public bool Contains(int roomID)
         {
-            Room room = Rooms.Find(roomInDB => roomInDB.RoomID == roomID);
+            Room room = Rooms.Find(roomInDB => roomInDB.RoomIDInLoadingRegion == roomID);
             return room != null;
         }
 
@@ -118,13 +118,13 @@ namespace SF.RoomModule
         {
             for (int i = 0; i < Rooms.Count; i++)
             {
-                Rooms[i].RoomID = i;
-                Rooms[i].RoomPrefab.GetComponent<RoomController>().RoomID = i;
+                Rooms[i].RoomIDInLoadingRegion = i;
+                Rooms[i].RoomPrefab.GetComponent<RoomController>().RoomIDInLoadingRegion = i;
             }
         }
 
         /// <summary>
-        /// We search via the RoomID first. If the RoomID doesn;t exist than
+        /// We search via the RoomIDInLoadingRegion first. If the RoomIDInLoadingRegion doesn;t exist than
         /// </summary>
         /// <param name="index"></param>
         /// <exception cref="NotImplementedException"></exception>
