@@ -42,7 +42,7 @@ namespace SFEditor.U2D.Physics
                 {
                     EditorGUI.BeginChangeCheck();
 
-                    var sizeValue = handleRight * _shapeComponent.Size / 2;
+                    var sizeValue = _shapeComponent.Size / 2;
                     var newSize = Handles.Slider2D
                         (
                             sizeValue, 
