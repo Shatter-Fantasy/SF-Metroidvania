@@ -1,27 +1,53 @@
+> [!WARNING]
+> Unity 6.4 and 6.5 has a set of Native Crashes that are part of the Engine related to the Tilemap updates. These are not caused by the the package.
+> Use Unity 6.4 patch 4 or 6.5 beta 5 at least to avoid these crashes. I am helping Unity Technologies with them and we got all, but one fixed involving update to SRP batcher.
+> Link to our public forum posts for people to stay updated on the crashes.
+> https://discussions.unity.com/t/tilemap-crashes-and-rendering-bugs-in-unity-6-4-6-5-and-6-6-collection-post/1715496/14
+
 # SF-Metroidvania-Package
-There is a work in progress dedicated documentation website being made. Will update this section part way through alpha six that is currently in progress.
+There is a work in progress dedicated documentation website being made.
 
 ## Summary 
 This is the Shatter Fantasy Metroidvania Unity package that can be used to create any game needing Metroidvania like controls. 
-It is using Unity's low level physics that was added in Unity 6.3 creating a minimum required version for Unity 6.3 editors.
-This package uses the burst compiler combined with NativeCollections for improved perforance.
+It is using Unity's Physics Core 2D that was added in Unity 6.5, (originally Low Lvel Physics 2D introduced in 6.3) creating a minimum required version for Unity 6.5 editors.
+The Physics Core 2D package is used to link into Box2D Version 3.1 to create a custom Physics System from the ground up.
+We are aiming to have the package be released for 6.7 LTS. This package uses the burst compiler combined with NativeCollections for improved perforance.
+Read section "Why Unity 6.7 and not Unity 6.3" for more information on version requirements
 
-## Current Alpha: Alpha Eight
-Alpha Eight focused on a smaller set of qol api changes, simplifying the SavePoint logic,
-and improvements to the SFRectangleShape scene editing tool. 
+## Current Alpha: Alpha Ten Changes
 
-### Planned
-- Add more utilities for Low Level Physics API.
-    - Extension methods for setting PhysicsShapes.ContactFilter.categories  
-    - Extension methods for setting PhysicsShapes.ContactFilter.contacts 
-- Update the Save System.cs - Sooner I get this done the less chance of future alphas breaking save files in builds.
-  - Remove old Checkpoint and CheckPointManager class
--  Improve the SFRectangleShape scene tool.
-  - Will improve the other SFShapeComponent's scene tools in a future alpha.
+### Important Changes:
+- We now have the Physics Core 2D implemented so Unity 6.5 is the min version as mentioned we are aiming for a Unity 6.7 release with no technical debt.
+This includes a lot of namespace changes from Unity's side. 
+See Unity post here for the namespaces changes for Box2D 3.1 related API.
+
+https://discussions.unity.com/t/physics-core-2d-in-unity-6-5/1715178
+
+
+### Added Stuff
+
+#### Region System replacing the need for a room database.
+Alpha Ten includes the ground up rework for the region and room sytem. This simplies a lot of set up for both of them.
+There is now a Region Database scriptable object that replaces the Room Database.
+Note Room System is still used, but implements helper logic via the Region Database now.
+
+This adds a lot including, but not limited to:
+- Custom room position spawning when transitioning between regions.
+- Simple set up for choosing which room to load when changing regions.
+- A region Data asset to help quickly set up rooms and room transitions easily.
+
+
+### Fixed Bugs
+- Lot of the Spawn System issues caused by the room system messing up the spawn point for loading rooms.
+
+
+### Planned for Alpha Ten
+- Update Slope calculations. Implement PhysicsQuery with burst compilation.
+
 
 ## Future Features:
 
-### Major Core Features
+### Future Major Core Features
 - Interactable Environment - think freezing water and burning grass. This relies on the GeometryIsland API in Unity 6.3.
 - Full implementation of the Sprite Destructor to allow destructible sprites with physics. This wll be implementing the Sprite Fragmentation API added in Unity 6.3
 - Updating the Data Editor for characters, items, and adding a level data editor tab to it.
