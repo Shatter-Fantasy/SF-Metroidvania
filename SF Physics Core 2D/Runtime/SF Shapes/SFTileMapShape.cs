@@ -33,6 +33,8 @@ namespace SF.U2D.Physics
                 _tilemap = GetComponent<Tilemap>();
 
             BodyDefinition.type = PhysicsBody.BodyType.Static;
+            
+            CreateShape();
         }
 
         protected override void PreEnabled()
@@ -57,6 +59,11 @@ namespace SF.U2D.Physics
         /// <param name="syncTiles"></param>
         private void TilemapTilesChanged(Tilemap tilemap, Tilemap.SyncTile[] syncTiles)
         {
+#if UNITY_EDITOR
+            if (UnityEditor.BuildPipeline.isBuildingPlayer || Application.isBatchMode)
+                return;
+#endif
+            
             if(_tilemap != null && _tilemap == tilemap)
                 CreateShape();
         }
