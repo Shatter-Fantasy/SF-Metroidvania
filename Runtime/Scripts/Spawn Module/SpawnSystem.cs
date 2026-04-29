@@ -45,7 +45,6 @@ namespace SF.SpawnModule
         
         private void OnDestroy()
         {
-            CurrentSpawnPosition    = Vector3.zero;
             SpawnedPlayer           = null;
             SpawnedPlayerController = null;
         }
