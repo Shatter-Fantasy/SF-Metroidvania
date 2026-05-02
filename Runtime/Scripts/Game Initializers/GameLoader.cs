@@ -1,12 +1,10 @@
 using System;
-using SF.DataManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SF.Managers
 {
     using RoomModule;
-    
+    using SF.DataManagement;
     public enum GameLoadingMode
     {
         NewGame, LoadGame, Continue

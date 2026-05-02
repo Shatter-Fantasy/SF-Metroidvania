@@ -164,6 +164,7 @@ namespace SF.U2D.Physics
 
         public Action ShapeCreatedHandler;
         public Action ShapeDestroyedHandler;
+        
         protected void OnEnable()
         {
             PreEnabled();
