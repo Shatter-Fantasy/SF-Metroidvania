@@ -1,6 +1,6 @@
 {
   "name": "shatterfantasy.sf-metroidvania",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "displayName": "SF Metroidvania",
   "description": "This is the Metroidvania Toolkit developed by \nJonathan Westfall of Shatter Fantasy studio.\n\nIt uses the Low Level Physics 2D API introduced in Unity 6.3 combined with \nBurst Compiling and NativeCollections for higher performant and customizable physics.",
   "documentationUrl": "https://github.com/Shatter-Fantasy/SF-Metroidvania",
@@ -26,10 +26,10 @@
   "_upm": {
     "changelog": "### Changed\n- Started the 2D Character Controller"
   },
-  "unity": "6000.3",
+  "unity": "6000.5",
   "dependencies": {
     "com.unity.burst": "1.8.28",
-    "com.unity.cinemachine": "3.1.5",
+    "com.unity.cinemachine": "3.1.6",
     "com.unity.collections": "2.6.2",
     "com.unity.inputsystem": "1.18.0"
   },
