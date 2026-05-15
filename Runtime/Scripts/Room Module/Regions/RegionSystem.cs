@@ -1,3 +1,5 @@
+using Unity.Scripting.LifecycleManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SF.RoomModule.RegionModule
@@ -5,8 +7,9 @@ namespace SF.RoomModule.RegionModule
     using SF.LevelModule;
     using SF.LoggingModule;
     using SF.SpawnModule;
-    public static class RegionSystem
+    public static partial class RegionSystem
     {
+        
         /// <summary>
         /// The Region data asset for the scene the current <see cref="LevelLoader"/> is in.
         /// Set this in the inspector to update 
@@ -15,6 +18,13 @@ namespace SF.RoomModule.RegionModule
         public static RegionDataAsset PreviousRegionDataAsset;
         public static RegionDatabase RegionDatabase;
 
+        [OnExitingPlayMode]
+        static void OnExitingPlayMode()
+        {
+            LoadedRegionDataAsset   = null;
+            PreviousRegionDataAsset = null;
+        }
+        
         public static void LoadInitialRegionData()
         {
             if (RegionDatabase == null ||RegionDatabase.DataEntries == null || RegionDatabase.DataEntries.Count < 1)
