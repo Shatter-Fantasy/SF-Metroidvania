@@ -1,11 +1,9 @@
 using System;
-using SF.RoomModule;
-using SF.RoomModule.RegionModule;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SF.LevelModule
 {
+    using SF.RoomModule.RegionModule;
     /// <summary>
     /// Loads the required game objects for used in managers and core systems in playable levels.
     /// This is needed to be in each playable scene and make sure this does not persist between scenes,
@@ -27,62 +25,13 @@ namespace SF.LevelModule
         public static event Action LevelReadyHandler;
 
         public static event Action LevelStartedHandler;
-
-        private void Awake()
-        {
-            // This has to be done in awake. OnEnable/Start is called after the first sceneLoaded call.
-            SceneManager.sceneLoaded += OnLevelLoaded;
-        }
         
-        /// <summary>
-        /// Loads all the required game objects used by managers and the core systems in a level so they can be used.
-        /// Called by the SceneManager when any scene is loaded.
-        ///<remarks>
-        /// This is called after the first OnEnable call of the scene, but before the first Start call of the frame.
-        /// This is only called in editor if the Enter Play Mode option says reload scene.
-        ///</remarks>
-        /// </summary>
-        /// <param name="scene"></param>
-        /// <param name="loadSceneMode"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
-        {
-            // We will be doing stuff here later so the NewGameSceneInitialization is staying in a separate function for now 
-            for (int i = 0; i < _gameStartingSceneIndexes.Length; i++)
-            {
-                // If this is one of the game starting menu scenes don't bother running the playable scene initialization loop.
-                if (_gameStartingSceneIndexes[i] == scene.buildIndex)
-                {
-                    return;
-                }
-            }
-
-            PlayableGameSceneInitialization();
-        }
-        
-        /// <summary>
-        /// Initialize the level related game data.
-        /// <remarks>
-        /// For some reason if you are trying to load in the editor for testing any game object spawned here is invisible in the new hierarchy in 6.3
-        /// </remarks>
-        /// </summary>
-        private void PlayableGameSceneInitialization()
+        private void Start()
         {
             RegionSystem.LoadInitialRegionData();
             LevelReadyHandler?.Invoke();
-        }
-        
-        /// <summary>
-        /// This runs after <see cref="OnLevelLoaded"/> is Invoked.
-        /// </summary>
-        private void Start()
-        {
+            
             LevelStartedHandler?.Invoke();
-        }
-        
-        private void OnDestroy()
-        {
-            SceneManager.sceneLoaded -= OnLevelLoaded;
         }
     }
 }
