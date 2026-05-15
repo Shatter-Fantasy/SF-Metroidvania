@@ -237,6 +237,10 @@ namespace SF.U2D.Physics
                 return;
             
             _shape.callbackTarget = this;
+            _shape.SetOwnerUserData(new PhysicsUserData()
+            {
+                objectValue = gameObject
+            });
             ShapeCreatedHandler?.Invoke();
         }
 
@@ -270,12 +274,18 @@ namespace SF.U2D.Physics
                 // Set the transform object.
                 Body.transformObject      = transform;
                 Body.callbackTarget       = this;
+                
+                Body.SetOwnerUserData(new PhysicsUserData()
+                {
+                    objectValue = gameObject
+                });
+                
                 Body.userData = new()
                 {
                     objectValue = gameObject
                 };
                 
-              
+                
             }
             if(PhysicsWorld.isValid)
                 PhysicsWorld.RegisterTransformChange(transform,this);
