@@ -35,7 +35,7 @@ namespace SF.CameraModule
             get 
             {
                 if (_instance == null)
-                    _instance = FindFirstObjectByType<CameraController>();
+                    _instance = FindAnyObjectByType<CameraController>();
 
                 if(_instance == null)
                     _instance = Camera.main?.gameObject.AddComponent<CameraController>();
