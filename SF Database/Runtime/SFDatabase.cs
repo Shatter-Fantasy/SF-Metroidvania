@@ -10,7 +10,8 @@ namespace SF.DataModule
     /// </summary>
     public abstract class SFDatabase : ScriptableObject
     {
-        
+        public int DatabaseLoadOrder;
+            
         /// <summary>
         /// SFDatabases are registered by the <see cref="DatabaseRegistry"/> which is loaded during the player start up
         /// as part of the preloaded assets set in the project's PlayerSettings via SetPreloadedAssets.

@@ -3,14 +3,12 @@
     "rootNamespace": "SFEditor",
     "references": [
         "GUID:3a9781db4804a9945b9883f3a7c46d45",
-        "GUID:3501f6086cdd0e648ac05237fdb4fbad",
-        "GUID:68abc65edeb6a19489adf3e91e68ac47",
-        "GUID:3f7d48e83d211bc4da6a4c2762281d9f",
         "GUID:e8ca73d31c2608e498b77118a366f5dd",
         "GUID:1c97a4378fd0e6e44bb478bb97b582d3",
         "GUID:0e262b65f1ca903488add4a5b5ae6cff",
-        "GUID:a7bc90a4502048749a37c4a8859616fe",
-        "GUID:7ea3b7865b793ea448d05d64305c4886"
+        "GUID:e914b7dc822bee7408a68a0fcea54763",
+        "GUID:dd79e86156776d540afa94a2e6a06bf8",
+        "GUID:bce4ab5a2b6bd064996aa39796ef194f"
     ],
     "includePlatforms": [
         "Editor"

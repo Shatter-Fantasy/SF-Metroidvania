@@ -1,0 +1,103 @@
+## Replaceable words
+Some words are able to replace each other and you will see online that the words are swapped a lot without explanation. This can lead to some confusion for people first learning new formulas.
+
+Example when talking about Vector math, magnitude and length of a vector are most of the time the same thing, just worded differently. You will see some explainations say one or the other. Anyone trying to learn the Cross Product probably ran into this a lot.
+
+For game devs think of Unity where there is API for Vector3.magnitude. If you read the documentation it says this function returns the length of the Vector3.
+
+
+
+## Symbol Legend
+
+### Common Lowercase Theta θ
+θ is the the lowercase of theta
+Theta (θ) stand for an angle in most formulas.
+ - Plane angle in geomentry
+ - Unknown variable sometimes in trignomentry
+
+ #### Fun Extra Information 
+ - θ also can stand for the voiceless dental fricative which
+ for English speakers is the sound "th" like in the word "think."
+ - Theta Type Replication for bacteril DNA replication to circular chromosomes. 
+  - Used in theta functions of several complex variables. Think Grassmann alebras which relate to quantum field theory. Most common occuring one is in the theory of elliptic functions. 
+
+
+### Vector Symbols 
+|a| means the magnitude (length) of the vector a.
+
+## Formulas
+
+### Vector Formulas
+
+#### Magnitude (length) of a Vector
+The magnitude (length) of a Vector is calculated by a simple rule that works for Vectors with two or more directions
+
+The square root of the sum of the squares of the components of a vector.
+Example Vector2 has two components so it looks like this.
+
+Credit to Cuemath for the image
+![alt text](magnitude-of-a-vector-formula-1623757125.png)
+
+|a| = (x*x+y*y+z*z)
+
+Cross Product
+Forms of the Formula
+a * x = |a| |b| sin(θ) n
+
+
+
+
+### Dot Product 
+
+Dot Product will be shortened to DP to make this more readable in some sections.
+
+#### Different Formulas of Dot Product
+##### Perpendicular Dot Product
+You can find out if we are looking at the left or the right side of the Vector B. This is use heavily in things like mesh generation, Graham Scan for convex hulls, and other types of gift wrapping algorithms. 
+
+This only works in a 2D settings. 3D or a higher dimensional settings breaks this formula, so keep that in mind. For 3D or more you can use a variant of the Cross Product. 
+
+Formula Legend: 
+PDP = Perpendicular Dot Product
+
+Vector2 A can have a couple different meaning depending on your use case.
+1. The direction where the camera is looking. Think of a camera looking directly at a point fitting on a flat geomentry plane. 
+2. The current point on a set of point Vector2 to compare to the next point in a sequence.
+
+Here is a great resource to see when this is used. \
+https://www.geeksforgeeks.org/convex-hull-using-graham-scan/
+
+Vector2 B - The vector from the camera or a comparison point to the point you want to calculate the PDP for. \
+Formula is PDP = (A1 * B2) - (A2 * B1)
+
+Vector2 B when using it for the comparison point think of the previously mention example where you are comparing a set of points in a list to the next point in the list. See picture below for visualization.
+
+Credit to geeksforgeeks.com for the image below.
+![alt text](Convex-Hull-using-Graham-Scan-2.jpg)
+
+
+
+
+#### Uses of Dot Product
+
+##### DP Most Common Uses
+
+Getting the distance of two vectors (points). This is done by uding Dot Product to multiply two vectors to return a single value that represents a distance.
+
+Desaturating a set of color values by using a DP inside a lerp function that a set of color weights. Think of Photoshop and how when desaturating you have a set of sliders/curves for color values before setting the desaturate filter on the image you are editing. 
+
+Fake lighting to custom implement the light attenuation formula in shaders.
+
+##### DP: Desaturation
+Desaturating a set of colors can be done by using a lerp function and the dot product together. 
+
+Desaturation Formula: Lerp(Vector, DP(Vector,(0.3,0.59,0.11)), alpha).
+Set of editable color weights = (0.3(red), 0.59(green), 0.11(blue))
+
+Desaturation can use DP to calculate the image pixels and pre supplied weights for each color.
+
+This way of using DP for desaturation is called "perceived luminance" in the use for RGB colors. Please note for perceived luminance there is a standard luminance for certain color spaces, so you will see multiple definitions of luminance that changed depending on the context.
+
+##### DP: Light Attenuation 
+Light Strength / distance(world position of a pixel, light bulb position)
+

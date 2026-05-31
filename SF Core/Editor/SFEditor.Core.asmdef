@@ -1,0 +1,23 @@
+{
+    "name": "SFEditor.Core",
+    "rootNamespace": "SFEditor.Core",
+    "references": [
+        "GUID:3501f6086cdd0e648ac05237fdb4fbad",
+        "GUID:c6169c8b9ba779e499da35485e53bc3e",
+        "GUID:3f7d48e83d211bc4da6a4c2762281d9f",
+        "GUID:a7bc90a4502048749a37c4a8859616fe",
+        "GUID:7b3bff3382378e44085461cad7c88e21",
+        "GUID:06a33b1fd6ca23345870150e28011df1"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

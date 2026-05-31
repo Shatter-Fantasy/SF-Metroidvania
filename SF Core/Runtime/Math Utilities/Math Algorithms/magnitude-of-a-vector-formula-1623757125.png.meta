@@ -1,0 +1,1197 @@
+fileFormatVersion: 2
+guid: af21cf1bdd2ea4b41b6baf3f9dc87b96
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5112312130734928002
+    second: magnitude-of-a-vector-formula-1623757125_0
+  - first:
+      213: -6644432650505314922
+    second: magnitude-of-a-vector-formula-1623757125_1
+  - first:
+      213: 136671428739920594
+    second: magnitude-of-a-vector-formula-1623757125_2
+  - first:
+      213: 6967946823802113032
+    second: magnitude-of-a-vector-formula-1623757125_3
+  - first:
+      213: 2454106474295144137
+    second: magnitude-of-a-vector-formula-1623757125_4
+  - first:
+      213: -8890604136477097869
+    second: magnitude-of-a-vector-formula-1623757125_5
+  - first:
+      213: -118717870364771718
+    second: magnitude-of-a-vector-formula-1623757125_6
+  - first:
+      213: 7232206712554504562
+    second: magnitude-of-a-vector-formula-1623757125_7
+  - first:
+      213: 1714439381500684449
+    second: magnitude-of-a-vector-formula-1623757125_8
+  - first:
+      213: -6297847532816316885
+    second: magnitude-of-a-vector-formula-1623757125_9
+  - first:
+      213: -2613455863574055797
+    second: magnitude-of-a-vector-formula-1623757125_10
+  - first:
+      213: 4289641054469145563
+    second: magnitude-of-a-vector-formula-1623757125_11
+  - first:
+      213: 8427468460609412427
+    second: magnitude-of-a-vector-formula-1623757125_12
+  - first:
+      213: -2673583056087278248
+    second: magnitude-of-a-vector-formula-1623757125_13
+  - first:
+      213: 5571835064238735959
+    second: magnitude-of-a-vector-formula-1623757125_14
+  - first:
+      213: 7792682592325910092
+    second: magnitude-of-a-vector-formula-1623757125_15
+  - first:
+      213: -8817872351345783589
+    second: magnitude-of-a-vector-formula-1623757125_16
+  - first:
+      213: -1481171690763495680
+    second: magnitude-of-a-vector-formula-1623757125_17
+  - first:
+      213: -7276465370644939356
+    second: magnitude-of-a-vector-formula-1623757125_18
+  - first:
+      213: -4415395943410098914
+    second: magnitude-of-a-vector-formula-1623757125_19
+  - first:
+      213: 8667224932254935649
+    second: magnitude-of-a-vector-formula-1623757125_20
+  - first:
+      213: 927404869280727030
+    second: magnitude-of-a-vector-formula-1623757125_21
+  - first:
+      213: -7689338414688782092
+    second: magnitude-of-a-vector-formula-1623757125_22
+  - first:
+      213: 358749539993284340
+    second: magnitude-of-a-vector-formula-1623757125_23
+  - first:
+      213: -4739490695344634630
+    second: magnitude-of-a-vector-formula-1623757125_24
+  - first:
+      213: -1933765463683476430
+    second: magnitude-of-a-vector-formula-1623757125_25
+  - first:
+      213: 5181060254890242500
+    second: magnitude-of-a-vector-formula-1623757125_26
+  - first:
+      213: -8584179536165444026
+    second: magnitude-of-a-vector-formula-1623757125_27
+  - first:
+      213: -892928770088955610
+    second: magnitude-of-a-vector-formula-1623757125_28
+  - first:
+      213: 2925204757760516819
+    second: magnitude-of-a-vector-formula-1623757125_29
+  - first:
+      213: 1449605108508429922
+    second: magnitude-of-a-vector-formula-1623757125_30
+  - first:
+      213: -1765084580050264671
+    second: magnitude-of-a-vector-formula-1623757125_31
+  - first:
+      213: -6918780884113258498
+    second: magnitude-of-a-vector-formula-1623757125_32
+  - first:
+      213: -1521809283526975500
+    second: magnitude-of-a-vector-formula-1623757125_33
+  - first:
+      213: -6708950097862360070
+    second: magnitude-of-a-vector-formula-1623757125_34
+  - first:
+      213: -5160284131348078699
+    second: magnitude-of-a-vector-formula-1623757125_35
+  - first:
+      213: 5464985824982582319
+    second: magnitude-of-a-vector-formula-1623757125_36
+  - first:
+      213: -3853824220716240051
+    second: magnitude-of-a-vector-formula-1623757125_37
+  - first:
+      213: 5889133185810462860
+    second: magnitude-of-a-vector-formula-1623757125_38
+  - first:
+      213: -5875952809224578078
+    second: magnitude-of-a-vector-formula-1623757125_39
+  - first:
+      213: -4274918751743405862
+    second: magnitude-of-a-vector-formula-1623757125_40
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 337
+        width: 20
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2803065fbc492f640800000000000000
+      internalID: 5112312130734928002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_1
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 337
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69d9f9445bb3ac3a0800000000000000
+      internalID: -6644432650505314922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_2
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 331
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d2fcf8b0fd85e100800000000000000
+      internalID: 136671428739920594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_3
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 337
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80c498ee7be13b060800000000000000
+      internalID: 6967946823802113032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_4
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 353
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ce295106dcbe0220800000000000000
+      internalID: 2454106474295144137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_5
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 337
+        width: 6
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3700aae64aa3e9480800000000000000
+      internalID: -8890604136477097869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_6
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 337
+        width: 10
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7aba64d9ba3a5ef0800000000000000
+      internalID: -118717870364771718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_7
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 337
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 271c10cefa5fd5460800000000000000
+      internalID: 7232206712554504562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_8
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 337
+        width: 17
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a8e943b889eac710800000000000000
+      internalID: 1714439381500684449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_9
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 337
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b26c9ec490d8998a0800000000000000
+      internalID: -6297847532816316885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_10
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 337
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b84b18f1db32bbbd0800000000000000
+      internalID: -2613455863574055797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_11
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 337
+        width: 10
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd3c091cfcdd78b30800000000000000
+      internalID: 4289641054469145563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_12
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 337
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4d9e6e0ae164f470800000000000000
+      internalID: 8427468460609412427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_13
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 337
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85d1a60306685ead0800000000000000
+      internalID: -2673583056087278248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_14
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 337
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75204075872235d40800000000000000
+      internalID: 5571835064238735959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_15
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 337
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4eb4f2c78b252c60800000000000000
+      internalID: 7792682592325910092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_16
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 337
+        width: 10
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdccb47c0df90a580800000000000000
+      internalID: -8817872351345783589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_17
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 337
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0075da0e132d17be0800000000000000
+      internalID: -1481171690763495680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_18
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 337
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4adf64a3c4dc40b90800000000000000
+      internalID: -7276465370644939356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_19
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 337
+        width: 16
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1d175288cc59b2c0800000000000000
+      internalID: -4415395943410098914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_20
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 337
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16ae67ba72b284870800000000000000
+      internalID: 8667224932254935649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_21
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 337
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fff174a0ddcedc00800000000000000
+      internalID: 927404869280727030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_22
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 337
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f8b5b2a37bf94590800000000000000
+      internalID: -7689338414688782092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_23
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 337
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fe62ae4ec88af400800000000000000
+      internalID: 358749539993284340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_24
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 337
+        width: 6
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af4c6bfc252f93eb0800000000000000
+      internalID: -4739490695344634630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_25
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 337
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2345a3a6e82e925e0800000000000000
+      internalID: -1933765463683476430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_26
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 331
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c1b0a4f9d2d6e740800000000000000
+      internalID: 5181060254890242500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_27
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 348
+        width: 39
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6466eaa513eded880800000000000000
+      internalID: -8584179536165444026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_28
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 348
+        width: 20
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6211f19b30eab93f0800000000000000
+      internalID: -892928770088955610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_29
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 348
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d229919a3a689820800000000000000
+      internalID: 2925204757760516819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_30
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 348
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26e8c357a280e1410800000000000000
+      internalID: 1449605108508429922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_31
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 348
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ad959f1de82187e0800000000000000
+      internalID: -1765084580050264671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_32
+      rect:
+        serializedVersion: 2
+        x: 574
+        y: 334
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef78aa3717d8bff90800000000000000
+      internalID: -6918780884113258498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_33
+      rect:
+        serializedVersion: 2
+        x: 581
+        y: 334
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ff9b7ff48271eae0800000000000000
+      internalID: -1521809283526975500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_34
+      rect:
+        serializedVersion: 2
+        x: 588
+        y: 334
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af387197e6505e2a0800000000000000
+      internalID: -6708950097862360070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_35
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 333
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59f99e24cecf268b0800000000000000
+      internalID: -5160284131348078699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_36
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 334
+        width: 16
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f24c1a037a787db40800000000000000
+      internalID: 5464985824982582319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_37
+      rect:
+        serializedVersion: 2
+        x: 628
+        y: 333
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4379692a47748ac0800000000000000
+      internalID: -3853824220716240051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_38
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 334
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8872373e676ab150800000000000000
+      internalID: 5889133185810462860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_39
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 334
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ebd5395d0c647ea0800000000000000
+      internalID: -5875952809224578078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magnitude-of-a-vector-formula-1623757125_40
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 12
+        width: 358
+        height: 274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad09da67b007ca4c0800000000000000
+      internalID: -4274918751743405862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Underground Jungle Platforms_0: -675372448
+      magnitude-of-a-vector-formula-1623757125_0: 5112312130734928002
+      magnitude-of-a-vector-formula-1623757125_1: -6644432650505314922
+      magnitude-of-a-vector-formula-1623757125_10: -2613455863574055797
+      magnitude-of-a-vector-formula-1623757125_11: 4289641054469145563
+      magnitude-of-a-vector-formula-1623757125_12: 8427468460609412427
+      magnitude-of-a-vector-formula-1623757125_13: -2673583056087278248
+      magnitude-of-a-vector-formula-1623757125_14: 5571835064238735959
+      magnitude-of-a-vector-formula-1623757125_15: 7792682592325910092
+      magnitude-of-a-vector-formula-1623757125_16: -8817872351345783589
+      magnitude-of-a-vector-formula-1623757125_17: -1481171690763495680
+      magnitude-of-a-vector-formula-1623757125_18: -7276465370644939356
+      magnitude-of-a-vector-formula-1623757125_19: -4415395943410098914
+      magnitude-of-a-vector-formula-1623757125_2: 136671428739920594
+      magnitude-of-a-vector-formula-1623757125_20: 8667224932254935649
+      magnitude-of-a-vector-formula-1623757125_21: 927404869280727030
+      magnitude-of-a-vector-formula-1623757125_22: -7689338414688782092
+      magnitude-of-a-vector-formula-1623757125_23: 358749539993284340
+      magnitude-of-a-vector-formula-1623757125_24: -4739490695344634630
+      magnitude-of-a-vector-formula-1623757125_25: -1933765463683476430
+      magnitude-of-a-vector-formula-1623757125_26: 5181060254890242500
+      magnitude-of-a-vector-formula-1623757125_27: -8584179536165444026
+      magnitude-of-a-vector-formula-1623757125_28: -892928770088955610
+      magnitude-of-a-vector-formula-1623757125_29: 2925204757760516819
+      magnitude-of-a-vector-formula-1623757125_3: 6967946823802113032
+      magnitude-of-a-vector-formula-1623757125_30: 1449605108508429922
+      magnitude-of-a-vector-formula-1623757125_31: -1765084580050264671
+      magnitude-of-a-vector-formula-1623757125_32: -6918780884113258498
+      magnitude-of-a-vector-formula-1623757125_33: -1521809283526975500
+      magnitude-of-a-vector-formula-1623757125_34: -6708950097862360070
+      magnitude-of-a-vector-formula-1623757125_35: -5160284131348078699
+      magnitude-of-a-vector-formula-1623757125_36: 5464985824982582319
+      magnitude-of-a-vector-formula-1623757125_37: -3853824220716240051
+      magnitude-of-a-vector-formula-1623757125_38: 5889133185810462860
+      magnitude-of-a-vector-formula-1623757125_39: -5875952809224578078
+      magnitude-of-a-vector-formula-1623757125_4: 2454106474295144137
+      magnitude-of-a-vector-formula-1623757125_40: -4274918751743405862
+      magnitude-of-a-vector-formula-1623757125_5: -8890604136477097869
+      magnitude-of-a-vector-formula-1623757125_6: -118717870364771718
+      magnitude-of-a-vector-formula-1623757125_7: 7232206712554504562
+      magnitude-of-a-vector-formula-1623757125_8: 1714439381500684449
+      magnitude-of-a-vector-formula-1623757125_9: -6297847532816316885
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
