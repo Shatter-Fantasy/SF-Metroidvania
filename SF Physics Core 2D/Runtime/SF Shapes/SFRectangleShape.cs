@@ -2,7 +2,6 @@ using System;
 using Unity.U2D.Physics;
 using UnityEngine;
 
-
 namespace SF.U2D.Physics
 {
     [ExecuteAlways]
