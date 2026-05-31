@@ -11,12 +11,10 @@ namespace SFEditor.Dialogue.Graphs
     {
 	    public string ExecutionPortName { get; } = "Conversation Entry";
 	    public string SpeakerOptionsName { get; } = "Speaker";
-	    public const string AnimationParameterOptionsName = "Animation Parameter";
 	    protected override void OnDefineOptions(IOptionDefinitionContext  context)
 	    {		    
 		    context.AddOption<string>(SpeakerOptionsName);
-		    context.AddOption<string>(ExecutionPortName);
-		    context.AddOption<string>(AnimationParameterOptionsName);
+		    context.AddOption<string>(ExecutionPortName).AsTextArea().Build();
 	    }
 
 	    public IRuntimeNode ConvertToRuntimeNode()
