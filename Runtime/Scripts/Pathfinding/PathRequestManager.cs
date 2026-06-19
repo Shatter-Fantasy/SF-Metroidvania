@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace SF.Pathfinding
 {
-    public class PathRequetManager : MonoBehaviour
+    public class PathRequestManager : MonoBehaviour
     {
-        public static PathRequetManager _instance;
+        public static PathRequestManager _instance;
 
         public Queue<PathRequest> _pathRequestQueue = new Queue<PathRequest>();
         private PathRequest _currentPathRequest;

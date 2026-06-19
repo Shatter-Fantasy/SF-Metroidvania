@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SF.StateMachine
 {
-	using U2D.Physics;
+	using SF.U2D.Physics;
 
     public class PatrolAIState : StateCore
     {
