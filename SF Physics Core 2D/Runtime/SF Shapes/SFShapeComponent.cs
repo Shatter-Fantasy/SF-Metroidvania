@@ -20,8 +20,13 @@ namespace SF.U2D.Physics
 
         void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent);
     }
-    
-    public interface IContact2DCallbackBase {}
+
+    public interface IBodyUpdate2DCallback
+    {
+        void OnBodyUpdate2D(PhysicsEvents.BodyUpdateEvent bodyUpdateEvent, SFShapeComponent callingComponent);
+    }
+
+    public interface IContact2DCallbackBase { }
     
     public interface IContactBegin2DCallback : IContact2DCallbackBase
     {
@@ -56,7 +61,8 @@ namespace SF.U2D.Physics
         ITriggerShapeCallback, PhysicsCallbacks.ITriggerCallback,
         IContactShapeCallback, PhysicsCallbacks.IContactCallback,
         IPreSolveShapeCallback, PhysicsCallbacks.IPreSolveCallback,
-        IContactBegin2DCallback, IContactEnd2DCallback
+        IBodyUpdate2DCallback, PhysicsCallbacks.IBodyUpdateCallback,
+        IContactBegin2DCallback, IContactEnd2DCallback 
     {
 
         protected PhysicsShape _shape;
@@ -171,6 +177,7 @@ namespace SF.U2D.Physics
         /// The callback targets has to implement the interfaces for the type of Physics Event you want to have sent to it.
         /// Because of this you can not set a GameObject for example as the callback target currently as of 6.3
         /// </summary>
+        private readonly List<IBodyUpdate2DCallback> _bodyUpdateTargets = new();
         private readonly List<ITriggerShapeCallback> _triggerTargets = new();
         private readonly List<IContactShapeCallback> _contactTargets = new();
         private readonly List<IContactBegin2DCallback> _contactBegin2DTargets = new();
@@ -280,7 +287,8 @@ namespace SF.U2D.Physics
             }
             // Sync the shape position with the component's transform position.
             BodyDefinition.position = PhysicsMath.ToPosition2D(transform.position, PhysicsWorld.transformPlane);
-            BodyDefinition.rotation = new PhysicsRotate(PhysicsMath.ToRotation2D(transform.rotation, PhysicsWorld.transformPlane));
+            BodyDefinition.rotation = PhysicsRotate.FromDegrees(PhysicsMath.ToRotation2D(transform.rotation, 
+                PhysicsWorld.transformPlane));
             
             // Create the physics body to inject into the shape when creating it.
             Body = PhysicsBody.Create(world:PhysicsWorld, definition: BodyDefinition);
@@ -345,6 +353,46 @@ namespace SF.U2D.Physics
         }
 
 #region Physic Event Callbacks
+    
+#region BodyUpdate Callbacks
+        
+        
+        public void AddBodyUpdateCallbackTarget<TBodyUpdateCallback>(TBodyUpdateCallback target) 
+            where TBodyUpdateCallback : IBodyUpdate2DCallback
+        {
+            _bodyUpdateTargets?.Add(target);
+        }
+        
+        public void RemoveBodyUpdateCallbackTarget<TBodyUpdateCallback>(TBodyUpdateCallback target) 
+            where TBodyUpdateCallback : IBodyUpdate2DCallback
+        {
+            _bodyUpdateTargets?.Remove(target);
+        }
+        
+        private void OnBodyUpdateCallbacks(PhysicsEvents.BodyUpdateEvent bodyUpdateEvent)
+        {
+            // The top if and foreach will be removed after setting up the new IContactCallback interfaces.
+            if (_bodyUpdateTargets is { Count: < 1 }) 
+                return;
+            
+            foreach (var target in _bodyUpdateTargets)
+            {
+                target.OnBodyUpdate2D(bodyUpdateEvent, this);
+            }
+        }
+        
+        public void OnBodyUpdate2D(PhysicsEvents.BodyUpdateEvent bodyUpdateEvent, SFShapeComponent callingComponent)
+        {
+            OnBodyUpdate2D(bodyUpdateEvent);
+        }
+       
+        public void OnBodyUpdate2D(PhysicsEvents.BodyUpdateEvent bodyUpdateEvent)
+        {
+            OnBodyUpdateCallbacks(bodyUpdateEvent);
+        }
+        
+#endregion
+#region Trigger Callbacks
         public void AddTriggerCallbackTarget(ITriggerShapeCallback target)
         {
             _triggerTargets.Add(target);
@@ -376,6 +424,8 @@ namespace SF.U2D.Physics
         {
             _triggerTargets.Remove(target);
         }
+        
+#endregion
         
         public void AddContactCallbackTarget(IContactShapeCallback target)
         {
@@ -409,7 +459,6 @@ namespace SF.U2D.Physics
                     break;
             }
         }
-
         
         public void AddPreSolveCallbackTarget(IPreSolveShapeCallback target)
         {
@@ -447,12 +496,14 @@ namespace SF.U2D.Physics
             }
         }
         
-        public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
+
+        
+        public virtual void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
             OnTriggerBeginCallbacks(beginEvent);
         }
 
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
+        public virtual void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent)
         {
             OnTriggerEndCallbacks(endEvent);
         }
@@ -509,8 +560,7 @@ namespace SF.U2D.Physics
         
         public void OnTransformChanged(PhysicsEvents.TransformChangeEvent transformChangeEvent)
         {
-            var physicsTransform = new PhysicsTransform(transform.position, PhysicsRotate.identity);
-            Body.SetAndWriteTransform(physicsTransform);
+            Body.transform  = new PhysicsTransform(transform.position, PhysicsRotate.identity);
         } 
 #endregion
         
@@ -627,5 +677,6 @@ namespace SF.U2D.Physics
         }
 #endif
 
+  
     }
 }
