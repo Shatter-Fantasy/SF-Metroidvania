@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -69,7 +70,7 @@ namespace SF.Pathfinding
             if(GridPath == null)
                 return;
 
-            Vector2[] wayPoints = new Vector2[0];
+            NativeList<float2> wayPoints = default;
             bool pathSuccess = false;
 
             _startNode = GridPath.NodeFromWorldPoint(startPotion);
@@ -126,6 +127,7 @@ namespace SF.Pathfinding
             _pathRequestManager.FinishedProcessingPath(wayPoints,pathSuccess);
         }
 
+        /*
         public async Awaitable<Vector2[]> FindPathAwaitable(Vector2 startPotion, Vector2 goalPosition)
         {
             if(GridPath == null)
@@ -186,14 +188,16 @@ namespace SF.Pathfinding
 
             return wayPoints;
         }
+        */
         
-        /*
-        public async Awaitable<NativeArray<float3>> FindPathAwaitable(float2 startPotion, float2 goalPosition)
+        public async Awaitable<NativeList<float2>> FindPathAwaitable(float2 startPotion, float2 goalPosition)
         {
-            if(GridPath == null)
-                return default;
+            NativeList<float2> wayPoints = new NativeList<float2>();
 
-            NativeArray<float3> wayPoints = new NativeArray<float3>();
+            if (GridPath == null)
+                return wayPoints;
+
+          
             bool pathSuccess = false;
 
             _startNode = GridPath.NodeFromWorldPoint(startPotion);
@@ -243,12 +247,14 @@ namespace SF.Pathfinding
                 }
             }
             await Awaitable.EndOfFrameAsync();
-            if(pathSuccess)
+
+            if (pathSuccess)
                 wayPoints = RetracePath(_startNode, _goalNode);
 
             return wayPoints;
-        } */
+        }
         
+        /*
         private Vector2[] RetracePath(PathNodeBase startNode, PathNodeBase goalNode)
         {
             List<PathNodeBase> pathNodes = new();
@@ -263,10 +269,10 @@ namespace SF.Pathfinding
             Vector2[] waypoints = SimplifyPath(pathNodes);
             System.Array.Reverse(waypoints);
             return waypoints;
-        }
+        }*/
         
-        /*
-        private NativeArray<float3> RetracePath(PathNodeBase startNode, PathNodeBase goalNode)
+        
+        private NativeList<float2> RetracePath(PathNodeBase startNode, PathNodeBase goalNode)
         {
             List<PathNodeBase> pathNodes = new();
 
@@ -277,11 +283,12 @@ namespace SF.Pathfinding
                 pathNodes.Add(currentNode);
                 currentNode = currentNode.ParentNodeOnPath;
             }
-            Vector2[] waypoints = SimplifyPath(pathNodes);
-            System.Array.Reverse(waypoints);
+            NativeList<float2> waypoints = SimplifyPath(pathNodes);
+            //waypoints = waypoints.Reverse();
+            //System.Array.Reverse(waypoints);
             return waypoints;
-        }*/
-
+        }
+        /*
         private Vector2[] SimplifyPath(List<PathNodeBase> path)
         {
             List<Vector2> waypoints = new List<Vector2>();
@@ -291,7 +298,7 @@ namespace SF.Pathfinding
             {
                 Vector2 directionNew = new Vector2(
                     path[i-1].GridPosition.x - path[i].GridPosition.x, 
-                    path[i-1].GridPosition.y - path[i].GridPosition.y
+                    path[i-1].GridPosition.y - path[i].GridPosition.y,
                     );
 
                 if(directionNew != directionOld)
@@ -301,8 +308,31 @@ namespace SF.Pathfinding
             }
 
             return waypoints.ToArray();
+        }*/
+
+        private NativeList<float2> SimplifyPath(in List<PathNodeBase> path)
+        {
+            NativeList<float2> waypoints = new NativeList<float2>(allocator: Allocator.Temp);
+            
+            float2 directionOld = Vector2.zero;
+
+            for(int i = 1; i < path.Count; i++)
+            {
+                float2 directionNew = new float2(
+                    path[i-1].GridPosition.x - path[i].GridPosition.x, 
+                    path[i-1].GridPosition.y - path[i].GridPosition.y
+                );
+
+                if(directionNew.Equals(directionOld))
+                    waypoints.Add(path[i-1].WorldPosition);
+
+                directionOld = directionNew;
+            }
+
+            return waypoints;
         }
 
+        
         private float GetDistance(PathNodeBase nodeA, PathNodeBase nodeB)
         {
             float distanceX = Mathf.Abs(nodeA.GridPosition.x - nodeB.GridPosition.x);

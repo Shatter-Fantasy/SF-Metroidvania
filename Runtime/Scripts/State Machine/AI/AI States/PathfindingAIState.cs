@@ -86,7 +86,7 @@ namespace SF.StateMachine
 				_targetIndex      = 0;
 				_currentTargetPos = _target.position;
 			
-				_path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position, _target.position);
+				//_path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position, _target.position);
             
 				_followingTarget = true;
 				
@@ -107,6 +107,7 @@ namespace SF.StateMachine
 	        FollowPath();
         }
 
+        
         private async void FollowPath()
         {
 	        if (!_followingTarget)
@@ -114,8 +115,8 @@ namespace SF.StateMachine
 		        
 	        if (Vector2.Distance(_currentTargetPos, _target.position) > _nodeRadius)
 	        {
-		        _path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
-			        _target.position);
+		        //_path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
+			        //_target.position);
 
 		        // If when updating the path we realized the player moved into the same node 
 		        // as the path follower just return and stop looping.
@@ -156,6 +157,7 @@ namespace SF.StateMachine
 				return;
 		}
         
+        /*
         private async Awaitable FollowPathAsync()
         {
         	if(_path.Length < 1)
@@ -203,10 +205,11 @@ namespace SF.StateMachine
 		        await Awaitable.EndOfFrameAsync();
 	        }
         }
-
+        */
+        /*
         protected override void OnStateExit()
         {
 	        _followingTarget = false;
-        }
+        }*/
     }
 }

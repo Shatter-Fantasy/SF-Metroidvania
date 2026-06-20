@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using Unity.U2D.Physics;
 using UnityEngine;
 
 namespace SF.Pathfinding
@@ -8,7 +8,7 @@ namespace SF.Pathfinding
     public class GridBase : MonoBehaviour
     {
         public bool DebugDrawGrid = false;
-        public LayerMask UnwalkableMask;
+        public PhysicsQuery.QueryFilter UnwalkableMask;
         public Vector2 GridWorldSize;
         public float NodeRadius = 0.5f;
 
@@ -42,7 +42,8 @@ namespace SF.Pathfinding
                         Vector2.up * (y * _nodeDiameter + NodeRadius);
 
                     // TODO: Update this to low level physics overlap checking.
-                    bool traversable = !(Physics2D.OverlapCircle(worldPoint, NodeRadius, UnwalkableMask));
+                    //bool traversable = !(Physics2D.OverlapCircle(worldPoint, NodeRadius, UnwalkableMask));
+                    bool traversable = !(PhysicsWorld.defaultWorld.TestOverlapPoint(worldPoint, UnwalkableMask));
                     
                     _grid[x, y] = new PathNodeBase(traversable,worldPoint, new Vector2(x,y));
                 }

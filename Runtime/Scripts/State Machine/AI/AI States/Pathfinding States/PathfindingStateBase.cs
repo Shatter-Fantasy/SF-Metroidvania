@@ -1,6 +1,8 @@
 using System;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Mathematics;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace SF.StateMachine
@@ -35,8 +37,8 @@ namespace SF.StateMachine
         /// </summary>
         [Header("Pathfinding")]
         protected GridBase _grid;
-        protected Vector2[] _path;
-        protected float3[] _pathUpdated;
+        //protected Vector2[] _path;
+        protected NativeList<float2> _path;
         protected float _nodeRadius = 0.5f;
        
         protected bool _isFollowingTarget;
@@ -94,44 +96,30 @@ namespace SF.StateMachine
         
         protected async void FollowPathAsync()
         {
-            if(math.distance(_currentTargetPos, _currentTargetPos) > _nodeRadius)
-            {
-                _path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(new Vector2(_controlledPosition.x,_controlledPosition.y),
-                    new Vector2(_currentTargetPos.x,_currentTargetPos.y));
-
-                // If when updating the path we realized the player moved into the same node 
-                // as the path follower just return and stop looping.
-                if (_path == null || _path.Length < 1)
-                {
-                    _currentWayPoint = _currentTargetPos;
-                }
-                else
-                {
-                    var wayPoint = _path[0];
-                    _currentWayPoint = new float3(wayPoint.x,wayPoint.y,0);
-                }
-
-                _targetIndex = 0;
-            }
-            else if (Vector3.Distance(_controlledTransform.position, _currentWayPoint) < _nodeRadius)
+            if (math.distance(_currentTargetPos, _controlledPosition) < _nodeRadius)
             {
                 _targetIndex++;
-			    
+                
                 // Reached the end of the path. If following a player target this means we reached them.
-                if (_targetIndex >= _path?.Length)
-                {
-                    _path = null;
+                if (!_path.IsCreated && _targetIndex >= _path.Length)
                     return;
+            }
+            else
+            {
+                _path = await PathRequestManager._instance.PathFinding
+                                                .FindPathAwaitable(_controlledPosition.xy, _currentTargetPos.xy);
+            }
+            
+            // Set the current waypoint as the current node position based on the current target index in the path array.
+            if (_path.IsCreated)
+            {
+                if (_targetIndex < _path.Length)
+                {
+                    var wayPoint = _path[_targetIndex];
+                    _currentWayPoint = new float3(wayPoint.x, wayPoint.y, 0);
                 }
             }
-
-            // Set the current waypoint as the current node position based on the current target index in the path array.
-            if (_path != null && _targetIndex < _path.Length)
-            {
-                var wayPoint = _path[_targetIndex];
-                _currentWayPoint = new float3(wayPoint.x,wayPoint.y,0);
-            }
-
+            
             _controlledTransform.position= Vector3.MoveTowards(_controlledTransform.position, _currentTargetPos, _speed * Time.deltaTime);
         }
     }

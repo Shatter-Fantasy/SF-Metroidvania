@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace SF.Pathfinding
@@ -21,7 +22,7 @@ namespace SF.Pathfinding
             PathFinding = GetComponent<PathAStar>();
         }
 
-        public static void RequestPath(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback)
+        public static void RequestPath(Vector2 pathStart, Vector2 pathEnd, Action<NativeList<float2>, bool> callback)
         {
             PathRequest newRequest = new PathRequest(pathStart,pathEnd,callback);
             _instance._pathRequestQueue.Enqueue(newRequest);
@@ -37,8 +38,8 @@ namespace SF.Pathfinding
                 PathFinding.StartFindPath(_currentPathRequest.PathStart, _currentPathRequest.PathEnd);
             }
         }
-
-        public void FinishedProcessingPath(Vector2[] path, bool succes)
+        
+        public void FinishedProcessingPath(NativeList<float2> path, bool succes)
         {
             _currentPathRequest.Callback(path, succes);
             _isProcessingAPath = false;
@@ -49,9 +50,9 @@ namespace SF.Pathfinding
         {
             public Vector2 PathStart;
             public Vector2 PathEnd;
-            public Action<Vector2[], bool> Callback;
+            public Action<NativeList<float2>, bool> Callback;
             
-            public PathRequest(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback)
+            public PathRequest(Vector2 pathStart, Vector2 pathEnd, Action<NativeList<float2>, bool> callback)
             {
                 PathStart = pathStart;
                 PathEnd = pathEnd;
