@@ -1,21 +1,22 @@
 using System;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace SF.SpawnModule
 {
-    using Characters.Controllers;
-    using LevelModule;
-    using U2D.Physics;
-    using RoomModule;
+    using SF.Characters.Controllers;
+    using SF.LevelModule;
+    using SF.U2D.Physics;
+    using SF.RoomModule;
     /// <summary>
     /// The system that controls the logic for spawning the player. 
     /// </summary>
-    public class SpawnSystem : MonoBehaviour
+    public partial class SpawnSystem : MonoBehaviour
     {
         public GameObject Controller;
 
 #region Static Fields/Events
-        public static Vector3 CurrentSpawnPosition;
+        [AutoStaticsCleanup] public static Vector3 CurrentSpawnPosition;
         
         /// <summary>
         /// The spawned root gameobject of the player.
