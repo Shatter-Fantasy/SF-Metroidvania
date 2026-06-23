@@ -12,9 +12,9 @@ namespace SF.U2D.Sprites
 		/// This is used in URP for ligh, shadow, and other render layer checks.
 		/// </summary>
 		public uint RenderLayerMask;
-		public SortingLayer SortingLayer;
+		// I need to make a custom ISerializedCallback implementation to convert this to an enum flag and back.
+		[System.NonSerialized] public SortingLayer SortingLayer;
 		public int SortingOrder;
-
 	}
 
 	[System.Serializable]
