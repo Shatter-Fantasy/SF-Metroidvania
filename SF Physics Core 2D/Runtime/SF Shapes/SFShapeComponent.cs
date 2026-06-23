@@ -16,18 +16,9 @@ namespace SF.U2D.Physics
         bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent,SFShapeComponent callingShapeComponent);
     }
     
-
     public interface IBodyUpdate2DCallback
     {
         void OnBodyUpdate2D(PhysicsEvents.BodyUpdateEvent bodyUpdateEvent, SFShapeComponent callingComponent);
-    }
-
-
-    public interface ITriggerShapeCallback
-    {
-        void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
-
-        void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent);
     }
     
     /// <summary>
@@ -163,10 +154,10 @@ namespace SF.U2D.Physics
         /// Because of this you can not set a GameObject for example as the callback target currently as of 6.3
         /// </summary>
         private readonly List<IBodyUpdate2DCallback> _bodyUpdateTargets = new();
-        private readonly List<ITriggerShapeCallback> _triggerTargets = new();
-        //private readonly List<IContactShapeCallback> _contactTargets = new();
         private readonly List<IContactShapeBegin2DCallback> _contactBegin2DTargets = new();
         private readonly List<IContactShapeEnd2DCallback> _contactEnd2DTargets = new();
+        private readonly List<ITriggerShapeBegin2DCallback> _triggerBegin2DTargets = new();
+        private readonly List<ITriggerShapeEnd2DCallback> _triggerEnd2DTargets = new();
         private readonly List<IPreSolveShapeCallback> _preSolveTargets = new();
 
         public Action ShapeCreatedHandler;
@@ -378,17 +369,33 @@ namespace SF.U2D.Physics
         
 #endregion
 #region Trigger Callbacks
-        public void AddTriggerCallbackTarget(ITriggerShapeCallback target)
-        {
-            _triggerTargets.Add(target);
+    
+        public void AddTriggerCallbackTarget<TTriggerCallback>(TTriggerCallback target) 
+            where TTriggerCallback : ITrigger2DCallbackBase
+        { 
+            // Objects can implement both ITriggerShapeBegin2DCallback and ITriggerShapeEnd2DCallback, so don't use else if.
+            if(target is ITriggerShapeBegin2DCallback begin2DCallback)
+                    _triggerBegin2DTargets.Add(begin2DCallback);
+            if(target is ITriggerShapeEnd2DCallback end2DCallback)
+               _triggerEnd2DTargets.Add(end2DCallback);
         }
-
+        
+        public void RemoveTriggerCallbackTarget<TTriggerCallback>(TTriggerCallback target) 
+            where TTriggerCallback : ITrigger2DCallbackBase
+        {
+            // Objects can implement both ITriggerShapeBegin2DCallback and ITriggerShapeEnd2DCallback, so don't use else if.
+            if(target is ITriggerShapeBegin2DCallback begin2DCallback)
+                _triggerBegin2DTargets.Remove(begin2DCallback);
+            if(target is ITriggerShapeEnd2DCallback end2DCallback)
+                _triggerEnd2DTargets.Remove(end2DCallback);
+        }
+        
         private void OnTriggerBeginCallbacks(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
-            if(_triggerTargets == null || _triggerTargets.Count < 1)
+            if(_triggerBegin2DTargets is { Count: < 1 })
                 return;
             
-            foreach (var target in _triggerTargets)
+            foreach (var target in _triggerBegin2DTargets)
             {
                 target.OnTriggerBegin2D(beginEvent, this);
             }
@@ -396,50 +403,36 @@ namespace SF.U2D.Physics
         
         private void OnTriggerEndCallbacks(PhysicsEvents.TriggerEndEvent endEvent)
         {
-            if(_triggerTargets == null || _triggerTargets.Count < 1)
+            if(_triggerEnd2DTargets is { Count: < 1 })
                 return;
 
-            foreach (var target in _triggerTargets)
+            foreach (var target in _triggerEnd2DTargets)
             {
                 target.OnTriggerEnd2D(endEvent, this);
             }
         }
-        
-        public void RemoveTriggerCallbackTarget(ITriggerShapeCallback target)
-        {
-            _triggerTargets.Remove(target);
-        }
-        
 #endregion
     
         public void AddContactCallbackTarget<TContactCallback>(TContactCallback target) 
             where TContactCallback : IContact2DCallbackBase
         {
+            // Objects can implement both IContactShapeBegin2DCallback and IContactShapeEnd2DCallback, so don't use else if.
             if (target is IContactShapeBegin2DCallback begin2DCallback)
                 _contactBegin2DTargets.Add(begin2DCallback);
-            else if (target is IContactShapeEnd2DCallback end2DCallback)
+            if (target is IContactShapeEnd2DCallback end2DCallback)
                 _contactEnd2DTargets.Add(end2DCallback);
         }
         
         public void RemoveContactCallbackTarget<TContactCallback>(TContactCallback target) 
             where TContactCallback : IContact2DCallbackBase
         {
-            switch (target)
-            {
-                case IContactShapeBegin2DCallback begin2DCallback:
-                    _contactBegin2DTargets.Remove(begin2DCallback);
-                    break;
-                case IContactShapeEnd2DCallback end2DCallback:
-                    _contactEnd2DTargets.Remove(end2DCallback);
-                    break;
-            }
+            // Objects can implement both IContactShapeBegin2DCallback and IContactShapeEnd2DCallback, so don't use else if.
+            if (target is IContactShapeBegin2DCallback begin2DCallback)
+                _contactBegin2DTargets.Remove(begin2DCallback);
+            if (target is IContactShapeEnd2DCallback end2DCallback)
+                _contactEnd2DTargets.Remove(end2DCallback);
         }
         
-        public void AddPreSolveCallbackTarget(IPreSolveShapeCallback target)
-        {
-            _preSolveTargets.Add(target);
-        }
-
         private void OnContactBeginCallbacks(PhysicsEvents.ContactBeginEvent beginEvent)
         {
             if(_contactBegin2DTargets is { Count: < 1 })
@@ -453,16 +446,7 @@ namespace SF.U2D.Physics
         
         private void OnContactEndCallbacks(PhysicsEvents.ContactEndEvent endEvent)
         {
-            // The top if and foreach will be removed after setting up the new IContactCallback interfaces.
             if(_contactEnd2DTargets is { Count: < 1 })
-            {
-                foreach (var target in _contactEnd2DTargets)
-                {
-                    target.OnContactEnd2D(endEvent, this);
-                }
-            }
-            
-            if(_contactEnd2DTargets == null || _contactEnd2DTargets.Count < 1)
                 return;
             
             foreach (var target in _contactEnd2DTargets)
@@ -471,8 +455,34 @@ namespace SF.U2D.Physics
             }
         }
         
+        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent)
+        {
+            OnContactBeginCallbacks(beginEvent);
+        }
 
+        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent)
+        {
+            OnContactEndCallbacks(endEvent);
+        }
         
+
+        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnContactBegin2D(beginEvent);
+        }
+
+        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent)
+        {
+            OnContactEnd2D(endEvent);
+        }
+        
+        
+        public void AddPreSolveCallbackTarget(IPreSolveShapeCallback target)
+        {
+            _preSolveTargets.Add(target);
+        }
+
+
         public virtual void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent)
         {
             OnTriggerBeginCallbacks(beginEvent);
@@ -483,15 +493,6 @@ namespace SF.U2D.Physics
             OnTriggerEndCallbacks(endEvent);
         }
 
-        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent)
-        {
-            OnContactBeginCallbacks(beginEvent);
-        }
-
-        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent)
-        {
-            OnContactEndCallbacks(endEvent);
-        }
 
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
@@ -503,15 +504,6 @@ namespace SF.U2D.Physics
             OnTriggerEnd2D(endEvent);
         }
 
-        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
-        {
-            OnContactBegin2D(beginEvent);
-        }
-
-        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            OnContactEnd2D(endEvent);
-        }
         
         public bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent)
         {
