@@ -24,8 +24,10 @@ namespace SF.StatModule
     /// <summary>
     /// Wrapper for <see cref="StatDataList[T]"/> to make it easier to serialize in Databases.
     /// </summary>
+    [System.Serializable]
     public abstract class StatDataListBase : DTOBase{}
     
+    [System.Serializable]
     public abstract class StatDataList<T> : StatDataListBase where T : StatData
     {
         public List<StatMediator<T>> StatMediators = new List<StatMediator<T>>();

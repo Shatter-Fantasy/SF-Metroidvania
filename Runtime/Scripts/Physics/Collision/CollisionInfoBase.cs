@@ -14,6 +14,7 @@ namespace SF.U2D.Physics
     ///	These are collisions from Collision based callbacks that interact with a non-trigger collider.
     /// Used for platforms, walls, and physical objects that can stop the player.
     /// </remarks>
+    [Serializable]
     public abstract class CollisionInfoBase
     {
         public GameObject ControlledGameObject;

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -42,8 +43,7 @@ namespace SF.Characters
 		//[SerializeField] private bool _hasForcedState;
 		
 		
-
-		public AnimatorControllerParameter[] AnimatorParameters;
+		[NonSerialized] public AnimatorControllerParameter[] AnimatorParameters;
 		#region Lifecycle Functions  
 		private void Awake()
 		{

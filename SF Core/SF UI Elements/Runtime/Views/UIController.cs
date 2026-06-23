@@ -76,6 +76,6 @@ namespace SF.UIModule
 		/// </summary>
 		/// <param name="panelRenderer"></param>
 		/// <param name="rootElement"></param>
-		protected abstract void OnUIControllerUIReloaded(PanelRenderer panelRenderer, VisualElement rootElement);
+		protected abstract void OnUIControllerUIReloaded(PanelRenderer panelRenderer, VisualElement rootElement, int version);
 	}
 }

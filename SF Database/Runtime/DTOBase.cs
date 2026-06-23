@@ -1,11 +1,13 @@
 #if !SF_DATABASES
-using UnityEngine;
+    using System;
+    using UnityEngine;
 
 namespace SF.DataModule
 {
     /// <summary>
     /// This is a DTOBase that can be used for normal class object where needed.
     /// </summary>
+    [Serializable]
     public class DTOBase
     {
         public int ID = 0;

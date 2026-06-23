@@ -9,7 +9,7 @@ namespace SF.Pathfinding
     {
         public static PathRequestManager _instance;
 
-        public Queue<PathRequest> _pathRequestQueue = new Queue<PathRequest>();
+        [NonSerialized] public Queue<PathRequest> _pathRequestQueue = new Queue<PathRequest>();
         private PathRequest _currentPathRequest;
 
         private bool _isProcessingAPath;

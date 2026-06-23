@@ -38,6 +38,7 @@ namespace SF.Settings
     /// <summary>
     /// Base class for any type of game settings the player can change in game..
     /// </summary>
+    [Serializable]
     public abstract class SettingsBase
     {
         /// <summary>
