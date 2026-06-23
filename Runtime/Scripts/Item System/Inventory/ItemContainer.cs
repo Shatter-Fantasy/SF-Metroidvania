@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using SF.DataModule;
 using UnityEngine;
 
 namespace SF.ItemModule
 {
-    using Managers;
+    using SF.DataModule;
     public class ItemContainer : MonoBehaviour
     {
         [SerializeReference]

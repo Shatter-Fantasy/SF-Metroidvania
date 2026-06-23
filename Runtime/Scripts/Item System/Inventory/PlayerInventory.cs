@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SF.DataModule;
 
 namespace SF.ItemModule
 {
-    using DataManagement;
-    using Managers;
-    [Serializable]
+    using SF.DataManagement;
+    using SF.DataModule;
+    
     public class PlayerInventory : ItemContainer
     {
         [NonSerialized] public List<ItemData> FilteredConsumable = new List<ItemData>();
