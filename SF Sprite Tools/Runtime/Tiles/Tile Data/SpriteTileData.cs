@@ -17,13 +17,13 @@ namespace SF.U2D.Sprites
 
 	}
 
+	[System.Serializable]
 	public class SpriteTileData
     {
 		/// <summary>
 		/// This is used to keep track of the tiles linked to a Sprite.
 		/// </summary>
 		public GUID SpriteTileID;
-
 		public SpriteTileRenderLayer TileRenderLayer;
 		public TileBase DefaultTile;
     }
