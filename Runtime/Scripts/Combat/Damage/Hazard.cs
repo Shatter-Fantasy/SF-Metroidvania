@@ -18,7 +18,7 @@ namespace SF.DamageModule
 
     public class Hazard : MonoBehaviour,
         ITriggerShapeCallback,
-        IContactShapeCallback
+        IContactShapeBegin2DCallback
     {
         private Vector2 _collisionNormal;
         public Direction DamageDirection;
@@ -48,7 +48,6 @@ namespace SF.DamageModule
         {
             // noop - No Operation.
         }
-
         
         // TODO: Add this to an utility class where the direction is just passed in as a parameter.
         private bool CheckCollisionDirection()
@@ -93,11 +92,6 @@ namespace SF.DamageModule
             
             damagable.TakeDamage(DamageAmount,_knockBackForce);
             */
-        }
-
-        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            
         }
     }
 }

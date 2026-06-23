@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.U2D.Physics;
-using UnityEditor;
 using UnityEngine;
 
+#if  UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace SF.U2D.Physics
 {
@@ -14,30 +16,13 @@ namespace SF.U2D.Physics
         bool OnPreSolve2D(PhysicsEvents.PreSolveEvent preSolveEvent,SFShapeComponent callingShapeComponent);
     }
     
-    public interface IContactShapeCallback
-    {
-        void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
-
-        void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent);
-    }
 
     public interface IBodyUpdate2DCallback
     {
         void OnBodyUpdate2D(PhysicsEvents.BodyUpdateEvent bodyUpdateEvent, SFShapeComponent callingComponent);
     }
 
-    public interface IContact2DCallbackBase { }
-    
-    public interface IContactBegin2DCallback : IContact2DCallbackBase
-    {
-        void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
-    }
-    
-    public interface IContactEnd2DCallback : IContact2DCallbackBase
-    {
-        void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent);
-    }
-    
+
     public interface ITriggerShapeCallback
     {
         void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent);
@@ -59,10 +44,10 @@ namespace SF.U2D.Physics
     [Icon("Packages/shatterfantasy.sf-metroidvania/Editor/Icons/SceneBody.png")]
     public abstract class SFShapeComponent : MonoBehaviour,  PhysicsCallbacks.ITransformChangedCallback,
         ITriggerShapeCallback, PhysicsCallbacks.ITriggerCallback,
-        IContactShapeCallback, PhysicsCallbacks.IContactCallback,
         IPreSolveShapeCallback, PhysicsCallbacks.IPreSolveCallback,
         IBodyUpdate2DCallback, PhysicsCallbacks.IBodyUpdateCallback,
-        IContactBegin2DCallback, IContactEnd2DCallback 
+        IContactShapeBegin2DCallback, IContactShapeEnd2DCallback,
+        PhysicsCallbacks.IContactCallback
     {
 
         protected PhysicsShape _shape;
@@ -179,9 +164,9 @@ namespace SF.U2D.Physics
         /// </summary>
         private readonly List<IBodyUpdate2DCallback> _bodyUpdateTargets = new();
         private readonly List<ITriggerShapeCallback> _triggerTargets = new();
-        private readonly List<IContactShapeCallback> _contactTargets = new();
-        private readonly List<IContactBegin2DCallback> _contactBegin2DTargets = new();
-        private readonly List<IContactEnd2DCallback> _contactEnd2DTargets = new();
+        //private readonly List<IContactShapeCallback> _contactTargets = new();
+        private readonly List<IContactShapeBegin2DCallback> _contactBegin2DTargets = new();
+        private readonly List<IContactShapeEnd2DCallback> _contactEnd2DTargets = new();
         private readonly List<IPreSolveShapeCallback> _preSolveTargets = new();
 
         public Action ShapeCreatedHandler;
@@ -426,24 +411,14 @@ namespace SF.U2D.Physics
         }
         
 #endregion
-        
-        public void AddContactCallbackTarget(IContactShapeCallback target)
-        {
-            _contactTargets.Add(target);
-        }
-        
+    
         public void AddContactCallbackTarget<TContactCallback>(TContactCallback target) 
             where TContactCallback : IContact2DCallbackBase
         {
-            if (target is IContactBegin2DCallback begin2DCallback)
+            if (target is IContactShapeBegin2DCallback begin2DCallback)
                 _contactBegin2DTargets.Add(begin2DCallback);
-            else if (target is IContactEnd2DCallback end2DCallback)
+            else if (target is IContactShapeEnd2DCallback end2DCallback)
                 _contactEnd2DTargets.Add(end2DCallback);
-        }
-        
-        public void RemoveContactCallbackTarget(IContactShapeCallback target)
-        {
-            _contactTargets.Remove(target);
         }
         
         public void RemoveContactCallbackTarget<TContactCallback>(TContactCallback target) 
@@ -451,10 +426,10 @@ namespace SF.U2D.Physics
         {
             switch (target)
             {
-                case IContactBegin2DCallback begin2DCallback:
+                case IContactShapeBegin2DCallback begin2DCallback:
                     _contactBegin2DTargets.Remove(begin2DCallback);
                     break;
-                case IContactEnd2DCallback end2DCallback:
+                case IContactShapeEnd2DCallback end2DCallback:
                     _contactEnd2DTargets.Remove(end2DCallback);
                     break;
             }
@@ -467,10 +442,10 @@ namespace SF.U2D.Physics
 
         private void OnContactBeginCallbacks(PhysicsEvents.ContactBeginEvent beginEvent)
         {
-            if(_contactTargets == null || _contactTargets.Count < 1)
+            if(_contactBegin2DTargets is { Count: < 1 })
                 return;
 
-            foreach (var target in _contactTargets)
+            foreach (var target in _contactBegin2DTargets)
             {
                 target.OnContactBegin2D(beginEvent, this);
             }
@@ -479,9 +454,9 @@ namespace SF.U2D.Physics
         private void OnContactEndCallbacks(PhysicsEvents.ContactEndEvent endEvent)
         {
             // The top if and foreach will be removed after setting up the new IContactCallback interfaces.
-            if(_contactTargets is { Count: < 1 })
+            if(_contactEnd2DTargets is { Count: < 1 })
             {
-                foreach (var target in _contactTargets)
+                foreach (var target in _contactEnd2DTargets)
                 {
                     target.OnContactEnd2D(endEvent, this);
                 }
