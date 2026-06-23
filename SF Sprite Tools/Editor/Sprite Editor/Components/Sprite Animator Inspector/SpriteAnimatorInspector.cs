@@ -1,19 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 
-using SF;
-
-using SFEditor.SpritesData;
-using SFEditor.SpritesData.Utilities;
-
 using UnityEditor;
-
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace SFEditor
+namespace SFEditor.U2D.Sprites
 {
+	using SF;
+	using SFEditor.U2D.Utilities;
+	using SFEditor.U2D.UIElements;
+	
 	[UxmlElement]
     public partial class SpriteAnimatorInspector : VisualElement
     {

@@ -5,10 +5,10 @@ using UnityEditor.U2D.Sprites;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace SFEditor.SpritesData
+namespace SFEditor.U2D.UIElements
 {
-	using Utilities;
-	
+	using SFEditor.U2D.Utilities;
+	using SFEditor.U2D.Sprites;
 	// This is in the SFSpriteEditorDataProvider file. This is the implementation for the data providers.
 	public partial class SFSpriteEditor
 	{

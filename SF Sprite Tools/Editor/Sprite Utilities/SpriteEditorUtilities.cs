@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEditor;
 using UnityEditor.U2D.Sprites;
-
 using UnityEngine;
 
-namespace SFEditor.SpritesData.Utilities
+namespace SFEditor.U2D.Utilities
 {
+	using SFEditor.U2D.Sprites;
     public static class SFSpriteEditorUtilities
     {
 		/// <summary>

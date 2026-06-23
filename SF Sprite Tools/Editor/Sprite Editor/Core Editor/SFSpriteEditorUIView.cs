@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System;
 
-namespace SFEditor.SpritesData
+namespace SFEditor.U2D.UIElements
 {
+    using SFEditor.U2D.Sprites;
+
+    using SFEditor.U2D.Utilities;
     using SFEditor.UIElements.Utilities;
     using static SFEditor.UIElements.Utilities.SFUIElementsFactory;
-    using UIElements;
-    using Utilities;
+    using SF.UIElements;
     using SF.Utilities;
 
 
@@ -511,7 +513,7 @@ namespace SFEditor.SpritesData
             rect = rect.AbsoluteRect();
             switch(SpriteEditorRectMode)
             {
-                case SpriteEditorRectMode.AddSprite:
+                case UIElements.SpriteEditorRectMode.AddSprite:
                     AddSpriteRectFromDrag(_dragManipulator.InversedDragRect);
                     break;
             }

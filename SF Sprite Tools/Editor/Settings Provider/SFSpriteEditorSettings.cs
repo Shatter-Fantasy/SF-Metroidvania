@@ -1,16 +1,14 @@
 using System.IO;
 using System.Text;
-
 using UnityEditor;
-
 using UnityEngine;
 
-namespace SFEditor
+namespace SFEditor.U2D
 {
     public class SFSpriteEditorSettings : ScriptableObject
     {
-		public const string SFSpriteEditorSettingsPath = "Assets/SF Settings/SFSpriteEditorSettings.asset";
-
+	    public const string SFSpriteEditorSettingsPath = "Assets/Settings/SF Settings/SF Sprite Editor Settings.asset";
+	    public const string ProjectSettingsPath = "SF/U2D/Sprite Editor Settings";
 		private static string SFSpriteEditorSettingsFolderPath;
 
 		#region Sprite Animation Settings
@@ -40,7 +38,6 @@ namespace SFEditor
 		public static SFSpriteEditorSettings GetOrCreateSettings()
 		{
 			var settings = AssetDatabase.LoadAssetAtPath<SFSpriteEditorSettings>(SFSpriteEditorSettingsPath);
-
 			if(settings == null)
 			{
 				settings = CreateInstance<SFSpriteEditorSettings>();

@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEditor;
 using UnityEditor.U2D.Sprites;
 
-namespace SFEditor.SpritesData
+namespace SFEditor.U2D.Sprites
 {
 	public class DefaultSpriteNameFileIdProvider : ISpriteNameFileIdDataProvider
 	{

@@ -1,14 +1,11 @@
-using SF;
-
-using SFEditor.SpritesData;
-
 using UnityEditor;
-
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace SFEditor
+namespace SFEditor.U2D.UIElements
 {
+	using SF;
+
 	[UxmlElement]
     public partial class SpriteSliceInspector : VisualElement
     {

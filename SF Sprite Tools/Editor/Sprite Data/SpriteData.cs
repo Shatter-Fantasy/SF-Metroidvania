@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace SFEditor.SpritesData
+namespace SFEditor.U2D.Sprites
 {
+	using SF.U2D.Sprites;
 	/// <summary>
 	/// A custom class that can be used to edit, add, remove, or read data from sprites in the Editor. 
 	/// </summary>

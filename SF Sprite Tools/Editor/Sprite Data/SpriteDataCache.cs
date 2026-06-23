@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
-
-using SFEditor.SpritesData.Utilities;
-using SFEditor.Utilities;
-
 using UnityEditor;
 using UnityEditor.U2D.Sprites;
-
 using UnityEngine;
 
-namespace SFEditor.SpritesData
+namespace SFEditor.U2D.Sprites
 {
+	
+	using SFEditor.U2D.Utilities;
+	using SFEditor.Utilities;
+	
     public class SpriteDataCache : ScriptableObject
     {
 		/// <summary>

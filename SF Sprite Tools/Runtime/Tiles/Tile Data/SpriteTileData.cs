@@ -1,9 +1,7 @@
-using UnityEditor;
-
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace SFEditor.SpritesData
+namespace SF.U2D.Sprites
 {
 
 	// TODO: Add a Collection of this to the SFSpriteEditorSettings to allow for easily seeing and editing the SpriteTileRenderLayers.

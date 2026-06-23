@@ -1,8 +1,8 @@
 using UnityEngine.UIElements;
-using SFEditor.SpritesData.UIElements;
 
-namespace SFEditor.SpritesData
+namespace SFEditor.U2D.Sprites
 {
+	using SFEditor.U2D.UIElements;
 	/// <summary>
 	/// This is the base class needed to be implemented to make new Sprite Frame Modules to implement new features into the Sprite Editor.
 	/// </summary>

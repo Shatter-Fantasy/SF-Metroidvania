@@ -1,19 +1,18 @@
 using System.Collections.Generic;
 using System.IO;
-
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace SFEditor
+namespace SFEditor.U2D
 {
 	public class SFSpriteEditorSettingsProvider : SettingsProvider
 	{
 		private SerializedObject _settingsObj;
 
 		private const string SFSpriteEditorSettingsPath = SFSpriteEditorSettings.SFSpriteEditorSettingsPath;
-		private const string SFSpriteEditorStyleSheetPath = "Assets/SF.2DTools/Editor/UI Toolkit/Style Sheets/SFSpriteEditor.uss";
+		private const string ProjectSettingsPath = SFSpriteEditorSettingsPath;
+		private const string SFSpriteEditorStyleSheetPath = "Packages/SF.Metroidvania/SF Sprite Tools/Editor/UI Toolkit/Style Sheets/SFSpriteEditor.uss";
 
 		public SFSpriteEditorSettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords) {}
 
@@ -35,9 +34,10 @@ namespace SFEditor
 					var settings = SFSpriteEditorSettings.GetSerializedSettings();
 					// TODO: Make the style sheet for the editor if we want one.
 					// This might be a good time to make the Common Style Sheet and add it to a project settings folder.
-
+					
 					var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(SFSpriteEditorStyleSheetPath);
-					rootElement.styleSheets.Add(styleSheet);
+					if(styleSheet != null)
+						rootElement.styleSheets.Add(styleSheet);
 
 					var title = new Label()
 					{

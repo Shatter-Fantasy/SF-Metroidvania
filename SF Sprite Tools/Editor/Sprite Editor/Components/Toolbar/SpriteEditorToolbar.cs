@@ -1,16 +1,14 @@
-using System;
-
-using SF;
 
 using UnityEditor;
-using UnityEditor.ShortcutManagement;
 using UnityEditor.UIElements;
-
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace SFEditor.SpritesData.UIElements
+namespace SFEditor.U2D.UIElements
 {
+	using SF;
+	using SFEditor.U2D.Sprites;
+	
 	[UxmlElement]
     public partial class SpriteEditorToolbar : Toolbar
     {

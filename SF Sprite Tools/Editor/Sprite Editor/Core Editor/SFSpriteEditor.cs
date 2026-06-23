@@ -6,9 +6,12 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-namespace SFEditor.SpritesData
+
+namespace SFEditor.U2D.UIElements
 {
+	using SFEditor.U2D.Sprites;
 	using SFEditor.Utilities;
+	
 	public enum SpriteEditorRectMode
 	{
 		AddSprite,

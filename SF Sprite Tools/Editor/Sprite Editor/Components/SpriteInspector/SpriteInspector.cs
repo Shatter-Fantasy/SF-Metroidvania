@@ -1,12 +1,11 @@
 using UnityEditor;
-
 using UnityEngine.UIElements;
-
-using SF;
 using UnityEngine;
 
-namespace SFEditor.SpritesData
+namespace SFEditor.U2D.Sprites
 {
+	using SF;
+	
 	[UxmlElement]
     public partial class SpriteInspector : VisualElement
     {

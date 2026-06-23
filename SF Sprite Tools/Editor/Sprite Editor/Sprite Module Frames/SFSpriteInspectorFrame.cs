@@ -1,15 +1,12 @@
-using System.Collections.Generic;
-
 using UnityEditor;
 using UnityEditor.UIElements;
-
 using UnityEngine;
-using SFEditor.SpritesData.Utilities;
-using UnityEngine.UIElements;
 using UnityEditor.ShortcutManagement;
 
-namespace SFEditor.SpritesData
+namespace SFEditor.U2D.UIElements
 {
+	using SFEditor.U2D.Sprites;
+	
 	public class SFSpriteInspectorFrame : SpriteFrameModule
 	{
 
