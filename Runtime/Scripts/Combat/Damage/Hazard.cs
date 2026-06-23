@@ -17,8 +17,7 @@ namespace SF.DamageModule
     }
 
     public class Hazard : MonoBehaviour,
-        ITriggerShapeCallback,
-        IContactShapeBegin2DCallback
+        ITriggerShapeBegin2DCallback
     {
         private Vector2 _collisionNormal;
         public Direction DamageDirection;
@@ -42,11 +41,6 @@ namespace SF.DamageModule
                 return;
             
             damagable.TakeDamage(DamageAmount,_knockBackForce);
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            // noop - No Operation.
         }
         
         // TODO: Add this to an utility class where the direction is just passed in as a parameter.
@@ -80,18 +74,6 @@ namespace SF.DamageModule
 
             return false;
 
-        }
-        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
-        {
-            // TODO: Important: Update the LowLevelPhysicsUtilities with a method that matches the TriggerBeginEvent, but for ContactBeginEvent.
-            /*
-             var visitingComponent = beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>();
-            
-            if (!visitingComponent.TryGetComponent(out IDamagable damagable))
-                return;
-            
-            damagable.TakeDamage(DamageAmount,_knockBackForce);
-            */
         }
     }
 }

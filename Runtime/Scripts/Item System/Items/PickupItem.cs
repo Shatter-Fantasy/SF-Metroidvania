@@ -9,7 +9,7 @@ namespace SF.ItemModule
     using U2D.Physics;
     public class PickupItem : MonoBehaviour, 
         IInteractable<PlayerController>, 
-        ITriggerShapeCallback
+        ITriggerShapeBegin2DCallback
     {
         
         [field: SerializeField] public InteractableMode InteractableMode { get; set; }
@@ -58,11 +58,5 @@ namespace SF.ItemModule
                 Interact(controller);
             }
         }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        { 
-            // noo - No Operation
-        }
-
     }
 }

@@ -9,7 +9,7 @@ namespace SF.Interactables
     using InputModule;
     using U2D.Physics;
     
-    public class PlayerInteractionController : InteractionController, ITriggerShapeCallback
+    public class PlayerInteractionController : InteractionController, ITriggerShapeBegin2DCallback
     {
         private PlayerController _controller;
         
@@ -78,11 +78,6 @@ namespace SF.Interactables
                 interactableController.Interact(_controller);
             else
                 interactable.Interact();
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            // noop - No Operation
         }
     }
 }

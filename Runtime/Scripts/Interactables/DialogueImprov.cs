@@ -10,7 +10,7 @@ namespace SF.DialogueModule
     
     public class DialogueImprov : MonoBehaviour, 
         IInteractable<PlayerController>,
-        ITriggerShapeCallback
+        ITriggerShapeBegin2DCallback, ITriggerShapeEnd2DCallback
     {
         [Header("Set either the guid or the conversation asset.")]
         public int ConversationGUID;

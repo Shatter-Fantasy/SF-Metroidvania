@@ -13,9 +13,8 @@ namespace SF.RoomModule
     using U2D.Physics;
     
     public class RoomController : MonoBehaviour, 
-        ITriggerShapeCallback
+        ITriggerShapeBegin2DCallback, ITriggerShapeEnd2DCallback
     {
-        
         /* TODO List:
             Room Auto Align: Make a method that allows taking in two transforms.
             each transform is the floor of two connected rooms. 
