@@ -1,0 +1,80 @@
+SpriteEditorToolbar {
+    justify-content: space-between;
+}
+
+IMGUIContainer {
+    min-width: 100%;
+    min-height: 100%;
+}
+
+ImagePreviewFrame {
+    min-width: 100%;
+    min-height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+SpriteInspector {
+    bottom: 50px;
+    right: 50px;
+}
+
+SpriteInspectorControl {
+    background-color: rgb(56, 56, 56);
+    min-width: 330px;
+    min-height: 170px;
+    flex: 1 0 0;
+}
+
+#main-container {
+}
+
+#main-view {
+    min-width: 100%;
+    min-height: auto;
+    flex-grow: 1;
+}
+
+.inspector-frame {
+    position: absolute;
+    min-width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--unity-colors-default-background);
+}
+
+.texture-container {
+    --unityOverflowClipBox: ContentBox;
+    overflow: hidden;
+    position: relative;
+}
+
+.sf-container {
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.container {
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.overlay-container {
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.properties-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.properties-container > Label {
+    font-size: 18px;
+    margin: 5px;
+}
+
+.properties-container .unity-base-field {
+    justify-content: space-between;
+    flex-basis: 100%;
+}

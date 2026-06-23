@@ -1,0 +1,15 @@
+<ui:UXML
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:sfui="SF.UIElements"
+    noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
+>
+  <ui:Label text="Border"/>
+  <sfui:SFRow class="split">
+    <ui:IntegerField label="L"/>
+    <ui:IntegerField label="T"/>
+  </sfui:SFRow>
+  <sfui:SFRow class="split">
+    <ui:IntegerField label="R"/>
+    <ui:IntegerField label="B"/>
+  </sfui:SFRow>
+</ui:UXML>
