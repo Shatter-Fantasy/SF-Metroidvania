@@ -20,6 +20,7 @@ namespace SF.DialogueModule
         }
     }
     
+    [Serializable]
     public class ConversationPropertyPair
     {
         

@@ -91,7 +91,7 @@ namespace SF.U2D.Physics
             }
         }
 
-        public NativeList<PhysicsShape> ShapesInComposite;
+        [NonSerialized] public NativeList<PhysicsShape> ShapesInComposite;
         
         /// <summary>
         /// The definition for the <see cref="Shape"/> for the <see cref="SFShapeComponent"/>.
@@ -127,10 +127,10 @@ namespace SF.U2D.Physics
         /// </summary>
         public List<IPhysicsShapeContained> ContainedPhysicsShapes = new();
 
-        public PhysicsBody Body;
+        [NonSerialized] public PhysicsBody Body;
         public PhysicsBodyDefinition BodyDefinition = PhysicsBodyDefinition.defaultDefinition;
 
-        public PhysicsWorld PhysicsWorld;
+        [NonSerialized] public PhysicsWorld PhysicsWorld;
 
         /// <summary>
         /// Is the <see cref="Shape"/> created by multiple separate <see cref="PhysicsShape"/>?

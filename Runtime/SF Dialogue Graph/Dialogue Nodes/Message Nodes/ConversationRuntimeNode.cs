@@ -40,7 +40,6 @@ namespace SF.DialogueModule.Nodes
 
         public override async void ProcessNode()
         {
-            bool isPaused = false;
             foreach (var node in RuntimeNodes)
             {
                 node.ProcessNode();
