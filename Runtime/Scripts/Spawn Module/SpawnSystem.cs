@@ -21,21 +21,20 @@ namespace SF.SpawnModule
         /// <summary>
         /// The spawned root gameobject of the player.
         /// </summary>
-        public static GameObject SpawnedPlayer;
+        [AutoStaticsCleanup] public static GameObject SpawnedPlayer;
         
         /// <summary>
         /// The <see cref="ControllerBody2D"/> of the <see cref="SpawnedPlayer"/>.
         /// </summary>
-        public static ControllerBody2D SpawnedPlayerController;
+        [AutoStaticsCleanup] public static ControllerBody2D SpawnedPlayerController;
         
-        public static event Action<GameObject> InitialPlayerSpawnHandler;
-        public static event Action PlayerRespawnHandler;
+        [AutoStaticsCleanup] public static event Action<GameObject> InitialPlayerSpawnHandler;
+        [AutoStaticsCleanup] public static event Action PlayerRespawnHandler;
 #endregion
 
 #region Unity Lifecycle
         private void OnEnable()
         {
-            LevelLoader.LevelReadyHandler -= InitialPlayerSpawn;
             LevelLoader.LevelReadyHandler += InitialPlayerSpawn;
         }
 

@@ -1,4 +1,5 @@
 using System;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace SF.LevelModule
@@ -10,7 +11,7 @@ namespace SF.LevelModule
     /// so start can run per at least once per scene.
     /// </summary>
     [DefaultExecutionOrder(-4)]
-    public class LevelLoader : MonoBehaviour
+    public partial class LevelLoader : MonoBehaviour
     {
         /// <summary>
         /// These are the indexes that are considered not part of a playable game scene.
@@ -22,10 +23,11 @@ namespace SF.LevelModule
         /// <summary>
         /// This is called when the first playable is ready to give the player control.
         /// </summary>
+        [AutoStaticsCleanup]
         public static event Action LevelReadyHandler;
 
         public static event Action LevelStartedHandler;
-        
+   
         private void Start()
         {
             RegionSystem.LoadInitialRegionData();
