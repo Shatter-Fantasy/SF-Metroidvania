@@ -47,15 +47,18 @@ namespace SF.Managers
         /// </summary>
         public static event Action GameInitializedHandler;
         
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             // The GameLoader will take care of all child game objects initialization.
             // If one was already set and initialized do not reinit and load duplicate game managers.
             // Destroy this entire GameObject to prevent duplicate managers.
             if (Instance != null && Instance != this)
+            {
                 Destroy(gameObject);
-            else
-                Instance = this;
+                return;
+            }
             
             InitializeGame();
         }

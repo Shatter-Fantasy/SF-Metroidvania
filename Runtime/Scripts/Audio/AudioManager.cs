@@ -51,10 +51,16 @@ namespace SF.AudioModule
             }
         }
 
-        private void Awake()
+        protected override void Awake()
         {
-            Instance = this;
+            base.Awake();
 
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+            
             if(_audioSource == null)
                 _audioSource = GetComponent<AudioSource>();
         }
