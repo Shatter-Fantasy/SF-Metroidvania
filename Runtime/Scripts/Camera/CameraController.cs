@@ -5,11 +5,12 @@ namespace SF.CameraModule
 {
     using RoomModule;
     using SpawnModule;
+    
     /// <summary>
     /// The manager for the active main camera in playable levels.
     /// Contains helper methods for switching active cameras.
     /// </summary>
-    public class CameraController : MonoBehaviour
+    public class CameraController : ManagerBaseStaticCleanUp<CameraController>
     {
         /// <summary>
         /// This is the default priority that is set on the old virtual cameras that are being switched away from.
@@ -30,7 +31,8 @@ namespace SF.CameraModule
         /// How far away the virtual cameras camera is set 
         /// </summary>
         public const int CameraDistance = 10;
-        public static CameraController Instance
+        
+        public new static CameraController Instance
         {
             get 
             {
@@ -44,7 +46,6 @@ namespace SF.CameraModule
             }
             set { _instance = value; }
         }
-        private static CameraController _instance;
 
         public Transform CameraTarget;
         [SerializeField] private CinemachineRectangleConfiner2D _playerCamConfiner;
@@ -55,14 +56,11 @@ namespace SF.CameraModule
         public static CinemachineCamera PlayerCamera;
         public static CinemachineCamera ActiveCutsceneCamera;
 
-        private void Awake()
+        protected override void Awake()
         {
-            if(Instance != null && _instance  != this)
-                Destroy(this);
-            else // done in an else statement for times when the component is not destroyed instantly and continues into the Awake call.
-            {
-                Instance = this;
-            }
+            base.Awake();
+            if (_instance != null && _instance != this)
+                return;
 
             MainCamera = GetComponent<Camera>();
             if (MainCamera != null)

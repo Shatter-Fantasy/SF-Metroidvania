@@ -10,21 +10,21 @@ namespace SF.Managers
 	/// <summary>
 	/// The current state that is controlling the games input and actions. 
 	/// </summary>
-	public enum GameControlState
+	public enum GameControlState : uint 
 	{
-		Player,
-		SceneChanging,
-		Cutscenes,
-		Transition, // Player being moved within a scene, but has no control over the player. Think teleporting.
-        Dialogue,
-        Menu,
+		Player = 0,
+		SceneChanging = 1,
+		Cutscenes = 2,
+		Transition = 4, // Player being moved within a scene, but has no control over the player. Think teleporting.
+        Dialogue = 8,
+        Menu = 16,
 	}
 	/// <summary>
 	/// The current play state of the game loop that describes what type of logic loop is being updated.
 	/// </summary>
 
     [DefaultExecutionOrder(-5)]
-    public class GameManager : MonoBehaviour
+    public class GameManager : ManagerBaseStaticCleanUp<GameManager>
     {
         [SerializeReference]
         public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
@@ -43,8 +43,6 @@ namespace SF.Managers
                 }
             }
         }
-        
-        public static GameManager Instance;
 
         public Action<GameControlState> OnGameControlStateChanged;
 
@@ -56,18 +54,12 @@ namespace SF.Managers
         /// </summary>
         public GameSettings GameSettings;
         
-        private void Awake()
+        protected override void Awake()
         {
             if(GameSettings != null)
                 GameSettings.DisplaySettings.ProcessSettings();
 
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject); 
-            }
-            else
-                Destroy(gameObject); // We want to destroy the child object managers so they are not doubles as well.
+            base.Awake();
         }
         
         protected void OnEnable()

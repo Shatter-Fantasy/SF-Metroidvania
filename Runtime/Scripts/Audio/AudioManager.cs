@@ -2,15 +2,18 @@ using UnityEngine;
 
 namespace SF.AudioModule
 {
+    using SF;
+    
+    /// <summary>
+    /// Manager that controls the in scene audio sources and contains utility methods to control the audio channels.
+    /// </summary>
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(AudioSource))]
-    public class AudioManager : MonoBehaviour
+    public class AudioManager : ManagerBaseStaticCleanUp<AudioManager>
     {
         private AudioSource _audioSource;
-
-
-        private static AudioManager _instance;
-        public static AudioManager Instance
+        
+        public new static AudioManager Instance
         {
             get 
             {

@@ -24,7 +24,7 @@ namespace SF.Managers
     /// Managers/Databases are ready before needing to be used.
     /// </summary>
     [DefaultExecutionOrder(-5)]
-    public class GameLoader : MonoBehaviour
+    public class GameLoader : ManagerBaseStaticCleanUp<GameLoader>
     {
         
         /// <summary>
@@ -33,7 +33,6 @@ namespace SF.Managers
         [Header("Scene Loading Data")]
         [field: SerializeField] public int NewGameSceneIndex { get; private set; } = 1;
         
-        public static GameLoader Instance;
         public static bool WasGameInitialized = false;
         /// <summary>
         /// Is set to true when a new game is being initialized.
@@ -42,7 +41,6 @@ namespace SF.Managers
         /// </remarks>
         /// </summary>
         public static bool SettingUpNewGame;
-
         
         /// <summary>
         /// This is run the first time the game is initialized in any scene.

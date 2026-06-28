@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SF.InputModule
@@ -6,7 +5,7 @@ namespace SF.InputModule
 	using AbilityModule;
 	using Managers;
 	
-    public class SFInputManager : MonoBehaviour
+    public class SFInputManager : ManagerBaseStaticCleanUp<SFInputManager>
     {
 	    
 	    /// <summary>
@@ -14,18 +13,6 @@ namespace SF.InputModule
 	    /// Allows the ability to set new input events to the player abilities when needed.
 	    /// </summary>
 	    private AbilityController _playerAbilityController;
-	    
-		private static SFInputManager _instance;
-		public static SFInputManager Instance
-		{
-			get
-			{
-				if(_instance == null)
-					_instance = FindAnyObjectByType<SFInputManager>();
-				
-				return _instance;
-			}
-		}
 
 		private static Controls _controls;
 		public static Controls Controls 
@@ -38,10 +25,11 @@ namespace SF.InputModule
 			}
 		}
 		
-		private void Awake()
+		protected override void Awake()
 		{
-			if(Instance != null && Instance != this)
-				Destroy(gameObject);
+			base.Awake();
+			if (Instance != null && Instance != this)
+				Destroy(this);
 		}
 
 		private void Start()
