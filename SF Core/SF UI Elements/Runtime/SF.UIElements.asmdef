@@ -1,0 +1,25 @@
+{
+    "name": "SF.UIElements",
+    "rootNamespace": "SF.UIElements",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "shatter-fantasy.sf-ui-elements",
+            "expression": "0.0.1",
+            "define": "SF_UIELEMENTS"
+        },
+        {
+            "name": "com.unity.dt.app-ui",
+            "expression": "2.0.0-pre.16",
+            "define": "SF_APPUI"
+        }
+    ],
+    "noEngineReferences": false
+}

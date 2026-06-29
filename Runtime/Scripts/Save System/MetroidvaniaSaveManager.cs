@@ -1,23 +1,27 @@
+
 namespace SF.DataManagement
 {
     using ItemModule;
     using RoomModule;
+    using SF.RoomModule.RegionModule;
 
     public class MetroidvaniaSaveManager : SaveSystem
     {
         public static SavePoint CurrentSavePoint;
         
-        /// <summary>
-        /// The starting room for new games or when no save files were find.
-        /// </summary>
-        public static int StartingRoom = 0;
         public static PlayerInventory PlayerInventory;
         public static MetroidvaniaSaveData CurrentMetroidvaniaSaveData = new();
+
+
+        public static void NewGame()
+        {
+            RegionSystem.LoadRegionAsync(new RegionTransitionConnection(0,0));
+        }
         
         public static void SaveGame()
         {
             CurrentSaveFileData.SaveDatas.Clear();
-            // Trigger save event first just in case something lsitening to the event updates data that would be put in the save file.
+            // Trigger save event first just in case something listening to the event updates data that would be put in the save file.
             SaveDataHandler?.Invoke();
             CurrentSaveFileData.TryAddOrSetDataBlock(CurrentMetroidvaniaSaveData);
             SaveDataFile();
@@ -42,7 +46,7 @@ namespace SF.DataManagement
             else // if there is no save file already made.
             {
                 // Set the starting room to the default new game room.
-                RoomSystem.SetInitialRoom(StartingRoom);
+                RoomSystem.SetInitialRoom(RoomSystem.StartingRoomId);
             }
             
             CurrentSavePoint = CurrentSaveFileData.CurrentSaveStation;

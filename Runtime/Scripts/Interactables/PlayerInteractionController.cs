@@ -1,15 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Collections;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.Interactables
 {
     using Characters.Controllers;
     using InputModule;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
-    public class PlayerInteractionController : InteractionController, ITriggerShapeCallback
+    public class PlayerInteractionController : InteractionController, ITriggerShapeBegin2DCallback
     {
         private PlayerController _controller;
         
@@ -78,11 +78,6 @@ namespace SF.Interactables
                 interactableController.Interact(_controller);
             else
                 interactable.Interact();
-        }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            // noop - No Operation
         }
     }
 }

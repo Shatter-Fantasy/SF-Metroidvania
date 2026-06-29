@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.DamageModule
 {
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     [System.Flags]
     public enum Direction : short
@@ -17,8 +17,7 @@ namespace SF.DamageModule
     }
 
     public class Hazard : MonoBehaviour,
-        ITriggerShapeCallback,
-        IContactShapeCallback
+        ITriggerShapeBegin2DCallback
     {
         private Vector2 _collisionNormal;
         public Direction DamageDirection;
@@ -43,12 +42,6 @@ namespace SF.DamageModule
             
             damagable.TakeDamage(DamageAmount,_knockBackForce);
         }
-
-        public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            // noop - No Operation.
-        }
-
         
         // TODO: Add this to an utility class where the direction is just passed in as a parameter.
         private bool CheckCollisionDirection()
@@ -81,23 +74,6 @@ namespace SF.DamageModule
 
             return false;
 
-        }
-        public void OnContactBegin2D(PhysicsEvents.ContactBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
-        {
-            // TODO: Important: Update the LowLevelPhysicsUtilities with a method that matches the TriggerBeginEvent, but for ContactBeginEvent.
-            /*
-             var visitingComponent = beginEvent.GetCallbackComponentOnVisitor<SFShapeComponent>();
-            
-            if (!visitingComponent.TryGetComponent(out IDamagable damagable))
-                return;
-            
-            damagable.TakeDamage(DamageAmount,_knockBackForce);
-            */
-        }
-
-        public void OnContactEnd2D(PhysicsEvents.ContactEndEvent endEvent, SFShapeComponent callingShapeComponent)
-        {
-            
         }
     }
 }

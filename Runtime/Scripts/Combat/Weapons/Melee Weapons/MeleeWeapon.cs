@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.Weapons
 {
     using Characters;
     using CombatModule;
     using DamageModule;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     public class MeleeWeapon : WeaponBase
     {
@@ -75,7 +75,7 @@ namespace SF.Weapons
             _hitBox.Body.enabled  = true;
             
             
-            _character2D.CharacterState.AttackState = AttackState.Attacking;
+
             DoAttack();
         }
 
@@ -83,9 +83,13 @@ namespace SF.Weapons
         {
             if (_character2D != null)
             {
+                // Set the attack animation state first than change the AttackState which will invoke the 
+                // OnAttackStateChanged in the Character Renderer.
                 _character2D.SetAnimationState(
                     AttackDefinition.Name,
                     AttackDefinition.AttackAnimationClip.length);
+                
+                _character2D.CharacterState.AttackState = AttackState.Attacking;
             }
             
             _attackTimer = new Timer(AttackDefinition.AttackTimer, OnUseComplete);

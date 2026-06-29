@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Documentation/templates/unity.meta
+guid: 6d2192cb4ac544c459a82c888f3bb9ab
+========
+guid: b7b8b03d343c4764d8f827eca6bdb214
+>>>>>>>> alphas/alpha-ten:Editor/Settings Provider.meta
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

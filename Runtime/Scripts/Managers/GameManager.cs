@@ -72,14 +72,18 @@ namespace SF.Managers
         
         protected void OnEnable()
         {
+#if SF_DIALOGUE_GRAPH
             DialogueManager.DialogueStartedHandler += OnDialogueStarted;
             DialogueManager.DialogueEndedHandler += OnDialogueEnded;
+#endif
         }
 
         protected void OnDisable ()
         {
+#if SF_DIALOGUE_GRAPH
             DialogueManager.DialogueStartedHandler -= OnDialogueStarted;
             DialogueManager.DialogueEndedHandler -= OnDialogueEnded;
+#endif
         }
 
         /// <summary>

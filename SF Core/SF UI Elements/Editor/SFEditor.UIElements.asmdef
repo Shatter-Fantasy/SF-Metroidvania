@@ -1,0 +1,22 @@
+{
+    "name": "SFEditor.UIElements",
+    "rootNamespace": "SFEditor.UIElements",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:3501f6086cdd0e648ac05237fdb4fbad",
+        "GUID:3f7d48e83d211bc4da6a4c2762281d9f",
+        "GUID:e914b7dc822bee7408a68a0fcea54763",
+        "GUID:06a33b1fd6ca23345870150e28011df1"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

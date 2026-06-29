@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.StateMachine
 {
 	using Pathfinding;
-	using PhysicsLowLevel;
+	using U2D.Physics;
 	using SpawnModule;
 	using StateMachine.Decisions;
     public class PathfindingAIState : StateCore
@@ -30,8 +30,7 @@ namespace SF.StateMachine
 	    private int _targetIndex = 0;
         private Awaitable _followPathAwaitable;
         private bool _followingTarget;
-		
-		
+        
 		/// <summary>
 		/// Should the path follower use a <see cref="PhysicsTransform"/> to update the position.
 		/// </summary>
@@ -69,7 +68,7 @@ namespace SF.StateMachine
 				_controlledShapeComponent = _controllerBody2D.ShapeComponent;
 			}
 
-			if (_controlledShapeComponent != null)
+			if (_controlledShapeComponent != null && _controlledShapeComponent.Body.isValid)
 			{
 				_controlledShapeComponent.Body.transformObject = _controlledTransform;
 			}
@@ -87,13 +86,13 @@ namespace SF.StateMachine
 				_targetIndex      = 0;
 				_currentTargetPos = _target.position;
 			
-				_path = await PathRequetManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position, _target.position);
+				_path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position, _target.position);
             
 				_followingTarget = true;
 				
-				if(PathRequetManager._instance?.PathFinding?.GridPath != null)
+				if(PathRequestManager._instance?.PathFinding?.GridPath != null)
 				{
-					_grid       = PathRequetManager._instance.PathFinding.GridPath;
+					_grid       = PathRequestManager._instance.PathFinding.GridPath;
 					_nodeRadius = _grid.NodeRadius;
 				}
 			}
@@ -115,7 +114,7 @@ namespace SF.StateMachine
 		        
 	        if (Vector2.Distance(_currentTargetPos, _target.position) > _nodeRadius)
 	        {
-		        _path = await PathRequetManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
+		        _path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
 			        _target.position);
 
 		        // If when updating the path we realized the player moved into the same node 
@@ -155,9 +154,6 @@ namespace SF.StateMachine
 			
 			if (!_usePhysicsTransform || _controlledShapeComponent == null) 
 				return;
-			
-			_controlledShapeComponent.ApplyTransform();
-			_controlledShapeComponent.CacheTransform();
 		}
         
         private async Awaitable FollowPathAsync()
@@ -172,7 +168,7 @@ namespace SF.StateMachine
 	        {
 		        if (Vector2.Distance(_currentTargetPos, _target.position) > _nodeRadius)
 		        {
-			        _path = await PathRequetManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
+			        _path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
 				        _target.position);
 
 			        // If when updating the path we realized the player moved into the same node 

@@ -1,10 +1,10 @@
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.Weapons
 {
     using Characters;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     public enum AttackState
     {

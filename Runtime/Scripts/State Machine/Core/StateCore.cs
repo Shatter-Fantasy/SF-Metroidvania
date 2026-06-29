@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SF.StateMachine
 {
 	using Characters;
-	using PhysicsLowLevel;
+	using U2D.Physics;
 	using Decisions;
 	public class DecisionTransition
 	{
@@ -91,10 +91,6 @@ namespace SF.StateMachine
         /// </summary>
         public void UpdateState()
 		{
-			
-			CheckTransitions();
-
-			
 			if (_controllerBody2D == null && _controllerBody2D?.CharacterState.CharacterStatus == CharacterStatus.Dead)
 			{
 				return;
@@ -153,7 +149,7 @@ namespace SF.StateMachine
 				return stateToCheck != null;
 			});
 		}
-		protected virtual void CheckTransitions()
+		public virtual void CheckTransitions()
 		{
 			Decisions.ForEach(decision => 
 			{

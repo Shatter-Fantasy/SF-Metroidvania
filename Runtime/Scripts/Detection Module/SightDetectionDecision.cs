@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.StateMachine.Decisions
 {
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     public enum SightShapeType
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     using Characters;
     
@@ -12,7 +12,6 @@ namespace SF.PhysicsLowLevel
     /// This can be used for Character Controllers, real time editable terrain (think Team 17 Worms games), and fast pace physics based 2D games that need high performance. 
     /// </remarks>
     [DisallowMultipleComponent]
-    [Icon("Packages/com.unity.2d.physics.lowlevelextras/Editor/Icons/SceneBody.png")]
     public class ControllerBody2D : PhysicController2D
     {
         public CharacterState CharacterState;
@@ -22,8 +21,14 @@ namespace SF.PhysicsLowLevel
         /// </summary>
         public SFShapeComponent ShapeComponent;
         
+        /* These are separate from the MovementState enum because some of the following can be true at the same time.
+         * Example you could be falling while gliding or falling into a water pool.
+         */
         [Header("Movement Booleans")]
         public bool IsRunning;
+        /// <summary>
+        /// Tracks if the character in a pool of water or other liquid.
+        /// </summary>
         public bool IsSwimming;
         public bool IsJumping;
         public bool IsFalling;
@@ -58,29 +63,48 @@ namespace SF.PhysicsLowLevel
         public BodyCollisionInfo CollisionInfo = new BodyCollisionInfo();
         
         protected CharacterRenderer2D _character;
+        
+        
 
-        /// <summary>
-        /// Should the debug rendering and log system be active.
-        /// </summary>
-        /// <remarks>
-        /// Debug rendering works in builds and in editor, but requires a device that supports compute shaders.
-        /// WebGL doesn't work, but WebGPU does work.
-        /// </remarks>
-        public bool DebugMode = false;
+        protected override void OnAwake()
+        {
+            CollisionInfo = new BodyCollisionInfo
+            {
+                ControllerBody2D = this
+            };
+
+            if (!TryGetComponent(out ShapeComponent))
+            {
+                ShapeComponent = gameObject.AddComponent<SFCapsuleShape>();
+            }
+        }
+        
+        protected override void FixedUpdate()
+        {
+            if (_direction.x != 0)
+                _directionLastFrame.x = _direction.x;
+            
+            if (!ShapeComponent.Shape.isValid)
+                return;
+
+            OnPreFixedUpdate();
+            
+            // We now use the PhysicsEvent.PostSimulate callback for checking collisions post movement
+            // We should make sure this is not skipping first frame of collision though.
+            CollisionInfo.CheckCollisions();
+            
+            CalculateHorizontal();
+            CalculateVertical();
+            CalculateSlope();
+            Move();
+        }
+
         
         protected override void Move()
         {
             if (ShapeComponent == null 
                 || !ShapeComponent.Shape.isValid)
                 return;
-            
-            /* Slope Calculations
-            if(_onSlope)
-            {
-                _calculatedVelocity *= _slopeMultiplier;
-                // TODO: Make the ability to walk up slopes.
-                //_calculatedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity, _slopeNormal);
-            } */
 
             if (IsFrozen && CollisionInfo.IsGrounded)
                 _calculatedVelocity.x = 0;
@@ -130,6 +154,7 @@ namespace SF.PhysicsLowLevel
             {
                 _calculatedVelocity.x = 0;
             }
+            
         }
 
         protected override void CalculateVertical()
@@ -139,9 +164,8 @@ namespace SF.PhysicsLowLevel
             {
                 _calculatedVelocity.y = Direction.y * CurrentPhysics.ClimbSpeed.y;
             }
-            
-            //if(!CollisionInfo.IsGrounded  && !IsClimbing && !_onSlope)
-            if(!CollisionInfo.IsGrounded && !IsClimbing)
+
+            if(!CollisionInfo.IsGrounded && !IsClimbing )
             {
                 // This is related to the formula of: square root of ( -2 (gravity * height) )
                 // https://en.wikipedia.org/wiki/Equations_for_a_falling_body#Example
@@ -152,13 +176,81 @@ namespace SF.PhysicsLowLevel
                     CurrentPhysics.MaxUpForce);
             }
         }
+        
+        protected virtual void CalculateSlope()
+        {
+            if (!CollisionInfo.OnSlope && !CollisionInfo.WasOnSlope)
+                return;
 
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity,CollisionInfo.SlopeNormalAngle);
+     
+            
+            // Checking left side for slope
+            if (CollisionInfo.IsCollidingLeft)
+            {
+                // Walking up the slope on the left
+                if (Direction.x < 0)
+                {
+                    if (CollisionInfo.SlopeNormalAngle.x < 0 && CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit)
+                    {
+                        _calculatedVelocity = new Vector2(-projectedVelocity.x, projectedVelocity.y);
+                    }
+                    else
+                        _calculatedVelocity.x = 0;
+                } // Walking down the slope colliding on the left
+                else if (Direction.x > 0)
+                {
+                     if (CollisionInfo.WasOnSlope && !CollisionInfo.OnSlope &&
+                        CollisionInfo.PreviousSlopeNormalAngle.x > 0)
+                    {
+                        projectedVelocity =
+                            Vector3.ProjectOnPlane(_calculatedVelocity, CollisionInfo.PreviousSlopeNormalAngle);
+                        _calculatedVelocity = new Vector2(projectedVelocity.x, projectedVelocity.y);
+                    }
+                }
+            }
+            else if(CollisionInfo.IsCollidingRight 
+                && Direction.x > 0 
+                && CollisionInfo.SlopeNormalAngle.x > 0)
+            {
+                if (CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit)
+                {
+                    _calculatedVelocity = new Vector2(projectedVelocity.x, projectedVelocity.y);
+                }
+                else
+                    _calculatedVelocity.x = 0;
+            }
+
+            if(CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit)
+            {
+                if(_calculatedVelocity.x == 0)
+                    _calculatedVelocity.y = 0;
+                else
+                {
+                    _calculatedVelocity.y = projectedVelocity.y;
+                }
+            }
+            
+            //_calculatedVelocity *= _slopeMultiplier;
+            if (CollisionInfo.SlopeAngle <= CollisionInfo.SlopeAngleUpperLimit
+                && !IsJumping)
+            {
+                if(_calculatedVelocity.y == 0)
+                    _calculatedVelocity = Vector3.ProjectOnPlane(_calculatedVelocity, CollisionInfo.SlopeNormalAngle);
+                else
+                    _calculatedVelocity.y = 0;
+            }
+            
+        }
+        
         protected override void CalculateMovementState()
         {
             if(CharacterState.CharacterStatus == CharacterStatus.Dead)
                 return;
 
-            // TODO: There are some places that set the values outside of this function. Find a way to make it where this function is the only needed one. Example IsJump in the Jumping Ability.
+            /* TODO: There are some places that set the values outside of this function.
+             * Find a way to make it where this function is the only needed one. Example IsJump in the Jumping Ability.
+             */
 
             if(IsClimbing)
             {
@@ -201,46 +293,19 @@ namespace SF.PhysicsLowLevel
         }
 
 
-        protected override void OnAwake()
+        public void ResizePhysicsShape(Vector2 newSize)
         {
-            CollisionInfo = new BodyCollisionInfo
-            {
-                ControllerBody2D = this
-            };
-
-            if (!TryGetComponent(out ShapeComponent))
-            {
-                ShapeComponent = gameObject.AddComponent<SFCapsuleShape>();
-            }
+            /* Implement for Alpha 9
+             * Needed to finish the updated crouch and climb ability implementation.
+             * This just needs to update the ShapeComponent.PhysicsShape size
+             * */
         }
-        
-        protected override void FixedUpdate()
+        public void ResetPhysicsShapeSize()
         {
-            if (_direction.x != 0)
-                _directionLastFrame.x = _direction.x;
-            
-            if (!ShapeComponent.Shape.isValid)
-                return;
-
-            OnPreFixedUpdate();
-            
-            // We now use the PhysicsEvent.PostSimulate callback for checking collisions post movement
-            // We should make sure this is not skipping first frame of collision though.
-            CollisionInfo.CheckCollisions();
-            
-            CalculateHorizontal();
-            CalculateVertical();
-            
-            Move();
-        }
-        
-        public void ResizeCollider(Vector2 newSize)
-        {
-            
-        }
-        public void ResetColliderSize()
-        {
-            
+            /* Implement for Alpha 9
+             * Needed to finish the updated crouch and climb ability implementation.
+             * This just needs to update the ShapeComponent.PhysicsShape size
+             * */
         }
 
         public virtual void UpdatePhysicsProperties(MovementProperties movementProperties, 
@@ -262,6 +327,7 @@ namespace SF.PhysicsLowLevel
         
         public virtual void ResetPhysics(MovementProperties movementProperties)
         {
+            // TODO: Implement the movement properties being passed in from states like gliding/exiting physics volume.
             CurrentPhysics = DefaultPhysics;
             PhysicsVolumeType = PhysicsVolumeType.None;
 

@@ -1,14 +1,14 @@
 using System;
 using UnityEngine;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     /// <summary>
     /// Base class for custom Physics Controllers in a 2D simulation.
     /// Inherit from this to create a custom velocity and physics interaction solution for any type of game object.
     /// </summary>
     /// <remarks>
-    /// The base class doesn't care or understand the difference between a <see cref="Rigidbody2D"/> or a <see cref="UnityEngine.LowLevelPhysics2D.PhysicsBody"/>.
+    /// The base class doesn't care or understand the difference between a <see cref="Rigidbody2D"/> or a <see cref="Unity.U2D.Physics;.PhysicsBody"/>.
     /// They inheriting classes define which one to use.
     /// </remarks>
     public abstract class PhysicController2D : MonoBehaviour, IForceReceiver
@@ -113,20 +113,9 @@ namespace SF.PhysicsLowLevel
                 _directionLastFrame.x = _direction.x;
             
             OnPreFixedUpdate();
-
-            /*
-            // Set all bools for what sides there was a collision on last frame.
-            CollisionInfo.WasCollidingRight = CollisionInfo.IsCollidingRight;
-            CollisionInfo.WasCollidingLeft = CollisionInfo.IsCollidingLeft;
-            CollisionInfo.WasCollidingAbove = CollisionInfo.IsCollidingAbove;
-            CollisionInfo.WasCollidingBelow = CollisionInfo.IsGrounded;
-          
-            CollisionInfo.CheckCollisions();
-            */
             
             CalculateHorizontal();
             CalculateVertical();
-            
             
             Move();
         }

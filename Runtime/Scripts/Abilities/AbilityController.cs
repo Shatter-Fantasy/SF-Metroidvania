@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SF.AbilityModule
 {
     using SF.Characters.Controllers;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
     /// <summary>
     /// This is the <see cref="PlayerController"/> specific controller for abilities that only players use.
@@ -14,7 +14,7 @@ namespace SF.AbilityModule
     /// <remarks>
     /// The AbilityController default execution order is set one past the Controller2D.
     /// This guarantees the controller is already set up it's current physic struct in case any external force is starting to change it
-    /// <see cref="SF.PhysicsLowLevel.PhysicsVolume"/> on spawn. Think loading a save room in an underwater PhysicsVolume.
+    /// <see cref="SF.U2D.Physics.PhysicsVolume"/> on spawn. Think loading a save room in an underwater PhysicsVolume.
     /// </remarks>
     /// </summary>
     [DefaultExecutionOrder(1)]

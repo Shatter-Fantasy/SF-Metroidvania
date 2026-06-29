@@ -3,7 +3,7 @@ namespace SF.StatModule
     [System.Serializable]
     public class StatData
     {
-        public float BaseValue = 10;
+        public float BaseValue;
 
         public StatData(float baseValue = 0)
         {

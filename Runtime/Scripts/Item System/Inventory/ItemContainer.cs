@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SF.ItemModule
 {
-    using Managers;
+    using SF.DataModule;
     public class ItemContainer : MonoBehaviour
     {
         [SerializeReference]
@@ -11,7 +11,8 @@ namespace SF.ItemModule
 
         public virtual void AddItem(int itemID)
         {
-            var item = GameLoader.Instance?.ItemDatabase[itemID];
+            
+            var item = DatabaseRegistry.GetDatabase<ItemDatabase>()[itemID];
             
             if (item != null)
             {

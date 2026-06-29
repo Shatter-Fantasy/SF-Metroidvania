@@ -3,8 +3,9 @@ using UnityEngine;
 namespace SF.CommandModule
 {
     using Characters;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     
+    [System.Serializable]
     public class CharacterCommandNode : CommandNode
     {
         [HideInInspector] public ControllerBody2D ControllerBody2D;

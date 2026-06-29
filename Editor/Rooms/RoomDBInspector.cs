@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SF.RoomModule;
+using SF.RoomModule.RegionModule;
 using SF.UIElements.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -12,16 +13,14 @@ namespace SFEditor.Rooms
     {
         private VisualElement _root;
         private ListView _roomListView;
-        private RoomDB _roomDB;
+        private RegionDataAsset _roomDB;
         
         public override VisualElement CreateInspectorGUI()
         {
-            _roomDB = target as RoomDB;
+            //_roomDB = target as RoomDB;
             _root = new VisualElement() {name = "room-db--root"};
             InspectorElement.FillDefaultInspector(_root,serializedObject,this);
-
-
-            _root.AddChild(new Button(SetRoomDBInstance){ text = "Set Instance" });
+            
             _root.AddChild(new Button(SetRoomIDs){ text = "Set Room Prefab IDs" });
             
             _root.RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
@@ -50,15 +49,6 @@ namespace SFEditor.Rooms
             {
                 _roomDB[roomIndex].RoomID = roomIndex;
             }
-        }
-
-        private void SetRoomDBInstance()
-        {
-            RoomDB roomDB = target as RoomDB;
-            if (roomDB == null)
-                return;
-            
-            RoomSystem.RoomDB = roomDB;
         }
         
         private void SetRoomIDs()

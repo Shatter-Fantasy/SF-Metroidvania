@@ -5,9 +5,9 @@ using System.Text;
 
 namespace SF.ItemModule
 {
-    using DataManagement;
-    using Managers;
-    [Serializable]
+    using SF.DataManagement;
+    using SF.DataModule;
+    
     public class PlayerInventory : ItemContainer
     {
         [NonSerialized] public List<ItemData> FilteredConsumable = new List<ItemData>();
@@ -27,7 +27,7 @@ namespace SF.ItemModule
         
         public override void AddItem(int itemID)
         {
-            var item = GameLoader.Instance?.ItemDatabase[itemID];
+            var item = DatabaseRegistry.GetDatabase<ItemDatabase>()[itemID];
             ItemData itemData = new ItemData();
 
             if (item is WeaponDTO equipmentDTO)

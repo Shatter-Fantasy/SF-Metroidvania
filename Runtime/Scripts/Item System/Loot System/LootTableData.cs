@@ -41,7 +41,7 @@ namespace SF.LootModule
                 };
 
                 spawnedItem.GetComponent<SpriteRenderer>().sprite = item.ItemIcon;
-                spawnedItem.GetComponent<PickupItem>().Item = item;
+                spawnedItem.GetComponent<PickupItem>().ItemDTO = item;
             }
             else
             {
@@ -52,7 +52,7 @@ namespace SF.LootModule
                 );
                 
                 spawnedItem.name = item.Name;
-                spawnedItem.GetComponent<PickupItem>().Item = item;
+                spawnedItem.GetComponent<PickupItem>().ItemDTO = item;
                 spawnedItem.GetComponent<SpriteRenderer>().sprite = item.ItemIcon;
             }
         }

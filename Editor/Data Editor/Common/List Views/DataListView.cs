@@ -14,7 +14,7 @@ namespace SFEditor.Data
     /// <typeparam name="U"></typeparam>
     public abstract class DataListView<T,U> : ListView, 
         INotifyValueChanged<T> 
-        where T : SFDatabase<U> 
+        where T : SFAssetDatabase<U> 
         where U : DTOAssetBase
     {
         private T _value;
@@ -121,7 +121,7 @@ namespace SFEditor.Data
                     action =>
                     {
                         var assetDTO = DTOAssetBase.CreateInstance(typeof(U).FullName) as U;
-                        assetDTO.Name = "New Data Entry" + assetDTO.GUID;
+                        assetDTO.Name = "New Data Entry" + assetDTO.ID;
                         assetDTO.name = assetDTO.Name;
                         // We don't do Count - 1 because we haven't added this to the list datbase yet.
                         assetDTO.ID = value.DataEntries.Count; 

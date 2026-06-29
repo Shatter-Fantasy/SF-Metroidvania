@@ -18,16 +18,8 @@ namespace SF.ItemModule
 		{
 			
 		}
-		        
-		public static implicit operator Weapon(EquipmentDTO equipmentAsset)
-		{
-			// Deep copy the weapon to prevent any reference types from being edited in the future.
-			Weapon weapon = (Weapon)equipmentAsset.WeaponData.MemberwiseClone();
-			// Might have to deep copy ItemPriceDTO as well.
-			return weapon;
-		}
 		
-		public static implicit operator Weapon(WeaponDTO equipmentAsset)
+		public static explicit operator Weapon(WeaponDTO equipmentAsset)
 		{
 			// Deep copy the weapon to prevent any reference types from being edited in the future.
 			Weapon weapon = (Weapon)equipmentAsset.WeaponData.MemberwiseClone();

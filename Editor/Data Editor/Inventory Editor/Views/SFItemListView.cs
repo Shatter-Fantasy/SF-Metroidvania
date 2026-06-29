@@ -1,12 +1,12 @@
 using UnityEngine.UIElements;
-
-using SFEditor.Data;
-using SF.ItemModule;
 using UnityEditor;
 using UnityEngine;
 
 namespace SFEditor.Inventory.Data
 {
+    using SFEditor.Data;
+    using SF.ItemModule;
+    
     [UxmlElement]
     public partial class SFItemListView : DataListView<ItemDatabase, ItemDTO>
     {
@@ -31,7 +31,7 @@ namespace SFEditor.Inventory.Data
                     action =>
                     {
                         var assetDTO = ItemDTO.CreateInstance(typeof(ItemDTO).FullName) as ItemDTO;
-                        assetDTO.Name = "New Data Entry" + assetDTO.GUID;
+                        assetDTO.Name = "New Data Entry" + assetDTO.ID;
                         assetDTO.name = assetDTO.Name;
                         // We don't do Count - 1 because we haven't added this to the list datbase yet.
                         assetDTO.ID = value.DataEntries.Count; 
@@ -45,7 +45,7 @@ namespace SFEditor.Inventory.Data
                     action =>
                     {
                         var assetDTO = ScriptableObject.CreateInstance(typeof(WeaponDTO).FullName) as WeaponDTO;
-                        assetDTO.Name = "New Weapon" + assetDTO.GUID;
+                        assetDTO.Name = "New Weapon" + assetDTO.ID;
                         assetDTO.name = assetDTO.Name;
                         // We don't do Count - 1 because we haven't added this to the list database yet.
                         assetDTO.ID = value.DataEntries.Count; 
@@ -59,7 +59,7 @@ namespace SFEditor.Inventory.Data
                     action =>
                     {
                         var assetDTO = ScriptableObject.CreateInstance(typeof(EquipmentDTO).FullName) as EquipmentDTO;
-                        assetDTO.Name = "New Equipment Entry" + assetDTO.GUID;
+                        assetDTO.Name = "New Equipment Entry" + assetDTO.ID;
                         assetDTO.name = assetDTO.Name;
                         // We don't do Count - 1 because we haven't added this to the list database yet.
                         assetDTO.ID = value.DataEntries.Count; 

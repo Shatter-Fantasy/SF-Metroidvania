@@ -1,7 +1,10 @@
+using SF.Weapons;
+using UnityEngine;
+
 namespace SF.Characters.Controllers
 {
     using Managers;
-    using PhysicsLowLevel;
+    using U2D.Physics;
     /// <summary>
     /// A physics controller for the playable character that help implement gravity, slope mechanics, collision for platforms,
     /// and updates the <see cref="MovementState"/>.
@@ -22,11 +25,47 @@ namespace SF.Characters.Controllers
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.OnGameControlStateChanged += OnGameControlStateChanged;
-                //if(LevelPlayData.Instance.spawnedPlayerController == null)
-                  //  LevelPlayData.Instance.spawnedPlayerController = this;
 
-                if (!GameLoader.Instance.GameLoaderData.SettingUpNewGame)
+                if (!GameLoader.SettingUpNewGame)
                     CollisionInfo.CollisionActivated = true;
+            }
+        }
+        
+        protected override void CalculateHorizontal()
+        {
+            if(IsClimbing 
+               || (CharacterState.AttackState == AttackState.Attacking && CollisionInfo.IsGrounded))
+            {
+                _calculatedVelocity.x = 0;
+                return;
+            }
+
+            if(Direction.x != 0)
+            {
+                // We only have to do a single clamp because than Direction.x takes care of it being negative or not when being multiplied.
+                ReferenceSpeed = Mathf.Clamp(ReferenceSpeed, 0, CurrentPhysics.GroundMaxSpeed);
+
+                // TODO: When turning around erase previously directional velocity.
+                // If it is kept the player could slide in the previous direction for a second before running the new direction on smaller ground acceleration values.
+                _calculatedVelocity.x = Mathf.MoveTowards(_calculatedVelocity.x, ReferenceSpeed * Direction.x, CurrentPhysics.GroundAcceleration);
+            }
+            else
+            {
+                _calculatedVelocity.x = Mathf.MoveTowards(_calculatedVelocity.x, 0, CurrentPhysics.GroundDeacceleration);
+            }
+            
+            // If we are moving left and not hitting a slope, but an obstacle, stop moving left.
+            if (CollisionInfo.IsCollidingLeft && Direction.x < 0 && CollisionInfo.IsCollidingLeft)
+            {
+                if (!CollisionInfo.OnSlope)
+                    _calculatedVelocity.x = 0;
+            }
+			
+            // If we are moving Right and not hitting a slope, but an obstacle, stop moving Right.
+            if (CollisionInfo.IsCollidingRight && Direction.x > 0 && CollisionInfo.IsCollidingRight)
+            {
+                if (!CollisionInfo.OnSlope)
+                    _calculatedVelocity.x = 0;
             }
         }
 

@@ -5,13 +5,13 @@
         "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:4307f53044263cf4b835bd812fc161a4",
         "GUID:15fc0a57446b3144c949da3e2b9737a9",
-        "GUID:d4d4feea66c3d8f4489a0b92318aec3a",
         "GUID:2665a8d13d1b3f18800f46e256720795",
         "GUID:e0cd26848372d4e5c891c569017e11f1",
-        "GUID:3501f6086cdd0e648ac05237fdb4fbad",
-        "GUID:be6ee5278f71af84482ee07ccf40fc11",
-        "GUID:9891c26878d4c8e4b8a7a59815c27c7b",
-        "GUID:3f7d48e83d211bc4da6a4c2762281d9f"
+        "GUID:06a33b1fd6ca23345870150e28011df1",
+        "GUID:ab4b2240156558b48ac8b70a1894244f",
+        "GUID:1c97a4378fd0e6e44bb478bb97b582d3",
+        "GUID:0e262b65f1ca903488add4a5b5ae6cff",
+        "GUID:e914b7dc822bee7408a68a0fcea54763"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -20,12 +20,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "com.unity.2d.physics.extras",
-            "expression": "1.0.0",
-            "define": "UNITY_LOW_LEVEL_EXTRAS_2D"
-        }
-    ],
+    "versionDefines": [],
     "noEngineReferences": false
 }

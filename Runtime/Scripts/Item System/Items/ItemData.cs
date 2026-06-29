@@ -1,5 +1,8 @@
+using System;
+
 namespace SF.ItemModule
 {
+    using DataModule;
     /// <summary>
     /// The representation of an item and its data sent between objects. 
     /// </summary>
@@ -7,11 +10,10 @@ namespace SF.ItemModule
     /// The <see cref="ItemDTO"/> is the actual data asset in the project, while <see cref="ItemData"/> is used for
     /// passing the data that represents an item between objects.
     /// </remarks>
-    [System.Serializable]
-    public class ItemData
+    [Serializable]
+    public class ItemData : DTOBase
     {
         // TODO: Replace the ID, Name, and description with DescriptionDataDefinition.
-        public int ID = 0;
         public string Name;
         public string Description;
 
@@ -55,11 +57,27 @@ namespace SF.ItemModule
         }
         */
         
-        public static implicit operator ItemData(ItemDTO itemAsset) 
+        public static implicit operator ItemData(ItemDTO itemAsset)
         {
+            if (itemAsset == null)
+                return new ItemData();
+            
             ItemData itemData = new ItemData();
             itemData.ID = itemAsset.ID;
             itemData.Name = itemAsset.Name;
+            itemData.Description = itemAsset.Description;
+            itemData.ItemSubType = itemAsset.ItemSubType;
+            return itemData;
+        }
+        
+        public static implicit operator ItemData(WeaponDTO itemAsset)
+        {
+            if (itemAsset == null)
+                return new ItemData();
+            
+            ItemData itemData = new ItemData();
+            itemData.ID          = itemAsset.ID;
+            itemData.Name        = itemAsset.Name;
             itemData.Description = itemAsset.Description;
             itemData.ItemSubType = itemAsset.ItemSubType;
             return itemData;

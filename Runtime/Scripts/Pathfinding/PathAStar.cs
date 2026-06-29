@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace SF.Pathfinding
@@ -40,10 +43,10 @@ namespace SF.Pathfinding
      *          
      *       }
      */
-    [RequireComponent(typeof(PathRequetManager))]
+    [RequireComponent(typeof(PathRequestManager))]
     public class PathAStar : MonoBehaviour
     {
-        private PathRequetManager _pathRequestManager;
+        private PathRequestManager _pathRequestManager;
         [field: SerializeField] public GridBase GridPath { get; private set; }
 
         private PathNodeBase _startNode;
@@ -51,7 +54,7 @@ namespace SF.Pathfinding
 
         private void Awake()
         {
-            _pathRequestManager = GetComponent<PathRequetManager>();
+            _pathRequestManager = GetComponent<PathRequestManager>();
             if(GridPath == null)
                 GridPath = GetComponent<GridBase>();
         }
@@ -183,7 +186,69 @@ namespace SF.Pathfinding
 
             return wayPoints;
         }
+        
+        /*
+        public async Awaitable<NativeArray<float3>> FindPathAwaitable(float2 startPotion, float2 goalPosition)
+        {
+            if(GridPath == null)
+                return default;
 
+            NativeArray<float3> wayPoints = new NativeArray<float3>();
+            bool pathSuccess = false;
+
+            _startNode = GridPath.NodeFromWorldPoint(startPotion);
+            _goalNode = GridPath.NodeFromWorldPoint(goalPosition);
+
+            // If either nodes are not traveserable don't bother finding a path.
+            if(!_startNode.IsTraversable || !_goalNode.IsTraversable)
+                return default;
+
+            Heap<PathNodeBase> _openNodes = new Heap<PathNodeBase>(GridPath.MaxSize);
+            HashSet<PathNodeBase> _closedNodes = new();
+
+            _openNodes.Add(_startNode);
+
+            while(_openNodes.Count > 0)
+            {
+                PathNodeBase currentNode = _openNodes.RemoveFirst();
+
+                _closedNodes.Add(currentNode);
+
+                // We found our goal node.
+                if(currentNode == _goalNode)
+                {
+                    pathSuccess = true;
+                    break;
+                }
+
+
+                foreach(PathNodeBase neighbourNode in GridPath.GetNeighbours(currentNode))
+                {
+                    if(!neighbourNode.IsTraversable || _closedNodes.Contains(neighbourNode))
+                        continue;
+
+                    float newMovementCostToNeighbour = currentNode.GCost + GetDistance(currentNode, neighbourNode);
+
+                    if(newMovementCostToNeighbour < neighbourNode.GCost || !_openNodes.Contains(neighbourNode))
+                    {
+                        neighbourNode.GCost = newMovementCostToNeighbour;
+                        neighbourNode.HCost = GetDistance(neighbourNode, _goalNode);
+                        neighbourNode.ParentNodeOnPath = currentNode;
+
+                        if(!_openNodes.Contains(neighbourNode))
+                            _openNodes.Add(neighbourNode);
+                        else
+                            _openNodes.UpdateItem(neighbourNode);
+                    }
+                }
+            }
+            await Awaitable.EndOfFrameAsync();
+            if(pathSuccess)
+                wayPoints = RetracePath(_startNode, _goalNode);
+
+            return wayPoints;
+        } */
+        
         private Vector2[] RetracePath(PathNodeBase startNode, PathNodeBase goalNode)
         {
             List<PathNodeBase> pathNodes = new();
@@ -199,6 +264,23 @@ namespace SF.Pathfinding
             System.Array.Reverse(waypoints);
             return waypoints;
         }
+        
+        /*
+        private NativeArray<float3> RetracePath(PathNodeBase startNode, PathNodeBase goalNode)
+        {
+            List<PathNodeBase> pathNodes = new();
+
+            PathNodeBase currentNode = goalNode;
+
+            while (currentNode != startNode)
+            {
+                pathNodes.Add(currentNode);
+                currentNode = currentNode.ParentNodeOnPath;
+            }
+            Vector2[] waypoints = SimplifyPath(pathNodes);
+            System.Array.Reverse(waypoints);
+            return waypoints;
+        }*/
 
         private Vector2[] SimplifyPath(List<PathNodeBase> path)
         {

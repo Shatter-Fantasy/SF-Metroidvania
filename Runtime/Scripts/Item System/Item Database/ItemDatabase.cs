@@ -7,14 +7,14 @@ namespace SF.ItemModule
     using DataModule;
     
     [CreateAssetMenu(fileName = "Item Database", menuName = "SF/Data/Item Database")]
-    public class ItemDatabase : SFDatabase<ItemDTO>
+    public class ItemDatabase : SFAssetDatabase<ItemDTO>
     {
         public readonly Dictionary<EquipmentType, List<EquipmentDTO>> EquipmentDictionary = new();
         
         /* Filtered Item Lists */
         
         [SerializeReference] public List<EquipmentDTO> Equipment = new();
-        [SerializeReference] public List<EquipmentDTO> Weapons = new();
+        [SerializeReference] public List<WeaponDTO> Weapons = new();
         [SerializeReference] public List<EquipmentDTO> Armor = new();
 
         public Action OnItemsFiltered;

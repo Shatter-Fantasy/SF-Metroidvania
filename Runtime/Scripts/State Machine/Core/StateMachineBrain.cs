@@ -4,15 +4,22 @@ using UnityEngine;
 
 namespace SF.StateMachine
 {
-	using PhysicsLowLevel;
+	using SF.U2D.Physics;
+	
 	/// <summary>
 	/// This is for controlling non-player controlled characters states and actions.
-	/// 
 	/// <see cref="SF.StateMachine.Core.StateCore"/> are for non-player characters
 	/// and <see cref="SF.AbilityModule.AbilityCore"/> are for player controlled characters.
 	/// </summary>
 	public class StateMachineBrain : MonoBehaviour
-    {
+	{
+
+		/// <summary>
+		/// The rate at which the <see cref="StateMachineBrain"/> runs it's <see cref="UpdateState"/> method to check if it needs
+		/// to change state via a <see cref="SF.StateMachine.Decisions.StateDecisionCore"/>.
+		/// </summary>
+		[SerializeField] private float _tickRate = 0.5f;
+		private float _tickDelta = 0;
 	    [field: SerializeField] public StateCore DefaultState { get; protected set; }
         [field: SerializeField] public StateCore CurrentState { get; protected set; }
         [field: SerializeField] public StateCore PreviousState { get;protected set; }
@@ -47,7 +54,14 @@ namespace SF.StateMachine
 		}
 		private void Update()
 		{
-            UpdateState();
+			if (_tickDelta >= _tickRate)
+			{
+				_tickDelta = 0;
+				CurrentState.CheckTransitions();
+			}
+
+			_tickDelta += Time.deltaTime;
+			UpdateState();
 		}
         /// <summary>
         /// We run the newState logic of the current active newState if the current newState is not null.

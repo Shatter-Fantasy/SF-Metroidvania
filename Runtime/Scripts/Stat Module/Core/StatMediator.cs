@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SF.StatModule
 {
+    using DataModule;
     public enum StatValueRoundingType
     {
         None,
@@ -17,7 +18,7 @@ namespace SF.StatModule
     /// for a StatData.
     /// </summary>
     [System.Serializable]
-    public class StatMediator<TStatData> where TStatData : StatData
+    public class StatMediator<TStatData> : DTOBase where TStatData : StatData
     {
         public string Name = "Stat";
         public string StatDescription = "This is a stat.";
@@ -142,7 +143,7 @@ namespace SF.StatModule
     /// You have a RPGAttributeStat called strength. Your strength attribute increases your physical attack stat.
     /// The strength stat can also be used for chances of applying debuffs when using skills. 
     /// Let's say you have a skill that has a base 10% to make the enemy bleed, 
-    /// but ever 10 strength increases the chnace by 7% past a base amount of strength of 50.
+    /// but ever 10 strength increases the chance by 7% past a base amount of strength of 50.
     /// So your strength stat is 60 which is ten over the base amount of 50 strength adding another 7% chance to bleed.
     /// 
     /// Example 2. Attributes that can effect stats that are not of the C# type StatData

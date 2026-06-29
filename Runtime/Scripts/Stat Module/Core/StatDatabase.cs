@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SF.StatModule
 {
+    using DataModule;
     /// <summary>
     /// The default set stat for different type of objects that will be using any stat sets.
     /// </summary>
@@ -14,7 +15,7 @@ namespace SF.StatModule
     /// Strength, agility, vitility, and so forth.
     /// </remarks>
     [CreateAssetMenu(fileName = "Stat System Database", menuName = "SF/StatMediators/Stat Database")]
-    public partial class StatSetDatabase : ScriptableObject
+    public partial class StatSetDatabase : SFDatabase<StatDataListBase>
     {
         // Important Information. This class is partial to allow for people to add their own types of Stat Sets
         // It also let's them add their own type casting overloads properties.
@@ -24,5 +25,4 @@ namespace SF.StatModule
         [Space(10)]
         public List<StatMediator<PricingStat>> PriceStats = new List<StatMediator<PricingStat>>();
     }
-
 }

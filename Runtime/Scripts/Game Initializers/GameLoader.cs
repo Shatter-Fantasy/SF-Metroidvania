@@ -1,13 +1,24 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SF.Managers
 {
-    using DataManagement;
     using RoomModule;
-    using ItemModule;
-    using LevelModule;
+    using SF.DataManagement;
+    public enum GameLoadingMode
+    {
+        NewGame, LoadGame, Continue
+    }
+    
+    /// <summary>
+    /// Declares the default order for important game features other than physics.
+    /// For Physics DefaultExecutionOrder see <see cref="SF.U2D.Physics.PhysicsCore2DExecutionOrder"/>
+    /// </summary>
+    public static class GameDefaultExecutionOrders
+    {
+        public const int DatabaseExecutionOrder = -10;
+    }
+    
     /// <summary>
     /// Keeps track of the prefabs, scriptable objects that need loaded for first scene (think RoomDB), and makes sure all required
     /// Managers/Databases are ready before needing to be used.
@@ -15,22 +26,23 @@ namespace SF.Managers
     [DefaultExecutionOrder(-5)]
     public class GameLoader : MonoBehaviour
     {
-        [field: SerializeField] public GameLoaderSO GameLoaderData { get; private set; }
-
-        public static GameLoader Instance;
-        public static bool WasGameInitialized = false;
-        /* Since Scriptable Objects don't have their lifecycle events done until they are referenced in scene,
-         we set them up via the GameLoader Scriptable Object with a RuntimeInitializeOnLoadMethod
-         which set the values of the GameManager on first scene load. */
-        [Header("Required Databases DB ")]
-        [SerializeField] private RoomDB _roomDB;
         
         /// <summary>
-        /// This data object that keeps track of references needed to be loaded in playable levels before anything else.
+        /// The index of the scene for a new game inside the build profile list.
         /// </summary>
-        [SerializeField] private LevelPlayData _levelPlayData;
+        [Header("Scene Loading Data")]
+        [field: SerializeField] public int NewGameSceneIndex { get; private set; } = 1;
+        
+        public static GameLoader Instance;
+        public static bool WasGameInitialized = false;
+        /// <summary>
+        /// Is set to true when a new game is being initialized.
+        /// <remarks>
+        /// This is used in places like SceneManager.loadedScene event callbacks to see if we are loading a new game first playable scene or not.
+        /// </remarks>
+        /// </summary>
+        public static bool SettingUpNewGame;
 
-        public ItemDatabase ItemDatabase;
         
         /// <summary>
         /// This is run the first time the game is initialized in any scene.
@@ -65,12 +77,6 @@ namespace SF.Managers
             if (WasGameInitialized)
                 return;
             
-            if (_roomDB != null)
-                RoomSystem.RoomDB = _roomDB;
-            
-            if (_levelPlayData != null)
-                LevelPlayData.Instance = _levelPlayData;
-            
             GameInitializedHandler?.Invoke();
             WasGameInitialized = true;
         }
@@ -80,19 +86,13 @@ namespace SF.Managers
         /// </summary>
         public void NewGame()
         {
-            if (GameLoaderData == null)
-                return;
-
-            GameLoaderData.SettingUpNewGame = true;
-            MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
-            SceneManager.LoadScene(GameLoaderData.NewGameSceneIndex);
+            MetroidvaniaSaveManager.NewGame();
         }
 
         public void LoadGame()
         {
-            // Set the starting room first.
-            if(GameLoaderData != null)
-                MetroidvaniaSaveManager.StartingRoom = GameLoaderData.StartingRoomID;
+            // TODO: Implement the file loading and get the last saved rooms room id and region.
+            RoomSystem.StartingRoomId = 0;
         }
         
         /// <summary>
@@ -100,10 +100,7 @@ namespace SF.Managers
         /// </summary>
         private void OnNewGameReady()
         {
-            if (GameLoaderData == null)
-                return;
-            
-            GameLoaderData.SettingUpNewGame = false;
+            SettingUpNewGame = false;
         }
     }
 }

@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
 using Unity.Collections;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.Mathematics;
+using Unity.U2D.Physics;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace SF.PhysicsLowLevel
+namespace SF.U2D.Physics
 {
     using Utilities;
     
@@ -12,8 +15,26 @@ namespace SF.PhysicsLowLevel
     {
         [NonSerialized] public ControllerBody2D ControllerBody2D;
 
+        [Header("Slope Settings")]
+        public bool OnSlope;
+        public float SlopeAngle;
+        public Vector2 SlopeNormalAngle;
+        /// <summary>
+        /// Were we on a slope the previous frame. Used for doing downward velocity when walking down slopes.
+        /// </summary>
+        [NonSerialized] public bool WasOnSlope;
+        [NonSerialized] public float PreviousSlopeAngle;
+        [NonSerialized] public Vector2 PreviousSlopeNormalAngle;
+        /// <summary>
+        /// The smallest angle to be standing on for a body to be considered standing on a slope.
+        /// </summary>
+        public float MinimumSlopeAngle = 15f;
+        [FormerlySerializedAs("SlopeAngleLimit")] public float SlopeAngleUpperLimit = 45f;
+        
+
         private ContactExtensions.ContactNormalFilterFunction _filterFunction;
         private NativeArray<PhysicsShape.Contact> _contacts;
+        
         
         public override void CheckCollisions()
         {
@@ -38,24 +59,55 @@ namespace SF.PhysicsLowLevel
         
         public override void GroundCollisionChecks()
         {
+            WasOnSlope               = OnSlope;
+            PreviousSlopeAngle       = SlopeAngle;
+            PreviousSlopeNormalAngle = SlopeNormalAngle;
+            
             if (_contacts.Length == 0)
             {
                 IsGrounded = false;
                 IsCollidingBelow = false;
+                OnSlope = false;
+                SlopeAngle = 0;
+                SlopeNormalAngle = Vector2.zero;
                 return;
             }
             
-            // Normal hits are within the context of shapeA to shapeB  = below hit normals return positive 1
-            var filteredContacts = _contacts.Filter(
+          // Normal hits are within the context of shapeA to shapeB  = below hit normals return positive 1
+          var filteredContacts = _contacts.Filter(
                 ContactFiltering.NormalYFilter, 
                 ControllerBody2D.ShapeComponent.Shape, 
                 CollisionContactThreshold,
-                FilterMathOperator.GreaterThan);
+                FilterMathOperator.GreaterThan).ToList();
+            
 
-            if (filteredContacts.ToList().Count > 0)
+            if (filteredContacts.Count > 0)
             {
                 IsGrounded = true;
                 IsCollidingBelow = true;
+
+                // We reset it just before the loop OnSlope check allowing us to know if it says OnSlope = false after the loop we can reset slope normal and so forth. 
+                OnSlope = false;
+                for (int i = 0; i < filteredContacts.Count; i++)
+                {
+                    Vector2 normal = filteredContacts[i].manifold.normal;
+                    float   angle  = Vector2.Angle(Vector2.up, normal);
+                    //Debug.Log($"Normal: {normal}, Angle: {angle}");
+
+                    if (MinimumSlopeAngle < angle)
+                    {
+                        SlopeNormalAngle = normal;
+                        SlopeAngle       = angle;
+                        OnSlope          = true;
+                        break;
+                    }
+                }
+
+                if (!OnSlope)
+                {
+                    SlopeNormalAngle = Vector2.zero;
+                    SlopeAngle       = 0;
+                }
             }
             else // If we are not colliding with anything below.
             {

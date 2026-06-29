@@ -64,25 +64,5 @@ namespace SF.Weapons
         {
             _comboIndex = 0;
         }
-        
-#if UNITY_EDITOR
-        /// <summary>
-        /// Syncs all the attack timers to match the length of the animation clip length for that attack animation.
-        /// </summary>
-        [ContextMenu("Sync attack and animation timers.")]
-        protected virtual void SetAllAttacksTimerViaAnimation()
-        {
-            AnimationClip clip;
-            
-            for (int i = 0; i < ComboAttacks.Count; i++)
-            {
-                clip = ComboAttacks[i].AttackAnimationClip;
-                
-                float targetFrameTimer = (ComboAttacks[i].HitBoxAnimationFrame + 1) * (float)Math.Round((1f / clip.frameRate), 3);
-                ComboAttacks[i].AttackTimer = clip.length;
-                ComboAttacks[i].HitBoxDelay = targetFrameTimer;
-            }
-        }
-#endif
     }
 }

@@ -24,14 +24,14 @@ namespace SF.Transitions
 
                 if (newRoom == null || newRoom.SpawnedInstance == null)
                 {
-                    Debug.LogWarning($"There was no room with the RoomID: {roomTransition.EnteringRoomID} inside of the loaded RoomDB or it currently doesn't have it's spawned instance value set.");
+                    Debug.LogWarning($"There was no room with the RoomIDInLoadingRegion: {roomTransition.EnteringRoomID} inside of the loaded RoomDB or it currently doesn't have it's spawned instance value set.");
                     return;
                 }
                
                 // This will need improved down line for possible performance improvements for larger rooms.
                 if (!newRoom.TransitionsIDs.Contains(roomTransition.EnteringTransitionID))
                 {
-                    Debug.LogWarning($"There was no RoomTransition with the ID: {roomTransition.EnteringTransitionID} set inside of the room with the RoomID of{roomTransition.EnteringRoomID}.");
+                    Debug.LogWarning($"There was no RoomTransition with the ID: {roomTransition.EnteringTransitionID} set inside of the room with the RoomIDInLoadingRegion of{roomTransition.EnteringRoomID}.");
                     return;
                 }
                 

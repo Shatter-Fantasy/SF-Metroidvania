@@ -104,6 +104,10 @@ namespace SF.InputModule
 
         private void OnDestroy()
         {
+			// Without this when loading a new scene with an SFInputManager in it the new one will disable the Controls.
+			if(Instance != this)
+				return;
+			
 	        if (Controls != null)
 	        {
 		        Controls.Player.Disable();

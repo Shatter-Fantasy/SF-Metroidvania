@@ -1,0 +1,21 @@
+{
+    "name": "SFEditor.U2D.Physics",
+    "rootNamespace": "SFEditor.U2D.Physics",
+    "references": [
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:2665a8d13d1b3f18800f46e256720795",
+        "GUID:0e262b65f1ca903488add4a5b5ae6cff",
+        "GUID:06a33b1fd6ca23345870150e28011df1"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

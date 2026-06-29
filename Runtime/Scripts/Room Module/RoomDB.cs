@@ -1,21 +1,45 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SF.RoomModule.RegionModule;
 using UnityEngine;
 
 namespace SF.RoomModule
 {
+    using LevelModule;
+    using DataModule;
+    using static Managers.GameDefaultExecutionOrders;
+    
+    [DefaultExecutionOrder(DatabaseExecutionOrder)]
     [CreateAssetMenu(fileName = "Room DB", menuName = "SF/Data/Rooms/Room Database")]
-    public class RoomDB : ScriptableObject , IList<Room>
+    public class RoomDB : SFDatabase //, IList<Room>
     {
+        // Rooms is moved into the RegionDataAsset so each region can have it's own set of rooms.
         public List<Room> Rooms = new();
+        /*
+        private void InitializeRoomsForLoadedScene()
+        {
+            if(RegionSystem.LoadedRegionDataAsset != null)
+                RoomSystem.SetInitialRoom(RoomSystem.StartingRoomId);
+            else
+                RoomSystem.SetInitialRoom(0);
+        }
         
-        /// <summary>
-        /// Will be called when the Rooms list value gets changed such as add/remove.
-        /// This is also called when a new list is assigned into the Rooms value.
-        /// </summary>
-        public Action OnRoomsValueChanged;
+        public override void OnRegisterDatabase()
+        {   
+            RoomSystem.RoomDB               =  this;
+            LevelLoader.LevelReadyHandler += InitializeRoomsForLoadedScene;
+        }
 
+        public override void OnDeregisterDatabase()
+        {
+            // Only reset the RoomSystemDB if the RoomDB being registered was the same one.
+            if (RoomSystem.RoomDB == this)
+                RoomSystem.RoomDB = null;
+
+            LevelLoader.LevelReadyHandler -= InitializeRoomsForLoadedScene;
+        }
+#region  ILiSt Implementation
         public IEnumerator<Room> GetEnumerator()
         {
             throw new NotImplementedException();
@@ -29,24 +53,22 @@ namespace SF.RoomModule
         public void Add(Room newRoom)
         {
             Rooms.Add(newRoom);
-            OnRoomsValueChanged();
         }
 
         public void Clear()
         {
             Rooms.Clear();
-            OnRoomsValueChanged();
         }
         
         public bool Contains(Room item)
         {
-            Room room = Rooms.Find(roomInDB => roomInDB.RoomID == item?.RoomID);
+            Room room = Rooms.Find(roomInDB => roomInDB.RoomIDInLoadingRegion == item?.RoomIDInLoadingRegion);
             return room != null;
         }
         
         public bool Contains(int roomID)
         {
-            Room room = Rooms.Find(roomInDB => roomInDB.RoomID == roomID);
+            Room room = Rooms.Find(roomInDB => roomInDB.RoomIDInLoadingRegion == roomID);
             return room != null;
         }
 
@@ -66,7 +88,6 @@ namespace SF.RoomModule
             if (Rooms.Contains(room))
             {
                 Rooms.Remove(room);
-                OnRoomsValueChanged();
                 return true;
             }
 
@@ -97,13 +118,13 @@ namespace SF.RoomModule
         {
             for (int i = 0; i < Rooms.Count; i++)
             {
-                Rooms[i].RoomID = i;
-                Rooms[i].RoomPrefab.GetComponent<RoomController>().RoomID = i;
+                Rooms[i].RoomIDInLoadingRegion = i;
+                Rooms[i].RoomPrefab.GetComponent<RoomController>().RoomIDInLoadingRegion = i;
             }
         }
 
         /// <summary>
-        /// We search via the RoomID first. If the RoomID doesn;t exist than
+        /// We search via the RoomIDInLoadingRegion first. If the RoomIDInLoadingRegion doesn;t exist than
         /// </summary>
         /// <param name="index"></param>
         /// <exception cref="NotImplementedException"></exception>
@@ -125,5 +146,7 @@ namespace SF.RoomModule
 
             set => throw new NotImplementedException();
         }
+#endregion
+        */
     }
 }

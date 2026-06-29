@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
+using Unity.U2D.Physics;
 
 namespace SF.RoomModule
 {
     using CameraModule;
     using Characters.Controllers;
     using Managers;
-    using PhysicsLowLevel;
-
+    using U2D.Physics;
     
     public class RoomController : MonoBehaviour, 
-        ITriggerShapeCallback
+        ITriggerShapeBegin2DCallback, ITriggerShapeEnd2DCallback
     {
-        
         /* TODO List:
             Room Auto Align: Make a method that allows taking in two transforms.
             each transform is the floor of two connected rooms. 
@@ -63,21 +61,21 @@ namespace SF.RoomModule
             if(_physicsShapeComponent != null)
                 _physicsShapeComponent.AddTriggerCallbackTarget(this);
             
-            if (RoomSystem.RoomDB == null)
+            if (RoomSystem.LoadedRegion == null)
             {
 #if UNITY_EDITOR
-                Debug.LogWarning($"There is no database set in the {nameof(RoomSystem)}");
+                Debug.LogWarning($"There is no region data set in the {nameof(RoomSystem)}");
                 return;
 #endif
             }
-            if (RoomSystem.RoomDB[RoomID] == null)
+            if (RoomSystem.LoadedRegion[RoomID] == null)
             {
-                Debug.LogWarning($"A room with the RoomID of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
+                Debug.LogWarning($"A room with the RoomIDInLoadingRegion of {RoomID} was not found in the RoomDatabase. Check if there was a room with the id of {RoomID} set inside the RoomDatabase");
                 return;
             }
-            RoomIdsToLoadOnEnter = RoomSystem.RoomDB[RoomID].ConnectedRoomsIDs;
+            RoomIdsToLoadOnEnter = RoomSystem.LoadedRegion[RoomID].ConnectedRoomsIDs;
         
-            RoomSystem.LoadRoomManually(RoomID, gameObject);
+            RoomSystem.LoadRoom(RoomID, loadDynamically: false, spawnedInstance: gameObject);
         }
 
         private void OnDestroy()
@@ -94,16 +92,8 @@ namespace SF.RoomModule
             {
                 return;
             }
-
-            // Probably should put this if and for loop in the RoomSystem itself.
-            if (RoomSystem.DynamicRoomLoading)
-            {
-                foreach (var roomID in RoomIdsToLoadOnEnter)
-                {
-                    RoomSystem.LoadRoom(roomID);
-                }
-            }
-
+            
+            RoomSystem.LoadRoom(RoomID);
             RoomSystem.SetCurrentRoom(RoomID);
         }
         
