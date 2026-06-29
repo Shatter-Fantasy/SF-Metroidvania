@@ -106,13 +106,9 @@ namespace SF.U2D.Physics
             using var   vertexPath        = new NativeList<Vector2>(Allocator.Temp);
             
             Profiler.BeginSample("Getting Tile Data");
-#if UNITY_6000_4_OR_NEWER
-            Tilemap.PositionArray tilePosition = new Tilemap.PositionArray();
-            _tilemap.GetUsedTileData(out _tilesInBlock, out tilePosition);
-#else
-            _tilemap.GetUsedTileData(out _tilesInBlock);
-            using var positions = _tilemap.GetTileCellPositions();
-#endif
+
+            _tilemap.GetUsedTileData(out _tilesInBlock, out Tilemap.PositionArray tilePosition);
+
             Profiler.EndSample();
             
             Profiler.BeginSample("SFTileMapShape Geometry",this);
@@ -145,11 +141,7 @@ namespace SF.U2D.Physics
                         for (int v = 0; v <  _physicsShapeVertex.Count; v++)
                         {
                             // The (Vector2)_tilesInBlock[i].transform.MultiplyPoint3x4 below matches the tiles rotation or scale value of the placed tile data.
-#if UNITY_6000_4_OR_NEWER
                         vertexPath.Add((Vector2)_tilesInBlock[i].transform.MultiplyPoint3x4(_physicsShapeVertex[v]) + tilePosition[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
-#else
-                        vertexPath.Add((Vector2)_tilesInBlock[i].transform.MultiplyPoint3x4(_physicsShapeVertex[v])+ positions[i].ToVector2Int() + (Vector2)_tilemap.tileAnchor);
-#endif
                         }
                         
                         PhysicsTransform tileTransform = PhysicsTransform.identity;

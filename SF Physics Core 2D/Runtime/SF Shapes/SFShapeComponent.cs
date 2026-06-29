@@ -121,11 +121,6 @@ namespace SF.U2D.Physics
                 return new PhysicsShape.ShapeProxy();
             }
         }
-        
-        /// <summary>
-        /// A list of objects that are currently contained inside of <see cref="Shape"/>
-        /// </summary>
-        public List<IPhysicsShapeContained> ContainedPhysicsShapes = new();
 
         [NonSerialized] public PhysicsBody Body;
         public PhysicsBodyDefinition BodyDefinition = PhysicsBodyDefinition.defaultDefinition;

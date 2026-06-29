@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Unity.Collections;
-//using Unity.Tilemaps.Experimental;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
 namespace SF.Utilities
 {
     public static class TileMapUtilities
@@ -46,8 +46,7 @@ namespace SF.Utilities
 
             return tilePositions;
         }
-        
-#if UNITY_6000_4_OR_NEWER
+
         public static int GetUsedTileData(this Tilemap tilemap, out List<TileData> usedTileData, out Tilemap.PositionArray positionArray)
         {
             usedTileData  = new();
@@ -67,29 +66,6 @@ namespace SF.Utilities
             
            
             return count;
-        }
-#endif
-public static void GetUsedTileData(this Tilemap tilemap, out List<TileData> usedTileData)
-        {
-            usedTileData = new();
-
-            if (tilemap == null)
-                return;
-            
-            tilemap.CompressBounds();
-            BoundsInt bounds = tilemap.cellBounds;
-            var positionEnumerator = bounds.allPositionsWithin;
-            
-            
-            foreach (var position in positionEnumerator)
-            {
-                if (tilemap.HasTile(position))
-                {
-                    var tileData = new TileData();
-                    tilemap.GetTile(position).GetTileData(position,tilemap, ref tileData);
-                    usedTileData.Add(tileData);
-                }
-            }
         }
     }
 }
