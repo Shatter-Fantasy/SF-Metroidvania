@@ -99,10 +99,9 @@
         }
       }
     },
-    "xref": [ "https://normanderwan.github.io/UnityXrefMaps/xrefmap.yml" ],
     "xref": 
     [
-      "https://normanderwan.github.io/UnityXrefMaps/6000.0/xrefmap.yml",
+      "https://normanderwan.github.io/UnityXrefMaps/xrefmap.yml",
       "https://learn.microsoft.com/en-us/dotnet/.xrefmap.json"
     ],
     "xrefService": [
