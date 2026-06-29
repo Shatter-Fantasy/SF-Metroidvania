@@ -27,8 +27,7 @@ namespace SF.SpawnModule
         public readonly int DeathAnimationHash = Animator.StringToHash(DeathAnimationName);
 
         public float HitAnimationDuration = 0.3f;
-        
-        public SpriteBlinkCommand DamageBlink;
+
         
         protected ControllerBody2D _controllerBody2D;
         protected CharacterRenderer2D _character2D;
@@ -50,8 +49,6 @@ namespace SF.SpawnModule
 
             if(_character2D != null && !string.IsNullOrEmpty(DeathAnimationName))
                 _character2D.SetAnimationState(DeathAnimationName,0.01f);
-            
-            DamageBlink.StopInteruptBlinking();
             
             base.Kill();
             CharacterDiedHandler?.Invoke();
@@ -78,8 +75,6 @@ namespace SF.SpawnModule
                 _character2D.SetAnimationState(HitAnimationName, HitAnimationDuration);
 
             base.TakeDamage(damage);
-            _ = DamageBlink.Use();
-            
             _controllerBody2D?.SetDirectionalForce(knockback);
             
             _activeInvicibility = true;
