@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SF.DialogueModule.Nodes
+namespace SF.Graphs.Nodes
 {
     [System.Serializable]
-    public class ComparisonRuntimeNode : RuntimeNode, IComparisonNode<int>
+    public class ComparisonRuntimeNode : SFRuntimeNode, IComparisonNode<int>
     {
         [field:SerializeField] public int ValueToCheck { get; set; }
         [field:SerializeField] public int ComparisonValue { get; set; }
 
         [SerializeReference]
-        public IRuntimeNode ExecutionNode;
-        public ComparisonRuntimeNode(int valueToCheck, int comparisonValue, IRuntimeNode executionNode = null)
+        public SFRuntimeNode ExecutionNode;
+        public ComparisonRuntimeNode(int valueToCheck, int comparisonValue, SFRuntimeNode executionNode = null)
         {
             ValueToCheck = valueToCheck;
             ComparisonValue = comparisonValue;
@@ -23,7 +23,7 @@ namespace SF.DialogueModule.Nodes
             return ValueToCheck == ComparisonValue;
         }
 
-        public override void TraverseNode(in List<RuntimeNode> branchNodes)
+        public override void TraverseNode(in List<SFRuntimeNode> branchNodes)
         {
             ExecutionNode?.TraverseNode(branchNodes);
         }

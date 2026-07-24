@@ -1,10 +1,11 @@
-using SF.DialogueModule.Nodes;
-using SFEditor.Nodes;
+using SF.Graphs.Nodes;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
 
 namespace SFEditor.Dialogue.Graphs
 {
+    using SFEditor.Graphs.Nodes;
+
     /// <summary>
     /// The type of animation value an <see cref="AnimatorNode"/> is setting.
     /// </summary>
@@ -67,7 +68,7 @@ namespace SFEditor.Dialogue.Graphs
             }
         }
 
-        public IRuntimeNode ConvertToRuntimeNode()
+        public SFRuntimeNode ConvertToRuntimeNode()
         {
             GetNodeOptionByName(AnimatorNodeTypeOptionsName).TryGetValue(out AnimatorNodeType animatorNodeType);
             GetInputPortByName(AnimatorOptionsName).TryGetValue(out Animator animator);

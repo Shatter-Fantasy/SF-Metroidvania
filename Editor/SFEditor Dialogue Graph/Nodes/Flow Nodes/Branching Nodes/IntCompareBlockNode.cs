@@ -1,9 +1,9 @@
 using Unity.GraphToolkit.Editor;
-using SF.DialogueModule.Nodes;
-using SFEditor.Nodes;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SFEditor.Graphs.Nodes
 {
+    using SF.Graphs.Nodes;
+    using SFEditor.Dialogue.Graphs;
 
     public abstract class ComparisonBlockNode : BlockNode, IComparisonNode
     {
@@ -61,7 +61,7 @@ namespace SFEditor.Dialogue.Graphs
             return ValueToCheck == ComparisonValue;
         }
         
-        public IRuntimeNode ConvertToRuntimeNode()
+        public SFRuntimeNode ConvertToRuntimeNode()
         {
             GetInputPortByName(BranchingContextNode.ValuePort)
                 .TryGetValue(out ValueToCheck);

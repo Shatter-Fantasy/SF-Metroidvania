@@ -1,10 +1,11 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace SF.DialogueModule.Nodes
 {
+	using SF.Graphs.Nodes;
+
 	[System.Serializable]
-    public class ConversationEntryRuntimeNode : RuntimeNode
+    public class ConversationEntryRuntimeNode : SFRuntimeNode
     {
 	    public string Text;
 	    public string SpeakerName;
@@ -40,7 +41,7 @@ namespace SF.DialogueModule.Nodes
 		/// Checks to see what all nodes needs processed for the current branch of dialogue.
 		/// </summary>
 		/// <param name="branchNodes"></param>
-	    public override void TraverseNode(in List<RuntimeNode> branchNodes)
+	    public override void TraverseNode(in List<SFRuntimeNode> branchNodes)
 	    {
 		    _dialogueEntry = new DialogueEntry(Text,SpeakerName);
 	    }

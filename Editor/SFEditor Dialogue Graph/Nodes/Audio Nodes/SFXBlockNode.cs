@@ -1,14 +1,13 @@
-using SF.DialogueModule.Nodes;
-using SFEditor.Nodes;
+using SF.Graphs.Nodes;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SFEditor.Graphs.Graphs
 {
+    using SFEditor.Graphs.Nodes;
+
     [System.Serializable]
-    [UseWithContext(typeof(ConversationContextNode))]
-    [UseWithGraph(typeof(DialogueGraph))]
     public class SFXBlockNode : BlockNode, INodeConvertor
     {
         public string AudioResourceOptionsName { get; } = "Audio Resource";
@@ -20,7 +19,7 @@ namespace SFEditor.Dialogue.Graphs
             context.AddOption<AudioSource>(AudioSourceOptionsName);
         }
 
-        public IRuntimeNode ConvertToRuntimeNode()
+        public SFRuntimeNode ConvertToRuntimeNode()
         {
             GetNodeOptionByName(AudioResourceOptionsName).TryGetValue(out AudioResource audioResource);
             GetNodeOptionByName(AudioSourceOptionsName).TryGetValue(out AudioSource audioSource);

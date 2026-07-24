@@ -8,24 +8,17 @@ namespace SFEditor.Dialogue.Graphs
 	using SF.DialogueModule;
 	using SF.DialogueModule.Nodes;
 	using SFEditor.DialogueModule;
-	[Serializable]
-	public abstract class SFGraphBase : Graph
-	{
-		/// <summary>
-		/// If the graph has changed we need to update it during the next graph importer.
-		/// </summary>
-		public bool HasGraphChanged;
+	using SFEditor.Graphs;
+	using SFEditor.Graphs.Nodes;
 
-		public bool HasInitialized = false; 
-		public override void OnGraphChanged(GraphLogger graphLogger)
-		{
-			HasGraphChanged = true;
-		}
+	public partial class DialogueGraph
+	{
+
 	}
 	
 	[Icon(AssetIconPath)]
     [Graph(AssetExtension)] [Serializable]
-    public class DialogueGraph : SFGraphBase
+    public partial class DialogueGraph : SFGraphBase<SFEditorNode>
     {
 	    public const string AssetIconPath = "Assets/Editor Default Resources/SF Dialogue Graph/Icons/Dialogue Graph Icon.png";
 	    public const string AssetExtension = "sfgr";

@@ -1,9 +1,12 @@
-using SFEditor.Nodes;
-using SF.DialogueModule.Nodes;
+
 using Unity.GraphToolkit.Editor;
 
 namespace SFEditor.Dialogue.Graphs
 {
+	using SFEditor.Graphs.Nodes;
+	using SF.DialogueModule.Nodes;
+	using SF.Graphs.Nodes;
+
 	[System.Serializable]
     [UseWithContext(typeof(ConversationContextNode))] 
 	[UseWithGraph(typeof(DialogueGraph))]
@@ -17,7 +20,7 @@ namespace SFEditor.Dialogue.Graphs
 		    context.AddOption<string>(ExecutionPortName).AsTextArea().Build();
 	    }
 
-	    public IRuntimeNode ConvertToRuntimeNode()
+	    public SFRuntimeNode ConvertToRuntimeNode()
 	    {
 		    GetNodeOptionByName(ExecutionPortName).TryGetValue(out string text);
 		    GetNodeOptionByName(SpeakerOptionsName).TryGetValue(out string speakerName);

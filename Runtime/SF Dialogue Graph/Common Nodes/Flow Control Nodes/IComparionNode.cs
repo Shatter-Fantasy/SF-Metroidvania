@@ -1,4 +1,4 @@
-namespace SF.DialogueModule.Nodes
+namespace SF.Graphs.Nodes
 {
     /// <summary>
     /// Informs a <see cref="DialogueGraph"/> about what type of comparison is being done

@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SF.DialogueModule.Nodes
+namespace SF.Graphs.Nodes
 {
     /// <summary>
     /// A runtime node used to play and control animations on the passed in animator.
     /// </summary>
     [System.Serializable]
-    public class AnimatorRuntimeNode : RuntimeNode, IRuntimeNode
+    public class AnimatorRuntimeNode : SFRuntimeNode
     {
         /// <summary>
         /// The animator to set the animation parameters state of.
@@ -19,7 +19,7 @@ namespace SF.DialogueModule.Nodes
         /// </summary>
         public string AnimationParameterName;
 
-        public override void TraverseNode(in List<RuntimeNode> branchNodes)
+        public override void TraverseNode(in List<SFRuntimeNode> branchNodes)
         {
             branchNodes.Add(this);
         }

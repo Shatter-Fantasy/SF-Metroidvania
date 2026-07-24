@@ -3,25 +3,26 @@ using UnityEngine;
 
 namespace SF.DialogueModule.Nodes
 {
+    using SF.Graphs.Nodes;
     [System.Serializable]
-    public class BranchingRuntimeNode : RuntimeNode
+    public class BranchingRuntimeNode : Graphs.Nodes.SFRuntimeNode
     {
         /// <summary>
         /// This is the node to go through if none of the comparison
         /// checks nodes passed the validation checks.
         /// </summary>
-        [SerializeReference] public IRuntimeNode FallbackNode; 
+        [SerializeReference] public Graphs.Nodes.SFRuntimeNode FallbackNode;
         
         [SerializeReference]
-        public List<IRuntimeNode> ComparisonNodes = new();
+        public List<Graphs.Nodes.SFRuntimeNode> ComparisonNodes = new();
 
-        public BranchingRuntimeNode(List<IRuntimeNode> comparisonNodes)
+        public BranchingRuntimeNode(List<Graphs.Nodes.SFRuntimeNode> comparisonNodes)
         {
             if (comparisonNodes != null)
                 ComparisonNodes = comparisonNodes;
         }
 
-        public override void TraverseNode(in List<RuntimeNode> branchNodes)
+        public override void TraverseNode(in List<Graphs.Nodes.SFRuntimeNode> branchNodes)
         {
             foreach (var node in ComparisonNodes)
             {

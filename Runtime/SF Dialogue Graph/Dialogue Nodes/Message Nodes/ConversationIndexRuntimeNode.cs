@@ -2,6 +2,8 @@ using System.Collections.Generic;
 
 namespace SF.DialogueModule.Nodes
 {
+    using SF.Graphs.Nodes;
+
     public enum ConversationIndexNodeType
     {
         Get,
@@ -9,7 +11,7 @@ namespace SF.DialogueModule.Nodes
     }
     
     [System.Serializable]
-    public class ConversationIndexRuntimeNode : RuntimeNode, IRuntimeNode
+    public class ConversationIndexRuntimeNode : ConversationRuntimeNode
     {
         public ConversationIndexNodeType IndexOperation;
         public int ConversationIndex;
@@ -20,7 +22,7 @@ namespace SF.DialogueModule.Nodes
             ConversationIndex = conversationIndex;
         }
 
-        public override void TraverseNode(in List<RuntimeNode> branchNodes)
+        public override void TraverseNode(in List<SFRuntimeNode> branchNodes)
         {
             branchNodes.Add(this);
         }
@@ -38,5 +40,6 @@ namespace SF.DialogueModule.Nodes
                 ConversationIndex = Conversation.ConversationIndex;
             }
         }
+
     }
 }

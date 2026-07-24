@@ -1,9 +1,9 @@
-using SFEditor.Nodes;
-using SF.DialogueModule.Nodes;
+using SF.Graphs.Nodes;
 using Unity.GraphToolkit.Editor;
 
 namespace SFEditor.Dialogue.Graphs
 {
+    using SFEditor.Graphs.Nodes;
     [System.Serializable]
     [UseWithContext(typeof(ConversationContextNode))]
     [UseWithGraph(typeof(DialogueGraph))]
@@ -17,7 +17,7 @@ namespace SFEditor.Dialogue.Graphs
             context.AddOption<string>(NodeCallerOptionName);
         }
 
-        public IRuntimeNode ConvertToRuntimeNode()
+        public SFRuntimeNode ConvertToRuntimeNode()
         {
             return null;
             /*

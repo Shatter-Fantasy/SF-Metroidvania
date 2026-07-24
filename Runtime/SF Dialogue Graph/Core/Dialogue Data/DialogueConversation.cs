@@ -8,7 +8,8 @@ namespace SF.DialogueModule
 {
     using DataModule;
     using DialogueModule.Nodes;
-    
+    using SF.Graphs.Nodes;
+
     /// <summary>
     /// Data container for an entire conversation of a dialogue sequence.
     /// Including dialogue entries, actor data, and event details related to the dialogue.
@@ -24,11 +25,15 @@ namespace SF.DialogueModule
         /// The unique identifier for a <see cref="DialogueConversation"/>.
         /// </summary>
         public int GUID;
-        
+
+        /// <summary>
+        /// The id of the graph linked to this conversation asset.
+        /// </summary>
+        public Hash128 GraphID;
         //public List<DialogueEntry> DialogueEntries = new();
 
         [SerializeReference]
-        public List<IRuntimeNode> Nodes = new();
+        public List<SFRuntimeNode> Nodes = new();
         /// <summary>
         /// This is the runtime graph for conversations nodes created from the Dialogue Graph Importer.
         /// 
@@ -54,14 +59,15 @@ namespace SF.DialogueModule
         /// </summary>
         public DialogueConversation() { }
         
-        public DialogueConversation(List<IRuntimeNode> nodes)
+        public DialogueConversation(List<SFRuntimeNode> nodes)
         {
             RuntimeGraph = new DialogueRuntimeGraph(this,nodes);
             Nodes = nodes;
 
             for (int i = 0; i < nodes.Count; i++)
             {
-                nodes[i].Conversation = this;
+                if(nodes[i] is ConversationRuntimeNode conversationRuntimeNode)
+                    conversationRuntimeNode.Conversation = this;
             }
         }
 
@@ -73,7 +79,7 @@ namespace SF.DialogueModule
                 || conversation.RuntimeGraph == null)
                 return clonedConversation;
             
-            clonedConversation.Nodes = new List<IRuntimeNode>(conversation.RuntimeGraph.Nodes);
+            clonedConversation.Nodes = new List<SFRuntimeNode>(conversation.RuntimeGraph.Nodes);
             
             return clonedConversation;
         }
@@ -110,7 +116,7 @@ namespace SF.DialogueModule
         /// <summary>
         /// Used to update the graph nodes without resetting the reference in scriptable object assets.
         /// </summary>
-        public void UpdateNodes(List<IRuntimeNode> updatedNodes)
+        public void UpdateNodes(List<SFRuntimeNode> updatedNodes)
         {
             for (int i = 0; i < updatedNodes.Count; i++)
             {
@@ -120,7 +126,7 @@ namespace SF.DialogueModule
                 }
                 else
                 {
-                    if(updatedNodes[i] is RuntimeNode runtimeNode)
+                    if(updatedNodes[i] is SFRuntimeNode runtimeNode)
                         RuntimeGraph.Nodes[i] = runtimeNode.ShallowCopy();
                 }
             }

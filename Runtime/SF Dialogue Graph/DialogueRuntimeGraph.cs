@@ -6,6 +6,7 @@ using UnityEngine;
 namespace SF.DialogueModule.Nodes
 {
 	using SF.DialogueModule;
+	using SF.Graphs.Nodes;
 	/// <summary>
 	/// The runtime representation of a dialogue graph.
 	/// </summary>
@@ -26,13 +27,13 @@ namespace SF.DialogueModule.Nodes
 	    /// SerializeReference nodes when opening Unity losing all data.
 	    /// </remarks>
 	    [SerializeReference]
-	    public List<IRuntimeNode> Nodes = new();
+	    public List<SFRuntimeNode> Nodes = new();
 
 	    /// <summary>
 	    /// The nodes for the current branch of a conversation.
 	    /// </summary>
 	    [SerializeReference]
-	    public List<RuntimeNode> BranchNodes = new ();
+	    public List<SFRuntimeNode> BranchNodes = new ();
 	    
 	    /// <summary>
 	    /// Is the graph processing paused and waiting for a node to complete something.
@@ -64,7 +65,7 @@ namespace SF.DialogueModule.Nodes
 		    Nodes = ClonedConversation.Nodes;
 	    }
 
-	    public DialogueRuntimeGraph(DialogueConversation conversation, List<IRuntimeNode> nodes)
+	    public DialogueRuntimeGraph(DialogueConversation conversation, List<SFRuntimeNode> nodes)
 	    {
 		    ClonedConversation = conversation.Clone(conversation);
 		    OriginalConversation = conversation;
@@ -77,7 +78,7 @@ namespace SF.DialogueModule.Nodes
 		    BranchNodes.Clear();
 		    foreach (var runtimeNode in Nodes)
 		    {
-			    if (runtimeNode is RuntimeNode dialogueRuntimeNode)
+			    if (runtimeNode is SFRuntimeNode dialogueRuntimeNode)
 			    {
 				    dialogueRuntimeNode.TraverseNode(BranchNodes);
 			    }

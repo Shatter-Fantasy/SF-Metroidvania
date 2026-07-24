@@ -2,7 +2,10 @@ using Unity.GraphToolkit.Editor;
 
 namespace SFEditor.Dialogue.Graphs
 {
-    public interface IDialogueNode : INode
+    using SFEditor.Graphs.Nodes;
+    using SF.Graphs.Nodes;
+
+    public interface IDialogueNode : INode, ISFNode
     {
         public string ExecutionPortName { get; }
     }
@@ -11,8 +14,7 @@ namespace SFEditor.Dialogue.Graphs
     /// The base class containing runtime data for dialogue nodes.
     /// </summary>
     [System.Serializable]
-    public abstract class DialogueNode : Node, IDialogueNode
+    public abstract class DialogueNode : SFEditorNode, IDialogueNode
     {
-        public abstract string ExecutionPortName { get; }
     }
 }

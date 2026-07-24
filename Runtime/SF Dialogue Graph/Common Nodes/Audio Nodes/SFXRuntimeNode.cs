@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace SF.DialogueModule.Nodes
+namespace SF.Graphs.Nodes
 {
     /// <summary>
     /// A runtime node used to play and control sfx.
     /// </summary>
     [System.Serializable]
-    public class SFXRuntimeNode : RuntimeNode
+    public class SFXRuntimeNode : SFRuntimeNode
     {
         /// <summary>
         /// The <see cref="AudioResource"/> to play.This can be an audio clip, <see cref="AudioRandomContainer"/>,

@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using SF.DialogueModule;
-using SF.DialogueModule.Nodes;
-using Unity.GraphToolkit.Editor;
-using UnityEngine;
 
-namespace SFEditor.Nodes
+namespace SFEditor.Graphs.Nodes
 {
+    using SF.Graphs.Nodes;
+
     /// <summary>
     /// Describes how to convert an editor node to a runtime node for processing.
     /// </summary>
@@ -17,11 +15,11 @@ namespace SFEditor.Nodes
         /// <returns>
         /// Returns the converted runtime node.
         /// </returns>
-        public IRuntimeNode ConvertToRuntimeNode();
-        
+        public SFRuntimeNode ConvertToRuntimeNode();
+
         // Maybe add a convert back to editor version from a runtime node.
     }
-    
+
     /// <summary>
     /// Describes how to convert an editor node to a runtime node for processing.
     /// </summary>
@@ -33,8 +31,8 @@ namespace SFEditor.Nodes
         /// <returns>
         /// Returns the converted runtime node.
         /// </returns>
-        public List<IRuntimeNode> ConvertToRuntimeNodes(DialogueConversation dialogueConversation);
-        
+        public List<SFRuntimeNode> ConvertToRuntimeNodes();
+
         // Maybe add a convert back to editor version from a runtime node.
     }
 }

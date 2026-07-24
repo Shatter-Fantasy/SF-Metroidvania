@@ -2,25 +2,18 @@ using Unity.GraphToolkit.Editor;
 
 namespace SFEditor.DialogueModule
 {
-
+	using SFEditor.Graphs.Nodes;
 	using Dialogue.Graphs;
+
     public static class DialogueNodeUtilities
     {
-		
-		public static IDialogueNode GetNextNode<T>(T currentNode) where T : IDialogueNode
+		public static ISFEditorNode GetNextNode<T>(T currentNode) where T : ISFEditorNode
 	    {
 		    var outputPort = currentNode.GetOutputPortByName(currentNode.ExecutionPortName);
-		    
-#if UNITY_6000_4_OR_NEWER
 		    var nextNodePort = outputPort.FirstConnectedPort;
-#else
-		    var nextNodePort = outputPort.firstConnectedPort;
-#endif
 		    
-		    var nextNode = nextNodePort?.GetNode() as IDialogueNode;
+		    var nextNode = nextNodePort?.GetNode() as ISFEditorNode;
 		    return nextNode;
 	    }
-	    
-	   
     }
 }

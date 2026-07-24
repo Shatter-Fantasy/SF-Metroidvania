@@ -25,7 +25,7 @@ namespace SFEditor.DialogueModule
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets,
             string[] movedFromAssetPaths)
         {
-            
+            return;
             DialogueGraph dialogueGraph = default; 
 
             foreach (string assetPath in importedAssets)

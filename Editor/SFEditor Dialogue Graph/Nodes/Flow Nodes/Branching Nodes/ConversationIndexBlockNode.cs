@@ -1,10 +1,12 @@
-using SF.DialogueModule;
+using SF.Graphs.Nodes;
 using Unity.GraphToolkit.Editor;
-using SF.DialogueModule.Nodes;
-using SFEditor.Nodes;
 
 namespace SFEditor.Dialogue.Graphs
 {
+    using SF.DialogueModule.Nodes;
+    using SFEditor.Graphs.Nodes;
+    using SF.DialogueModule;
+
     [System.Serializable]
     [UseWithContext(typeof(BranchingContextNode), typeof(ConversationContextNode))]
     [UseWithGraph(typeof(DialogueGraph))]
@@ -32,7 +34,7 @@ namespace SFEditor.Dialogue.Graphs
                 context.AddInputPort<int>(ConversationIndexOptionName);
         }
 
-        public IRuntimeNode ConvertToRuntimeNode()
+        public SFRuntimeNode ConvertToRuntimeNode()
         {
             GetNodeOptionByName(NodeTypeOptionName).TryGetValue(out ConversationIndexNodeType);
 

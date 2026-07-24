@@ -3,19 +3,28 @@ using UnityEngine;
 
 namespace SF.DialogueModule.Nodes
 {
+    using SF.Graphs.Nodes;
+
+
     [System.Serializable]
-    public class ConversationRuntimeNode : RuntimeNode
+    public class ConversationRuntimeNode : SFRuntimeNode
     {
         /// <summary>
         /// Node to process after going through all the block nodes in this context.
         /// </summary>
         [SerializeReference]
-        public IRuntimeNode ExecutionNode;
-        
+        public SFRuntimeNode ExecutionNode;
+
+        public DialogueConversation Conversation { get;set; }
+
         [SerializeReference]
-        public List<IRuntimeNode> RuntimeNodes = new();
-        
-        public ConversationRuntimeNode(List<IRuntimeNode> runtimeNodes, IRuntimeNode executionNode = null)
+        public List<SFRuntimeNode> RuntimeNodes = new();
+
+        /// <summary>
+        /// Empty constructor so inheriting classes don't need to implement a paramarless constructor.
+        /// </summary>
+        public ConversationRuntimeNode(){}
+        public ConversationRuntimeNode(List<SFRuntimeNode> runtimeNodes, SFRuntimeNode executionNode = null)
         {
             if(runtimeNodes != null)
                 RuntimeNodes = runtimeNodes;
@@ -24,12 +33,13 @@ namespace SF.DialogueModule.Nodes
                 ExecutionNode = executionNode;
         }
 
-        public override void TraverseNode(in List<RuntimeNode> branchNodes)
+        public override void TraverseNode(in List<SFRuntimeNode> branchNodes)
         {
             
             foreach (var node in RuntimeNodes)
             {
-                node.Conversation = Conversation;
+                if(node is ConversationRuntimeNode conversationRuntimeNode)
+                    conversationRuntimeNode.Conversation = Conversation;
                 node.TraverseNode(branchNodes);
             }
             
@@ -53,5 +63,6 @@ namespace SF.DialogueModule.Nodes
         
             ExecutionNode?.ProcessNode();
         }
+
     }
 }

@@ -5,11 +5,12 @@ using Unity.GraphToolkit.Editor;
 namespace SFEditor.DialogueModule
 {
     using SF.DialogueModule;
-    using SF.DialogueModule.Nodes;
+    using SF.Graphs.Nodes;
     using SFEditor.Dialogue.Graphs;
-    using SFEditor.Nodes;
+    using SFEditor.Graphs.Nodes;
+
     using static DialogueNodeUtilities;
-    
+
     public class DialogueNodeProcessor
     {
         private DialogueGraph _dialogueGraph;
@@ -17,12 +18,12 @@ namespace SFEditor.DialogueModule
         
 #region Graph Nodes
         public List<INode> GraphNodes = new();
-        public List<IRuntimeNode> RuntimeNodes = new();
+        public List<SFRuntimeNode> RuntimeNodes = new();
         
         /// <summary>
         /// StartDialogueNode tells each graph where the conversation starts.
         /// </summary>
-        private StartDialogueNode _startDialogueNode;
+        private SFEditorStartNode _startDialogueNode;
 #endregion
 
         public DialogueNodeProcessor(DialogueGraph dialogueGraph, bool processNodesInstantly = true)
@@ -44,7 +45,7 @@ namespace SFEditor.DialogueModule
             GraphNodes = _dialogueGraph?.GetNodes().ToList();
             
             // StartDialogueNode tells each graph where the conversation starts.
-            _startDialogueNode = GraphNodes?.OfType<StartDialogueNode>().FirstOrDefault();
+            _startDialogueNode = GraphNodes?.OfType<SFEditorStartNode>().FirstOrDefault();
             
             // This can happen when first creating a dialogue graph asset and Unity imports the created asset into the project.
             // Not an error when this happens on asset creation and expected behavior. 
@@ -54,7 +55,7 @@ namespace SFEditor.DialogueModule
             ProcessNodesToConversations(_startDialogueNode);
         }
         
-        private void ProcessNodesToConversations(IDialogueNode nodeModel)
+        private void ProcessNodesToConversations(ISFEditorNode nodeModel)
         {
             if (_dialogueConversation == null)
                 return;

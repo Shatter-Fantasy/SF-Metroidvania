@@ -1,30 +1,31 @@
 using System;
 using System.Collections.Generic;
 using Unity.GraphToolkit.Editor;
-using UnityEngine;
 
 namespace SFEditor.Dialogue.Graphs
 {
-	using SFEditor.Nodes;
+	using SF.Graphs.Nodes;
+	using SFEditor.Graphs.Nodes;
 	using SF.DialogueModule;
 	using SF.DialogueModule.Nodes;
+
 	[Serializable]
 	[UseWithGraph(typeof(DialogueGraph))]
-	public class ConversationContextNode : ContextNode, 
+	public class ConversationContextNode : SFEditorContextNode,
 		IDialogueNode, 
 		IContextNodeConvertor
 	{
-		public string ExecutionPortName { get; } = "Dialogue Entry";
+		public override string ExecutionPortName { get; } = "Dialogue Entry";
 		
 		public const string ConversationTitleName = "Conversation Name";
 		
-		public List<IRuntimeNode> RuntimeNodes = new ();
+		public List<SFRuntimeNode> RuntimeNodes = new ();
 		/// <summary>
 		/// Conversation that is only set and used during the <see cref="DialogueGraphImporter"/> processing. 
 		/// </summary>
 		[NonSerialized] public DialogueConversation Conversation;
 
-		public IRuntimeNode ExecutionNode;
+		public SFRuntimeNode ExecutionNode;
 		
 		protected override void OnDefineOptions(IOptionDefinitionContext  context)
 		{ 
@@ -38,7 +39,7 @@ namespace SFEditor.Dialogue.Graphs
 			context.AddOutputPort<string>(ExecutionPortName).Build();
 		}
 
-		public IRuntimeNode ConvertToRuntimeNode()
+		public SFRuntimeNode ConvertToRuntimeNode()
 		{
 			RuntimeNodes = ConvertToRuntimeNodes(Conversation);
 
@@ -55,7 +56,12 @@ namespace SFEditor.Dialogue.Graphs
 			return new ConversationRuntimeNode(RuntimeNodes);
 		}
 
-		public List<IRuntimeNode> ConvertToRuntimeNodes(DialogueConversation dialogueConversation)
+		public List<SFRuntimeNode> ConvertToRuntimeNodes()
+		{
+			throw new NotImplementedException();
+		}
+
+		public List<SFRuntimeNode> ConvertToRuntimeNodes(DialogueConversation dialogueConversation)
 		{
 			if (dialogueConversation != null)
 			{
@@ -90,10 +96,13 @@ namespace SFEditor.Dialogue.Graphs
 				}
 			}
 			
-			
-			
-			
+
 			return RuntimeNodes;
+		}
+
+		SFRuntimeNode INodeConvertor.ConvertToRuntimeNode()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

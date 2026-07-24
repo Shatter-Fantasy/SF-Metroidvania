@@ -1,23 +1,22 @@
 using System.Collections.Generic;
-using SF.DialogueModule;
-using Unity.GraphToolkit.Editor;
-using SFEditor.Nodes;
-using SF.DialogueModule.Nodes;
 using UnityEngine;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SFEditor.Graphs.Nodes
 {
+    using SF.DialogueModule;
+    using SF.DialogueModule.Nodes;
+    using SF.Graphs.Nodes;
+
     [System.Serializable]
-    [UseWithGraph(typeof(DialogueGraph))]
-    public class BranchingContextNode : ContextNode, IContextNodeConvertor, IDialogueNode
+    public class BranchingContextNode : SFEditorContextNode, INodeConvertor
     {
         [SerializeReference]
         public List<IComparisonNode> ComparisonNodes = new();
         
-        public string ExecutionPortName { get; } = "Comparisons Failed";
+        public override string ExecutionPortName { get; } = "Comparisons Failed";
         public const string ValuePort = "Value";
         
-        public List<IRuntimeNode> RuntimeNodes = new ();
+        public List<SFRuntimeNode> RuntimeNodes = new ();
         
         protected override void OnDefinePorts(IPortDefinitionContext context)
         {
@@ -27,14 +26,14 @@ namespace SFEditor.Dialogue.Graphs
             context.AddOutputPort<string>(ExecutionPortName);
         }
 
-        public IRuntimeNode ConvertToRuntimeNode()
+        public SFRuntimeNode ConvertToRuntimeNode()
         {
             RuntimeNodes = ConvertToRuntimeNodes();
 
             return new BranchingRuntimeNode(RuntimeNodes);
         }
 
-        public List<IRuntimeNode> ConvertToRuntimeNodes(DialogueConversation dialogueConversation = null)
+        public List<SFRuntimeNode> ConvertToRuntimeNodes(DialogueConversation dialogueConversation = null)
         {
 #if UNITY_6000_4_OR_NEWER
 			for(int i = 0; i < BlockCount; i++) 
