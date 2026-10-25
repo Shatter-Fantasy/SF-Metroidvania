@@ -1,10 +1,10 @@
 using SF.Graphs.Nodes;
 using Unity.GraphToolkit.Editor;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SF.Dialogue.Graphs.Editor
 {
     using SF.DialogueModule.Nodes;
-    using SFEditor.Graphs.Nodes;
+    using SF.Graphs.Nodes.Editor;
     using SF.DialogueModule;
 
     [System.Serializable]

@@ -1,4 +1,5 @@
 using System;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -6,7 +7,7 @@ namespace SF.LoggingModule
 {
 	public static class LoggingSystem 
 	{
-		public static bool DoLogging = true;
+		[NoAutoStaticsCleanup] public static bool DoLogging = true;
 
 		[System.Diagnostics.Conditional("UNITY_EDITOR")]
 		public static void LogMessage(string message, Object context, LogType logType = LogType.Log)

@@ -22,7 +22,7 @@ namespace SF.Interactables
 	/// <summary>
 	/// Allows any object to interact with the component implementing this interface,
 	/// while also passing in any type of data that might need to be read during the interaction.
-	/// See <see cref="SF.DataManagement.SaveStation.Interact(PlayerController)"/> for an example.
+	/// See <see cref="SF.SaveModule.SaveStation.Interact(PlayerController)"/> for an example.
 	/// </summary>
 	/// <typeparam name="T">The data that needs to be passed in during an interaction.</typeparam>
 	public interface IInteractable<in T> : IInteractable

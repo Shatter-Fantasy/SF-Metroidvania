@@ -1,8 +1,8 @@
 using Unity.GraphToolkit.Editor;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SF.Dialogue.Graphs.Editor
 {
-    using SFEditor.Graphs.Nodes;
+    using SF.Graphs.Nodes.Editor;
     using SF.Graphs.Nodes;
 
     public interface IDialogueNode : INode, ISFNode

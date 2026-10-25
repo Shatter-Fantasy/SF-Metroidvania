@@ -6,13 +6,12 @@ using UnityEngine;
 namespace SF.Graphs.Editor
 {
     using SF.DialogueModule;
-    using SFEditor.Dialogue.Graphs;
-    using SFEditor.Graphs.Nodes;
+    using Dialogue.Graphs.Editor;
+    using Nodes.Editor;
 
-    [ScriptedImporter(1, DialogueGraphExtension)]
+    [ScriptedImporter(1, DialogueGraph.AssetExtension)]
     public class DialogueGraphImporter : ScriptedImporter
     {
-        public const string DialogueGraphExtension = "sfgr";
         public override void OnImportAsset(AssetImportContext ctx)
         {
             var graph = GraphDatabase.LoadGraphForImporter<DialogueGraph>(ctx.assetPath);
@@ -37,7 +36,7 @@ namespace SF.Graphs.Editor
             if (startingNode == null)
             {
                 graph.UndoBeginRecordGraph("Adding Missing Start Node");
-                graph.AddNode(new SFEditorStartNode());
+                graph.AddNode(new StartDialogueNode());
                 graph.UndoEndRecordGraph();
             }
 
@@ -48,6 +47,7 @@ namespace SF.Graphs.Editor
             var runtimeAsset = ScriptableObject.CreateInstance<DialogueConversation>();
             runtimeAsset.GraphID = graph.ID;
 
+            graph.LinkedConversationAsset = runtimeAsset;
             graph.ProcessGraphNodes();
             //BuildRuntimeGraph(startNodeModel, runtimeAsset);
 

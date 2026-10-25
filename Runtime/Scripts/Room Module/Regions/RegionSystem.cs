@@ -1,3 +1,4 @@
+using SF.DataModule;
 using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,9 +8,9 @@ namespace SF.RoomModule.RegionModule
     using SF.LevelModule;
     using SF.LoggingModule;
     using SF.SpawnModule;
+    [AutoStaticsCleanup]
     public static partial class RegionSystem
     {
-        
         /// <summary>
         /// The Region data asset for the scene the current <see cref="LevelLoader"/> is in.
         /// Set this in the inspector to update 
@@ -17,16 +18,14 @@ namespace SF.RoomModule.RegionModule
         public static RegionDataAsset LoadedRegionDataAsset;
         public static RegionDataAsset PreviousRegionDataAsset;
         public static RegionDatabase RegionDatabase;
-
-        [OnExitingPlayMode]
-        static void OnExitingPlayMode()
-        {
-            LoadedRegionDataAsset   = null;
-            PreviousRegionDataAsset = null;
-        }
         
         public static void LoadInitialRegionData()
         {
+            // Warning Jet Brains Rider 2026.2.3.1 During debug mode says this is null, but it passes the below null check
+            // Jet Brains rider is slowly rotting as a product.
+            RegionDatabase ??= DatabaseRegistry.GetDatabase<RegionDatabase>();
+
+
             if (RegionDatabase == null ||RegionDatabase.DataEntries == null || RegionDatabase.DataEntries.Count < 1)
                 return;
             

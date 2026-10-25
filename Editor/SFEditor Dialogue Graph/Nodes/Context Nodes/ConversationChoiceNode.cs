@@ -1,6 +1,6 @@
 using Unity.GraphToolkit.Editor;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SF.Dialogue.Graphs.Editor
 {
 	[System.Serializable]
 	[UseWithGraph(typeof(DialogueGraph))]

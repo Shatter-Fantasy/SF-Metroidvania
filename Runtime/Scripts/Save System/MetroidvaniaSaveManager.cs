@@ -1,17 +1,18 @@
+using Unity.Scripting.LifecycleManagement;
 
-namespace SF.DataManagement
+namespace SF.SaveModule
 {
-    using ItemModule;
-    using RoomModule;
+    using SF.ItemModule;
+    using SF.RoomModule;
     using SF.RoomModule.RegionModule;
 
-    public class MetroidvaniaSaveManager : SaveSystem
+    [AutoStaticsCleanup]
+    public partial class MetroidvaniaSaveManager : SaveSystem
     {
         public static SavePoint CurrentSavePoint;
         
         public static PlayerInventory PlayerInventory;
         public static MetroidvaniaSaveData CurrentMetroidvaniaSaveData = new();
-
 
         public static void NewGame()
         {

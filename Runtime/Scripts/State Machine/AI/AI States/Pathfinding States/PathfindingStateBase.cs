@@ -80,9 +80,9 @@ namespace SF.StateMachine
 
                 _isFollowingTarget = true;
                 
-                if (PathRequestManager._instance?.PathFinding?.GridPath != null)
+                if (PathRequestManager.Instance?.PathFinding?.GridPath != null)
                 {
-                    _grid = PathRequestManager._instance.PathFinding.GridPath;
+                    _grid = PathRequestManager.Instance.PathFinding.GridPath;
                     _nodeRadius = _grid.NodeRadius;
                 }
             }
@@ -96,7 +96,7 @@ namespace SF.StateMachine
         {
             if(math.distance(_currentTargetPos, _currentTargetPos) > _nodeRadius)
             {
-                _path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(new Vector2(_controlledPosition.x,_controlledPosition.y),
+                _path = await PathRequestManager.Instance.PathFinding.FindPathAwaitable(new Vector2(_controlledPosition.x,_controlledPosition.y),
                     new Vector2(_currentTargetPos.x,_currentTargetPos.y));
 
                 // If when updating the path we realized the player moved into the same node 

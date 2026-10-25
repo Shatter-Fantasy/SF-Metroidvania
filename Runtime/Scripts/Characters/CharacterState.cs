@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SF.Characters
 {
-	using Weapons;
+	using SF.Weapons;
 	
 	/// <summary>
 	/// The current movement state of the Character.
@@ -29,12 +29,12 @@ namespace SF.Characters
 	/// <summary>
 	/// The current status of the character's lifespan.
 	/// </summary>
-	public enum CharacterStatus
+	public enum CharacterStatus : int
 	{
-		Alive,
-		Dead,
-		Respawning,
-		KnockedOut
+		Alive = 0,
+		Dead = 1,
+		Respawning = 2,
+		KnockedOut = 4
 	}
 
 	/// <summary>

@@ -1,8 +1,8 @@
 namespace SF.SpawnModule
 {
-    using Characters.Data;
-    using Experience;
-    using StateMachine;
+    using SF.Characters.Data;
+    using SF.StatModule;
+    using SF.StateMachine;
 
     public class CombatantHealth : CharacterHealth
     {

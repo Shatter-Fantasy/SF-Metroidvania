@@ -22,7 +22,7 @@ namespace SF.U2D.Physics
     /// </summary>
     public class PhysicsVolume : MonoBehaviour
     {
-        [SerializeField] private MovementProperties _volumeProperties = new(Vector2.zero);
+        [SerializeField] private MovementProperties _volumeProperties = new();
         [SerializeField] private PhysicsVolumeType _physicsVolumeType = PhysicsVolumeType.Water;
 
         private void OnTriggerEnter2D(Collider2D collision)

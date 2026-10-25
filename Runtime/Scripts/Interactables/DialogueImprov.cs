@@ -1,12 +1,11 @@
-using System;
 using UnityEngine;
 using Unity.U2D.Physics;
 
 namespace SF.DialogueModule
 {
-    using Characters.Controllers;
-    using Interactables;
-    using U2D.Physics;
+    using SF.Characters.Controllers;
+    using SF.Interactables;
+    using SF.U2D.Physics;
     
     public class DialogueImprov : MonoBehaviour, 
         IInteractable<PlayerController>,
@@ -40,9 +39,7 @@ namespace SF.DialogueModule
         public void OnTriggerBegin2D(PhysicsEvents.TriggerBeginEvent beginEvent, SFShapeComponent callingShapeComponent)
         {
             if(_dialogueConversation != null)
-                DialogueManager.TriggerConversation(_dialogueConversation,this);
-            else
-                DialogueManager.TriggerConversation(ConversationGUID,this);
+                DialogueManager.TriggerConversation(_dialogueConversation.GraphID,this);
         }
 
         public void OnTriggerEnd2D(PhysicsEvents.TriggerEndEvent endEvent, SFShapeComponent callingShapeComponent)

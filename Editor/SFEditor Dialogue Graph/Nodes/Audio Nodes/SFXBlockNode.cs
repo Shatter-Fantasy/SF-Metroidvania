@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 
 namespace SFEditor.Graphs.Graphs
 {
-    using SFEditor.Graphs.Nodes;
+    using SF.Graphs.Nodes.Editor;
 
     [System.Serializable]
     public class SFXBlockNode : BlockNode, INodeConvertor

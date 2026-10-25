@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,7 +6,8 @@ namespace SF.DialogueModule
 {
     public class DialogueUIManager : MonoBehaviour
     {
-        [SerializeField] private UIDocument _dialogueOverlayUXML;
+        [SerializeField] private PanelRenderer _dialoguePanelRenderer;
+
         private VisualElement _dialogueView;
         private Label _dialogueLabel;
         private Label _speakerLabel;
@@ -14,14 +16,29 @@ namespace SF.DialogueModule
         
         private void Start()
         {
-            if (_dialogueOverlayUXML == null)
+
+            if (_dialoguePanelRenderer == null)
                 return;
-            
-            _dialogueView = _dialogueOverlayUXML.rootVisualElement.Q<VisualElement>(name: "dialogue__view");
-            _dialogueLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "overlay-dialogue__label");
-            _speakerLabel = _dialogueOverlayUXML.rootVisualElement.Q<Label>(name: "dialogue-speaker__label");
+
+            _dialoguePanelRenderer.RegisterUIReloadCallback(OnDialogueUIReload);
         }
-        
+
+        private void OnDestroy()
+        {
+            if (_dialoguePanelRenderer == null)
+                return;
+
+            _dialoguePanelRenderer.UnregisterUIReloadCallback(OnDialogueUIReload);
+        }
+
+        private void OnDialogueUIReload(PanelRenderer panelRenderer, VisualElement rootElement, int version)
+        {
+            _dialogueView = rootElement.Q<VisualElement>(name: "dialogue__view");
+            _dialogueLabel = rootElement.Q<Label>(name: "overlay-dialogue__label");
+            _speakerLabel = rootElement.Q<Label>(name: "dialogue-speaker__label");
+        }
+
+
         private void OnEnable()
         {
             DialogueManager.DialogueStartedHandler += OnDialogueStarted;
@@ -60,6 +77,7 @@ namespace SF.DialogueModule
                 _dialogueLabel.text = _currentEntry.Text;
                 _speakerLabel.text = _currentEntry.SpeakerName;
             }
+
         }
 
         private void OnDialogueEnded()

@@ -18,42 +18,18 @@ namespace SF.U2D.Physics
 
     // TODO: Rename this struct to GroundedPhysicsProperties
     [System.Serializable]
-    public struct MovementProperties : IPhysicsControllerProperties
+    public struct MovementProperties() : IPhysicsControllerProperties
     {
-        public float GroundSpeed;
-        public float GroundRunningSpeed;
-        public float GroundAcceleration;
-        public float GroundDeacceleration;
-        public float GroundMaxSpeed;
+        public float GroundSpeed = 8f;
+        public float GroundRunningSpeed = 7.5f;
+        public float GroundAcceleration = 1f;
+        public float GroundDeacceleration = 1f;
+        public float GroundMaxSpeed = 10f;
 
-        public float GravityScale;
-        public float TerminalVelocity;
-        public float MaxUpForce;
+        public float GravityScale = 1f;
+        public float TerminalVelocity = 20f;
+        public float MaxUpForce = 15f;
 
-        public Vector2 ClimbSpeed;
-
-        public MovementProperties(
-            Vector2 _climbSpeed,
-            float _groundSpeed = 5f,
-            float _groundRunningSpeed = 7.5f,
-            float _groundAcceleration = 1f,
-            float _groundDeacceleration = 1f,
-            float _groundMaxSpeed = 10f,
-            float _gravityScale = 1,
-            float _terminalVelocity = 20f,
-            float _maxUpForce = 15f)
-        {
-            GroundSpeed = _groundSpeed;
-            GroundRunningSpeed = _groundRunningSpeed;
-            GroundAcceleration = _groundAcceleration;
-            GroundDeacceleration = _groundDeacceleration;
-            GroundMaxSpeed = _groundMaxSpeed;
-
-            GravityScale = _gravityScale;
-            TerminalVelocity = _terminalVelocity;
-            MaxUpForce = _maxUpForce;
-
-            ClimbSpeed = _climbSpeed;
-        }
+        public Vector2 ClimbSpeed = new Vector2(1,1);
     }
 }

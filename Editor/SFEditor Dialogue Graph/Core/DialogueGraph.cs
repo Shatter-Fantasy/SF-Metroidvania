@@ -3,25 +3,21 @@ using Unity.GraphToolkit.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SF.Dialogue.Graphs.Editor
 {
 	using SF.DialogueModule;
 	using SF.DialogueModule.Nodes;
 	using SFEditor.DialogueModule;
 	using SFEditor.Graphs;
-	using SFEditor.Graphs.Nodes;
+	using SF.Graphs.Nodes.Editor;
 
-	public partial class DialogueGraph
-	{
-
-	}
-	
 	[Icon(AssetIconPath)]
     [Graph(AssetExtension)] [Serializable]
     public partial class DialogueGraph : SFGraphBase<SFEditorNode>
     {
 	    public const string AssetIconPath = "Assets/Editor Default Resources/SF Dialogue Graph/Icons/Dialogue Graph Icon.png";
 	    public const string AssetExtension = "sfgr";
+	    public const string DefaultAssetName = "New Conversation";
 
 		public DialogueConversation LinkedConversationAsset;
 		public DialogueDatabase Database;
@@ -29,12 +25,12 @@ namespace SFEditor.Dialogue.Graphs
 		/// <summary>
 		/// A helper class the editor and runtime graph nodes.
 		/// </summary>
-		public DialogueNodeProcessor NodeProcessor;
+		[NonSerialized] public DialogueNodeProcessor NodeProcessor;
 		
-	    [MenuItem("Assets/Create/SF/DialogueGraph/Dialogue Graph", false)]
+	    [MenuItem("Assets/Create/SF/DialogueGraph/Dialogue Graph")]
 	    static void CreateAssetFile()
 	    {
-		    GraphDatabase.PromptInProjectBrowserToCreateNewAsset<DialogueGraph>();
+		    GraphDatabase.PromptInProjectBrowserToCreateNewAsset<DialogueGraph>(DefaultAssetName);
 	    }
 		
 		/// <summary>

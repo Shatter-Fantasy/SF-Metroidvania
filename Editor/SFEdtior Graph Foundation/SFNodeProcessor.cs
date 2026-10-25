@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using SFEditor.Graphs;
 using Unity.GraphToolkit.Editor;
 
-namespace SFEditor.Graphs.Nodes
+namespace SF.Graphs.Nodes.Editor
 {
     using SF.Graphs.Nodes;
-    using SFEditor.Graphs.Nodes;
+    using Editor;
 
    public class SFNodeProcessor<TGraphBase, IGraphNode>
         where TGraphBase : SFGraphBase

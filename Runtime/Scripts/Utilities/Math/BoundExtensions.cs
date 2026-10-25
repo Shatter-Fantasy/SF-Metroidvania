@@ -1,13 +1,21 @@
+using Unity.U2D.Physics;
 using UnityEngine;
 
 namespace SF
 {
 #if !SF_Utilities
+
     /// <summary>
     /// A set of helper functions and extensions methods for Unity's Bounds structs of different types. Bounds and BoundsInt.
     /// </summary>
     public static class BoundExtensions
     {
+        extension(Bounds bounds)
+        {
+            // Extension Method
+            public Vector2 TopRight => new(bounds.max.x, bounds.max.y);
+        }
+
         #region Bounds
         public static Vector2 TopRight(this Bounds bounds) => new(bounds.max.x, bounds.max.y);
         public static Vector2 TopCenter(this Bounds bounds) => new(bounds.center.x, bounds.max.y);

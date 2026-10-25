@@ -55,7 +55,7 @@ namespace SF.UIModule
             }
 
             PickedUpTime                       = itemDTO;
-            _itemPickUpLabel.text              = itemDTO?.Name;
+            _itemPickUpLabel.text              = itemDTO?.name;
             _overlayContainer.style.visibility = Visibility.Visible;
 
             _ = _popTimer.StartTimerAsync();

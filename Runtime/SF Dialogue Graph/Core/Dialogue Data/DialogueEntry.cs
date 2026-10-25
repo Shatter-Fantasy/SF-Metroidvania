@@ -1,9 +1,9 @@
 using System;
-using SF.DialogueModule.Nodes;
-using UnityEngine;
+using Unity.Scripting.LifecycleManagement;
 
 namespace SF.DialogueModule
 {
+    using SF.DialogueModule.Nodes;
     /// <summary>
     /// The individual parts of a full dialogue conversations including events to activate once the dialogue happens, starts, or ends.
     /// </summary>
@@ -39,7 +39,7 @@ namespace SF.DialogueModule
             SpeakerName = entryNode.SpeakerName;
         }
         // Used for comparisons to see if a DialogueEntry is null.
-        public static readonly DialogueEntry EmptyEntry = new()
+        [NoAutoStaticsCleanup] public static readonly DialogueEntry EmptyEntry = new()
         {
             Text = "",
             SpeakerName = ""

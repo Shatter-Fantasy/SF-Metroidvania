@@ -3,7 +3,6 @@ using UnityEngine;
 namespace SF.Characters.Data
 {
     using DataModule;
-    using Experience;
     using LootModule;
     using StatModule;
 

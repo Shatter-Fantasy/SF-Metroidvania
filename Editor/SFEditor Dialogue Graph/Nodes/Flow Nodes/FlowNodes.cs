@@ -1,13 +1,12 @@
 using System;
 using Unity.GraphToolkit.Editor;
 
-using SF.DialogueModule;
-
-namespace SFEditor.Dialogue.Graphs
+namespace SF.Dialogue.Graphs.Editor
 {
-    
+    using SF.DialogueModule;
+
     [Serializable]
-    public class StartDialogueNode : DialogueNode, IDialogueNode
+    public class StartDialogueNode : DialogueNode
     {
         public override string ExecutionPortName { get; } = "Dialogue Start";
         public const string DialogueDBName = "Dialogue Database";
@@ -25,14 +24,4 @@ namespace SFEditor.Dialogue.Graphs
             context.AddOutputPort<string>(ExecutionPortName).Build();
         }
     }
-    
-    [Serializable]
-    public class EndNode : Node
-    {
-        protected override void OnDefinePorts(IPortDefinitionContext context)
-        {
-            context.AddInputPort<INode>("Input Port");
-        }
-    }
 }
-

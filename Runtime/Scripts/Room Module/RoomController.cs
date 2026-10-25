@@ -7,10 +7,10 @@ using Unity.U2D.Physics;
 
 namespace SF.RoomModule
 {
-    using CameraModule;
-    using Characters.Controllers;
-    using Managers;
-    using U2D.Physics;
+    using SF.CameraModule;
+    using SF.Characters.Controllers;
+    using SF.Managers;
+    using SF.U2D.Physics;
     
     public class RoomController : MonoBehaviour, 
         ITriggerShapeBegin2DCallback, ITriggerShapeEnd2DCallback

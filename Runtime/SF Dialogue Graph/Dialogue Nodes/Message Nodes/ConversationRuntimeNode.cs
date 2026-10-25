@@ -5,7 +5,6 @@ namespace SF.DialogueModule.Nodes
 {
     using SF.Graphs.Nodes;
 
-
     [System.Serializable]
     public class ConversationRuntimeNode : SFRuntimeNode
     {
@@ -23,8 +22,11 @@ namespace SF.DialogueModule.Nodes
         /// <summary>
         /// Empty constructor so inheriting classes don't need to implement a paramarless constructor.
         /// </summary>
-        public ConversationRuntimeNode(){}
-        public ConversationRuntimeNode(List<SFRuntimeNode> runtimeNodes, SFRuntimeNode executionNode = null)
+        public ConversationRuntimeNode()
+        {
+            ShouldPauseGraphProcessing = true;
+        }
+        public ConversationRuntimeNode(List<SFRuntimeNode> runtimeNodes, SFRuntimeNode executionNode = null) : this()
         {
             if(runtimeNodes != null)
                 RuntimeNodes = runtimeNodes;

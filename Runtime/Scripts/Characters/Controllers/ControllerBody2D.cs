@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SF.U2D.Physics
 {
-    using Characters;
+    using SF.Characters;
     
     /// <summary>
     /// The base class for high performance physics controller that uses Unity's Low Level Physics2D system to allow for

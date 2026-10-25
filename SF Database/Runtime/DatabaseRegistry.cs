@@ -1,11 +1,12 @@
-#if !SF_DATABASES
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace SF.DataModule
 {
+    [NoAutoStaticsCleanup]
     [CreateAssetMenu(fileName = nameof(DatabaseRegistry), menuName = "SF/Data/Database Registry")]
     public class DatabaseRegistry : ScriptableObject
     {
@@ -175,4 +176,3 @@ namespace SF.DataModule
 #endif
     }
 }
-#endif

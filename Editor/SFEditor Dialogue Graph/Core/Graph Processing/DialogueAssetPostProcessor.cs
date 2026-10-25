@@ -1,7 +1,7 @@
-using System;
 using System.IO;
 using System.Text;
 using Unity.GraphToolkit.Editor;
+using Unity.Scripting.LifecycleManagement;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,15 +9,14 @@ namespace SFEditor.DialogueModule
 {
     using SF.DataModule;
     using SF.DialogueModule;
-    using SFEditor.Dialogue.Graphs;
-    public class DialogueAssetPostProcessor : AssetPostprocessor
+    using SF.Dialogue.Graphs.Editor;
+    [AutoStaticsCleanup]
+    public partial class DialogueAssetPostProcessor : AssetPostprocessor
     {
-        public static event Action<DialogueGraph> OnImported; 
-        
         // TODO: Implement the OnDeleted and OnMovedAssetFromTo events as well.
         //public static event Action<DialogueGraph> OnDeleted;
         //public static event Action<string, string> OnMovedAssetFromTo;
-        
+
         internal static bool IsPathToGraphAsset(string assetPath) => string.Equals(Path.GetExtension(assetPath), DialogueGraph.AssetExtension);
         internal const string AssetExtensionWithPeriod = "." + DialogueGraph.AssetExtension;
         internal const string AssetLabel = "Dialogue";
@@ -25,7 +24,7 @@ namespace SFEditor.DialogueModule
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets,
             string[] movedFromAssetPaths)
         {
-            return;
+            /*
             DialogueGraph dialogueGraph = default; 
 
             foreach (string assetPath in importedAssets)
@@ -53,15 +52,10 @@ namespace SFEditor.DialogueModule
                 {
                     dialogueGraph.ProcessGraphNodes();
                 }
-                
-                
-                if (OnImported != null)
-                {
-                    OnImported.Invoke(dialogueGraph);
-                }
-                
+
                 dialogueGraph.HasGraphChanged = false;
             } // End of Foreach loop for importedAssets
+            */
         }
 
         private static void UpdateLinkedAsset(DialogueGraph dialogueGraph)
@@ -73,16 +67,11 @@ namespace SFEditor.DialogueModule
         {
             // Default make the conversation asset and put it in the same folder as the graph it is linked to.
             StringBuilder stringBuilder = new(assetPath);
-#if UNITY_6000_4_OR_NEWER
             stringBuilder.Replace($"{dialogueGraph.Name}.{DialogueGraph.AssetExtension}", "");
             stringBuilder.Append($"{dialogueGraph.Name} Conversation.asset");
-#else
-				stringBuilder.Replace($"{dialogueGraph.name}.{DialogueGraph.AssetExtension}", "");
-			    stringBuilder.Append($"{dialogueGraph.name} Conversation.asset");
-#endif   
             
             DialogueConversation _dialogueConversation = ScriptableObject.CreateInstance<DialogueConversation>();
-            _dialogueConversation.GUID = Guid.NewGuid().GetHashCode();
+            _dialogueConversation.GraphID = dialogueGraph.ID;
             AssetDatabase.CreateAsset(_dialogueConversation,stringBuilder.ToString());
             AssetDatabase.SetLabels(_dialogueConversation,new string[] {AssetLabel});
             dialogueGraph.LinkedConversationAsset = _dialogueConversation;

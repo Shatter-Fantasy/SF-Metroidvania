@@ -1,10 +1,11 @@
 using System;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace SF.Managers
 {
-    using RoomModule;
-    using SF.DataManagement;
+    using SF.RoomModule;
+    using SaveModule;
     public enum GameLoadingMode
     {
         NewGame, LoadGame, Continue
@@ -24,7 +25,8 @@ namespace SF.Managers
     /// Managers/Databases are ready before needing to be used.
     /// </summary>
     [DefaultExecutionOrder(-5)]
-    public class GameLoader : ManagerBaseStaticCleanUp<GameLoader>
+    [AutoStaticsCleanup]
+    public partial class GameLoader : ManagerBaseStaticCleanUp<GameLoader>
     {
         
         /// <summary>

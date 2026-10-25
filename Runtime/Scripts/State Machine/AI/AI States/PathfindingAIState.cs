@@ -86,13 +86,13 @@ namespace SF.StateMachine
 				_targetIndex      = 0;
 				_currentTargetPos = _target.position;
 			
-				_path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position, _target.position);
+				_path = await PathRequestManager.Instance.PathFinding.FindPathAwaitable(_controlledTransform.position, _target.position);
             
 				_followingTarget = true;
 				
-				if(PathRequestManager._instance?.PathFinding?.GridPath != null)
+				if(PathRequestManager.Instance?.PathFinding?.GridPath != null)
 				{
-					_grid       = PathRequestManager._instance.PathFinding.GridPath;
+					_grid       = PathRequestManager.Instance.PathFinding.GridPath;
 					_nodeRadius = _grid.NodeRadius;
 				}
 			}
@@ -114,7 +114,7 @@ namespace SF.StateMachine
 		        
 	        if (Vector2.Distance(_currentTargetPos, _target.position) > _nodeRadius)
 	        {
-		        _path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
+		        _path = await PathRequestManager.Instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
 			        _target.position);
 
 		        // If when updating the path we realized the player moved into the same node 
@@ -168,7 +168,7 @@ namespace SF.StateMachine
 	        {
 		        if (Vector2.Distance(_currentTargetPos, _target.position) > _nodeRadius)
 		        {
-			        _path = await PathRequestManager._instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
+			        _path = await PathRequestManager.Instance.PathFinding.FindPathAwaitable(_controlledTransform.position,
 				        _target.position);
 
 			        // If when updating the path we realized the player moved into the same node 

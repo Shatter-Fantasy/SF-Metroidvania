@@ -1,6 +1,6 @@
 using Unity.GraphToolkit.Editor;
 
-namespace SFEditor.Graphs.Nodes
+namespace SF.Graphs.Nodes.Editor
 {
     using SF.Graphs.Nodes;
 
@@ -10,7 +10,7 @@ namespace SFEditor.Graphs.Nodes
     /// </summary>
     public interface ISFEditorNode : ISFNode, INode
     {
-        public abstract string ExecutionPortName { get; }
+        public string ExecutionPortName { get; }
     }
 
     /// <summary>

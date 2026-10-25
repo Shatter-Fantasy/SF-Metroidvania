@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace SF.Managers
 {
-    using DataManagement;
-    using DialogueModule;
-    using Settings;
+    using SF.SaveModule;
+    using SF.DialogueModule;
+    using SF.Settings;
 	/// <summary>
 	/// The current state that is controlling the games input and actions. 
 	/// </summary>
@@ -24,7 +25,8 @@ namespace SF.Managers
 	/// </summary>
 
     [DefaultExecutionOrder(-5)]
-    public class GameManager : ManagerBaseStaticCleanUp<GameManager>
+    [AutoStaticsCleanup]
+    public partial class GameManager : ManagerBaseStaticCleanUp<GameManager>
     {
         [SerializeReference]
         public List<SaveDataBlock> SaveDataBlocks = new List<SaveDataBlock> ();
@@ -64,18 +66,14 @@ namespace SF.Managers
         
         protected void OnEnable()
         {
-#if SF_DIALOGUE_GRAPH
             DialogueManager.DialogueStartedHandler += OnDialogueStarted;
             DialogueManager.DialogueEndedHandler += OnDialogueEnded;
-#endif
         }
 
         protected void OnDisable ()
         {
-#if SF_DIALOGUE_GRAPH
             DialogueManager.DialogueStartedHandler -= OnDialogueStarted;
             DialogueManager.DialogueEndedHandler -= OnDialogueEnded;
-#endif
         }
 
         /// <summary>

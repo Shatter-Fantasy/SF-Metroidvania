@@ -6,8 +6,8 @@ namespace SFEditor.DialogueModule
 {
     using SF.DialogueModule;
     using SF.Graphs.Nodes;
-    using SFEditor.Dialogue.Graphs;
-    using SFEditor.Graphs.Nodes;
+    using SF.Dialogue.Graphs.Editor;
+    using SF.Graphs.Nodes.Editor;
 
     using static DialogueNodeUtilities;
 

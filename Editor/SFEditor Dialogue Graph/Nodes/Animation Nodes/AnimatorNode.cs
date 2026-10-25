@@ -1,20 +1,20 @@
-using SF.Graphs.Nodes;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SF.Dialogue.Graphs.Editor
 {
-    using SFEditor.Graphs.Nodes;
+    using SF.Graphs.Nodes;
+    using SF.Graphs.Nodes.Editor;
 
     /// <summary>
     /// The type of animation value an <see cref="AnimatorNode"/> is setting.
     /// </summary>
-    public enum AnimatorNodeType
+    public enum AnimatorNodeType : int
     {
-        SetTrigger, // Animator.SetTrigger
-        SetBool,  // Animator.SetBool 
-        SetFloat, // Animator.SetFloat
-        SetInteger // Animator.SetInteger
+        SetTrigger = 0, // Animator.SetTrigger
+        SetBool = 1,  // Animator.SetBool
+        SetFloat = 2, // Animator.SetFloat
+        SetInteger = 4 // Animator.SetInteger
     }
     
     [System.Serializable]

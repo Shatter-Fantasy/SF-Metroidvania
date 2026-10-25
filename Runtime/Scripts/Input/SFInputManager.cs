@@ -1,11 +1,13 @@
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine.InputSystem;
 
 namespace SF.InputModule
 {
-	using AbilityModule;
-	using Managers;
-	
-    public class SFInputManager : ManagerBaseStaticCleanUp<SFInputManager>
+	using SF.AbilityModule;
+	using SF.Managers;
+
+	[AutoStaticsCleanup]
+    public partial class SFInputManager : ManagerBaseStaticCleanUp<SFInputManager>
     {
 	    
 	    /// <summary>
@@ -17,10 +19,9 @@ namespace SF.InputModule
 		private static Controls _controls;
 		public static Controls Controls 
 		{
-			get
+			get // Can't use the field keyword because the backed field is readonly and Autostaticcleanup won't work.
 			{
 				_controls ??= new Controls();
-
 				return _controls;
 			}
 		}

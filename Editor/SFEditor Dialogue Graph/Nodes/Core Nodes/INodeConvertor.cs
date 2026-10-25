@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SFEditor.Graphs.Nodes
+namespace SF.Graphs.Nodes.Editor
 {
     using SF.Graphs.Nodes;
 

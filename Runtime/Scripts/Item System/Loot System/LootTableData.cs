@@ -32,7 +32,7 @@ namespace SF.LootModule
             if (item.Prefab == null)
             {
                 GameObject spawnedItem = new GameObject(
-                    item.Name,
+                    item.name,
                     typeof(SpriteRenderer),
                     typeof(PickupItem)
                 )
@@ -51,7 +51,7 @@ namespace SF.LootModule
                     Quaternion.identity
                 );
                 
-                spawnedItem.name = item.Name;
+                spawnedItem.name = item.name;
                 spawnedItem.GetComponent<PickupItem>().ItemDTO = item;
                 spawnedItem.GetComponent<SpriteRenderer>().sprite = item.ItemIcon;
             }

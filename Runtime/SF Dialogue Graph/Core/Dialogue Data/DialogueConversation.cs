@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SF.DialogueModule
 {
@@ -14,16 +13,13 @@ namespace SF.DialogueModule
     /// Data container for an entire conversation of a dialogue sequence.
     /// Including dialogue entries, actor data, and event details related to the dialogue.
     /// </summary>
-    [CreateAssetMenu(menuName = "SF/Dialogue/Dialogue Conversation", fileName = "SF Conversation")]
+    /// <remarks>Note this asset is created via the Dialogue Graph Importer and never should be manually created by a user.</remarks>
     public class DialogueConversation : DTOAssetBase
     {
         /// <summary>
-        /// The name of this conversation.
-        /// </summary>
-        [FormerlySerializedAs("Name")] public string ConversationName;
-        /// <summary>
         /// The unique identifier for a <see cref="DialogueConversation"/>.
         /// </summary>
+        [Obsolete("Use the GraphID instead.")]
         public int GUID;
 
         /// <summary>
@@ -103,9 +99,7 @@ namespace SF.DialogueModule
         {
             Properties.Add(new ConversationPropertyPair(value,propertyName));
         }
-        
-       
-        
+
         
         public T GetProperty<T>(string propertyName, T value)
         {

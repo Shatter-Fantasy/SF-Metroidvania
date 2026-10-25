@@ -20,7 +20,7 @@ namespace SF.Graphs.Nodes
 	[System.Serializable]
     public class SFRuntimeNode : ISFNode
     {
-	    public bool ShouldPauseGraphProcessing;
+	    public bool ShouldPauseGraphProcessing = true;
 
 	    public bool IsBlockNode;
 

@@ -1,16 +1,18 @@
 using Unity.Cinemachine;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace SF.CameraModule
 {
-    using RoomModule;
-    using SpawnModule;
+    using SF.RoomModule;
+    using SF.SpawnModule;
     
     /// <summary>
     /// The manager for the active main camera in playable levels.
     /// Contains helper methods for switching active cameras.
     /// </summary>
-    public class CameraController : ManagerBaseStaticCleanUp<CameraController>
+    [AutoStaticsCleanup]
+    public partial class CameraController : ManagerBaseStaticCleanUp<CameraController>
     {
         /// <summary>
         /// This is the default priority that is set on the old virtual cameras that are being switched away from.

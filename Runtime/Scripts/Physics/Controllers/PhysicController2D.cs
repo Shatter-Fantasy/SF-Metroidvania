@@ -19,8 +19,9 @@ namespace SF.U2D.Physics
         [NonSerialized] public float ReferenceSpeed;
 
         [Header("Physics Properties")]
-        public MovementProperties DefaultPhysics = new(new Vector2(5, 5));
-        public MovementProperties CurrentPhysics = new(new Vector2(5, 5));
+        public MovementProperties DefaultPhysics = new();
+
+        public MovementProperties CurrentPhysics = new();
         /// <summary>
         /// The type of PhysicsVolumeType the controller is in. Sets as none if not in one.
         /// </summary>

@@ -1,10 +1,11 @@
 using Unity.GraphToolkit.Editor;
 
-namespace SFEditor.Graphs.Nodes
+namespace SF.Graphs.Nodes.Editor
 {
     using SF.Graphs.Nodes;
-    using SFEditor.Dialogue.Graphs;
+    using SF.Dialogue.Graphs.Editor;
 
+    [System.Serializable]
     public abstract class ComparisonBlockNode : BlockNode, IComparisonNode
     {
         public string ExecutionPortName { get; } = "Comparison Passed";

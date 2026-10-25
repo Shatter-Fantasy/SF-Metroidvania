@@ -1,5 +1,5 @@
 using Unity.GraphToolkit.Editor;
-namespace SFEditor.Dialogue.Graphs
+namespace SF.Dialogue.Graphs.Editor
 {
 	
     [UseWithContext(typeof(ConversationContextNode))] [System.Serializable]

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SFEditor.Graphs.Nodes
+namespace SF.Graphs.Nodes.Editor
 {
     using SF.DialogueModule;
     using SF.DialogueModule.Nodes;

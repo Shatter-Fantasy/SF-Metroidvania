@@ -3,7 +3,7 @@ using UnityEngine;
 namespace SF.Characters.Data
 {
     using LootModule;
-    using Experience;
+    using StatModule;
     public class CombatantData : CharacterData
     {
         public LootTableData EnemyLootTable;

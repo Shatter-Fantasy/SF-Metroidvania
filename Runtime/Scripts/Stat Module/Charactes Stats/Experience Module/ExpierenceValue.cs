@@ -1,7 +1,8 @@
 using Unity.Properties;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
-namespace SF.Experience
+namespace SF.StatModule
 {
     [System.Serializable]
     public class ExperienceValue
@@ -18,7 +19,7 @@ namespace SF.Experience
     {
         // TODO: Add the experience curve system.
         
-        protected static PlayerLevelStats _instance;
+        [NoAutoStaticsCleanup] protected static PlayerLevelStats _instance;
         public static PlayerLevelStats Instance
         {
             get => _instance;

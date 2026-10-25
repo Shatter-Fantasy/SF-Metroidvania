@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace SF.DataManagement
+namespace SF.SaveModule
 {
-    public class SaveSystem
+    [AutoStaticsCleanup]
+    public partial class SaveSystem
     {
-        public static bool UseEncryptedSaves;
-        protected static SaveSystem _instance;
+        [NoAutoStaticsCleanup] public static bool UseEncryptedSaves;
+        [NoAutoStaticsCleanup] protected static SaveSystem _instance;
         public static SaveSystem Instance
         {
             get => _instance;
@@ -23,14 +25,12 @@ namespace SF.DataManagement
                 _instance = value;
             }
         }
-        
+
         /// <summary>
-        /// Creates a static instance of the class on compilation.
+        /// Creates a static instance of the class when starting the player application.
         /// </summary>
-        /// <remarks>
-        /// Only works with non-Unity <see cref="UnityEngine.Object"/> classes.
-        /// </remarks>
-        static SaveSystem()
+        [OnEnteringPlayMode]
+        public static void InitSaveSystem()
         {
             Instance = new SaveSystem();
         }

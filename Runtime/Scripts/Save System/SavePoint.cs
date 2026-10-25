@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SF.DataManagement
+namespace SF.SaveModule
 {
     public abstract class SavePoint : MonoBehaviour
     {

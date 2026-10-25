@@ -10,7 +10,7 @@ namespace SF.LevelModule
     /// This is needed to be in each playable scene and make sure this does not persist between scenes,
     /// so start can run per at least once per scene.
     /// </summary>
-    [DefaultExecutionOrder(-4)]
+    [DefaultExecutionOrder(-4)] [AutoStaticsCleanup]
     public partial class LevelLoader : MonoBehaviour
     {
         /// <summary>
@@ -23,9 +23,8 @@ namespace SF.LevelModule
         /// <summary>
         /// This is called when the first playable is ready to give the player control.
         /// </summary>
-        [AutoStaticsCleanup]
-        public static event Action LevelReadyHandler;
 
+        public static event Action LevelReadyHandler;
         public static event Action LevelStartedHandler;
    
         private void Start()

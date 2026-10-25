@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SF.InputModule;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SF.DialogueModule
 {
+    using SF.InputModule;
     using SF.DialogueModule.Nodes;
     /// <summary>
     /// The in scene manager that controls the way DialogueConversations are run and set up.
     /// </summary>
-    public class DialogueManager : MonoBehaviour
+    [AutoStaticsCleanup]
+    public partial class DialogueManager : MonoBehaviour
     {
         private static DialogueManager _instance;
         public static DialogueManager Instance
@@ -91,10 +93,10 @@ namespace SF.DialogueModule
         public static void TriggerConversation(DialogueConversation conversation, Component callingComponent = null)
         {
             if(conversation != null)
-                TriggerConversation(conversation.GUID,callingComponent);
+                TriggerConversation(conversation.GraphID,callingComponent);
         }
-        
-        public static void TriggerConversation(int guid, Component callingComponent = null)
+
+        public static void TriggerConversation(Hash128 guid, Component callingComponent = null)
         {
             if (_instance == null)
             {
@@ -110,7 +112,7 @@ namespace SF.DialogueModule
             }
 
             // Are we in a conversation?
-            if (_instance._dialogueConversation?.GUID != guid)
+            if (_instance._dialogueConversation?.GraphID != guid)
             {
                 // If not check if the passed in conversation id is valid.
                 // Than start a new conversation and open the dialogue panel if it.

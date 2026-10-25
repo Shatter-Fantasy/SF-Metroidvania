@@ -4,7 +4,7 @@ using Unity.GraphToolkit.Editor;
 
 namespace SFEditor.Graphs
 {
-    using SFEditor.Graphs.Nodes;
+    using SF.Graphs.Nodes.Editor;
 
     [System.Serializable]
     public abstract class SFGraphBase : Graph

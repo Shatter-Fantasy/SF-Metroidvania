@@ -2,8 +2,7 @@ using Unity.GraphToolkit.Editor;
 
 namespace SFEditor.DialogueModule
 {
-	using SFEditor.Graphs.Nodes;
-	using Dialogue.Graphs;
+	using SF.Graphs.Nodes.Editor;
 
     public static class DialogueNodeUtilities
     {

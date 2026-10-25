@@ -64,7 +64,7 @@ namespace SF.ItemModule
             
             ItemData itemData = new ItemData();
             itemData.ID = itemAsset.ID;
-            itemData.Name = itemAsset.Name;
+            itemData.Name = itemAsset.name;
             itemData.Description = itemAsset.Description;
             itemData.ItemSubType = itemAsset.ItemSubType;
             return itemData;
@@ -77,7 +77,7 @@ namespace SF.ItemModule
             
             ItemData itemData = new ItemData();
             itemData.ID          = itemAsset.ID;
-            itemData.Name        = itemAsset.Name;
+            itemData.Name        = itemAsset.name;
             itemData.Description = itemAsset.Description;
             itemData.ItemSubType = itemAsset.ItemSubType;
             return itemData;

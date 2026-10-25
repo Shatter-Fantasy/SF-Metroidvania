@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
-
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace SF.Pathfinding
 {
-    public class PathRequestManager : MonoBehaviour
+    [AutoStaticsCleanup]
+    public partial class PathRequestManager : MonoBehaviour
     {
-        public static PathRequestManager _instance;
+        public static PathRequestManager Instance;
 
-        [NonSerialized] public Queue<PathRequest> _pathRequestQueue = new Queue<PathRequest>();
+        [NonSerialized] public Queue<PathRequest> PathRequestQueue = new Queue<PathRequest>();
         private PathRequest _currentPathRequest;
 
         private bool _isProcessingAPath;
@@ -17,22 +18,22 @@ namespace SF.Pathfinding
 
         private void Awake()
         {
-            _instance = this;
+            Instance = this;
             PathFinding = GetComponent<PathAStar>();
         }
 
         public static void RequestPath(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback)
         {
             PathRequest newRequest = new PathRequest(pathStart,pathEnd,callback);
-            _instance._pathRequestQueue.Enqueue(newRequest);
-            _instance.TryProcessNext();
+            Instance.PathRequestQueue.Enqueue(newRequest);
+            Instance.TryProcessNext();
         }
 
         private void TryProcessNext()
         {
-            if(!_isProcessingAPath && _pathRequestQueue.Count > 0)
+            if(!_isProcessingAPath && PathRequestQueue.Count > 0)
             {
-                _currentPathRequest = _pathRequestQueue.Dequeue();
+                _currentPathRequest = PathRequestQueue.Dequeue();
                 _isProcessingAPath = true;
                 PathFinding.StartFindPath(_currentPathRequest.PathStart, _currentPathRequest.PathEnd);
             }
@@ -50,7 +51,7 @@ namespace SF.Pathfinding
             public Vector2 PathStart;
             public Vector2 PathEnd;
             public Action<Vector2[], bool> Callback;
-            
+
             public PathRequest(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback)
             {
                 PathStart = pathStart;

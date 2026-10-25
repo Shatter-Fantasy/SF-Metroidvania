@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Unity.GraphToolkit.Editor;
 
-namespace SFEditor.Dialogue.Graphs
+namespace SF.Dialogue.Graphs.Editor
 {
 	using SF.Graphs.Nodes;
-	using SFEditor.Graphs.Nodes;
+	using SF.Graphs.Nodes.Editor;
 	using SF.DialogueModule;
 	using SF.DialogueModule.Nodes;
 
@@ -34,7 +34,7 @@ namespace SFEditor.Dialogue.Graphs
 	    
 		protected override void OnDefinePorts(IPortDefinitionContext context)
 		{
-			context.AddInputPort<string>("Input Node").Build();
+			context.AddInputPort("Input Node").Build();
 		    
 			context.AddOutputPort<string>(ExecutionPortName).Build();
 		}
@@ -43,11 +43,7 @@ namespace SFEditor.Dialogue.Graphs
 		{
 			RuntimeNodes = ConvertToRuntimeNodes(Conversation);
 
-#if UNITY_6000_4_OR_NEWER
 			var executionNode = GetOutputPortByName(ExecutionPortName).FirstConnectedPort.GetNode();
-#else
-			var executionNode = GetOutputPortByName(ExecutionPortName).firstConnectedPort.GetNode();
-#endif
 			if (executionNode is INodeConvertor nodeConvertor)
 			{
 				return new ConversationRuntimeNode(RuntimeNodes,nodeConvertor.ConvertToRuntimeNode());
@@ -63,17 +59,7 @@ namespace SFEditor.Dialogue.Graphs
 
 		public List<SFRuntimeNode> ConvertToRuntimeNodes(DialogueConversation dialogueConversation)
 		{
-			if (dialogueConversation != null)
-			{
-				GetNodeOptionByName(ConversationTitleName)
-					.TryGetValue(out dialogueConversation.ConversationName);
-			}
-			
-#if UNITY_6000_4_OR_NEWER
-						for(int i = 0; i < BlockCount; i++) 
-#else
-			for(int i = 0; i < blockCount; i++) 
-#endif
+			for(int i = 0; i < BlockCount; i++)
 			{
 				var conversationNode = GetBlock(i);
 						    
@@ -98,11 +84,6 @@ namespace SFEditor.Dialogue.Graphs
 			
 
 			return RuntimeNodes;
-		}
-
-		SFRuntimeNode INodeConvertor.ConvertToRuntimeNode()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

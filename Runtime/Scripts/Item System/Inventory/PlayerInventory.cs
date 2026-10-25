@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity.Scripting.LifecycleManagement;
 
 namespace SF.ItemModule
 {
-    using SF.DataManagement;
+    using SF.SaveModule;
     using SF.DataModule;
     
-    public class PlayerInventory : ItemContainer
+    public partial class PlayerInventory : ItemContainer
     {
         [NonSerialized] public List<ItemData> FilteredConsumable = new List<ItemData>();
         [NonSerialized] public List<Weapon> FilteredWeapons = new List<Weapon>();
@@ -18,7 +19,7 @@ namespace SF.ItemModule
         /// Invoked event when an item has been picked up off the ground.
         /// Does not activate when gaining items from shops, quest rewards, or from NPC dialogue interactions.
         /// </summary>
-        public static Action<int> ItemPickedUpHandler;
+        [AutoStaticsCleanup] public static Action<int> ItemPickedUpHandler;
         
         private void Start()
         {

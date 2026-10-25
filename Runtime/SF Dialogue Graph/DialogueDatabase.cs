@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,15 @@ namespace SF.DialogueModule
     [CreateAssetMenu(fileName = "Dialogue Database", menuName = "SF/Dialogue/Dialogue Database")]
     public class DialogueDatabase : SFAssetDatabase<DialogueConversation>
     {
+
+        public bool GetConversation(Hash128 graphID, out DialogueConversation conversation)
+        {
+            conversation = DataEntries.Find(x => x.GraphID == graphID);
+
+            return conversation != null;
+        }
+
+        [Obsolete("Use the GetConversation with Hash128 graphID as an overload instead.")]
         public bool GetConversation(int guid, out DialogueConversation conversation)
         {
             conversation = DataEntries.Find(x => x.GUID == guid);
